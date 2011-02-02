@@ -1,0 +1,15 @@
+							-*- outline -*-
+* oml 1.3              
+
+Dec/2003	Inserted copyright notices in most source files.
+July/10/2002	Autoconfiscated and fresh CVS repository.
+
+
+
+Date		tag		Description
+Feb/20/2002	gcc_3_branch2	Created.
+Feb/20/2002	oml_1_2		Working, documented, non mem leaks, Array,Vector,List are inline
+Feb/3/2002      inline_branch   Created to a 100% inline (no virtual functions) version.
+Jan/22/2002	oml_1_1		Just prior to creating the gcc_3_branch
+		oml_1_0		First tagged working version.
+				Prior to another gcc_3_branch2

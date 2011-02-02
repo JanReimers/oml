@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="oml" />
+		<Option pch_mode="2" />
+		<Option compiler="cygwin" />
+		<Build>
+			<Target title="Debug">
+				<Option output="..\libomld" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="cygwin" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="..\liboml" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="cygwin" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="..\" />
+			<Add directory=".\" />
+		</Compiler>
+		<Unit filename="array.h" />
+		<Unit filename="array_io.h" />
+		<Unit filename="arrindex.h" />
+		<Unit filename="binio.h" />
+		<Unit filename="binop.h" />
+		<Unit filename="cnumeric.h" />
+		<Unit filename="cow.h" />
+		<Unit filename="dmatrix.h" />
+		<Unit filename="heapsort.h" />
+		<Unit filename="histogram.h" />
+		<Unit filename="indexable.h" />
+		<Unit filename="indexsort.h" />
+		<Unit filename="indext.h" />
+		<Unit filename="io3d.h" />
+		<Unit filename="iterable.h" />
+		<Unit filename="iterable_io.h" />
+		<Unit filename="list.h" />
+		<Unit filename="list_io.h" />
+		<Unit filename="lusolver.h" />
+		<Unit filename="matindex.h" />
+		<Unit filename="matlimit.h" />
+		<Unit filename="matrix.h" />
+		<Unit filename="matrix3d.h" />
+		<Unit filename="matrixalg.h" />
+		<Unit filename="matrixbase.h" />
+		<Unit filename="matsub.h" />
+		<Unit filename="memops.h" />
+		<Unit filename="minmax.h" />
+		<Unit filename="mixtypes.h" />
+		<Unit filename="numeric.h" />
+		<Unit filename="numeric\gaussj.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\invmat.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\invtri.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\lubksb.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\lubksbm.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\ludcmp.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\lusolver.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\qldecomp.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\solvetri.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\svbksb.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\svdcmp.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="numeric\svsolver.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="omlcomplex.h" />
+		<Unit filename="ran250.h" />
+		<Unit filename="random.h" />
+		<Unit filename="rowcol.h" />
+		<Unit filename="shape.h" />
+		<Unit filename="shellsort.h" />
+		<Unit filename="smatindex.h" />
+		<Unit filename="smatrix.h" />
+		<Unit filename="src\InstanceDouble1.cpp" />
+		<Unit filename="src\InstanceDouble2.cpp" />
+		<Unit filename="src\InstanceDouble3.cpp" />
+		<Unit filename="src\NumericsDouble.cpp" />
+		<Unit filename="src\matlimit.cc" />
+		<Unit filename="src\ran250.cc" />
+		<Unit filename="src\stream.cc" />
+		<Unit filename="src\veclimit.cc" />
+		<Unit filename="stopw.h" />
+		<Unit filename="stream.h" />
+		<Unit filename="subarray.h" />
+		<Unit filename="submatrix.h" />
+		<Unit filename="subvector.h" />
+		<Unit filename="svsolver.h" />
+		<Unit filename="tstream.h" />
+		<Unit filename="unop.h" />
+		<Unit filename="unpickle.h" />
+		<Unit filename="vecindex.h" />
+		<Unit filename="veclimit.h" />
+		<Unit filename="vector.h" />
+		<Unit filename="vector3d.h" />
+		<Unit filename="vector_io.h" />
+		<Unit filename="xpr.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

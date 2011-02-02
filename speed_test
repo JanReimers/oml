@@ -1,0 +1,16 @@
+#
+export OPT='-O2 -DNDEBUG'
+cd buildgcc323/oml
+export PATH=/usr/local/gcc323/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+g++ -v
+make clean
+time `make -j2 >&make1.out`
+time `make check -j2 >&make2.out`
+time `make check -j2 >&make3.out`
+cd ../../buildgcc295/oml
+export PATH=/usr/local/gcc295/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+g++ -v
+make clean
+time `make -j2 >&make1.out`
+time `make check -j2 >&make2.out`
+time `make check -j2 >&make3.out`

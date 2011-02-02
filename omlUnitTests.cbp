@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="omlUnitTests" />
+		<Option pch_mode="2" />
+		<Option compiler="cygwin" />
+		<Build>
+			<Target title="UT1">
+				<Option output="bin\Debug\UT1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-O1" />
+				</Compiler>
+			</Target>
+			<Target title="UT2">
+				<Option output="bin\Debug\UT2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-O1" />
+				</Compiler>
+			</Target>
+			<Target title="UT3">
+				<Option output="bin\Debug\UT3" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-O1" />
+				</Compiler>
+			</Target>
+			<Target title="UT4">
+				<Option output="bin\Debug\UT4" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-O1" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="..\" />
+		</Compiler>
+		<Linker>
+			<Add library="bin\liboml.a" />
+		</Linker>
+		<Unit filename="UnitTests\UT-Array-double.cc">
+			<Option target="UT1" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Array-int.cc">
+			<Option target="UT2" />
+		</Unit>
+		<Unit filename="UnitTests\UT-DMatrix-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Eigen-double.cc">
+			<Option target="UT4" />
+		</Unit>
+		<Unit filename="UnitTests\UT-List-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-List-int.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Matrix-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Matrix3D-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Matrix3D.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Random-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-SMatrix-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-SolveTriDiagonal.cc">
+			<Option target="UT3" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Vector-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Vector-int.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Vector3D-double.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UT-Vector3D.cc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UnitTests\UnitTest.H" />
+		<Unit filename="UnitTests\UnitTest.cc" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

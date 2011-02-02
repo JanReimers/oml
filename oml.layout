@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="arrindex.h" open="0" top="0" tabpos="0">
+		<Cursor position="616" topLine="5" />
+	</File>
+	<File name="ran250.h" open="0" top="0" tabpos="0">
+		<Cursor position="170" topLine="0" />
+	</File>
+	<File name="src\InstanceDouble2.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="153" topLine="0" />
+	</File>
+	<File name="src\InstanceDouble3.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="152" topLine="0" />
+	</File>
+	<File name="src\NumericsDouble.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="138" topLine="0" />
+	</File>
+	<File name="src\ran250.cc" open="0" top="0" tabpos="0">
+		<Cursor position="102" topLine="0" />
+	</File>
+	<File name="src\stream.cc" open="0" top="0" tabpos="0">
+		<Cursor position="814" topLine="9" />
+	</File>
+	<File name="stream.h" open="0" top="0" tabpos="0">
+		<Cursor position="575" topLine="5" />
+	</File>
+	<File name="unop.h" open="0" top="0" tabpos="0">
+		<Cursor position="4660" topLine="182" />
+	</File>
+</CodeBlocks_layout_file>
