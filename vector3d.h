@@ -8,9 +8,10 @@
 #include "oml/mixtypes.h"
 #include <cmath>
 namespace std {template <class T> class complex;}
+const double pi=acos(0.0);
 
 //-----------------------------------------------------------------------------
-/*! \class Vector3D vector3d.h oml/vector3d.h 
+/*! \class Vector3D vector3d.h oml/vector3d.h
   \brief Very light weight 3D %Vector class with lots of overloaded operators.
 
   Structure for real space three vectors.  Most algeabraic operators have
@@ -22,8 +23,8 @@ namespace std {template <class T> class complex;}
   - /, *=, /= for scalers.
   - <, >, <=, >= all compare magnitudes.
   - Unary + and -
-  - \a a| \a b returns the angle in radians between \a a and \a b. 
-  - \a a|| \a b returns the angle in degrees between \a a and \a b. 
+  - \a a| \a b returns the angle in radians between \a a and \a b.
+  - \a a|| \a b returns the angle in degrees between \a a and \a b.
   - ! \a a returns the magnitude of \a a.
   - ~ \a a returns a unit vector in the direction of \a a.
   - For complex values \c conj, \c real, \c imag and \c norm are defined.
@@ -48,7 +49,7 @@ template <class T> class Vector3D
   template <class T1> Vector3D(T1 _x,T1 _y,T1 _z    ) : x( _x),y( _y),z( _z) {}
   //! Construct form another Vector3D type.
   template <class T1> Vector3D(const Vector3D<T1>& v) : x(v.x),y(v.y),z(v.z) {}
- 
+
   //! Assign
   Vector3D& operator =(const Vector3D& v) {x=v.x;y=v.y;z=v.z;return *this;}
   //! Assign form another Vector3D type.
@@ -61,13 +62,13 @@ template <class T> class Vector3D
   const T& operator()(subsc_t i) const {return (&x)[i-1];}
   //! Element access
   T& operator()(subsc_t i)       {return (&x)[i-1];}
-   
+
 
   /*! \name Coordinates*/
   //@{
   T x; //!< \a x coordinate.
   T y; //!< \a y coordinate.
-  T z; //!< \a z coordinate. 
+  T z; //!< \a z coordinate.
   //@}
 };
 
@@ -79,7 +80,7 @@ template <class T> class Vector3D
 
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> operator +(const Vector3D<T1>& a,const Vector3D<T2>& b)             
+Vector3D<typename BinaryRetType<T1,T2>::RetType> operator +(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
   return Vector3D<typename BinaryRetType<T1,T2>::RetType>(a.x+b.x,a.y+b.y,a.z+b.z);
 }
@@ -90,7 +91,7 @@ Vector3D<typename BinaryRetType<T1,T2>::RetType> operator -(const Vector3D<T1>& 
   return Vector3D<typename BinaryRetType<T1,T2>::RetType>(a.x-b.x,a.y-b.y,a.z-b.z);
 }
 
-template <class T1, class T2> inline 
+template <class T1, class T2> inline
 typename BinaryRetType<T1,T2>::RetType operator *(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
   return (a.x*b.x+a.y*b.y+a.z*b.z);
@@ -218,7 +219,7 @@ Vector3D<T>  operator +(const Vector3D<T>& a)
 //
 //  Angle between two vectors (Radians).
 //
-template <class T> inline  
+template <class T> inline
 T operator |(const Vector3D<T>& a,const Vector3D<T>& b)
 {
   return (T)acos( (~a) * (~b) );
@@ -228,27 +229,27 @@ T operator |(const Vector3D<T>& a,const Vector3D<T>& b)
 //
 //  Angle between two vectors (Degrees).
 //
-template <class T> inline 
+template <class T> inline
 T operator||(const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return static_cast<T>(acos( (~a) * (~b) )/M_PI*180.0);
+  return static_cast<T>(acos( (~a) * (~b) )/pi*180.0);
 }
 
 //-----------------------------------------------------------------------------
 //
 //  Magnitude and normalize.
 //
-template <class T> inline 
+template <class T> inline
 T operator !(const Vector3D<T>& a)
 {
   return (T)sqrt(a*a);
 }
 
-template <class T> inline 
+template <class T> inline
 Vector3D<T>  operator ~(const Vector3D<T>& a)  //normalize.
 {
   return a/!a;
-}  
+}
 
 //--------------------------------------------------------------------
 //

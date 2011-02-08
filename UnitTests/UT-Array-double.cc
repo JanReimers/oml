@@ -19,7 +19,7 @@
     for (index_t i=1; i<a.size(); i++) ret=ret&&(a[i-1]<=a[i]);
     return ret;
   }
-  
+
   bool IsDSorted(const Array<double>& a)
   {
     bool ret=true;
@@ -71,7 +71,7 @@ int main()
   }
   {
     Array<double> A(10),B(10);
-    double Pi=M_PI;
+    double Pi=acos(0.0);
     Fill(A,Pi);
     Fill(B,0.25);
     EXPECT(Max(abs(1.0/A   -(1.0/ Pi)))<eps,true);
@@ -106,16 +106,16 @@ int main()
     B=A;
     EXPECT3(IsASorted(B),AscendingShellSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingShellSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingShellSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),AscendingHeapSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),B.ReIndex(MakeAscendingIndex(A)),true);
     B=A;
-    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true); 
-  
+    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true);
+
   }
 //-----------------------------------------------------
 //
@@ -136,7 +136,7 @@ int main()
     }
     EXPECT1(B,A,"file >> B in ascii mode");
   }
-  
+
   StreamableObject::SetToBinary();
   {
     Array<double> A(1000),B;
@@ -151,7 +151,7 @@ int main()
       file >> B;
     }
     EXPECT1(B,A,"file >> B in binary mode");
-  }		
+  }
 
   return pass ? 0 : -1;
 }

@@ -14,6 +14,9 @@
 				<Compiler>
 					<Add option="-O1" />
 				</Compiler>
+				<ExtraCommands>
+					<Add after="./bin/Debug/UT1.exe" />
+				</ExtraCommands>
 			</Target>
 			<Target title="UT2">
 				<Option output="bin\Debug\UT2" prefix_auto="1" extension_auto="1" />
@@ -23,6 +26,9 @@
 				<Compiler>
 					<Add option="-O1" />
 				</Compiler>
+				<ExtraCommands>
+					<Add after="./bin/Debug/UT2.exe" />
+				</ExtraCommands>
 			</Target>
 			<Target title="UT3">
 				<Option output="bin\Debug\UT3" prefix_auto="1" extension_auto="1" />
@@ -32,6 +38,9 @@
 				<Compiler>
 					<Add option="-O1" />
 				</Compiler>
+				<ExtraCommands>
+					<Add after="./bin/Debug/UT3.exe" />
+				</ExtraCommands>
 			</Target>
 			<Target title="UT4">
 				<Option output="bin\Debug\UT4" prefix_auto="1" extension_auto="1" />
@@ -41,15 +50,22 @@
 				<Compiler>
 					<Add option="-O1" />
 				</Compiler>
+				<ExtraCommands>
+					<Add after="./bin/Debug/UT4.exe" />
+				</ExtraCommands>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="all" targets="UT1;UT2;UT3;UT4;" />
+		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="..\" />
 		</Compiler>
 		<Linker>
-			<Add library="bin\liboml.a" />
+			<Add library="oml" />
+			<Add directory="..\" />
 		</Linker>
 		<Unit filename="UnitTests\UT-Array-double.cc">
 			<Option target="UT1" />

@@ -4,6 +4,9 @@
 	<File name="arrindex.h" open="0" top="0" tabpos="0">
 		<Cursor position="616" topLine="5" />
 	</File>
+	<File name="cow.h" open="1" top="0" tabpos="2">
+		<Cursor position="1653" topLine="69" />
+	</File>
 	<File name="ran250.h" open="0" top="0" tabpos="0">
 		<Cursor position="170" topLine="0" />
 	</File>
@@ -27,5 +30,8 @@
 	</File>
 	<File name="unop.h" open="0" top="0" tabpos="0">
 		<Cursor position="4660" topLine="182" />
+	</File>
+	<File name="vector3d.h" open="1" top="0" tabpos="5">
+		<Cursor position="141" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
