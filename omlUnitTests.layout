@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="all" />
-	<File name="UnitTests\UT-Array-double.cc" open="1" top="0" tabpos="1">
+	<File name="UnitTests\UT-Array-double.cc" open="0" top="0" tabpos="1">
 		<Cursor position="1896" topLine="51" />
 	</File>
 	<File name="UnitTests\UT-Array-int.cc" open="0" top="0" tabpos="0">
