@@ -60,6 +60,7 @@ int main()
   {  //Mixing double and ints.
     Array<double> A(6);
     Fill(A,13.0);
+    Array<double> C=2+A; //Trigger g++ bug, see Val in xpr.h
     EXPECT(A+2,"{ 15 15 15 15 15 15 }");
     EXPECT(A-2,"{ 11 11 11 11 11 11 }");
     EXPECT(A*2,"{ 26 26 26 26 26 26 }");
@@ -71,7 +72,7 @@ int main()
   }
   {
     Array<double> A(10),B(10);
-    double Pi=acos(0.0);
+    double Pi=acos(-1.0);
     Fill(A,Pi);
     Fill(B,0.25);
     EXPECT(Max(abs(1.0/A   -(1.0/ Pi)))<eps,true);

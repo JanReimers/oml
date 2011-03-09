@@ -8,7 +8,7 @@
 #include "oml/mixtypes.h"
 #include <cmath>
 namespace std {template <class T> class complex;}
-const double pi=acos(0.0);
+const double pi=acos(-1.0);
 
 //-----------------------------------------------------------------------------
 /*! \class Vector3D vector3d.h oml/vector3d.h
