@@ -25,7 +25,7 @@ template <class T, class R> class Ref<T,R,ArrayShape>
   const R& itsRef;
 };
 
-template <class T, class R> class Ref<T,R,VectorShape> 
+template <class T, class R> class Ref<T,R,VectorShape>
 {
  public:
   Ref(const R& r) : itsRef(r) {};
@@ -55,18 +55,19 @@ template <class T, class R> class Ref<T,R,MatrixShape>
 //
 template <class T, class A, Shape> class Val {};
 
-template <class T, class A> class Val<T,A,ArrayShape> 
+template <class T, class A> class Val<T,A,ArrayShape>
 {
  public:
-  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a) {};
-  T       operator[](index_t) const {return itsVal        ;}
-  index_t size      (       ) const {return itsA.size();}
+  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), Asize(a.size()) {};
+  T       operator[](index_t) const {return itsVal;}
+  index_t size      (       ) const {return Asize ;}
  private:
   T        itsVal;
   const A& itsA;
+  int Asize; //Kludge to get around a long standing g++ BUG.
 };
 
-template <class T, class A> class Val<T,A, VectorShape> 
+template <class T, class A> class Val<T,A, VectorShape>
 {
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a) {};
@@ -107,7 +108,7 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,A
   Xpr(Expression e) : itsExp(e) {};
   Xpr(const Xpr& x) : itsExp(x.itsExp) {};
   ~Xpr() {};
-  
+
   T       operator[](index_t n) const {return itsExp[n]       ;}
   index_t size      (         ) const {return itsExp.size();}
 
@@ -122,11 +123,11 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,V
   Xpr(Expression e) : itsExp(e) {};
   Xpr(const Xpr& x) : itsExp(x.itsExp) {};
   ~Xpr() {};
-  
+
   T         operator[](index_t n) const {return itsExp[n];}
   T         operator()(subsc_t i) const {return itsExp(i);}
   index_t   size      (         ) const {return itsExp.size();}
-  VecLimits GetLimits (         ) const {return itsExp.GetLimits();}  
+  VecLimits GetLimits (         ) const {return itsExp.GetLimits();}
  private:
   Expression itsExp;
 };
@@ -138,18 +139,18 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,M
   Xpr(Expression e) : itsExp(e) {};
   Xpr(const Xpr& x) : itsExp(x.itsExp) {};
   ~Xpr() {};
-  
+
   T         operator[](index_t n          ) const {return itsExp[n];}
   T         operator()(subsc_t i,subsc_t j) const {return itsExp(i,j);}
   index_t   size      (                   ) const {return itsExp.size();}
-  MatLimits GetLimits (                   ) const {return itsExp.GetLimits();}  
+  MatLimits GetLimits (                   ) const {return itsExp.GetLimits();}
 
  private:
   Expression itsExp;
 };
 
 
-                                                                                      
+
 
 
 #endif //_xpr_h_
