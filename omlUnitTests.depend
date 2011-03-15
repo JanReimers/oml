@@ -614,3 +614,156 @@
 
 1295895095 c:\cygwin\home\reimersjan\cdt1\\config.h
 
+1297363018 source:c:\cygwin\home\reimersjan\cdt2\oml\unittests\unittest.cc
+	"oml/UnitTests/UnitTest.H"
+	<string>
+	<cstring>
+
+1297363018 c:\cygwin\home\reimersjan\cdt2\\oml\unittests\unittest.h
+	<iostream>
+	<sstream>
+	<string>
+
+1299693393 source:c:\cygwin\home\reimersjan\cdt2\oml\unittests\ut-array-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/array.h"
+	"oml/array_io.h"
+	"oml/minmax.h"
+	"oml/shellsort.h"
+	"oml/heapsort.h"
+	"oml/indexsort.h"
+	"oml/random.h"
+	<cmath>
+	<fstream>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\array.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/tstream.h"
+	"oml/iterable.h"
+	"oml/cow.h"
+	"oml/arrindex.h"
+	"oml/array,h"
+	"Froggy.H"
+	"oml/array.h"
+	"oml/array.h"
+	<cmath>
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array_io.h"
+	<iostream>
+	<fstream>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\indext.h
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\shape.h
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\tstream.h
+	"oml/stream.h"
+	<typeinfo>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\stream.h
+	<iosfwd>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\iterable.h
+	"oml/indext.h"
+	<iosfwd>
+	<cassert>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\cow.h
+	"oml/indext.h"
+	<cassert>
+	<iostream>
+
+1299694338 c:\cygwin\home\reimersjan\cdt2\\oml\arrindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\indexable.h
+	"oml/shape.h"
+	"oml/xpr.h"
+	"oml/binop.h"
+	"oml/unop.h"
+
+1299694649 c:\cygwin\home\reimersjan\cdt2\\oml\xpr.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/veclimit.h"
+	"oml/matlimit.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\veclimit.h
+	"oml/indext.h"
+	<iosfwd>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\matlimit.h
+	"oml/veclimit.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\binop.h
+	"oml/mixtypes.h"
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\mixtypes.h
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\unop.h
+	"oml/mixtypes.h"
+	<cmath>
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\memops.h
+	"oml/indexable.h"
+	<cassert>
+	<iostream>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\array_io.h
+	"oml/array.h"
+	"oml/iterable_io.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\iterable_io.h
+	"oml/iterable.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\binio.h
+	<iostream>
+	<complex>
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\minmax.h
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\shellsort.h
+	"oml/indexable.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\heapsort.h
+	"oml/indexable.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\indexsort.h
+	"oml/indexable.h"
+	"oml/list.h"
+	"oml/array.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\list.h
+	"oml/array.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\random.h
+	"oml/iterable.h"
+	"oml/ran250.h"
+
+1297363019 c:\cygwin\home\reimersjan\cdt2\\oml\ran250.h
+	"config.h"
+	<complex>
+	<cassert>
+	<stdint.h>
+	<inttypes.h>
+	<sys/types.h>
+
+1297363045 c:\cygwin\home\reimersjan\cdt2\\config.h
+

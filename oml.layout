@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
+	<File name="array.h" open="0" top="0" tabpos="0">
+		<Cursor position="19146" topLine="507" />
+	</File>
 	<File name="arrindex.h" open="0" top="0" tabpos="0">
-		<Cursor position="616" topLine="5" />
+		<Cursor position="524" topLine="0" />
 	</File>
 	<File name="cow.h" open="0" top="0" tabpos="2">
 		<Cursor position="1653" topLine="69" />
+	</File>
+	<File name="indexable.h" open="0" top="0" tabpos="0">
+		<Cursor position="14116" topLine="240" />
+	</File>
+	<File name="memops.h" open="0" top="0" tabpos="0">
+		<Cursor position="3405" topLine="84" />
 	</File>
 	<File name="ran250.h" open="0" top="0" tabpos="0">
 		<Cursor position="170" topLine="0" />
@@ -32,6 +41,9 @@
 		<Cursor position="4660" topLine="182" />
 	</File>
 	<File name="vector3d.h" open="0" top="0" tabpos="5">
-		<Cursor position="141" topLine="0" />
+		<Cursor position="267" topLine="0" />
+	</File>
+	<File name="xpr.h" open="0" top="0" tabpos="0">
+		<Cursor position="1882" topLine="55" />
 	</File>
 </CodeBlocks_layout_file>
