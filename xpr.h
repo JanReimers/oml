@@ -70,14 +70,15 @@ template <class T, class A> class Val<T,A,ArrayShape>
 template <class T, class A> class Val<T,A, VectorShape>
 {
  public:
-  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a) {};
+  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsALimits(a.GetLimits()) {};
   T         operator[](index_t) const {return itsVal;}
   T         operator()(subsc_t) const {return itsVal;}
-  index_t   size      (       ) const {return itsA.size();}
-  VecLimits GetLimits (       ) const {return itsA.GetLimits();}
+  index_t   size      (       ) const {return itsALimits.size();}
+  VecLimits GetLimits (       ) const {return itsALimits;}
  private:
   T        itsVal;
   const A& itsA;
+  VecLimits itsALimits; //Kludge to get around a long standing g++ BUG.
 };
 
 template <class T, class A> class Val<T,A,MatrixShape>
