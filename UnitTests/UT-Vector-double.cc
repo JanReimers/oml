@@ -18,7 +18,7 @@
     for (index_t i=a.GetLow()+1; i<=a.GetHigh(); i++) ret=ret&&(a(i-1)<=a(i));
     return ret;
   }
-  
+
   bool IsDSorted(const Vector<double>& a)
   {
     bool ret=true;
@@ -31,7 +31,7 @@ template <class T> T MaxAbs(const Vector<T>& v)
   return Max(abs(v));
 }
 
-int main()
+int TestVectorDouble()
 {
   const char* Class="Vector<double>";
   bool pass=true;
@@ -110,16 +110,16 @@ int main()
     B=A;
     EXPECT3(IsASorted(B),AscendingShellSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingShellSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingShellSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),AscendingHeapSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),B.ReIndex(MakeAscendingIndex(A)),true);
     B=A;
-    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true); 
-  
+    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true);
+
   }
   {
     Vector<double> A(10);
@@ -127,7 +127,7 @@ int main()
     EXPECT(fabs(!A-sqrt(10.0*M_PI*M_PI))<1e-15,true);
     EXPECT3(A*A,Normalize(A),1.0);
   }
-  
+
 //-----------------------------------------------------
 //
 //  IO tests
@@ -147,7 +147,7 @@ int main()
     }
     EXPECT1(B,A,"file >> B in ascii mode");
   }
-  
+
   StreamableObject::SetToBinary();
   {
     Vector<double> A(-10,1000),B;

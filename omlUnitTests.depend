@@ -767,3 +767,420 @@
 
 1297363045 c:\cygwin\home\reimersjan\cdt2\\config.h
 
+1300309050 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\unittest.cc
+	"oml/UnitTests/UnitTest.H"
+	<string>
+	<cstring>
+
+1300309050 c:\cygwin\home\reimersjan\cdt3\\oml\unittests\unittest.h
+	<iostream>
+	<sstream>
+	<string>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-array-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/array.h"
+	"oml/array_io.h"
+	"oml/minmax.h"
+	"oml/shellsort.h"
+	"oml/heapsort.h"
+	"oml/indexsort.h"
+	"oml/random.h"
+	<cmath>
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\array.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/tstream.h"
+	"oml/iterable.h"
+	"oml/cow.h"
+	"oml/arrindex.h"
+	"oml/array,h"
+	"Froggy.H"
+	"oml/array.h"
+	"oml/array.h"
+	<cmath>
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array_io.h"
+	<iostream>
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\indext.h
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\shape.h
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\tstream.h
+	"oml/stream.h"
+	<typeinfo>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\stream.h
+	<iosfwd>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\iterable.h
+	"oml/indext.h"
+	<iosfwd>
+	<cassert>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\cow.h
+	"oml/indext.h"
+	<cassert>
+	<iostream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\arrindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\indexable.h
+	"oml/shape.h"
+	"oml/xpr.h"
+	"oml/binop.h"
+	"oml/unop.h"
+
+1308335754 c:\cygwin\home\reimersjan\cdt3\\oml\xpr.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/veclimit.h"
+	"oml/matlimit.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\veclimit.h
+	"oml/indext.h"
+	<iosfwd>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matlimit.h
+	"oml/veclimit.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\binop.h
+	"oml/mixtypes.h"
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\mixtypes.h
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\unop.h
+	"oml/mixtypes.h"
+	<cmath>
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\memops.h
+	"oml/indexable.h"
+	<cassert>
+	<iostream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\array_io.h
+	"oml/array.h"
+	"oml/iterable_io.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\iterable_io.h
+	"oml/iterable.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\binio.h
+	<iostream>
+	<complex>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\minmax.h
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\shellsort.h
+	"oml/indexable.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\heapsort.h
+	"oml/indexable.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\indexsort.h
+	"oml/indexable.h"
+	"oml/list.h"
+	"oml/array.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\list.h
+	"oml/array.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\random.h
+	"oml/iterable.h"
+	"oml/ran250.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\ran250.h
+	"config.h"
+	<complex>
+	<cassert>
+	<stdint.h>
+	<inttypes.h>
+	<sys/types.h>
+
+1301340506 c:\cygwin\home\reimersjan\cdt3\\config.h
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-array-int.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/array.h"
+	"oml/array_io.h"
+	"oml/minmax.h"
+	"oml/random.h"
+	<stdlib.h>
+	<fstream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-dmatrix-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector_io.h"
+	"oml/dmatrix.h"
+	"oml/matrix.h"
+	"oml/minmax.h"
+	"oml/random.h"
+	"oml/stopw.h"
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\vector_io.h
+	"oml/vector.h"
+	"oml/iterable_io.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\vector.h
+	"oml/array.h"
+	"oml/veclimit.h"
+	"oml/vecindex.h"
+	"oml/minmax.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\vecindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\dmatrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/matindex.h"
+	"oml/rowcol.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrixbase.h
+	"oml/matlimit.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matsub.h
+	"oml/indext.h"
+	"oml/matindex.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrixalg.h
+	"oml/matindex.h"
+	"oml/vector.h"
+	"oml/rowcol.h"
+
+1308334555 c:\cygwin\home\reimersjan\cdt3\\oml\rowcol.h
+	"oml/vecindex.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/matindex.h"
+	"oml/rowcol.h"
+	"oml/matrix.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\stopw.h
+	<time.h>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-eigen-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/stopw.h"
+	"oml/vector.h"
+	"oml/matrix.h"
+	"oml/numeric.h"
+	<iostream>
+	<cmath>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\numeric.h
+	"oml/indext.h"
+	"oml/array.h"
+	"oml/vector.h"
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-list-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/list.h"
+	"oml/list_io.h"
+	"oml/array.h"
+	"oml/array_io.h"
+	"oml/shellsort.h"
+	"oml/heapsort.h"
+	"oml/indexsort.h"
+	"oml/random.h"
+	"oml/minmax.h"
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\list_io.h
+	"oml/list.h"
+	"oml/array.h"
+	"oml/iterable_io.h"
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-list-int.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/list.h"
+	"oml/list_io.h"
+	"oml/array.h"
+	"oml/array_io.h"
+	"oml/random.h"
+	"oml/minmax.h"
+	<fstream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-matrix-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector_io.h"
+	"oml/matrix.h"
+	"oml/smatrix.h"
+	"oml/numeric.h"
+	"oml/lusolver.h"
+	"oml/svsolver.h"
+	"oml/minmax.h"
+	"oml/random.h"
+	"oml/stopw.h"
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\smatrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/smatindex.h"
+	"oml/rowcol.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\smatindex.h
+	"oml/indexable.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\lusolver.h
+	"oml/array.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\svsolver.h
+	"oml/vector.h"
+	"oml/matrix.h"
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-matrix3d-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/matrix3d.h"
+	"oml/io3d.h"
+	"oml/stream.h"
+	<iostream>
+	<iomanip>
+	<fstream>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrix3d.h
+	"oml/vector3d.h"
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\vector3d.h
+	"oml/indext.h"
+	"oml/mixtypes.h"
+	<cmath>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\io3d.h
+	"oml/vector3d.h"
+	"oml/matrix3d.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	"oml/mixtypes.h"
+	<iomanip>
+	<cassert>
+	<iosfwd>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-matrix3d.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/matrix3d.h"
+	"oml/io3d.h"
+	"oml/stream.h"
+	<iostream>
+	<iomanip>
+	<fstream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-random-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/ran250.h"
+	"oml/histogram.h"
+	"oml/stopw.h"
+	<fstream>
+	<iomanip>
+
+1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\histogram.h
+	"oml/array.h"
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-smatrix-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector_io.h"
+	"oml/smatrix.h"
+	"oml/matrix.h"
+	"oml/minmax.h"
+	"oml/random.h"
+	"oml/stopw.h"
+	<fstream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-solvetridiagonal.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/numeric.h"
+	"oml/array.h"
+	"oml/vector.h"
+	"oml/vector_io.h"
+	"oml/matrix.h"
+	"oml/random.h"
+	<iostream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector-double.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector.h"
+	"oml/vector_io.h"
+	"oml/shellsort.h"
+	"oml/heapsort.h"
+	"oml/indexsort.h"
+	"oml/random.h"
+	<cmath>
+	<fstream>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector-int.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector.h"
+	"oml/vector_io.h"
+	"oml/minmax.h"
+	"oml/random.h"
+	<fstream>
+
+1308333948 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector3d-double.cc
+	"oml/UnitTests/UnitTest.H"
+	<cmath>
+	"oml/vector3d.h"
+	"oml/io3d.h"
+	"oml/stream.h"
+	<iostream>
+	<sstream>
+	<fstream>
+	<iomanip>
+
+1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector3d.cc
+	"oml/UnitTests/UnitTest.H"
+	"oml/vector3d.h"
+	"oml/io3d.h"
+	"oml/stream.h"
+	<cmath>
+	<iostream>
+	<strstream>
+	<fstream>
+	<iomanip>
+
+1308335933 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\main.cc
+

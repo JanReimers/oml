@@ -18,7 +18,7 @@ void mmul(MatrixType& C,const MatrixType& A, const MatrixType&B);
 double vmul(const VectorType V1,const MatrixType& A, const VectorType& V2);
 double vmul1(const VectorType V1,const MatrixType& A, const VectorType& V2);
 
-int main()
+int TestDMatrixDouble()
 {
   const char* Class="DirectMatrix<double>";
   bool pass=true;
@@ -34,10 +34,10 @@ int main()
 //  Constructors
 //
   {
-    EXPECT(MatrixType(),"(1:0),(1:0) "); 
+    EXPECT(MatrixType(),"(1:0),(1:0) ");
     EXPECT(MatrixType(2,3),"(1:2),(1:3) \n[ * * * ]\n[ * * * ]\n");
     EXPECT(MatrixType(-2,1,-1,3),
-	   "(-2:1),(-1:3) \n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n");      
+	   "(-2:1),(-1:3) \n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n");
     EXPECT(MatrixType(VecLimits(-2,1),VecLimits(-1,3)),
 	   "(-2:1),(-1:3) \n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n[ * * * * * ]\n");
     EXPECT(MatrixType(MatLimits(-2,1,-1,3)),
@@ -45,7 +45,7 @@ int main()
     MatrixType A1(3,3),A2(3,3);
     Fill(A1,3.0);
     EXPECT3(temp,MatrixType temp(A1),"(1:3),(1:3) \n[ 3 3 3 ]\n[ 3 3 3 ]\n[ 3 3 3 ]\n");
-    EXPECT(A2=A1,"(1:3),(1:3) \n[ 3 3 3 ]\n[ 3 3 3 ]\n[ 3 3 3 ]\n");      
+    EXPECT(A2=A1,"(1:3),(1:3) \n[ 3 3 3 ]\n[ 3 3 3 ]\n[ 3 3 3 ]\n");
 
     EXPECT2(A1,SetLimits(0,4,0,4,true),
 		"(0:4),(0:4) \n[ * * * * * ]\n[ * 3 3 3 * ]\n[ * 3 3 3 * ]\n[ * 3 3 3 * ]\n[ * * * * * ]\n");
@@ -65,8 +65,8 @@ int main()
     A1.SetLimits(3,3);
     EXPECT3(A1,A1=Transpose(A2+A2),"(1:3),(1:3) \n[ 2 4 6 ]\n[ 8 10 1776 ]\n[ 14 16 18 ]\n");
     EXPECT3(A1,A1=1.0+Transpose(A2+A2),"(1:3),(1:3) \n[ 3 5 7 ]\n[ 9 11 1777 ]\n[ 15 17 19 ]\n");
-		
-    EXPECT(A1.SubMatrix(MatLimits(2,3,1,2)),"(2:3),(1:2) \n[ 9 11 ]\n[ 15 17 ]\n");  
+
+    EXPECT(A1.SubMatrix(MatLimits(2,3,1,2)),"(2:3),(1:2) \n[ 9 11 ]\n[ 15 17 ]\n");
 	}
   {
     MatrixType A(2,8,2,8);
@@ -78,13 +78,13 @@ int main()
     EXPECT(Sum(A.GetRow    (6)),182);
 		EXPECT(Sum(A.GetDiagonal()),175);
 		EXPECT(A.GetRow(6)*A.GetColumn (3),2198);
-		
+
   }
   {
     MatrixType A(3,3),B(3,3);
     Fill(A,13.0);
     Fill(B, 5.0);
-    
+
     EXPECT(A,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");
     EXPECT(B,"(1:3),(1:3) \n[ 5 5 5 ]\n[ 5 5 5 ]\n[ 5 5 5 ]\n");
     EXPECT(A+B,"(1:3),(1:3) \n[ 18 18 18 ]\n[ 18 18 18 ]\n[ 18 18 18 ]\n");
@@ -96,14 +96,14 @@ int main()
     EXPECT(A/2.0,"(1:3),(1:3) \n[ 6.5 6.5 6.5 ]\n[ 6.5 6.5 6.5 ]\n[ 6.5 6.5 6.5 ]\n");
     EXPECT(A+=B,"(1:3),(1:3) \n[ 18 18 18 ]\n[ 18 18 18 ]\n[ 18 18 18 ]\n");
     EXPECT(A-=B,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");
-    EXPECT(A+=2.0,"(1:3),(1:3) \n[ 15 15 15 ]\n[ 15 15 15 ]\n[ 15 15 15 ]\n");            
-    EXPECT(A-=2.0,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");      
-    EXPECT(A*=2.0,"(1:3),(1:3) \n[ 26 26 26 ]\n[ 26 26 26 ]\n[ 26 26 26 ]\n");      
-    EXPECT(A/=2.0,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");      
-    EXPECT(DirectMultiply(A,B),"(1:3),(1:3) \n[ 65 65 65 ]\n[ 65 65 65 ]\n[ 65 65 65 ]\n");      
-    EXPECT(DirectDivide(A,B),"(1:3),(1:3) \n[ 2.6 2.6 2.6 ]\n[ 2.6 2.6 2.6 ]\n[ 2.6 2.6 2.6 ]\n");            
+    EXPECT(A+=2.0,"(1:3),(1:3) \n[ 15 15 15 ]\n[ 15 15 15 ]\n[ 15 15 15 ]\n");
+    EXPECT(A-=2.0,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");
+    EXPECT(A*=2.0,"(1:3),(1:3) \n[ 26 26 26 ]\n[ 26 26 26 ]\n[ 26 26 26 ]\n");
+    EXPECT(A/=2.0,"(1:3),(1:3) \n[ 13 13 13 ]\n[ 13 13 13 ]\n[ 13 13 13 ]\n");
+    EXPECT(DirectMultiply(A,B),"(1:3),(1:3) \n[ 65 65 65 ]\n[ 65 65 65 ]\n[ 65 65 65 ]\n");
+    EXPECT(DirectDivide(A,B),"(1:3),(1:3) \n[ 2.6 2.6 2.6 ]\n[ 2.6 2.6 2.6 ]\n[ 2.6 2.6 2.6 ]\n");
     EXPECT(A==A,"1");
-    EXPECT(A==B,"0");      
+    EXPECT(A==B,"0");
     EXPECT(A!=A,"0");
     EXPECT(A!=B,"1");
     EXPECT(Sum(A),"117");
@@ -112,7 +112,7 @@ int main()
     EXPECT3(A,FillRandom(A,100.0),"(1:3),(1:3) \n[ * * * ]\n[ * * * ]\n[ * * * ]\n");
     EXPECT(Max(A)<=100,"1");
     EXPECT(Max(A)>=0,"1");
-    
+
     {
       MatrixType Ran(100,10);
       FillRandom(Ran,100.0);
@@ -137,23 +137,23 @@ int main()
     EXPECT(A,"(1:3),(1:3) \n[ 0 3 6 ]\n[ 1 4 7 ]\n[ 2 5 8 ]\n");
     EXPECT(B,"(1:3),(1:3) \n[ 0 1 2 ]\n[ 3 4 5 ]\n[ 6 7 8 ]\n");
     EXPECT3(C,C=A*B,"(1:3),(1:3) \n[ 45 54 63 ]\n[ 54 66 78 ]\n[ 63 78 93 ]\n");
-    EXPECT3(C,C=-A*B,"(1:3),(1:3) \n[ -45 -54 -63 ]\n[ -54 -66 -78 ]\n[ -63 -78 -93 ]\n");  
-    EXPECT3(C,C=A*-B,"(1:3),(1:3) \n[ -45 -54 -63 ]\n[ -54 -66 -78 ]\n[ -63 -78 -93 ]\n");  
+    EXPECT3(C,C=-A*B,"(1:3),(1:3) \n[ -45 -54 -63 ]\n[ -54 -66 -78 ]\n[ -63 -78 -93 ]\n");
+    EXPECT3(C,C=A*-B,"(1:3),(1:3) \n[ -45 -54 -63 ]\n[ -54 -66 -78 ]\n[ -63 -78 -93 ]\n");
     EXPECT3(C,C=-A*-B,"(1:3),(1:3) \n[ 45 54 63 ]\n[ 54 66 78 ]\n[ 63 78 93 ]\n");
     EXPECT3(C,C=A*B-B*A,"(1:3),(1:3) \n[ 40 40 40 ]\n[ 40 16 -8 ]\n[ 40 -8 -56 ]\n");
     VectorType V(3),VC(3);
     FillLinear(V,0.0,2.0);
     EXPECT(V,"(1:3){ 0 1 2 }");
     EXPECT3(VC,VC=A*V,"(1:3){ 15 18 21 }");
-    EXPECT3(VC,VC=V*A,"(1:3){ 5 14 23 }");    
-    EXPECT(V*A*V,60);        
+    EXPECT3(VC,VC=V*A,"(1:3){ 5 14 23 }");
+    EXPECT(V*A*V,60);
     EXPECT3(VC,VC=-A*V,"(1:3){ -15 -18 -21 }");
-    EXPECT3(VC,VC=V*-A,"(1:3){ -5 -14 -23 }");    
+    EXPECT3(VC,VC=V*-A,"(1:3){ -5 -14 -23 }");
     EXPECT3(VC,VC=A*-V,"(1:3){ -15 -18 -21 }");
-    EXPECT3(VC,VC=-V*A,"(1:3){ -5 -14 -23 }");    
+    EXPECT3(VC,VC=-V*A,"(1:3){ -5 -14 -23 }");
     EXPECT3(VC,VC=-A*-V,"(1:3){ 15 18 21 }");
     EXPECT3(VC,VC=-V*-A,"(1:3){ 5 14 23 }");
-    
+
     EXPECT(A,"(1:3),(1:3) \n[ 0 3 6 ]\n[ 1 4 7 ]\n[ 2 5 8 ]\n");
     EXPECT(B,"(1:3),(1:3) \n[ 0 1 2 ]\n[ 3 4 5 ]\n[ 6 7 8 ]\n");
     EXPECT(A+=~B,"(1:3),(1:3) \n[ 0 6 12 ]\n[ 2 8 14 ]\n[ 4 10 16 ]\n");
@@ -169,12 +169,12 @@ int main()
     EXPECT(A+=2.0*OuterProduct(V,V),"(1:3),(1:3) \n[ 0 3 6 ]\n[ 1 6 11 ]\n[ 2 9 16 ]\n");
     EXPECT(A-=OuterProduct(V,V)*2.0,"(1:3),(1:3) \n[ 0 3 6 ]\n[ 1 4 7 ]\n[ 2 5 8 ]\n");
 
-    EXPECT3(A,Unit(A),"(1:3),(1:3) \n[ 1 0 0 ]\n[ 0 1 0 ]\n[ 0 0 1 ]\n");    
-    EXPECT(IsSymmetric(A),true);    
+    EXPECT3(A,Unit(A),"(1:3),(1:3) \n[ 1 0 0 ]\n[ 0 1 0 ]\n[ 0 0 1 ]\n");
+    EXPECT(IsSymmetric(A),true);
     EXPECT(IsSymmetric(B),false);
     EXPECT(MakeSymmetric(B),4);
     EXPECT(B,"(1:3),(1:3) \n[ 0 2 4 ]\n[ 2 4 6 ]\n[ 4 6 8 ]\n");
-      
+
   }
 
 //-----------------------------------------------------
@@ -196,7 +196,7 @@ int main()
     }
     EXPECT1(B,A,"file >> B in ascii mode");
   }
-  
+
   StreamableObject::SetToBinary();
   {
     MatrixType A(-10,20,-5,5),B;
@@ -212,17 +212,17 @@ int main()
     }
     EXPECT1(B,A,"file >> B in binary mode");
   }
- 
-  
-  
+
+
+
   {
     int N=200;
     MatrixType A(N,N),B(N,N),C(N,N);
     VectorType V(N);
     FillRandom(A,100.0);
-    FillRandom(B,100.0);    
+    FillRandom(B,100.0);
     FillRandom(V,100.0);
-    
+
     StopWatch s;
     s.Start();
     for (int i=1;i<=10;i++) C=A*B;
@@ -233,19 +233,19 @@ int main()
     for (int i=1;i<=10;i++) mmul(C,A,B);
     s.Stop();
     Flops=10*N*N*N*2/s.GetTime();
-    std::cout << "Hand coaded  " << Flops*1e-6 << " MFlops" << std::endl;  
-  
+    std::cout << "Hand coaded  " << Flops*1e-6 << " MFlops" << std::endl;
+
     N=1000;
     int N1=10;
     A.SetLimits(N,N);
     V.SetLimits(N);
     FillRandom(A,10.0);
-    FillRandom(V,10.0);    
+    FillRandom(V,10.0);
     double d1, d2=0;
     s.Start();
     for (int i=1;i<=N1;i++) d1=vmul1(V,A,V);
     s.Stop();
- 
+
     double MFlops=(N1*1e-6)*2*(N*N+N)/s.GetTime();
     std::cout << "Exp template " << MFlops << " MFlops" << std::endl;
     s.Start();
@@ -253,7 +253,7 @@ int main()
     s.Stop();
     assert(fabs(d1-d2)<1e-6);
     MFlops=(N1*1e-6)*2*(N*N+N)/s.GetTime();
-    std::cout << "Hand coaded  " << MFlops << " MFlops" << std::endl;  
+    std::cout << "Hand coaded  " << MFlops << " MFlops" << std::endl;
   }
   return pass ? 0 : -1;
 }

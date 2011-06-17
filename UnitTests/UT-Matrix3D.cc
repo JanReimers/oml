@@ -12,7 +12,7 @@
 
 using namespace std;
 
-bool DiagnoseMatrix3D()
+bool TestMatrix3D()
 {
   const char* Class="Matrix3D<double>";
   bool pass=true;

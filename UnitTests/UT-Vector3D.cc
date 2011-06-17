@@ -14,7 +14,7 @@
 
 using namespace std;
 
-int main()
+int TestVector3D()
 {
   const char* Class="TVector3D<double>";
   bool pass=true;

@@ -13,6 +13,9 @@
 	<File name="cow.h" open="0" top="0" tabpos="2">
 		<Cursor position="1653" topLine="69" />
 	</File>
+	<File name="dmatrix.h" open="0" top="0" tabpos="0">
+		<Cursor position="3554" topLine="70" />
+	</File>
 	<File name="indexable.h" open="0" top="0" tabpos="0">
 		<Cursor position="1314" topLine="294" />
 	</File>
@@ -35,7 +38,7 @@
 		<Cursor position="138" topLine="0" />
 	</File>
 	<File name="src\ran250.cc" open="0" top="0" tabpos="0">
-		<Cursor position="102" topLine="0" />
+		<Cursor position="2778" topLine="102" />
 	</File>
 	<File name="src\stream.cc" open="0" top="0" tabpos="0">
 		<Cursor position="554" topLine="9" />

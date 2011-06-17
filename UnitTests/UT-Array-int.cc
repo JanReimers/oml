@@ -11,7 +11,7 @@
 #include <fstream>
 
 
-int main()
+int TestArrayInt()
 {
   const char* Class="Array<int>";
   bool pass=true;
@@ -28,11 +28,11 @@ int main()
    {
       EXPECT(Array<index_t>(),"{ }");
       EXPECT(Array<index_t>(10),"{ * * * * * * * * * * }");
-      
+
       Array<index_t> A1(10),A2(10);
       Fill(A1,3);
-      EXPECT(Array<index_t>(A1),"{ 3 3 3 3 3 3 3 3 3 3 }");      
-      EXPECT(A2=A1,"{ 3 3 3 3 3 3 3 3 3 3 }");      
+      EXPECT(Array<index_t>(A1),"{ 3 3 3 3 3 3 3 3 3 3 }");
+      EXPECT(A2=A1,"{ 3 3 3 3 3 3 3 3 3 3 }");
       EXPECT2(A1,SetSize(13,true),"{ 3 3 3 3 3 3 3 3 3 3 * * * }");
       EXPECT2(A1,SetSize(10),"{ * * * * * * * * * * }");
       EXPECT3(A2,FillLinear(A2,1,10),"{ 1 2 3 4 5 6 7 8 9 10 }");
@@ -52,7 +52,7 @@ int main()
     EXPECT(A+B,"{ 18 18 18 18 18 18 }");
     EXPECT(A-B,"{ 8 8 8 8 8 8 }");
     EXPECT(A*B,"{ 65 65 65 65 65 65 }");
-    EXPECT(A/B,"{ 2 2 2 2 2 2 }");            
+    EXPECT(A/B,"{ 2 2 2 2 2 2 }");
     EXPECT(A+2,"{ 15 15 15 15 15 15 }");
     EXPECT(A-2,"{ 11 11 11 11 11 11 }");
     EXPECT(A*2,"{ 26 26 26 26 26 26 }");
@@ -65,13 +65,13 @@ int main()
     EXPECT(A-=B,"{ 13 13 13 13 13 13 }");
     EXPECT(A*=B,"{ 65 65 65 65 65 65 }");
     EXPECT(A/=B,"{ 13 13 13 13 13 13 }");
-		EXPECT(A+=2,"{ 15 15 15 15 15 15 }");            
-    EXPECT(A-=2,"{ 13 13 13 13 13 13 }");      
-    EXPECT(A*=2,"{ 26 26 26 26 26 26 }");      
-    EXPECT(A/=2,"{ 13 13 13 13 13 13 }");      
+		EXPECT(A+=2,"{ 15 15 15 15 15 15 }");
+    EXPECT(A-=2,"{ 13 13 13 13 13 13 }");
+    EXPECT(A*=2,"{ 26 26 26 26 26 26 }");
+    EXPECT(A/=2,"{ 13 13 13 13 13 13 }");
     EXPECT(Dot(A,B),13*5*6);
     EXPECT(A==A,"1");
-    EXPECT(A==B,"0");      
+    EXPECT(A==B,"0");
     EXPECT(A!=A,"0");
     EXPECT(A!=B,"1");
     EXPECT(Sum(A),"78");
@@ -87,7 +87,7 @@ int main()
     EXPECT3(A,FillRandom(A,100),"{ * * * * * * }");
     EXPECT(Max(A)<=100,"1");
     EXPECT(Max(A)>=0,"1");
-    
+
     {
       Array<int> Ran(1000);
       FillRandom(Ran,100);
@@ -120,7 +120,7 @@ int main()
     }
     EXPECT1(B,A,"file >> B in ascii mode");
   }
-  
+
   StreamableObject::SetToBinary();
   {
     Array<int> A(1000),B;
@@ -135,7 +135,7 @@ int main()
       file >> B;
     }
     EXPECT1(B,A,"file >> B in binary mode");
-  }		
+  }
 
   return pass ? 0 : -1;
 }

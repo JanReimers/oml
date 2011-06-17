@@ -27,7 +27,7 @@
     return ret;
   }
 
-int main()
+int TestArrayDouble()
 {
   const char* Class="Array<double>";
   bool pass=true;

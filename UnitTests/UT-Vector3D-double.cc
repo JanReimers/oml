@@ -12,7 +12,7 @@
 #include <fstream>
 #include <iomanip>
 
-int main()
+int TestVector3DDouble()
 {
   const char* Class="TVector3D<double>";
   bool pass=true;

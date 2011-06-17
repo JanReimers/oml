@@ -11,7 +11,7 @@
 #include "oml/random.h"
 #include <iostream>
 
-int main()
+int TestSolveTriDiagonal()
 {
   const char* Class="Tri diagonal system solver";
   StartClass(Class);
@@ -31,16 +31,16 @@ int main()
     // Load up a symmetrix tri diagonal matrix.
     Matrix<double> A(lim,lim);
     Fill(A,0.0);
-    A.GetDiagonal()=diag;    
-    for (int i=lim.Low;i<=lim.High-1;i++) 
+    A.GetDiagonal()=diag;
+    for (int i=lim.Low;i<=lim.High-1;i++)
       {
 	A(i,i+1)=off(i);
 	A(i+1,i)=off(i);
       }
-    
+
     std::cout.setf(std::ios::fixed,std::ios::floatfield);
     std::cout << "A=" << A << std::endl;
-    
+
     Vector<double> u=SolveTriDiag(off,diag,r);
     std::cout << "A*u-r=" << A*u-r << std::endl;
     EXPECT(!(A*u-r) < 1e-6,"1");
@@ -54,7 +54,7 @@ int main()
     FillRandom(off,a);
     FillRandomPositive(diag,1+2*a);
     std::cout.setf(std::ios::fixed,std::ios::floatfield);
-    
+
     Array<double> u=SolveTriDiag(off,diag,r);
 
     double err=0.0;

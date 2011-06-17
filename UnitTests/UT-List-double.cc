@@ -20,7 +20,7 @@
     for (index_t i=1; i<a.size(); i++) ret=ret&&(a[i-1]<=a[i]);
     return ret;
   }
-  
+
   bool IsDSorted(const List<double>& a)
   {
     bool ret=true;
@@ -28,7 +28,7 @@
     return ret;
   }
 
-int main()
+int TestListDouble()
 {
   const char* Class="List<double>";
   bool pass=true;
@@ -77,7 +77,7 @@ int main()
     List<double> A,B;
     double Pi=M_PI;
     for (int i=0;i<10;i++) A.push_back(M_PI);
-    for (int i=0;i<10;i++) B.push_back(0.25);    
+    for (int i=0;i<10;i++) B.push_back(0.25);
     EXPECT(Max(abs(1.0/A   -(1.0/ Pi)))<eps,true);
     EXPECT(Max(abs(sin(A)  - sin (Pi)))<eps,true);
     EXPECT(Max(abs(cos(A)  - cos (Pi)))<eps,true);
@@ -107,21 +107,21 @@ int main()
   {
     List<double> A,B;
     for (int i=0;i<1000;i++) A.push_back(i);
-    for (int i=0;i<1000;i++) B.push_back(i);    
+    for (int i=0;i<1000;i++) B.push_back(i);
     FillRandom(A,100.0);
     B=A;
     EXPECT3(IsASorted(B),AscendingShellSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingShellSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingShellSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),AscendingHeapSort(B),true);
     B=A;
-    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true); 
+    EXPECT3(IsDSorted(B),DescendingHeapSort(B),true);
     B=A;
     EXPECT3(IsASorted(B),B.ReIndex(MakeAscendingIndex(A)),true);
     B=A;
-    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true); 
-  
+    EXPECT3(IsDSorted(B),B.ReIndex(MakeDescendingIndex(A)),true);
+
   }
 
   return pass ? 0 : -1;

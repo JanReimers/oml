@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <fstream>
 
-int main()
+int TestMatrix3DDouble()
 {
   const char* Class="Matrix3D<double>";
   bool pass=true;

@@ -9,7 +9,7 @@
 #include <fstream>
 #include <iomanip>
 
-int main()
+int TestRandomDouble()
 {
   bool pass=true;
   const char* Class="Random number generator";

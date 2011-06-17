@@ -10,7 +10,7 @@
 #include <iostream>
 #include <cmath>
 
-int main()
+int TestEigenDouble()
 {
   const char* Class="Eigen tester";
   StartClass(Class);

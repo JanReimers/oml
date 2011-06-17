@@ -13,7 +13,7 @@
 
 typedef List<int> ListType;
 
-int main()
+int TestListInt()
 {
   const char* Class="List<int>";
   bool pass=true;
@@ -50,18 +50,18 @@ int main()
     C[0]=-1;
     EXPECT(A,"{ 0 1 2 3 4 5 6 7 8 9 }");
     EXPECT(B,"{ 0 1 2 3 4 5 6 7 8 9 }");
-    EXPECT(C,"{ -1 1 2 3 4 5 6 7 8 9 }");  
+    EXPECT(C,"{ -1 1 2 3 4 5 6 7 8 9 }");
     EXPECT3(A,A.push_back(999),"{ 0 1 2 3 4 5 6 7 8 9 999 }");
     EXPECT3(A,A.InsertAt(-888,1),"{ 0 -888 1 2 3 4 5 6 7 8 9 999 }");
     EXPECT(A.find(4),5);
-    EXPECT(A.find(10),A.size());    
+    EXPECT(A.find(10),A.size());
     EXPECT3(A,A.Remove(5),"{ 0 -888 1 2 3 4 6 7 8 9 999 }");
     A.push_back(6);
     A.InsertAt(6,5);
     EXPECT3(A,A.RemoveAll(6),"{ 0 -888 1 2 3 4 7 8 9 999 }");
     EXPECT3(A,A.RemoveAt(0),"{ -888 1 2 3 4 7 8 9 999 }");
     EXPECT(A.front(),-888);
-    EXPECT(A.back(),999); 
+    EXPECT(A.back(),999);
     Array<index_t> index(A.size());
     FillLinear(index,A.size()-1,0);
     EXPECT3(A,A.ReIndex(index),"{ 999 9 8 7 4 3 2 1 -888 }");
@@ -72,7 +72,7 @@ int main()
 //
   {
     ListType A,B;
-    for (int i=0;i<6;i++) 
+    for (int i=0;i<6;i++)
     {
       A.push_back(13);
       B.push_back(5);
@@ -80,20 +80,20 @@ int main()
     EXPECT(A+B,"{ 18 18 18 18 18 18 }");
     EXPECT(A-B,"{ 8 8 8 8 8 8 }");
     EXPECT(A*B,"{ 65 65 65 65 65 65 }");
-    EXPECT(A/B,"{ 2 2 2 2 2 2 }");            
+    EXPECT(A/B,"{ 2 2 2 2 2 2 }");
     EXPECT(A+2,"{ 15 15 15 15 15 15 }");
     EXPECT(A-2,"{ 11 11 11 11 11 11 }");
     EXPECT(A*2,"{ 26 26 26 26 26 26 }");
     EXPECT(A/2,"{ 6 6 6 6 6 6 }");
     EXPECT(A+=B,"{ 18 18 18 18 18 18 }");
     EXPECT(A-=B,"{ 13 13 13 13 13 13 }");
-    EXPECT(A+=2,"{ 15 15 15 15 15 15 }");            
-    EXPECT(A-=2,"{ 13 13 13 13 13 13 }");      
-    EXPECT(A*=2,"{ 26 26 26 26 26 26 }");      
-    EXPECT(A/=2,"{ 13 13 13 13 13 13 }");      
+    EXPECT(A+=2,"{ 15 15 15 15 15 15 }");
+    EXPECT(A-=2,"{ 13 13 13 13 13 13 }");
+    EXPECT(A*=2,"{ 26 26 26 26 26 26 }");
+    EXPECT(A/=2,"{ 13 13 13 13 13 13 }");
     EXPECT(Dot(A,B),13*5*6);
     EXPECT(A==A,"1");
-    EXPECT(A==B,"0");      
+    EXPECT(A==B,"0");
     EXPECT(A!=A,"0");
     EXPECT(A!=B,"1");
     EXPECT(Sum(A),"78");
@@ -109,7 +109,7 @@ int main()
     EXPECT3(A,FillRandom(A,100),"{ * * * * * * }");
     EXPECT(Max(A)<=100,"1");
     EXPECT(Max(A)>=0,"1");
-    
+
     {
       ListType Ran;
       for (int i=0;i<1000;i++) Ran.push_back(i);
@@ -129,4 +129,4 @@ int main()
 
 
 
-    
+

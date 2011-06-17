@@ -9,7 +9,7 @@
 #include "oml/random.h"
 #include <fstream>
 
-int main()
+int TestVectorInt()
 {
   const char* Class="Vector<int>";
   bool pass=true;
@@ -28,13 +28,13 @@ int main()
       std::cout << "Constructor tests" << std::endl;
       EXPECT(Vector<index_t>(),"(1:0){ }");
       EXPECT(Vector<index_t>(10),"(1:10){ * * * * * * * * * * }");
-      EXPECT(Vector<index_t>(5,14),"(5:14){ * * * * * * * * * * }");      
-      EXPECT(Vector<index_t>(VecLimits(5,14)),"(5:14){ * * * * * * * * * * }");      
-      
+      EXPECT(Vector<index_t>(5,14),"(5:14){ * * * * * * * * * * }");
+      EXPECT(Vector<index_t>(VecLimits(5,14)),"(5:14){ * * * * * * * * * * }");
+
       Vector<index_t> A1(5,14),A2(5,14);
       Fill(A1,3);
-      EXPECT(Vector<index_t>(A1),"(5:14){ 3 3 3 3 3 3 3 3 3 3 }");      
-      EXPECT(A2=A1,"(5:14){ 3 3 3 3 3 3 3 3 3 3 }");      
+      EXPECT(Vector<index_t>(A1),"(5:14){ 3 3 3 3 3 3 3 3 3 3 }");
+      EXPECT(A2=A1,"(5:14){ 3 3 3 3 3 3 3 3 3 3 }");
       EXPECT2(A1,SetLimits(VecLimits(-2,17),true),"(-2:17){ * * * * * * * 3 3 3 3 3 3 3 3 3 3 * * * }");
       EXPECT2(A1,SetLimits(VecLimits(-6,13)),"(-6:13){ * * * * * * * * * * * * * * * * * * * * }");
       EXPECT3(A2,FillLinear(A2,1,10),"(5:14){ 1 2 3 4 5 6 7 8 9 10 }");
@@ -51,7 +51,7 @@ int main()
     Vector<index_t> A(-3,2),B(-3,2);
     Fill(A,13);
     Fill(B, 5);
-    
+
     EXPECT(A+B,"(-3:2){ 18 18 18 18 18 18 }");
     EXPECT(A-B,"(-3:2){ 8 8 8 8 8 8 }");
     EXPECT(A*B,"390");
@@ -61,14 +61,14 @@ int main()
     EXPECT(A/2,"(-3:2){ 6 6 6 6 6 6 }");
     EXPECT(A+=B,"(-3:2){ 18 18 18 18 18 18 }");
     EXPECT(A-=B,"(-3:2){ 13 13 13 13 13 13 }");
-    EXPECT(A+=2,"(-3:2){ 15 15 15 15 15 15 }");            
-    EXPECT(A-=2,"(-3:2){ 13 13 13 13 13 13 }");      
-    EXPECT(A*=2,"(-3:2){ 26 26 26 26 26 26 }");      
-    EXPECT(A/=2,"(-3:2){ 13 13 13 13 13 13 }");      
-    EXPECT(DirectMultiply(A,B),"(-3:2){ 65 65 65 65 65 65 }");      
-    EXPECT(DirectDivide(A,B),"(-3:2){ 2 2 2 2 2 2 }");            
+    EXPECT(A+=2,"(-3:2){ 15 15 15 15 15 15 }");
+    EXPECT(A-=2,"(-3:2){ 13 13 13 13 13 13 }");
+    EXPECT(A*=2,"(-3:2){ 26 26 26 26 26 26 }");
+    EXPECT(A/=2,"(-3:2){ 13 13 13 13 13 13 }");
+    EXPECT(DirectMultiply(A,B),"(-3:2){ 65 65 65 65 65 65 }");
+    EXPECT(DirectDivide(A,B),"(-3:2){ 2 2 2 2 2 2 }");
     EXPECT(A==A,"1");
-    EXPECT(A==B,"0");      
+    EXPECT(A==B,"0");
     EXPECT(A!=A,"0");
     EXPECT(A!=B,"1");
     EXPECT(Sum(A),"78");
@@ -84,7 +84,7 @@ int main()
     EXPECT3(A,FillRandom(A,100),"(-3:2){ * * * * * * }");
     EXPECT(Max(A)<= 100,"1");
     EXPECT(Min(A)>=-100,"1");
-    
+
     {
       Vector<int> Ran(1000);
       FillRandom(Ran,100);
@@ -98,7 +98,7 @@ int main()
       EXPECT(Max(Ran),max);
     }
   }
-  
+
 //-----------------------------------------------------
 //
 //  IO tests
@@ -118,7 +118,7 @@ int main()
     }
     EXPECT1(B,A,"file >> B in ascii mode");
   }
-  
+
   StreamableObject::SetToBinary();
   {
     Vector<int> A(-10,1000),B;
@@ -133,6 +133,6 @@ int main()
       file >> B;
     }
     EXPECT1(B,A,"file >> B in binary mode");
-  }		
+  }
   return pass ? 0 : -1;
 }
