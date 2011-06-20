@@ -8,7 +8,7 @@
 #include "oml/stream.h"
 #include <cmath>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include <fstream>
 #include <iomanip>
 

@@ -40,13 +40,14 @@ template <class T, class R> class Ref<T,R,VectorShape>
 template <class T, class R> class Ref<T,R,MatrixShape>
 {
  public:
-  Ref(const R& r) : itsRef(r) {};
+  Ref(const R& r) : itsRef(r), itsLimits(r.GetLimits()) {};
   T         operator[](index_t n          ) const {return itsRef[n];}
   T         operator()(subsc_t i,subsc_t j) const {return itsRef(i,j);}
   index_t   size      (                   ) const {return itsRef.size();}
-  MatLimits GetLimits (                   ) const {return itsRef.GetLimits();}
+  MatLimits GetLimits (                   ) const {return itsLimits;}
  private:
   const R& itsRef;
+  MatLimits itsLimits;
 };
 
 //----------------------------------------------------
@@ -84,14 +85,15 @@ template <class T, class A> class Val<T,A, VectorShape>
 template <class T, class A> class Val<T,A,MatrixShape>
 {
  public:
-  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a) {};
+  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsALimits(a.GetLimits()) {};
   T         operator[](index_t        ) const {return itsVal;}
   T         operator()(subsc_t,subsc_t) const {return itsVal;}
   index_t   size      (               ) const {return itsA.size();}
-  MatLimits GetLimits (               ) const {return itsA.GetLimits();}
+  MatLimits GetLimits (               ) const {return itsALimits;}
  private:
   T        itsVal;
   const A& itsA;
+  MatLimits itsALimits; //Kludge to get around a long standing g++ BUG.
 };
 
 template <class T, class Derived,Store M,Data D,Shape S> class Indexable;

@@ -6,117 +6,61 @@
 		<Option pch_mode="2" />
 		<Option compiler="cygwin" />
 		<Build>
-			<Target title="UT1">
-				<Option output="bin\Debug\UT1" prefix_auto="1" extension_auto="1" />
+			<Target title="Debug">
+				<Option output=".\UTDebug" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="cygwin" />
 				<Compiler>
-					<Add option="-O1" />
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
-				<ExtraCommands>
-					<Add after="./bin/Debug/UT1.exe" />
-				</ExtraCommands>
+				<Linker>
+					<Add directory="..\Debug" />
+				</Linker>
 			</Target>
-			<Target title="UT2">
-				<Option output="bin\Debug\UT2" prefix_auto="1" extension_auto="1" />
+			<Target title="Release">
+				<Option output=".\UTRelease" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="cygwin" />
 				<Compiler>
-					<Add option="-O1" />
+					<Add option="-O2" />
 				</Compiler>
-				<ExtraCommands>
-					<Add after="./bin/Debug/UT2.exe" />
-				</ExtraCommands>
-			</Target>
-			<Target title="UT3">
-				<Option output="bin\Debug\UT3" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
-				<Option type="1" />
-				<Option compiler="cygwin" />
-				<Compiler>
-					<Add option="-O1" />
-				</Compiler>
-				<ExtraCommands>
-					<Add after="./bin/Debug/UT3.exe" />
-				</ExtraCommands>
-			</Target>
-			<Target title="UT4">
-				<Option output="bin\Debug\UT4" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
-				<Option type="1" />
-				<Option compiler="cygwin" />
-				<Compiler>
-					<Add option="-O1" />
-				</Compiler>
-				<ExtraCommands>
-					<Add after="./bin/Debug/UT4.exe" />
-				</ExtraCommands>
+				<Linker>
+					<Add directory="..\Release" />
+				</Linker>
 			</Target>
 		</Build>
 		<VirtualTargets>
-			<Add alias="all" targets="UT1;UT2;UT3;UT4;" />
+			<Add alias="all" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions" />
 			<Add directory="..\" />
 		</Compiler>
 		<Linker>
 			<Add library="oml" />
-			<Add directory="..\" />
 		</Linker>
-		<Unit filename="UnitTests\UT-Array-double.cc">
-			<Option target="UT1" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Array-int.cc">
-			<Option target="UT2" />
-		</Unit>
-		<Unit filename="UnitTests\UT-DMatrix-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Eigen-double.cc">
-			<Option target="UT4" />
-		</Unit>
-		<Unit filename="UnitTests\UT-List-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-List-int.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Matrix-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Matrix3D-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Matrix3D.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Random-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-SMatrix-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-SolveTriDiagonal.cc">
-			<Option target="UT3" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Vector-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Vector-int.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Vector3D-double.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="UnitTests\UT-Vector3D.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="UnitTests\UT-Array-double.cc" />
+		<Unit filename="UnitTests\UT-Array-int.cc" />
+		<Unit filename="UnitTests\UT-DMatrix-double.cc" />
+		<Unit filename="UnitTests\UT-Eigen-double.cc" />
+		<Unit filename="UnitTests\UT-List-double.cc" />
+		<Unit filename="UnitTests\UT-List-int.cc" />
+		<Unit filename="UnitTests\UT-Matrix-double.cc" />
+		<Unit filename="UnitTests\UT-Matrix3D-double.cc" />
+		<Unit filename="UnitTests\UT-Matrix3D.cc" />
+		<Unit filename="UnitTests\UT-Random-double.cc" />
+		<Unit filename="UnitTests\UT-SMatrix-double.cc" />
+		<Unit filename="UnitTests\UT-SolveTriDiagonal.cc" />
+		<Unit filename="UnitTests\UT-Vector-double.cc" />
+		<Unit filename="UnitTests\UT-Vector-int.cc" />
+		<Unit filename="UnitTests\UT-Vector3D-double.cc" />
+		<Unit filename="UnitTests\UT-Vector3D.cc" />
 		<Unit filename="UnitTests\UnitTest.H" />
 		<Unit filename="UnitTests\UnitTest.cc" />
+		<Unit filename="UnitTests\main.cc" />
 		<Extensions>
 			<code_completion />
 			<envvars />

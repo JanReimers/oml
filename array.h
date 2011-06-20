@@ -17,7 +17,7 @@
   Arrays have element indexes ranging from 0...n-1 and are indexed using the \c [i]
   syntax, just like C arrays.  The base index 0 cannot be changed. Arrays support
   copy on write (COW) symmantics, which avoids deep copying (element by element)
-  when they are returned by value from a function. 
+  when they are returned by value from a function.
 
   \b Math:
 
@@ -43,16 +43,16 @@ template <class T> class Array
            Array(              ) : itsData(0        ) {}; //!< Array with size=0;
   explicit Array(index_t   size) : itsData(size     ) {}; //!< All elements are un-initiated.
   //! Allows construction from an expression template.
-  template <class B> Array(const Indexable<T,B,Full,Real,ArrayShape>&);
+  template <class B, Data D> Array(const Indexable<T,B,Full,D,ArrayShape>&);
   //! Allows assignment from an expression template.
-  template <class B> Array& operator =(const Indexable<T,B,Full,Real,ArrayShape>&);
+  template <class B, Data D> Array& operator =(const Indexable<T,B,Full,D,ArrayShape>&);
   //@}
 
 
-  std::ostream& Write(std::ostream&) const; 
-  std::istream& Read (std::istream&)      ; 
+  std::ostream& Write(std::ostream&) const;
+  std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.
-  friend std::ostream& operator<<(std::ostream& os,const Array& a) 
+  friend std::ostream& operator<<(std::ostream& os,const Array& a)
   {
     return os << static_cast<const TStreamableObject<Array<T> >& >(a);
   }
@@ -79,16 +79,16 @@ template <class T> class Array
   //! Extract a subarray.  Involves a deep copy.
   Array SubArray(index_t start, index_t stop) const;
 
-  
+
 #if DEBUG
   #define CHECK(i) assert(i>=0&&i<itsSize)
 #else
   #define CHECK(i)
 #endif
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,Array,Full,Real,ArrayShape>& a) 
+    ArraySubscriptor(Indexable<T,Array,Full,Real,ArrayShape>& a)
       : itsPtr(static_cast<Array&>(a).Get()), itsSize(a.size()) {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -96,7 +96,7 @@ template <class T> class Array
     index_t itsSize;
   };
 #undef CHECK
-  
+
   /*! \name Subscriptors and Iterators.
     Iterators should be STL compatible.
    */
@@ -111,7 +111,7 @@ template <class T> class Array
  private:
   friend class ArraySubscriptor;
   friend class Iterable <T,Array>;
-  
+
   const T* Get() const;
         T* Get()      ;
   void  CheckIndex(index_t) const;
@@ -130,13 +130,13 @@ template <class T> class Array
   #define CHECK(i)
 #endif
 
-template <class T> inline  T Array<T>::operator[](index_t i) const 
+template <class T> inline  T Array<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& Array<T>::operator[](index_t i) 
+template <class T> inline T& Array<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
@@ -149,11 +149,11 @@ template <class T> inline T& Array<T>::operator[](index_t i)
 //  Some inline functions.
 //
 template <class T> inline index_t  Array<T>::size() const
-{ 
+{
   return itsData.size();
 }
 
-template <class T> inline const T* Array<T>::Get() const 
+template <class T> inline const T* Array<T>::Get() const
 {
   return itsData.Get();
 }
@@ -163,15 +163,15 @@ template <class T> inline T* Array<T>::Get()
   return itsData.Get();
 }
 
-template <class T> template <class B> inline 
-Array<T>& Array<T>::operator=(const Indexable<T,B,Full,Real,ArrayShape>& a) 
+template <class T> template <class B, Data D> inline
+Array<T>& Array<T>::operator=(const Indexable<T,B,Full,D,ArrayShape>& a)
 {
   ArrayAssign(*this,a);
   return *this;
 }
 
-template <class T> template <class B> inline 
-Array<T>::Array(const Indexable<T,B,Full,Real,ArrayShape>& a) 
+template <class T> template <class B, Data D> inline
+Array<T>::Array(const Indexable<T,B,Full,D,ArrayShape>& a)
   : itsData(a.size())
   {
     ArrayAssign(*this,a);
@@ -233,7 +233,7 @@ template <class T> inline Array<T> operator&(const Array<T>& a, const Array<T>& 
 template <class T> inline void Array<T>::ReIndex(const Array<index_t>& index)
 {
   assert(size()==index.size());
-  
+
   Array<index_t>::const_iterator b=index.begin();
   Array<T>                       dest(size());
   iterator                       i=dest.begin();
@@ -253,21 +253,21 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
 }
 
 /*! \mainpage Object %Matrix Library (OML)
- 
+
   \section motive Motivation
   One of the strong points of the FORTRAN language for numerical programming is its support
-  for multidimensional arrays. Beyond this FORTRAN (at least the 77 standard) has a 
+  for multidimensional arrays. Beyond this FORTRAN (at least the 77 standard) has a
   number of problems:
-  -# No support for dynamic memory allocation. The maximum problem size has to decided at 
+  -# No support for dynamic memory allocation. The maximum problem size has to decided at
   compile time.
   -# No concept of user defined data types and arrays thereof.
   -# Very poor static (compile time) checking of function interfaces etc.
-  -# No support for separation of interface and implementation, i.e. no way to do 
+  -# No support for separation of interface and implementation, i.e. no way to do
   dependency inversions (ref. Martin).
   -# Very poor support for std::string handling and system level operations.
 
   The C language solves some of these problems but introduces more:
-  -# Arrays start from 0 instead of 1. 
+  -# Arrays start from 0 instead of 1.
   -# Dynamically allocated multi dimensional arrays are hideously complex and error prone.
   -# No integer power operator like A**3.
   -# Static arrays are stored in row major form, this is ass backwards for FORTRAN programmers.
@@ -278,14 +278,14 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
 
   \section oml OML Introduction
 
-  First some nomenclature: Instead of the term \e array I will use the term \e container to 
+  First some nomenclature: Instead of the term \e array I will use the term \e container to
   refer to any C++ entity that can store and manage multiple values of a single type.
   The OML attempts to address most of the FORTRAN and C issues listed above, by providing the following features:
   - 1-D and 2-D containers that are dynamically allocated behind the scenes. So users rarely
   have to think about memory management issues.
-  - Containers can be freely passed by value (rather than by reference) with very little 
+  - Containers can be freely passed by value (rather than by reference) with very little
   speed penalty. This is achieved by simply transferring a data pointer into the
-  receiving container. This is called a \e shallow \e copy. The problem of how to deal with a 
+  receiving container. This is called a \e shallow \e copy. The problem of how to deal with a
   subsequent write operation on a container sharing data with others is addressed below.
   - Containers with user selectable lower indexes that default 1 are defined. This emulates
   FORTRAN.
@@ -301,7 +301,7 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   Example 2:
   \code
   // Instead of writing
-  for (int i=1;i<=n;i++) 
+  for (int i=1;i<=n;i++)
     for (int j=1;j<=n;j++)
     {
       C(i,j)=0.0;
@@ -309,29 +309,29 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
         C(i,j)+=A(i,k)*B(k,j);
      }
   // You just write
-  C=A*B; 
+  C=A*B;
   \endcode
-  
+
   \section containers OML Containers
   All OML containers are templated so you can put any (hopefully numerical) data type
   in the containers.  OML provides the following containers:
-  - \c Array<T> which emulates a 1-D C style array.  Lower index is always 0, and elements 
+  - \c Array<T> which emulates a 1-D C style array.  Lower index is always 0, and elements
   are accessed using \c A[i] notation.
   - \c List<T> is like %Array<T> but will dynamically resize itself when the user pushes
   values onto the back of the list (just like and STL \c std::vector<T>).
-  - \c Vector<T> which emulates a 1-D FORTRAN array. Lower index is selectable, defaulting 
+  - \c Vector<T> which emulates a 1-D FORTRAN array. Lower index is selectable, defaulting
   to 1. Elements are accessed using \c V(i) notation.
-  - \c Matrix<T> which emulates a 2-D FORTRAN array. Lower indices are selectable, defaulting 
+  - \c Matrix<T> which emulates a 2-D FORTRAN array. Lower indices are selectable, defaulting
   to 1. Elements are accessed using \c M(i,j) notation.
   - \c SMatrix<T> which emulates a 2-D FORTRAN array but only the upper triangle is stored.
-  So assigning to \c S(i,j) implicitly assigns \c S(j,i), hence \c S(i,j)==S(j,i) 
+  So assigning to \c S(i,j) implicitly assigns \c S(j,i), hence \c S(i,j)==S(j,i)
   is \b always true. This type of matrix saves some memory but you pay for this in performance
   when accessing the elements.
   - \c SMatrix<std::complex<T> > will magically behave like a Hermitian matrix, so that \c S(i,j)==conj(S(j,i))
   is always true.
 
-  That's it! There are no 3-D or 7-D containers as in FORTRAN. I find that with C++ coding 
-  styles you don't need these higher dimensional containers. You could declare a 
+  That's it! There are no 3-D or 7-D containers as in FORTRAN. I find that with C++ coding
+  styles you don't need these higher dimensional containers. You could declare a
   \c Vector<Matrix<double> > or a \c Matrix<Vector<double> > if you are stuck.
 
   \section type Recommended Data Types.
@@ -345,7 +345,7 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   Array<double> B=sin(froggies); //Compile time error, no function sin(Froggy) defined.
   \endcode
   If the user did happen to define a function called \c sin() that takes a Froggy argument
-  and returns a double, then the example above will indeed compile. 
+  and returns a double, then the example above will indeed compile.
   -# The \c Array<T>, \c List<T> and \c Vector<T> are all 100% defined in the header files
   so the user can instance these with any data type. The 2-D matrix containers have a
   fair amount of their code not in the headers. This \e non-inline code is compiled into
@@ -387,13 +387,13 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   }
   \endcode
 
-  If you return a pointer to the new container 
+  If you return a pointer to the new container
   the user has to worry about memory management which is a no no. Also returning a reference
   to a temporary (such as \c C) is illegal.
 
   This \e shallow \e copy system has a penalty. Any access to the individual elements of
-  a non constant OML container must first check if there are multiple owners.  I call 
-  this a COW check, and it can give a performance hit. This can be solved by using a 
+  a non constant OML container must first check if there are multiple owners.  I call
+  this a COW check, and it can give a performance hit. This can be solved by using a
   \c Subscriptor helper class:
   \code
   #include "oml/array.h"
@@ -406,7 +406,7 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   for (int i=0;i<N;i++) A[i]=sin(2*Pi*i*0.01); // Inefficient, does COW check for every access.
 
   Array<double>::Subscriptor s(A); //Only one COW check is done here.
-  for (int i=0;i<N;i++) s[i]=sin(2*Pi*i*0.01); // Faster, but you may have to measure 
+  for (int i=0;i<N;i++) s[i]=sin(2*Pi*i*0.01); // Faster, but you may have to measure
                                                // carefully to notice.
   \endcode
   Beware that even reading from \c A in the above example will also invoke a COW check for every access.
@@ -456,30 +456,30 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   for (int i=0;i<N;i++) C[i]=(A[i]-B[i])*(A[i]-B[i])+0.5*(A[i]+B[i]);
   \endcode
   The optimizer will then do common sub-expression elimination etc.  Basically you
-  get full speed at run time and no creation of extra temporaries. 
+  get full speed at run time and no creation of extra temporaries.
 
-  One problem with 
+  One problem with
   expression templates is that if there is a compilation error, the error messages are very hard
   read because of the many levels of template nesting.
 
   \section io IO and Streaming
-  OML containers are streamable, so you can write them to a file in ascii or 
+  OML containers are streamable, so you can write them to a file in ascii or
   binary form using \c op<<, and then read them back in using \c op>>. The object type
-  can even be automatically detected and created.  This is sometimes referred to as 
+  can even be automatically detected and created.  This is sometimes referred to as
   \e pickling and \e unpickling!
   Output of an OML object consists of
   -# flag indicating the mode (binary,ascii or pretty)
   -# typeinfo for the object
   -# size and/or limits of the container
   -# all the data in one unindexed list
-  
+
   When OML objects are read in using op>> the following occurs
   -# The mode is set to mode used to save the object.
   -# The typeinfo is checked for a match.
   -# The size/limits info is read in and the object is resized accordingly. Old data is \b not preserved.
   -# The data is read in a stored in the object.
   -# The mode is restored to its original state.
-  
+
   Example:
   \code
   #include "oml/array.h"
@@ -495,7 +495,7 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   out << A;
   ifstream in("test.dat");
   Array<double> B; //Don't need to know the size.
-  in >> B; 
+  in >> B;
   if (A==B)
     std::cout << "OK" << std::endl;
   else
@@ -513,21 +513,21 @@ template <class T> inline Array<T> Array<T>::SubArray(index_t start, index_t sto
   \endcode
   Operator \c * has a different meaning depending the container type. These operators can
   be mixed with the scalers in most cases.
-  
+
   The following math functions are also supported for all containers:
   \code
   DirectMultiply, DirectDivide, Dot, Sum, Min, Max, Integrate
   pow, fmod, atan2, hypot, Equal
-  sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, 
+  sin, cos, tan, asin, acos, atan, sinh, cosh, tanh,
   exp, log, pow2, pow3, pow4, pow10, log10, sqrt, fabs, conj, abs, arg, norm, real, imag.
   \endcode
   Some functions are specific to containers of complex values, so misuse will result in
   a compile time error.
-   
+
   Note that multiplication of
   %Array's does not imply an algebraic dot product, use \c Dot(A,B) for that.
 
-  \todo Construct from \c T[] to allow for example \c Array<double> \c A={1.,2.,3.,4.};  
+  \todo Construct from \c T[] to allow for example \c Array<double> \c A={1.,2.,3.,4.};
   \todo Construct and assign from STL iterators?
 
   \author Jan Reimers

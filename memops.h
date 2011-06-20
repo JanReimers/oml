@@ -99,8 +99,8 @@ OP(Div,/)
 #include <iostream>
 #endif
 
-template <class T, class Derived,Store M,Data D,Shape S,class B> inline
-void ArrayAssign(Indexable<T,Derived,M,D,S>& a,const Indexable<T,B,M,D,S>& b)
+template <class T, class Derived,Store M,Data DA,Shape S,class B, Data DB> inline
+void ArrayAssign(Indexable<T,Derived,M,DA,S>& a,const Indexable<T,B,M,DB,S>& b)
 {
   int n=a.size();
   assert(n==b.size());
@@ -140,7 +140,7 @@ void MatrixAssign(Indexable<T,Derived,Full,D,MatrixShape>& a,const Indexable<T,B
   assert(a.GetLimits()==b.GetLimits());
   typename Derived::Subscriptor s(a);
   subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
     for (int j=a.GetLimits().Col.Low;j<=ch;j++)
       s(i,j)=b(i,j);
 }
@@ -154,7 +154,7 @@ void MatrixAssign(Indexable<T,Derived,Symmetric,D,MatrixShape>& a,const Indexabl
   assert(a.GetLimits()==b.GetLimits());
   typename Derived::Subscriptor s(a);
   subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
     for (int j=i;j<=ch;j++)
       s(i,j)=b(i,j);
 }

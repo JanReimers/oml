@@ -789,7 +789,7 @@
 	<cmath>
 	<fstream>
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\array.h
+1308578172 c:\cygwin\home\reimersjan\cdt3\\oml\array.h
 	"oml/indext.h"
 	"oml/shape.h"
 	"oml/tstream.h"
@@ -831,7 +831,7 @@
 	<cassert>
 	<iostream>
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\arrindex.h
+1308576701 c:\cygwin\home\reimersjan\cdt3\\oml\arrindex.h
 	"oml/indexable.h"
 	"oml/memops.h"
 
@@ -841,7 +841,7 @@
 	"oml/binop.h"
 	"oml/unop.h"
 
-1308335754 c:\cygwin\home\reimersjan\cdt3\\oml\xpr.h
+1308343042 c:\cygwin\home\reimersjan\cdt3\\oml\xpr.h
 	"oml/indext.h"
 	"oml/shape.h"
 	"oml/veclimit.h"
@@ -869,7 +869,7 @@
 	"oml/indext.h"
 	"oml/matlimit.h"
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\memops.h
+1308581113 c:\cygwin\home\reimersjan\cdt3\\oml\memops.h
 	"oml/indexable.h"
 	<cassert>
 	<iostream>
@@ -929,7 +929,7 @@
 	<stdlib.h>
 	<fstream>
 
-1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-dmatrix-double.cc
+1308576353 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-dmatrix-double.cc
 	"oml/UnitTests/UnitTest.H"
 	"oml/vector_io.h"
 	"oml/dmatrix.h"
@@ -952,7 +952,7 @@
 	"oml/vecindex.h"
 	"oml/minmax.h"
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\vecindex.h
+1308575805 c:\cygwin\home\reimersjan\cdt3\\oml\vecindex.h
 	"oml/indexable.h"
 	"oml/memops.h"
 
@@ -977,15 +977,15 @@
 	"oml/indexable.h"
 	"oml/memops.h"
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrixalg.h
+1308343189 c:\cygwin\home\reimersjan\cdt3\\oml\matrixalg.h
 	"oml/matindex.h"
 	"oml/vector.h"
 	"oml/rowcol.h"
 
-1308334555 c:\cygwin\home\reimersjan\cdt3\\oml\rowcol.h
+1308591900 c:\cygwin\home\reimersjan\cdt3\\oml\rowcol.h
 	"oml/vecindex.h"
 
-1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\matrix.h
+1308579817 c:\cygwin\home\reimersjan\cdt3\\oml\matrix.h
 	"oml/iterable.h"
 	"oml/tstream.h"
 	"oml/matrixbase.h"
@@ -1041,7 +1041,7 @@
 	"oml/minmax.h"
 	<fstream>
 
-1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-matrix-double.cc
+1308582764 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-matrix-double.cc
 	"oml/UnitTests/UnitTest.H"
 	"oml/vector_io.h"
 	"oml/matrix.h"
@@ -1053,6 +1053,7 @@
 	"oml/random.h"
 	"oml/stopw.h"
 	<fstream>
+	<iostream>
 
 1300309051 c:\cygwin\home\reimersjan\cdt3\\oml\smatrix.h
 	"oml/iterable.h"
@@ -1171,16 +1172,16 @@
 	<fstream>
 	<iomanip>
 
-1308333501 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector3d.cc
+1308578439 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\ut-vector3d.cc
 	"oml/UnitTests/UnitTest.H"
 	"oml/vector3d.h"
 	"oml/io3d.h"
 	"oml/stream.h"
 	<cmath>
 	<iostream>
-	<strstream>
+	<sstream>
 	<fstream>
 	<iomanip>
 
-1308335933 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\main.cc
+1308578358 source:c:\cygwin\home\reimersjan\cdt3\oml\unittests\main.cc
 

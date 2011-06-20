@@ -14,11 +14,12 @@
 template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D,ArrayShape>
 {
  protected: // Users should not be messing around with this class.
-  explicit Indexable() {}; 
+ public:
+  explicit Indexable() {};
   Indexable& operator=(const Indexable&) {return *this;}
   Indexable(const Indexable&) {};
   ~Indexable() {};
-  
+
  public:
   T       operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
   index_t size      (         ) const {return static_cast<const Derived*>(this)->size();}
@@ -32,7 +33,7 @@ template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D
   template <class B> Derived& operator-=(const Indexable<T,B,M,D,ArrayShape>& b) {return ArraySub(*this,b);}
   template <class B> Derived& operator*=(const Indexable<T,B,M,D,ArrayShape>& b) {return ArrayMul(*this,b);}
   template <class B> Derived& operator/=(const Indexable<T,B,M,D,ArrayShape>& b) {return ArrayDiv(*this,b);}
-  
+
  private:
 };
 
@@ -47,7 +48,7 @@ template <class T> class Array;
 // There is no easy way to get the original derived type out os A which could be
 // a hideously complicated expression, so we just create an Array.
 //
-template <class T, class A, Store M, Data D> inline 
+template <class T, class A, Store M, Data D> inline
 std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,ArrayShape>& a)
 {
   return os << Array<T>(a);
@@ -55,7 +56,7 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,ArrayShape>& a
 
 //--------------------------------------------------------------
 //
-//  Macros for generating disambiguated template functions that return 
+//  Macros for generating disambiguated template functions that return
 //  expressions.
 //
 #define DisObOb(Func,Op,SHP)\

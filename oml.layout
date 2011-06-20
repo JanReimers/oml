@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Release" />
+	<ActiveTarget name="Debug" />
 	<File name="array.h" open="0" top="0" tabpos="0">
-		<Cursor position="19051" topLine="507" />
+		<Cursor position="4936" topLine="148" />
 	</File>
-	<File name="arrindex.h" open="0" top="0" tabpos="0">
-		<Cursor position="603" topLine="48" />
+	<File name="arrindex.h" open="1" top="0" tabpos="3">
+		<Cursor position="151" topLine="0" />
 	</File>
 	<File name="binop.h" open="0" top="0" tabpos="0">
 		<Cursor position="433" topLine="145" />
@@ -22,11 +22,17 @@
 	<File name="iterable.h" open="0" top="0" tabpos="0">
 		<Cursor position="652" topLine="27" />
 	</File>
-	<File name="memops.h" open="0" top="0" tabpos="0">
-		<Cursor position="3405" topLine="84" />
+	<File name="matrix.h" open="1" top="0" tabpos="2">
+		<Cursor position="7029" topLine="139" />
+	</File>
+	<File name="memops.h" open="1" top="0" tabpos="4">
+		<Cursor position="3661" topLine="87" />
 	</File>
 	<File name="ran250.h" open="0" top="0" tabpos="0">
 		<Cursor position="170" topLine="0" />
+	</File>
+	<File name="rowcol.h" open="1" top="0" tabpos="1">
+		<Cursor position="2062" topLine="66" />
 	</File>
 	<File name="src\InstanceDouble2.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="153" topLine="0" />
@@ -43,14 +49,23 @@
 	<File name="src\stream.cc" open="0" top="0" tabpos="0">
 		<Cursor position="554" topLine="9" />
 	</File>
+	<File name="src\veclimit.cc" open="0" top="0" tabpos="0">
+		<Cursor position="928" topLine="21" />
+	</File>
 	<File name="stream.h" open="0" top="0" tabpos="0">
 		<Cursor position="575" topLine="5" />
 	</File>
 	<File name="unop.h" open="0" top="0" tabpos="0">
 		<Cursor position="830" topLine="15" />
 	</File>
+	<File name="vecindex.h" open="0" top="0" tabpos="0">
+		<Cursor position="401" topLine="6" />
+	</File>
+	<File name="veclimit.h" open="0" top="0" tabpos="0">
+		<Cursor position="843" topLine="27" />
+	</File>
 	<File name="vector.h" open="0" top="0" tabpos="0">
-		<Cursor position="475" topLine="411" />
+		<Cursor position="475" topLine="399" />
 	</File>
 	<File name="vector3d.h" open="0" top="0" tabpos="5">
 		<Cursor position="267" topLine="0" />

@@ -21,7 +21,7 @@ template <class T> class Array;
 
   Full matrix class with indirect subscripting, which means a list of column pointers is maintained
   to speed up access. This is a standard speed versus excess memory trade off. See DirectMatrix for the other
-  option where indexes are calcuated for each access. The importance of the speed difference 
+  option where indexes are calcuated for each access. The importance of the speed difference
   will depend on your application and CPU/FPU architecture.
 
   \b Math:
@@ -55,20 +55,20 @@ template <class T> class Array;
     \nosubgrouping
 */
 
-template <class T> class Matrix 
+template <class T> class Matrix
   : public Indexable<T,Matrix<T>,Full,Real,MatrixShape>
   , public Iterable<T,Matrix<T> >
   , public TStreamableObject<Matrix<T> >
   , public MatrixBase
 {
  public:
-	
+
   /*! \name Constructors/Assignment
   Copy constructor and op=(Matrix) are automaically supplied by the compiler.
   */
   //@{
   explicit Matrix(                );//!< Matrix with size=0;
-  explicit Matrix(index_t r, index_t c);  //!<Construct from row and column size, use default lower bound.	
+  explicit Matrix(index_t r, index_t c);  //!<Construct from row and column size, use default lower bound.
   explicit Matrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch);  //!<Construct from lower and upper bounds.
   explicit Matrix(const VecLimits& r,const VecLimits& c);//!<Construct from lower and upper bounds.
   explicit Matrix(const MatLimits&);//!<Construct from lower and upper bounds.
@@ -79,16 +79,16 @@ template <class T> class Matrix
 
   //! Assignment.
   Matrix& operator=(const Matrix&);
-  //! Allows assignment from an expression template.  
+  //! Allows assignment from an expression template.
   template <class A,Store M, Data D> Matrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
   //@}
-  
+
   ~Matrix();
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.
-  friend std::ostream& operator<<(std::ostream& os,const Matrix& a) 
+  friend std::ostream& operator<<(std::ostream& os,const Matrix& a)
   {
     return os << static_cast<const TStreamableObject<Matrix<T> >& >(a);
   }
@@ -108,7 +108,7 @@ template <class T> class Matrix
 
   index_t   size     () const; //!<Returns number elements in the Matrix.
   MatLimits GetLimits() const; //!<Returns row/column lower and upper limits a structure.
-	
+
   /*! \name Resize functions
     The data can be optionally preserved.
   */
@@ -132,19 +132,25 @@ template <class T> class Matrix
 
   typedef MatrixRow     <T,Matrix<T>,Full,Real> RowType;
   typedef MatrixColumn  <T,Matrix<T>,Full,Real> ColType;
+  typedef MatrixRowAsArray   <T,Matrix<T>,Full,Real> RowArrayType;
+  typedef MatrixColumnAsArray<T,Matrix<T>,Full,Real> ColArrayType;
   typedef MatrixDiagonal<T,Matrix<T>,Full,Real> DiagType;
-  
+
   /*! \name Slice operations.
-   These member functions return proxies that behave like Vectors. 
+   These member functions return proxies that behave like Vectors.
   */
   //@{
   //! Return slice proxy.
-  RowType  GetRow     (subsc_t row)       {return RowType (*this,row);} 
-  ColType  GetColumn  (subsc_t col)       {return ColType (*this,col);} 
-  DiagType GetDiagonal(           )       {return DiagType(*this    );} 
-  const RowType  GetRow     (subsc_t row) const {return RowType (*this,row);}
-  const ColType  GetColumn  (subsc_t col) const {return ColType (*this,col);}
-  const DiagType GetDiagonal(           ) const {return DiagType(*this    );}
+  RowType             GetRow          (subsc_t row)       {return RowType (*this,row);}
+  ColType             GetColumn       (subsc_t col)       {return ColType (*this,col);}
+  RowArrayType        GetRowAsArray   (subsc_t row)       {return RowArrayType (*this,row);}
+  ColArrayType        GetColumnAsArray(subsc_t col)       {return ColArrayType (*this,col);}
+  DiagType            GetDiagonal     (           )       {return DiagType(*this    );}
+  const RowType       GetRow          (subsc_t row) const {return RowType (*this,row);}
+  const ColType       GetColumn       (subsc_t col) const {return ColType (*this,col);}
+  const RowArrayType  GetRowAsArray   (subsc_t row) const {return RowArrayType (*this,row);}
+  const ColArrayType  GetColumnAsArray(subsc_t col) const {return ColArrayType (*this,col);}
+  const DiagType      GetDiagonal     (           ) const {return DiagType(*this    );}
   //@}
 
   /*! \name Iterators.
@@ -167,19 +173,19 @@ template <class T> class Matrix
 //
 //  Allows fast L-value access.  Does COW check during construction.
 //
-  class Subscriptor 
+  class Subscriptor
   {
    public:
-    Subscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& m) 
+    Subscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits())
-      , itsPtr(static_cast<Matrix&>(m).GetColumns()) 
+      , itsPtr(static_cast<Matrix&>(m).GetColumns())
       {};
-		
+
     T& operator()(subsc_t i,subsc_t j) {CHECK(i,j);return itsPtr[j][i];}
-		
+
    private:
     MatLimits itsLimits;
-    T**   itsPtr; 
+    T**   itsPtr;
   };
 #undef CHECK
 
@@ -189,12 +195,12 @@ template <class T> class Matrix
   #define CHECK(i)
 #endif
 
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& a) 
+    ArraySubscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& a)
       : itsPtr(static_cast<Matrix*>(&a)->Get())
-      , itsSize(a.size()) 
+      , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -203,19 +209,19 @@ template <class T> class Matrix
   };
 
 #undef CHECK
- 
+
  private:
   friend class Indexable<T,Matrix,Full,Real,MatrixShape>;
   friend class Iterable<T,Matrix>;
   friend class Subscriptor;
   friend class ArraySubscriptor;
-	
+
   T  operator[](index_t i) const;
   T& operator[](index_t i)      ;
 //
 //  Get pointer to raw data.  required by iterable and Indexable.
 //
-  const T* Get() const ;       
+  const T* Get() const ;
         T* Get()       ; // Can trigger COW.
   T*const* GetColumns() const {return itsColumns;}
   T**      GetColumns(); // Can trigger COW.
@@ -232,7 +238,7 @@ template <class T> class Matrix
 //
 //  Full internal consistency check.
 //
-  void          Check () const;       //Check internal consistency between limits and cow.  
+  void          Check () const;       //Check internal consistency between limits and cow.
 
   cow_array<T > itsData;     //Copy-On-Write array for the data.
   T**           itsColumns;  //Column pointers.
@@ -240,7 +246,7 @@ template <class T> class Matrix
 
 //-----------------------------------------------------------------------------
 //
-//  Macro, which expands to an index checking function call, 
+//  Macro, which expands to an index checking function call,
 //  when DEBUG is on
 //
 #if DEBUG
@@ -254,7 +260,7 @@ template <class T> inline Matrix<T>::~Matrix()
   ReleaseColumns();
 }
 
-template <class T> inline T Matrix<T>::operator()(subsc_t i,subsc_t j) const 
+template <class T> inline T Matrix<T>::operator()(subsc_t i,subsc_t j) const
 {
   CHECK(i,j);
   return GetColumns()[j][i];
@@ -275,20 +281,20 @@ template <class T> inline T& Matrix<T>::operator()(subsc_t i,subsc_t j)
   #define CHECK(i)
 #endif
 
-template <class T> inline  T Matrix<T>::operator[](index_t i) const 
+template <class T> inline  T Matrix<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& Matrix<T>::operator[](index_t i) 
+template <class T> inline T& Matrix<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 #undef CHECK
 
-template <class T> template <class A,Store M, Data D> inline 
+template <class T> template <class A,Store M, Data D> inline
 Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
@@ -299,7 +305,7 @@ Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
   }
 
 
-template <class T> template <class A,Store M, Data D> inline 
+template <class T> template <class A,Store M, Data D> inline
 Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
 {
   if (size()==0) SetLimits(m.GetLimits());
@@ -313,7 +319,7 @@ template <class T> inline index_t Matrix<T>::size() const
   return GetLimits().size();
 }
 
-template <class T> inline const T* Matrix<T>::Get() const 
+template <class T> inline const T* Matrix<T>::Get() const
 {
   return itsData.Get();
 }
@@ -338,7 +344,7 @@ template <class T> inline void Matrix<T>::SetLimits(const VecLimits& r,const Vec
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline MatLimits Matrix<T>::GetLimits() const 
+template <class T> inline MatLimits Matrix<T>::GetLimits() const
 {
   return MatrixBase::GetLimits();
 }
