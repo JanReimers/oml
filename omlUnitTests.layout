@@ -2,7 +2,7 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="UnitTests\UT-Array-double.cc" open="0" top="0" tabpos="1">
-		<Cursor position="855" topLine="12" />
+		<Cursor position="729" topLine="51" />
 	</File>
 	<File name="UnitTests\UT-Array-int.cc" open="0" top="0" tabpos="0">
 		<Cursor position="289" topLine="0" />
@@ -16,8 +16,8 @@
 	<File name="UnitTests\UT-Matrix-double.cc" open="0" top="0" tabpos="0">
 		<Cursor position="5990" topLine="187" />
 	</File>
-	<File name="UnitTests\UT-Matrix3D-double.cc" open="0" top="0" tabpos="0">
-		<Cursor position="605" topLine="0" />
+	<File name="UnitTests\UT-Matrix3D-double.cc" open="1" top="0" tabpos="7">
+		<Cursor position="645" topLine="8" />
 	</File>
 	<File name="UnitTests\UT-Matrix3D.cc" open="0" top="0" tabpos="0">
 		<Cursor position="426" topLine="8" />
