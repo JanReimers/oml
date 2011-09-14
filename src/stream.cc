@@ -12,12 +12,20 @@
 std::string ReadName  (std::istream&);
 
 StreamableObject::Mode StreamableObject::theMode = StreamableObject::ascii;
+bool StreamableObject::theCheckArrayTypes=true;
 
 StreamableObject::Mode StreamableObject::SetOutputMode(Mode newMode)
 {
   Mode ret=theMode;
   theMode=newMode;
   return ret;
+}
+
+bool StreamableObject::CheckArrayTypes(bool check)
+{
+    bool ret=theCheckArrayTypes;
+    theCheckArrayTypes=check;
+    return ret;
 }
 
 void StreamableObject::WriteHeader(std::ostream& os,c_str type) const
@@ -52,9 +60,9 @@ void StreamableObject::CheckName(std::istream& is,c_str type)
   assert(is);
   assert(type);
   std::string Name=ReadName(is);
-  if (Name!=type)
+  if (theCheckArrayTypes && Name!=type)
   {
-    std::cerr << "Read '" << Name << "' from stream, but actuall object type is '" << type << "'" << std::endl;
+    std::cerr << "Read '" << Name << "' from stream, but actual object type is '" << type << "'" << std::endl;
     exit(-1);
   }
 }

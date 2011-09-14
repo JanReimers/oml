@@ -42,9 +42,12 @@ class StreamableObject
   static  Mode SetToAscii () {return SetOutputMode(ascii );}
   //! Set output mode to ascii. Returns current mode incase you need to restore it later.
   static  Mode SetToPretty() {return SetOutputMode(pretty);}
-  
+
+  static  bool CheckArrayTypes(bool);
+
  private:
   static  Mode theMode;
+  static  bool theCheckArrayTypes;
 };
 
 void OMLArrayIndexError(int i, int n);
