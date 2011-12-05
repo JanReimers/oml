@@ -1,4 +1,4 @@
-// File: tgl2.cc  
+// File: tgl2.cc
 
 // Modifications for oml containers Copyright (1994-2003), Jan N. Reimers
 
@@ -6,6 +6,7 @@
 #include "oml/matrix.h"
 #include <cassert>
 #include <cmath>
+#include <complex>
 
 inline double max(double a, double b) {return a>b ? a : b;}
 inline double min(double a, double b) {return a<b ? a : b;}
@@ -21,10 +22,10 @@ double pythag(double a,double b)
 {
 	double p,r,s,t,u;
 	double aa=fabs(a),ab=fabs(b);
-	
+
 	p = max(aa,ab);
 	if (p == 0.0) return p;
-	
+
 	r = square(min(aa,ab)/p);
 	while(true)
 	{
@@ -37,7 +38,7 @@ double pythag(double a,double b)
   }
 	return p;
 }
-		
+
 void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z, int ierr)
 {
   int n=d.size();
@@ -51,13 +52,13 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
 
   ierr = 0;
   if (n == 1) return;
-  
+
   for (int j=2;j<=n;j++) se(j-1) = se(j);
-  
+
   double f = 0.0;
   double tst1 = 0.0;
   se(n) = 0.0;
-  for (int l=1;l<=n;l++) 
+  for (int l=1;l<=n;l++)
   {
     int j = 0;
     double h = fabs(sd(l)) + fabs(se(l));
@@ -67,7 +68,7 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
     //
     int m;
     for(m=l;m<=n;m++) if (tst1 + fabs(se(m)) == tst1) break;
-    
+
     if (m!= l)
     {
       do
@@ -104,7 +105,7 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
 	//				int mml = m - l;
 	for (int ii = 1;ii<=m-l;ii++)
 	{
-	  
+
 	  c3 = c2;
 	  c2 = c;
 	  s2 = s;
@@ -119,7 +120,7 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
 	  sd(i+1) = h + s * (c * g + s * sd(i));
 	  for (int k = 1;k<=n;k++) // form vector
 	  {
-	    h = real(sz(k,i+1));
+	    h = std::real(sz(k,i+1));
 	    sz(k,i+1) = s * sz(k,i) + c * h;
 	    sz(k,i) = c * sz(k,i) - s * h;
 	  }
@@ -134,21 +135,21 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
   //
   //  Order eigenvalues and eigenvectors.
   //
-  for(int ii = 2;ii<=n;ii++) 
+  for(int ii = 2;ii<=n;ii++)
   {
     int i = ii - 1;
     int k = i;
     double p = sd(i);
-    
-    for(int j = ii;j<=n;j++) 
+
+    for(int j = ii;j<=n;j++)
       if (sd(j) < p) {k = j;p = sd(j);}
-    
+
     if (k!=i)
     {
       sd(k) = sd(i);
       sd(i) = p;
       z.SwapColumns(i,k);
     }
-  } 
+  }
   return;
 }

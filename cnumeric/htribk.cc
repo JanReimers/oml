@@ -1,6 +1,9 @@
 // File: htribk.cc  Back transform real symmetric matrix.
 #include "oml/matrix.h"
 #include <cassert>
+#include <complex>
+
+using std::real;
 
 // Modifications for oml containers Copyright (1994-2003), Jan N. Reimers
 
@@ -14,14 +17,14 @@
 //    this subroutine forms the eigenvectors of a complex hermitian
 //    matrix by back transforming those of the corresponding
 //    real symmetric tridiagonal matrix determined by  htridi.
-//  
-void htribk(const Matrix<std::complex<double> >& A, 
-	    const Vector<std::complex<double> >& tau, 
+//
+void htribk(const Matrix<std::complex<double> >& A,
+	    const Vector<std::complex<double> >& tau,
 	    Matrix<std::complex<double> >& Z)
 {
   int i,j,k,l,m,n;
   double h;
-  
+
   m=A.GetNumRows();
   n=m;
   assert(A.GetNumRows()==A.GetNumCols());
@@ -30,17 +33,17 @@ void htribk(const Matrix<std::complex<double> >& A,
   assert(m==tau.size());
 
   Matrix<std::complex<double> >::Subscriptor sZ(Z);
-  
+
   if (m == 0) return;
-  for (k=1;k<=n;k++) 
+  for (k=1;k<=n;k++)
     for (j=1;j<=m;j++)
-      sZ(k,j) = real(sZ(k,j))*conj(tau(k)); 
-  
+      sZ(k,j) = real(sZ(k,j))*conj(tau(k));
+
   if (n == 1) return;
-  for(i=2;i<=n;i++) 
+  for(i=2;i<=n;i++)
   {
     l = i - 1;
-    h = imag(A(i,i)); 
+    h = imag(A(i,i));
     if (h == 0.0) break;
     for (j=1;j<=m;j++)
     {
