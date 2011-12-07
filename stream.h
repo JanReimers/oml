@@ -22,8 +22,10 @@ class StreamableObject
  public:
   enum Mode {binary, ascii, pretty};
 
+  //! Outputs the IO mode and type name.
   void WriteHeader(std::ostream&,c_str type) const;
-  Mode ReadHeader (std::istream&,c_str type)      ;
+  //! Reads in IO mode and class type name and compares it ith the expected type name
+  Mode ReadHeader (std::istream&,c_str expected_type)      ;
 
   static  c_str PeekAtName(std::istream&);
   static  void  CheckName (std::istream&,c_str);

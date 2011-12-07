@@ -12,6 +12,8 @@ template <class A> class TStreamableObject;
 template <class A> std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o);
 template <class A> std::istream& operator>>(std::istream& os,       TStreamableObject<A>& o);
 
+// Allows template based streaming.  IO methods for the parent type A are called directly.
+//  ***No virtual dispatch***!  If you need virtual dispatch see the PMStreamableObject class.
 template <class A> class TStreamableObject
 : public StreamableObject
 {
@@ -24,13 +26,13 @@ template <class A> class TStreamableObject
 };
 
 
-template <class A> inline std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o)  
+template <class A> inline std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o)
 {
   o.WriteHeader(os,typeid(A).name());
   return static_cast<const A&>(o).Write(os);
 }
 
-template <class A> inline std::istream& operator>>(std::istream& is,TStreamableObject<A>& o)  
+template <class A> inline std::istream& operator>>(std::istream& is,TStreamableObject<A>& o)
 {
   StreamableObject::Mode current=o.ReadHeader(is,typeid(A).name());
   static_cast<A&>(o).Read (is);
@@ -41,7 +43,7 @@ template <class A> inline std::istream& operator>>(std::istream& is,TStreamableO
 template <class A> inline A* TStreamableObject<A>::Factory(std::istream& is)
 {
   //  CheckName(is,typeid(A).name()); Read operation should do this.
-  A* ret=new A; 
+  A* ret=new A;
   is >> ret;
   return ret;
 }
