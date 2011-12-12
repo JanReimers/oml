@@ -20,8 +20,8 @@ template <class A> class TStreamableObject
  public:
   friend std::ostream& operator<< <>(std::ostream& os, const TStreamableObject& o);
   friend std::istream& operator>> <>(std::istream& os,       TStreamableObject& o);
-  friend std::ostream& operator<<(std::ostream& os, const TStreamableObject* o) {return os << *o;}
-  friend std::istream& operator>>(std::istream& is,       TStreamableObject* o) {return is >> *o;}
+//  friend std::ostream& operator<<(std::ostream& os, const TStreamableObject* o) {return os << *o;}
+//  friend std::istream& operator>>(std::istream& is,       TStreamableObject* o) {return is >> *o;}
   static A* Factory(std::istream& is);
 };
 

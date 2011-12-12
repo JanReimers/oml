@@ -1,1 +1,460 @@
 # depslib dependency file v1.0
+1322865516 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\ch.cc
+	"oml/vector.h"
+	"oml/matrix.h"
+	"oml/cnumeric.h"
+	<cassert>
+	<iostream>
+	<complex>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\vector.h
+	"oml/array.h"
+	"oml/veclimit.h"
+	"oml/vecindex.h"
+	"oml/minmax.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\array.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/tstream.h"
+	"oml/iterable.h"
+	"oml/cow.h"
+	"oml/arrindex.h"
+	"oml/array,h"
+	"Froggy.H"
+	"oml/array.h"
+	"oml/array.h"
+	<cmath>
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array.h"
+	"oml/array_io.h"
+	<iostream>
+	<fstream>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\indext.h
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\shape.h
+
+1323282099 c:\cygwin\home\reimersjan\cdt4\\oml\tstream.h
+	"oml/stream.h"
+	<typeinfo>
+
+1323267575 c:\cygwin\home\reimersjan\cdt4\\oml\stream.h
+	<iosfwd>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\iterable.h
+	"oml/indext.h"
+	<iosfwd>
+	<cassert>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\cow.h
+	"oml/indext.h"
+	<cassert>
+	<iostream>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\arrindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\indexable.h
+	"oml/shape.h"
+	"oml/xpr.h"
+	"oml/binop.h"
+	"oml/unop.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\xpr.h
+	"oml/indext.h"
+	"oml/shape.h"
+	"oml/veclimit.h"
+	"oml/matlimit.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\veclimit.h
+	"oml/indext.h"
+	<iosfwd>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matlimit.h
+	"oml/veclimit.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\binop.h
+	"oml/mixtypes.h"
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\mixtypes.h
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\unop.h
+	"oml/mixtypes.h"
+	<cmath>
+	"oml/shape.h"
+	"oml/indext.h"
+	"oml/matlimit.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\memops.h
+	"oml/indexable.h"
+	<cassert>
+	<iostream>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\array_io.h
+	"oml/array.h"
+	"oml/iterable_io.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\iterable_io.h
+	"oml/iterable.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\binio.h
+	<iostream>
+	<complex>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\vecindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\minmax.h
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/matindex.h"
+	"oml/rowcol.h"
+	"oml/matrix.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matrixbase.h
+	"oml/matlimit.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matsub.h
+	"oml/indext.h"
+	"oml/matindex.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matindex.h
+	"oml/indexable.h"
+	"oml/memops.h"
+
+1322865411 c:\cygwin\home\reimersjan\cdt4\\oml\matrixalg.h
+	"oml/matindex.h"
+	"oml/vector.h"
+	"oml/rowcol.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\rowcol.h
+	"oml/vecindex.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\cnumeric.h
+	"oml/matrix.h"
+	"oml/smatrix.h"
+	"oml/vector.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\smatrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/smatindex.h"
+	"oml/rowcol.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\smatindex.h
+	"oml/indexable.h"
+
+1312809616 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\epsilon.cc
+	<cmath>
+
+1323092650 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\htribk.cc
+	"oml/matrix.h"
+	<cassert>
+	<complex>
+
+1323092669 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\htridi.cc
+	"oml/vector.h"
+	"oml/matrix.h"
+	<cassert>
+	<cmath>
+	<complex>
+
+1323092696 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\tql2.cc
+	"oml/vector.h"
+	"oml/matrix.h"
+	<cassert>
+	<cmath>
+	<complex>
+
+1312809616 source:c:\cygwin\home\reimersjan\cdt4\oml\cnumeric\tqlrat.cc
+	"oml/vector.h"
+	<cassert>
+	<cmath>
+	<iostream>
+
+1322862905 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancecomplex1.cpp
+	"src/dmatrix.cc"
+
+1312809617 c:\cygwin\home\reimersjan\cdt4\oml\\src\dmatrix.cc
+	"oml/dmatrix.h"
+	"oml/array.h"
+	"oml/minmax.h"
+	"oml/iterable_io.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+	"oml/matsub.ci"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\dmatrix.h
+	"oml/iterable.h"
+	"oml/tstream.h"
+	"oml/matrixbase.h"
+	"oml/matsub.h"
+	"oml/matrixalg.h"
+	"oml/cow.h"
+	"oml/matindex.h"
+	"oml/rowcol.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matsub.ci
+	"oml/matsub.h"
+	<cassert>
+
+1322862905 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancecomplex2.cpp
+	"src/smatrix.cc"
+
+1312809617 c:\cygwin\home\reimersjan\cdt4\oml\\src\smatrix.cc
+	"oml/smatrix.h"
+	"oml/array.h"
+	"oml/minmax.h"
+	"oml/binio.h"
+	"oml/iterable_io.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+	"oml/matsub.ci"
+
+1322862905 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancecomplex3.cpp
+	"src/matrix.cc"
+
+1312809617 c:\cygwin\home\reimersjan\cdt4\oml\\src\matrix.cc
+	"oml/matrix.h"
+	"oml/array.h"
+	"oml/iterable_io.h"
+	"oml/minmax.h"
+	<iostream>
+	<iomanip>
+	<cassert>
+	<cstdlib>
+	"oml/matsub.ci"
+
+1322864044 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancecomplexvec3.cpp
+	"vector3d.h"
+	"io3d.h"
+	"src/matrix.cc"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\oml\\vector3d.h
+	"oml/indext.h"
+	"oml/mixtypes.h"
+	<cmath>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\oml\\io3d.h
+	"oml/vector3d.h"
+	"oml/matrix3d.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	"oml/mixtypes.h"
+	<iomanip>
+	<cassert>
+	<iosfwd>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\vector3d.h
+	"oml/indext.h"
+	"oml/mixtypes.h"
+	<cmath>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\matrix3d.h
+	"oml/vector3d.h"
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancedouble1.cpp
+	"src/dmatrix.cc"
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\instancedouble2.cpp
+	"src/smatrix.cc"
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\numericsdouble.cpp
+	"numeric/cholsky.cc"
+	"numeric/eigsort.cc"
+	"numeric/gaussj.cc"
+	"numeric/invmat.cc"
+	"numeric/invtri.cc"
+	"numeric/lubksb.cc"
+	"numeric/lubksbm.cc"
+	"numeric/ludcmp.cc"
+	"numeric/lusolver.cc"
+	"numeric/qldecomp.cc"
+	"numeric/solvetri.cc"
+	"numeric/svbksb.cc"
+	"numeric/svdcmp.cc"
+	"numeric/svsolver.cc"
+	"numeric/tridiag.cc"
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\cholsky.cc
+	"oml/matrix.h"
+	"oml/smatrix.h"
+	"oml/numeric.h"
+	<cassert>
+	<cmath>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\numeric.h
+	"oml/indext.h"
+	"oml/array.h"
+	"oml/vector.h"
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\eigsort.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	<cmath>
+	<cassert>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\gaussj.cc
+	"oml/matrix.h"
+	"oml/array.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\invmat.cc
+	"oml/matrix.h"
+	"oml/smatrix.h"
+	"oml/numeric.h"
+	"oml/array.h"
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\invtri.cc
+	"oml/matrix.h"
+	"oml/smatrix.h"
+	<cmath>
+	<cassert>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\lubksb.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	"oml/array.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\lubksbm.cc
+	"oml/matrix.h"
+	"oml/array.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\ludcmp.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	"oml/array.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\lusolver.cc
+	"oml/lusolver.h"
+	"oml/matrix.h"
+	"oml/vector.h"
+	"oml/numeric.h"
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\lusolver.h
+	"oml/array.h"
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\qldecomp.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\solvetri.cc
+	<oml/array.h>
+	<oml/vector.h>
+	<iostream>
+	<cstdlib>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\svbksb.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\svdcmp.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\svsolver.cc
+	"oml/svsolver.h"
+	"oml/numeric.h"
+	<iostream>
+	<cassert>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\svsolver.h
+	"oml/vector.h"
+	"oml/matrix.h"
+
+1312809615 c:\cygwin\home\reimersjan\cdt4\oml\\numeric\tridiag.cc
+	"oml/matrix.h"
+	"oml/vector.h"
+	<cmath>
+	<cassert>
+	<iostream>
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\matlimit.cc
+	"oml/matlimit.h"
+	"oml/stream.h"
+	<iostream>
+	<cassert>
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\ran250.cc
+	"oml/ran250.h"
+	"oml/minmax.h"
+	<stdlib.h>
+	<time.h>
+	<limits.h>
+	<stdio.h>
+	<cmath>
+	<cassert>
+	<sys/types.h>
+
+1312809618 c:\cygwin\home\reimersjan\cdt4\\oml\ran250.h
+	"config.h"
+	<complex>
+	<cassert>
+	<stdint.h>
+	<inttypes.h>
+	<sys/types.h>
+
+1312809648 c:\cygwin\home\reimersjan\cdt4\\config.h
+
+1315941588 source:c:\cygwin\home\reimersjan\cdt4\oml\src\stream.cc
+	"oml/stream.h"
+	<typeinfo>
+	<cassert>
+	<iostream>
+	<string>
+	<cstdlib>
+
+1312809617 source:c:\cygwin\home\reimersjan\cdt4\oml\src\veclimit.cc
+	"oml/veclimit.h"
+	"oml/stream.h"
+	"oml/binio.h"
+	<iostream>
+	<cassert>
+
