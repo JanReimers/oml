@@ -19,26 +19,26 @@ int TestVector3D();
 
 int main()
 {
-//    TestArrayInt();
-//    TestListInt();
-//    TestVectorInt();
-//
-//    TestArrayDouble();
-//    TestListDouble();
-//    TestVectorDouble();
+    TestArrayInt();
+    TestListInt();
+    TestVectorInt();
+
+    TestArrayDouble();
+    TestListDouble();
+    TestVectorDouble();
     TestMatrixDouble();
-//    TestDMatrixDouble();
-//    TestSMatrixDouble();
-//
-//
-//    TestEigenDouble();
-//    TestRandomDouble();
-//    TestSolveTriDiagonal();
-//
-//    TestVector3DDouble();
-//    TestVector3D();
-//    TestMatrix3DDouble();
-//    TestMatrix3D();
+    TestDMatrixDouble();
+    TestSMatrixDouble();
+
+
+    TestEigenDouble();
+    TestRandomDouble();
+    TestSolveTriDiagonal();
+
+    TestVector3DDouble();
+    TestVector3D();
+    TestMatrix3DDouble();
+    TestMatrix3D();
 
     return 0;
 }
