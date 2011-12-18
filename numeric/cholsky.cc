@@ -7,6 +7,8 @@
 #include "oml/numeric.h"
 #include <cassert>
 #include <cmath>
+#include <iostream>
+#include <stdlib.h>
 
 #ifndef TYPE
 #error "cholsky.cc TYPE not defined"
@@ -32,7 +34,12 @@ template <class T> void Cholsky(Matrix<T>& A)
     {
         T temp=0.0;
         for(subsc_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
-        a(j,j)=sqrt(a(j,j)-temp);
+        if (temp>a(j,j))
+        {
+            std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
+            exit(-1);
+        }
+         a(j,j)=sqrt(a(j,j)-temp);
         for(subsc_t i=1; i<=j-1; i++)
         {
             temp=0.0;
@@ -52,6 +59,7 @@ template <class T> void Cholsky(Matrix<T>& A)
 //  upper and lower triangular parts.  A -> U * ~U
 //  Symmetric version, works on upper part, lower part will not be 0.0's.
 //
+#include "oml/isnan.h"
 #define UPPER_ONLY
 template <class T> void Cholsky(SMatrix<T>& A)
 {
@@ -66,6 +74,11 @@ template <class T> void Cholsky(SMatrix<T>& A)
     {
         T temp=0.0;
         for(subsc_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
+        if (temp>a(j,j))
+        {
+            std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
+            exit(-1);
+        }
         a(j,j)=sqrt(a(j,j)-temp);
         for(subsc_t i=1; i<=j-1; i++)
         {
