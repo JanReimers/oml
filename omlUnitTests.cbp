@@ -10,7 +10,7 @@
 				<Option output="./UTDebug" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="cygwin" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
@@ -23,7 +23,7 @@
 				<Option output="./UTRelease" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="cygwin" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -32,19 +32,22 @@
 				</Linker>
 			</Target>
 			<Target title="Debug-Linux">
-				<Option platforms="Unix;" />
 				<Option output="./UTDebug" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
+				<Option external_deps="../Debug/liboml.a;" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O" />
-					<Add option="-Wshadow" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
+					<Add directory="../../CDT1" />
 				</Compiler>
 				<Linker>
-					<Add directory="../Debug" />
+					<Add library="oml" />
+					<Add library="gtest" />
+					<Add library="pthread" />
+					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -52,28 +55,73 @@
 			<Add alias="all" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add option="-Wall" />
-			<Add directory="../" />
+			<Add option="-O" />
+			<Add option="-g" />
+			<Add option="-DDEBUG" />
 		</Compiler>
 		<Linker>
-			<Add library="oml" />
+			<Add library="gtest" />
+			<Add directory="../Debug" />
+			<Add directory="/usr/local/lib" />
 		</Linker>
-		<Unit filename="UnitTests/UT-Array-double.cc" />
+		<Unit filename="UnitTests/UT-Array-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="UnitTests/UT-Array-int.cc" />
-		<Unit filename="UnitTests/UT-DMatrix-double.cc" />
-		<Unit filename="UnitTests/UT-Eigen-double.cc" />
-		<Unit filename="UnitTests/UT-List-double.cc" />
-		<Unit filename="UnitTests/UT-List-int.cc" />
-		<Unit filename="UnitTests/UT-Matrix-double.cc" />
-		<Unit filename="UnitTests/UT-Matrix3D-double.cc" />
-		<Unit filename="UnitTests/UT-Matrix3D.cc" />
-		<Unit filename="UnitTests/UT-Random-double.cc" />
+		<Unit filename="UnitTests/UT-DMatrix-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Eigen-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-List-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-List-int.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Matrix-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Matrix3D-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Matrix3D.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Random-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="UnitTests/UT-SMatrix-double.cc" />
-		<Unit filename="UnitTests/UT-SolveTriDiagonal.cc" />
-		<Unit filename="UnitTests/UT-Vector-double.cc" />
-		<Unit filename="UnitTests/UT-Vector-int.cc" />
-		<Unit filename="UnitTests/UT-Vector3D-double.cc" />
-		<Unit filename="UnitTests/UT-Vector3D.cc" />
+		<Unit filename="UnitTests/UT-SolveTriDiagonal.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Vector-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Vector-int.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Vector3D-double.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="UnitTests/UT-Vector3D.cc">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="UnitTests/UnitTest.H" />
 		<Unit filename="UnitTests/UnitTest.cc" />
 		<Unit filename="UnitTests/main.cc" />

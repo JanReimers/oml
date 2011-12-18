@@ -807,12 +807,15 @@
 	"numeric/svsolver.cc"
 	"numeric/tridiag.cc"
 
-1323697235 /home/janr/CDT1/oml//numeric/cholsky.cc
+1324246392 /home/janr/CDT1/oml//numeric/cholsky.cc
 	"oml/matrix.h"
 	"oml/smatrix.h"
 	"oml/numeric.h"
 	<cassert>
 	<cmath>
+	<iostream>
+	<stdlib.h>
+	"oml/isnan.h"
 
 1323697238 /home/janr/CDT1//oml/numeric.h
 	"oml/indext.h"
@@ -832,11 +835,12 @@
 	<cassert>
 	<iostream>
 
-1323697235 /home/janr/CDT1/oml//numeric/invmat.cc
+1324245709 /home/janr/CDT1/oml//numeric/invmat.cc
 	"oml/matrix.h"
 	"oml/smatrix.h"
 	"oml/numeric.h"
 	"oml/array.h"
+	"oml/isnan.h"
 	<iostream>
 
 1323697235 /home/janr/CDT1/oml//numeric/invtri.cc
@@ -938,7 +942,7 @@
 	<cassert>
 	<sys/types.h>
 
-1323779623 /home/janr/CDT1//oml/ran250.h
+1323944778 /home/janr/CDT1//oml/ran250.h
 	"config.h"
 	<complex>
 	<cassert>
@@ -962,4 +966,10 @@
 	"oml/binio.h"
 	<iostream>
 	<cassert>
+
+1324158455 /home/janr/CDT1//oml/isnan.h
+	<oml/matrix.h>
+	<oml/smatrix.h>
+	<cmath>
+	<complex>
 
