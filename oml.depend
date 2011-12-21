@@ -835,12 +835,11 @@
 	<cassert>
 	<iostream>
 
-1324245709 /home/janr/CDT1/oml//numeric/invmat.cc
+1324246957 /home/janr/CDT1/oml//numeric/invmat.cc
 	"oml/matrix.h"
 	"oml/smatrix.h"
 	"oml/numeric.h"
 	"oml/array.h"
-	"oml/isnan.h"
 	<iostream>
 
 1323697235 /home/janr/CDT1/oml//numeric/invtri.cc
@@ -950,7 +949,7 @@
 	<inttypes.h>
 	<sys/types.h>
 
-1323697268 /home/janr/CDT1//config.h
+1324419762 /home/janr/CDT1//config.h
 
 1323697236 source:/home/janr/CDT1/oml/src/stream.cc
 	"oml/stream.h"
@@ -967,7 +966,7 @@
 	<iostream>
 	<cassert>
 
-1324158455 /home/janr/CDT1//oml/isnan.h
+1324247201 /home/janr/CDT1//oml/isnan.h
 	<oml/matrix.h>
 	<oml/smatrix.h>
 	<cmath>
