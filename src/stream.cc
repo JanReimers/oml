@@ -87,6 +87,7 @@ std::string ReadName(std::istream& is)
 //
 c_str StreamableObject::PeekAtName(std::istream& is)
 {
+
   assert(is);
   is >> std::ws;
   static std::string Name;
@@ -94,6 +95,7 @@ c_str StreamableObject::PeekAtName(std::istream& is)
   Mode temp;
   int itemp;
   is >> itemp;            //Get the mode flag out of the way.
+  (void)temp; //Avoid unused warning
   temp=static_cast<Mode>(itemp);
   is >>  Name;
   is.seekg(beforeName); //Reset stream before start of name and mode flag.
