@@ -4,8 +4,6 @@
 
 // Copyright (1994-2004), Jan N. Reimers
 
-#pragma interface
-
 #include "config.h"
 #include <complex>
 #include <cassert>
@@ -24,7 +22,7 @@
 
 template <class T> union Int2RealUnion;
 
-template <> union Int2RealUnion<float> 
+template <> union Int2RealUnion<float>
 {		   	// used to access floats as unsigneds
   float rep;
   ::uint32_t u;
@@ -66,7 +64,7 @@ inline float Int2Real<float>::convert(uint32_t l) const
   assert( result.rep < 1.0 && result.rep >= 0);
   return result.rep;
 }
-	
+
 inline double Int2Real<double>::convert(uint32_t l1,uint32_t l2) const
 {
   Int2RealUnion<double> result;
@@ -85,12 +83,12 @@ class TwoTap
 
   Int2Real<float > floatConverter;
   Int2Real<double> doubleConverter;
-  
+
 public:
   TwoTap(unsigned int tap1,unsigned int tap2);
  ~TwoTap();
- 
-  long GetNext() 
+
+  long GetNext()
   {
     ++Next;
     return itsArray[Next&Mask]=
@@ -100,7 +98,7 @@ public:
 
   float  GetNextFloat () {return  floatConverter.convert(GetNext());}
   double GetNextDouble() {return doubleConverter.convert(GetNext(),GetNext());}
-    
+
 
 };
 
@@ -112,12 +110,12 @@ class FourTap
 
   Int2Real<float > floatConverter;
   Int2Real<double> doubleConverter;
-  
+
 public:
   FourTap(unsigned int tap1,unsigned int tap2,unsigned int tap3,unsigned int tap4);
  ~FourTap();
-  	
-  long GetNext() 
+
+  long GetNext()
   {
     ++Next;
     return itsArray[Next&Mask]=
@@ -136,20 +134,20 @@ extern double  LNorm;
 
 template <class T> T      OMLRand();
 template <class T> T      OMLRandPos();
-template <class T> double OMLRandScale(T max); 
+template <class T> double OMLRandScale(T max);
 
 template <> inline int    OMLRand<int>   () {return GlobalRandomNumberGenerator.GetNext();}
 template <> inline long   OMLRand<long>  () {return GlobalRandomNumberGenerator.GetNext();}
-template <> inline float  OMLRand<float> () 
+template <> inline float  OMLRand<float> ()
 {
   return GlobalRandomNumberGenerator.GetNextFloat();
 }
-template <> inline double OMLRand<double>() 
+template <> inline double OMLRand<double>()
 {
   return GlobalRandomNumberGenerator.GetNextDouble();
 }
 
-template <> inline std::complex<double> OMLRand<std::complex<double> >() 
+template <> inline std::complex<double> OMLRand<std::complex<double> >()
 {
   return std::complex<double>(OMLRand<double>(),OMLRand<double>());
 }
@@ -158,16 +156,16 @@ template <> inline int    OMLRandPos<int>   () {return OMLRand<int> ()&0x7ffffff
 template <> inline long   OMLRandPos<long>  () {return OMLRand<long>()&0x7fffffff;}
 template <> inline float  OMLRandPos<float> () {return OMLRand<float>();}
 template <> inline double OMLRandPos<double>() {return OMLRand<double>();}
-template <> inline std::complex<double> OMLRandPos<std::complex<double> >() 
+template <> inline std::complex<double> OMLRandPos<std::complex<double> >()
 {
   return std::complex<double>(OMLRandPos<double>(),OMLRandPos<double>());
 }
 
 
-template <> inline double OMLRandScale<int>   (int    max) {return INorm*max;} 
-template <> inline double OMLRandScale<long>  (long   max) {return INorm*max;} 
-template <> inline double OMLRandScale<float> (float  max) {return max;} 
-template <> inline double OMLRandScale<double>(double max) {return max;} 
-template <> inline double OMLRandScale<std::complex<double> >(std::complex<double> max) {return real(max);} 
+template <> inline double OMLRandScale<int>   (int    max) {return INorm*max;}
+template <> inline double OMLRandScale<long>  (long   max) {return INorm*max;}
+template <> inline double OMLRandScale<float> (float  max) {return max;}
+template <> inline double OMLRandScale<double>(double max) {return max;}
+template <> inline double OMLRandScale<std::complex<double> >(std::complex<double> max) {return real(max);}
 
 #endif //_Ran250_H_
