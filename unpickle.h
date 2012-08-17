@@ -6,14 +6,15 @@
 
 #include <fstream>
 #include <string>
+#include <iostream>
 
 template <class T> bool UnPickle(T*& pointer, const  char* filep, const char* name)
 {
 	std::string file(filep);
   bool file_error=true;
-  if(file !="") 
+  if(file !="")
   {
-    ifstream in(file.c_str(),ios::in | ios::binary);
+    std::ifstream in(file.c_str(),std::ios::in | std::ios::binary);
     if(!in)
     {
       std::cerr << "Can't open " << name << " file :" << file << std::endl;
@@ -27,16 +28,16 @@ template <class T> bool UnPickle(T*& pointer, const  char* filep, const char* na
 
 //------------------------------------------------------------------
 //
-//  Non-polymorphic version, so you don't have to define a Factory 
+//  Non-polymorphic version, so you don't have to define a Factory
 //  function.
 //
 template <class T> bool UnPickleNP(T*& pointer, const  char* filep, const char* name)
 {
   std::string file(filep);
   bool file_error=true;
-  if(file !="") 
+  if(file !="")
   {
-    ifstream in(file.c_str(),ios::in | ios::binary);
+    std::ifstream in(file.c_str(),std::ios::in | std::ios::binary);
     if(!in)
     {
       std::cerr << "Can't open " << name << " file :" << file << std::endl;
