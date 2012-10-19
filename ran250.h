@@ -7,6 +7,7 @@
 #include "config.h"
 #include <complex>
 #include <cassert>
+#include <climits>
 #ifdef HAVE_STDINT_H
   #include <stdint.h>
 #else
@@ -87,13 +88,16 @@ class TwoTap
 public:
   TwoTap(unsigned int tap1,unsigned int tap2);
  ~TwoTap();
+  const char* Name();
 
   long GetNext()
   {
     ++Next;
     return itsArray[Next&Mask]=
-      itsArray[(Next-Tap1)&Mask]^
-      itsArray[(Next-Tap2)&Mask];
+//      (itsArray[(Next-Tap1)&Mask]%(SHRT_MAX-2))
+//       *
+//      (itsArray[(Next-Tap2)&Mask]%(SHRT_MAX-2));
+      itsArray[(Next-Tap1)&Mask]^itsArray[(Next-Tap2)&Mask];
   }
 
   float  GetNextFloat () {return  floatConverter.convert(GetNext());}
@@ -111,9 +115,11 @@ class FourTap
   Int2Real<float > floatConverter;
   Int2Real<double> doubleConverter;
 
+
 public:
   FourTap(unsigned int tap1,unsigned int tap2,unsigned int tap3,unsigned int tap4);
  ~FourTap();
+  const char* Name();
 
   long GetNext()
   {
@@ -129,6 +135,8 @@ public:
 };
 
 extern FourTap GlobalRandomNumberGenerator;
+//extern TwoTap GlobalRandomNumberGenerator;
+
 extern double  INorm;
 extern double  LNorm;
 
