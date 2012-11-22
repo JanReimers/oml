@@ -66,65 +66,60 @@
 			<Add directory="/usr/local/lib" />
 		</Linker>
 		<Unit filename="UnitTests/UT-Array-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="UnitTests/UT-Array-int.cc" />
+		<Unit filename="UnitTests/UT-Array-int.cc">
+			<Option target="Debug-Linux" />
+		</Unit>
 		<Unit filename="UnitTests/UT-DMatrix-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Eigen-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-List-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-List-int.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Matrix-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Matrix3D-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Matrix3D.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Random-double.cc">
-			<Option target="Debug" />
 			<Option target="Release" />
+			<Option target="Debug" />
 		</Unit>
-		<Unit filename="UnitTests/UT-SMatrix-double.cc" />
+		<Unit filename="UnitTests/UT-SMatrix-double.cc">
+			<Option target="Debug-Linux" />
+		</Unit>
 		<Unit filename="UnitTests/UT-SolveTriDiagonal.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Vector-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Vector-int.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Vector3D-double.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="UnitTests/UT-Vector3D.cc">
-			<Option target="Debug" />
-			<Option target="Release" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="UnitTests/UnitTest.H" />
-		<Unit filename="UnitTests/UnitTest.cc" />
+		<Unit filename="UnitTests/UnitTest.H">
+			<Option target="Debug-Linux" />
+		</Unit>
+		<Unit filename="UnitTests/UnitTest.cc">
+			<Option target="Debug-Linux" />
+		</Unit>
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>
 			<code_completion />

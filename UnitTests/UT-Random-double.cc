@@ -2,21 +2,32 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
+#include "gtest/gtest.h"
 #include "oml/UnitTests/UnitTest.H"
 #include "oml/ran250.h"
 #include "oml/histogram.h"
 #include "oml/stopw.h"
+#include "oml/array_io.h"
 #include <fstream>
 #include <iomanip>
 
-int TestRandomDouble()
+class RandomTesting : public ::testing::Test
+{
+public:
+    RandomTesting()
+    {
+
+    }
+
+
+};
+
+TEST_F(RandomTesting,StatisticsTest)
 {
   bool pass=true;
-  const char* Class="Random number generator";
-  StartClass(Class);
   StreamableObject::SetToPretty();
 
-  int Nbin=64*64,Nhits=1000;
+  int Nbin=64*64,Nhits=10000;
   Histogram<double> hint(Nbin,0,1.0/(Nbin-1));
   StopWatch sw;
   sw.Start();
@@ -26,6 +37,7 @@ int TestRandomDouble()
   }
   sw.Stop();
   std::cout << sw.GetTime()/(double)(Nbin*Nhits)*1000000.0 << "(ms) per random number." << std::endl;
+  std::cout << "h=" << hint.GetBins() << std::endl;
 
 
 
@@ -33,6 +45,7 @@ int TestRandomDouble()
   for (int i=0;i<sigma.size();i++) sigma[i]=hint.GetBins()[i];
   sigma-=(double)Nhits;
   sigma/=sqrt(Nhits);
+  std::cout << "sigma=" << sigma << std::endl;
   const Array<double>& ss(sigma);
   {
     std::ofstream rawout("raw.dat");
@@ -59,6 +72,7 @@ int TestRandomDouble()
       }
   }
 
+
   std::cout << " x      h(x)    exact(x) " << std::endl;
   const Array<int>& sm(hsigma.GetBins());
   for (int i=0;i<hsigma.GetNumBins();i++)
@@ -68,5 +82,4 @@ int TestRandomDouble()
   }
 
 
-  return pass ? 0 : -1;
 }

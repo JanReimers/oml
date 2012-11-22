@@ -32,6 +32,9 @@ template <class T> class Vector2d
   Vector2d& operator =(const Vector2d& v) {x=v.x;y=v.y;return *this;}
   template <class T1> Vector2d& operator =(const Vector2d<T1>& v) {x=v.x;y=v.y;return *this;}
 
+  Vector2d<double> GetValue() const {return Vector2d<double>(x.GetValue(),y.GetValue()); }
+
+
   const T& operator()(subsc_t i) const {return (&x)[i-1];}
         T& operator()(subsc_t i)       {return (&x)[i-1];}
 
@@ -250,11 +253,5 @@ template <class T> inline T norm(const Vector2d<complex<T> >& v)
 }
 */
 
-#include <iostream>
-
-template <class T> inline std::ostream& operator<<( std::ostream& os,const Vector2d<T> v)
-{
-   return os << '(' << v.x << "," << v.y << ")";
-}
 
 #endif
