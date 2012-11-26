@@ -78,6 +78,7 @@
 		<Unit filename="indexable.h" />
 		<Unit filename="indexsort.h" />
 		<Unit filename="indext.h" />
+		<Unit filename="io2d.h" />
 		<Unit filename="io3d.h" />
 		<Unit filename="isnan.h" />
 		<Unit filename="iterable.h" />
@@ -147,6 +148,7 @@
 		<Unit filename="src/InstanceDouble1.cpp" />
 		<Unit filename="src/InstanceDouble2.cpp" />
 		<Unit filename="src/InstanceDouble3.cpp" />
+		<Unit filename="src/InstanceVec2.cpp" />
 		<Unit filename="src/InstanceVec3.cpp" />
 		<Unit filename="src/NumericsDouble.cpp" />
 		<Unit filename="src/matlimit.cc" />
@@ -165,6 +167,7 @@
 		<Unit filename="vecindex.h" />
 		<Unit filename="veclimit.h" />
 		<Unit filename="vector.h" />
+		<Unit filename="vector2d.h" />
 		<Unit filename="vector3d.h" />
 		<Unit filename="vector_io.h" />
 		<Unit filename="xpr.h" />
