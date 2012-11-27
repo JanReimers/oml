@@ -94,7 +94,6 @@
 		</Unit>
 		<Unit filename="UnitTests/UT-Random-double.cc">
 			<Option target="Release" />
-			<Option target="Debug" />
 		</Unit>
 		<Unit filename="UnitTests/UT-SMatrix-double.cc">
 			<Option target="Debug-Linux" />
@@ -114,6 +113,7 @@
 		<Unit filename="UnitTests/UT-Vector3D.cc">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="UnitTests/UT-cow-array-int.cc" />
 		<Unit filename="UnitTests/UnitTest.H">
 			<Option target="Debug-Linux" />
 		</Unit>
