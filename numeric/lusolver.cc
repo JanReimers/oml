@@ -14,9 +14,10 @@
 template <class T> LUSolver<T>::LUSolver(Matrix<T>& A)
   : itsA(A)
   , itsIndex(A.GetNumRows())
+  , isOK(true)
   {
     double sign;
-    LUDecomp(itsA,itsIndex,sign);
+    isOK=LUDecomp(itsA,itsIndex,sign);
   }
 
 template <class T> void LUSolver<T>::SolveFor(Vector<T>& V) const

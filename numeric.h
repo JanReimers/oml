@@ -12,7 +12,7 @@ template <class T> class Matrix;
 template <class T> class SMatrix;
 
 //----------------------------------------------------------------------------
-/*! \file numeric.h 
+/*! \file numeric.h
   \brief Numerical methods as template functions.
 */
 //! Cholsky decomposition of a symmetric matrix, that is \b not stored symmetrically.
@@ -37,7 +37,7 @@ template <class T> void LUBackSub(const Matrix<T>& A, Vector<T>& B,const Array<i
 //! LU back substitution
 template <class T> void LUBackSub(const Matrix<T>& A, Matrix<T>& B,const Array<index_t>& Index);
 //! LU decomposition of A=L*U.
-template <class T> void LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d);
+template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d);
 //! QL decomposition.  Used for eigen problems.
 template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal);
 //! Single value back substitution.
@@ -53,13 +53,13 @@ template <class T> Matrix <T> InvertSymmetric(const Matrix <T>&);
 template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>&);
 
 //! Solve symmtric tri diagonal system Tu=r where T is a symmetric tridiagonal matrix. Last element of OffDiagonal is not used.
-Array<double> SolveTriDiag(const Array<double> & OffDiagonal, 
-			   const Array<double> & Diagonal, 
+Array<double> SolveTriDiag(const Array<double> & OffDiagonal,
+			   const Array<double> & Diagonal,
 			   const Array<double> & r);
 
 //! Solve symmtric tri diagonal system Tu=r where T is a tridiagonal matrix. Last element of OffDiagonal is not used.
-Vector<double> SolveTriDiag(const Vector<double> & OffDiagonal, 
-			    const Vector<double> & Diagonal, 
+Vector<double> SolveTriDiag(const Vector<double> & OffDiagonal,
+			    const Vector<double> & Diagonal,
 			    const Vector<double> & r);
 
 template <class T> Vector<T> Diagonalize(Matrix<T>& m)

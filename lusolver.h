@@ -21,10 +21,12 @@ template <class T> class LUSolver
   void SolveFor(Vector<T>& V) const;
   //! Solve many equations Ax=B, where x and B are Matrixs, x is output in B.
   void SolveFor(Matrix<T>& B) const;
-  
+  bool OK() const {return isOK;}
+
  private:
   Matrix<T>&     itsA;
   Array<index_t> itsIndex;
+  bool           isOK;
 };
 
 #endif //_lusolver_h_

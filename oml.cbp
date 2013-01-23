@@ -40,9 +40,13 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-pg" />
 			<Add directory="../" />
 			<Add directory="./" />
 		</Compiler>
+		<Linker>
+			<Add option="-pg" />
+		</Linker>
 		<Unit filename="array.h" />
 		<Unit filename="array_io.h" />
 		<Unit filename="arrindex.h" />
