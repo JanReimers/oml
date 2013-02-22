@@ -6,7 +6,7 @@
 
 #include "oml/matrix.h"
 
-template <class T> class RefSubMatrix  
+template <class T> class RefSubMatrix
   : public Indexable<T,RefSubMatrix<T>,Full,Real,MatrixShape>
   , public Iterable<T,RefSubMatrix<T> >
   , public MatrixBase
@@ -21,7 +21,7 @@ template <class T> class RefSubMatrix
       assert(itsRowOffset>=0);
       assert(itsColOffset>=0);
     }
-  
+
   RefSubMatrix(const RefSubMatrix& sv)
     : MatrixBase(sv.GetLimits())
     , itsRep(sv.itsRep)
@@ -42,9 +42,11 @@ template <class T> class RefSubMatrix
     assert(GetLimits()==a.GetLimits());
     for (int i=0;i<GetNumRows();i++)
       for (int j=0;j<GetNumCols();j++)
-	(*this)(i,j)=a(i,j);    
+	(*this)(i,j)=a(i,j);
     return *this;
   }
+
+  index_t size() const {return MatrixBase::size();}
 
   T  operator()(subsc_t i,subsc_t j) const
     {
@@ -62,7 +64,7 @@ template <class T> class RefSubMatrix
       assert(j<GetNumCols());
       return itsRep(itsRowOffset+i,itsColOffset+j);
     }
-  
+
   MatLimits GetLimits() const {return MatrixBase::GetLimits();}
 
   void SetLimits(subsc_t rstart, subsc_t rstop,subsc_t cstart, subsc_t cstop)
@@ -115,7 +117,7 @@ template <class T> class RefSubMatrix
 
 /* template <class T,class M, Store MD, class A, Store AD> inline Array<T>  */
 /* operator*(const Indexable<T,M,Full,MD,MatrixShape>& m, const Indexable<T,A,Full,AD,ArrayShape>& a) */
-template <class T,class M, class A> inline Array<T> 
+template <class T,class M, class A> inline Array<T>
 operator*(const Indexable<T,M,Full,Real,MatrixShape>& m, const Indexable<T,A,Full,Real,ArrayShape>& a)
 {
   int Nr=m.GetLimits().GetNumRows();

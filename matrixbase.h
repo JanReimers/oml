@@ -25,6 +25,7 @@ class MatrixBase
   VecLimits GetColLimits() const;
   index_t   GetNumRows  () const;
   index_t   GetNumCols  () const;
+  index_t   size        () const;
   subsc_t   GetRowLow   () const;
   subsc_t   GetRowHigh  () const;
   subsc_t   GetColLow   () const;
@@ -39,12 +40,12 @@ class MatrixBase
 inline MatrixBase::MatrixBase(                    ) : itsLimits(   ) {}
 inline MatrixBase::MatrixBase(const MatLimits& lim) : itsLimits(lim) {}
 
-inline void MatrixBase::SetLimits(const MatLimits& lim,bool preserve) 
+inline void MatrixBase::SetLimits(const MatLimits& lim,bool preserve)
 {
   itsLimits=lim;
 }
 
-inline  MatLimits MatrixBase::GetLimits() const 
+inline  MatLimits MatrixBase::GetLimits() const
 {
   return itsLimits;
 }
@@ -59,7 +60,12 @@ inline index_t MatrixBase::GetNumCols() const
   return itsLimits.Col.size();
 }
 
-inline VecLimits MatrixBase::GetRowLimits() const 
+inline index_t MatrixBase::size() const
+{
+  return itsLimits.size();
+}
+
+inline VecLimits MatrixBase::GetRowLimits() const
 {
   return itsLimits.Row;
 }
@@ -69,7 +75,7 @@ inline VecLimits MatrixBase::GetColLimits() const
   return itsLimits.Col;
 }
 
-inline subsc_t MatrixBase::GetRowLow() const 
+inline subsc_t MatrixBase::GetRowLow() const
 {
   return itsLimits.Row.Low;
 }
@@ -79,7 +85,7 @@ inline subsc_t MatrixBase::GetRowHigh() const
   return itsLimits.Row.High;
 }
 
-inline subsc_t MatrixBase::GetColLow() const 
+inline subsc_t MatrixBase::GetColLow() const
 {
   return itsLimits.Col.Low;
 }
