@@ -36,7 +36,6 @@
 			<Add alias="all" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add option="-O" />
 			<Add directory="../" />
 		</Compiler>
 		<Linker>
@@ -82,6 +81,7 @@
 		<Unit filename="UnitTests/UT-SolveTriDiagonal.cc">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="UnitTests/UT-SubMatrix-double.cc" />
 		<Unit filename="UnitTests/UT-Vector-double.cc">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

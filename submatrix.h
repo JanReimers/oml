@@ -7,7 +7,7 @@
 #include "oml/matrix.h"
 
 template <class T> class RefSubMatrix
-  : public Indexable<T,RefSubMatrix<T>,Full,Real,MatrixShape>
+  : public Indexable<T,RefSubMatrix<T>,Full,Abstract,MatrixShape>
   , public Iterable<T,RefSubMatrix<T> >
   , public MatrixBase
 {
@@ -106,7 +106,10 @@ template <class T> class RefSubMatrix
 
  private:
   friend class Iterable <T,RefSubMatrix>;
+  friend class Indexable<T,RefSubMatrix,Full,Abstract,MatrixShape>;
   friend class MatrixSubscriptor;
+
+//  T  operator[](index_t i) const {return itsRep[i+itsRowOffset*itsRep.GetLimits().GetNumCols()+itsColOffset];} //Required by Indexable
 
 /*   const T* Get() const {return &itsRep[0]+itsOffset;} //Required by iterable. */
 /*         T* Get()       {return &itsRep[0]+itsOffset;} //Required by iterable. */
@@ -115,8 +118,19 @@ template <class T> class RefSubMatrix
   subsc_t   itsRowOffset,itsColOffset;
 };
 
-/* template <class T,class M, Store MD, class A, Store AD> inline Array<T>  */
-/* operator*(const Indexable<T,M,Full,MD,MatrixShape>& m, const Indexable<T,A,Full,AD,ArrayShape>& a) */
+template <class T,class M, class A> inline Array<T>
+operator*(const Indexable<T,M,Full,Abstract,MatrixShape>& m, const Indexable<T,A,Full,Real,ArrayShape>& a)
+{
+  int Nr=m.GetLimits().GetNumRows();
+  int Nc=m.GetLimits().GetNumCols();
+  assert(a.size()==Nc);
+  Array<T> ret(Nr);
+  Fill(ret,0.0);
+  for (int i=0;i<Nr;i++)
+    for (int j=0;j<Nc;j++)
+      ret[i]+=m(i,j)*a[j];
+  return ret;
+}
 template <class T,class M, class A> inline Array<T>
 operator*(const Indexable<T,M,Full,Real,MatrixShape>& m, const Indexable<T,A,Full,Real,ArrayShape>& a)
 {

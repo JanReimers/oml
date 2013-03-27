@@ -14,12 +14,12 @@
 template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,MatrixShape>
 {
  public:
-  explicit Indexable() {}; 
+  explicit Indexable() {};
   ~Indexable() {};
-  
+
   T operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
   T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
-  
+
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
@@ -38,7 +38,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
 	 public:
 		Subscriptor(Indexable& m) : Derived::ArraySubscriptor(m) {};
 	};
-	
+
  protected:
   template <class B> void AssignFrom(const Indexable<T,B,Full,Real,MatrixShape>& b) { ArrayAssign(*this,b);}
   template <class B, Store MB, Data DB> void AssignFrom(const Indexable<T,B,MB,DB,MatrixShape>& b) {MatrixAssign(*this,b);}
@@ -54,12 +54,12 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
 template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,MatrixShape>
 {
  public:
-  explicit Indexable() {}; 
+  explicit Indexable() {};
   ~Indexable() {};
-  
-  T operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
+
+//  T operator[] Not supported for abstract matricies.
   T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
-  
+
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
@@ -71,12 +71,8 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
   template <class B,Store MB,Data DB> Derived& operator+=(const Indexable<T,B,MB,DB,MatrixShape>& b) {return MatrixAdd(*this,b);}
   template <class B,Store MB,Data DB> Derived& operator-=(const Indexable<T,B,MB,DB,MatrixShape>& b) {return MatrixSub(*this,b);}
 
-/*	class Subscriptor : public Derived::ArraySubscriptor
-	{
-	 public:
-		Subscriptor(Indexable& m) : Derived::ArraySubscriptor(m) {};
-	};*/
-	
+// ArraySubscriptor Not supported for abstract matricies.
+
  protected:
   template <class B, Store MB, Data DB> void AssignFrom(const Indexable<T,B,MB,DB,MatrixShape>& b) {MatrixAssign(*this,b);}
 
@@ -87,7 +83,7 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
 
 template <class T> class Matrix;
 
-template <class T, class A, Store M, Data D> inline 
+template <class T, class A, Store M, Data D> inline
 std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,MatrixShape>& a)
 {
   return os << Matrix<T>(a);
@@ -100,25 +96,25 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,MatrixShape>& 
 //  Abstract matrix specializations for some helper functions.
 //
 
-template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixShape>& a)                                        
-{      
+template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixShape>& a)
+{
 	bool ret(true);
   subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
     for (int j=a.GetLimits().Col.Low;j<=ch;j++)
       ret=ret&&a(i,j);
 	return ret;
-}                                                                                      
+}
 
-template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)                                        
-{      
+template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
+{
 	T ret(0);
   subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
     for (int j=a.GetLimits().Col.Low;j<=ch;j++)
       ret+=a(i,j);
 	return ret;
-}                                                                                      
+}
 
 template <class T, class A, class Op> class MinMax<T,A,Op,Full,Abstract,MatrixShape>
 {
@@ -128,7 +124,7 @@ template <class T, class A, class Op> class MinMax<T,A,Op,Full,Abstract,MatrixSh
 		subsc_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
 		subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
 		T ret=a(rl,cl);
-		for (int i=rl;i<=rh;i++) 
+		for (int i=rl;i<=rh;i++)
 			for (int j=cl;j<=ch;j++)
 		  {
 				T ai=a(i,j);
