@@ -85,6 +85,9 @@ template <class T> class Matrix
 
   ~Matrix();
 
+  using Indexable<T,Matrix<T>,Full,Real,MatrixShape>::AssignFrom;
+
+
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.

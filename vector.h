@@ -13,10 +13,10 @@ template <class T> class complex;
 /*! \class Vector vector.h oml/vector.h
   \brief Numerical container with FORTRAN array symatics.
 
-  Vectors have element indexes ranging from 1...n (by default) and are indexed using the 
+  Vectors have element indexes ranging from 1...n (by default) and are indexed using the
   (i) syntax, just like FORTRAN arrays.  The base index can also be changed just like in FORTRAN.
   Vectors support efficient copy on write (COW) symmantices, just like Arrays.
-  
+
   \b Math:
 
   The special operators for Vector are
@@ -26,10 +26,10 @@ template <class T> class complex;
   - \c operator/ is is only allowed for scalars.
   - \c Magnitude(V) and \c !V both return the magnitude of V.
   - \c Normalize(V) returns a unit vector with the same direction as V.
-  
+
   \nosubgrouping
 */
-template <class T> class Vector 
+template <class T> class Vector
   : public Indexable<T,Vector<T>,Full,Real,VectorShape>
   , public Iterable<T,Vector<T> >
   , public TStreamableObject<Vector<T> >
@@ -45,14 +45,14 @@ template <class T> class Vector
   Vector(const VecLimits&); //!<  Specify lower and upper index.
   //! Allows construction from an expression template.
   template <class B,Data D> Vector(const Indexable<T,B,Full,D,VectorShape>&);
-  //! Allows assignment from an expression template.  
+  //! Allows assignment from an expression template.
   template <class B,Data D> Vector& operator=(const Indexable<T,B,Full,D,VectorShape>&);
   //@}
-  
+
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.
-  friend std::ostream& operator<<(std::ostream& os,const Vector& a) 
+  friend std::ostream& operator<<(std::ostream& os,const Vector& a)
   {
     return os << static_cast<const TStreamableObject<Vector<T> >& >(a);
   }
@@ -84,10 +84,10 @@ template <class T> class Vector
   void SetLimits(index_t         , bool preserve=false); //!<Resize from new size.
   void SetLimits(subsc_t,subsc_t , bool preserve=false); //!<Resize from new limits.
   //@}
-	
+
   //! Does V(i)=V(index[i]) for i=low...high.  Used for sorting.
-  void   ReIndex(const Array<index_t>&);  
-  
+  void   ReIndex(const Array<index_t>&);
+
   /*! \name Sub-vector functions  */
   //@{
   Vector SubVector(const VecLimits&) const; //!< From limits.
@@ -110,16 +110,16 @@ template <class T> class Vector
 #else
   #define CHECK(i)
 #endif
-  class Subscriptor 
+  class Subscriptor
   {
    public:
-    Subscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a) 
+    Subscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a)
       : itsLimits(a.GetLimits())
-      , itsPtr(static_cast<Vector*>(&a)->Get()-itsLimits.Low) 
+      , itsPtr(static_cast<Vector*>(&a)->Get()-itsLimits.Low)
       {assert(itsPtr);}
-    
+
     T& operator()(subsc_t i) {CHECK(i);return itsPtr[i];}
-    
+
    private:
     VecLimits itsLimits;
     T*        itsPtr;
@@ -131,12 +131,12 @@ template <class T> class Vector
 #else
   #define CHECK(i)
 #endif
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a) 
+    ArraySubscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a)
       : itsPtr(static_cast<Vector*>(&a)->Get())
-      , itsSize(a.size()) 
+      , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -145,7 +145,7 @@ template <class T> class Vector
   };
 
 #undef CHECK
-  
+
  private:
   friend class Indexable<T,Vector,Full,Real,VectorShape>;
   friend class Iterable <T,Vector>;
@@ -168,42 +168,42 @@ template <class T> class Vector
 //
 //  Some special operators only for vectors.
 //
-template <class T, class A, Store M, Data D> inline 
+template <class T, class A, Store M, Data D> inline
 std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,VectorShape>& a)
 {
   return os << Vector<T>(a);
 }
 
 // The define op* as a vector dot (inner) product.
-template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline 
+template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 T operator*(const Indexable<T,A,MA,DA,VectorShape>& a, const Indexable<T,B,MB,DB,VectorShape>& b)
 {
    return Dot(a,b);
 }
 
 // Calculate the magnitue of a vector.
-template <class T, class A, Store M, Data D> inline 
-T Magnitude(const Indexable<T,A,M,D,VectorShape>& a) 
+template <class T, class A, Store M, Data D> inline
+T Magnitude(const Indexable<T,A,M,D,VectorShape>& a)
 {
   return sqrt(a*a);
 }
 
 // Overload op! for magnitue.
-template <class T, class A, Store M, Data D> inline 
-T operator!(const Indexable<T,A,M,D,VectorShape>& a) 
+template <class T, class A, Store M, Data D> inline
+T operator!(const Indexable<T,A,M,D,VectorShape>& a)
 {
   return Magnitude(a);
 }
 
 // Rescale so that v*v==1.0 .
-template <class T, class A, Store M, Data D> inline 
-void Normalize(Indexable<T,A,M,D,VectorShape>& v) 
+template <class T, class A, Store M, Data D> inline
+void Normalize(Indexable<T,A,M,D,VectorShape>& v)
 {
   v/=!v;
 }
 //-----------------------------------------------------------------------------
 //
-//  Macro, which expands to an index checking function call, 
+//  Macro, which expands to an index checking function call,
 //  when DEBUG is on
 //
 #if DEBUG
@@ -212,7 +212,7 @@ void Normalize(Indexable<T,A,M,D,VectorShape>& v)
   #define CHECK(i)
 #endif
 
-template <class T> inline T Vector<T>::operator()(subsc_t i) const 
+template <class T> inline T Vector<T>::operator()(subsc_t i) const
 {
   CHECK(i);
   return itsData.Get()[itsLimits.Offset(i)];
@@ -232,13 +232,13 @@ template <class T> inline T& Vector<T>::operator()(subsc_t i)
   #define CHECK(i)
 #endif
 
-template <class T> inline  T Vector<T>::operator[](index_t i) const 
+template <class T> inline  T Vector<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& Vector<T>::operator[](index_t i) 
+template <class T> inline T& Vector<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
@@ -258,21 +258,21 @@ template <class T> inline Vector<T>::Vector()
     CHECK;
   }
 
-template <class T> inline Vector<T>::Vector(index_t size) 
+template <class T> inline Vector<T>::Vector(index_t size)
   : itsLimits(size)
   , itsData  (size)
   {
     CHECK;
   }
 
-template <class T> inline Vector<T>::Vector(index_t l,index_t h) 
+template <class T> inline Vector<T>::Vector(index_t l,index_t h)
   : itsLimits(l,h)
   , itsData  (itsLimits.size())
   {
     CHECK;
   }
 
-template <class T> inline Vector<T>::Vector(const VecLimits& lim) 
+template <class T> inline Vector<T>::Vector(const VecLimits& lim)
   : itsLimits(lim          )
   , itsData  (lim.size())
   {
@@ -284,33 +284,33 @@ template <class T> inline index_t Vector<T>::size() const
   return GetLimits().size();
 }
 
-template <class T> inline const T* Vector<T>::Get() const 
+template <class T> inline const T* Vector<T>::Get() const
 {
   return itsData.Get();
 }
 
-template <class T> inline T* Vector<T>::Get() 
+template <class T> inline T* Vector<T>::Get()
 {
   return itsData.Get();
 }
 
-template <class T> template <class B,Data D> inline 
-Vector<T>::Vector(const Indexable<T,B,Full,D,VectorShape>& v) 
+template <class T> template <class B,Data D> inline
+Vector<T>::Vector(const Indexable<T,B,Full,D,VectorShape>& v)
   : itsLimits(v.GetLimits())
   , itsData  (itsLimits.size())
   {
-    AssignFrom(v); //Choose op[i] or op(i) depending on whether v is abstract.
+    this->AssignFrom(v); //Choose op[i] or op(i) depending on whether v is abstract.
     CHECK;
   }
 
 #undef CHECK
 
-template <class T> inline  VecLimits Vector<T>::GetLimits() const 
+template <class T> inline  VecLimits Vector<T>::GetLimits() const
 {
   return itsLimits;
 }
 
-template <class T> inline subsc_t Vector<T>::GetLow() const 
+template <class T> inline subsc_t Vector<T>::GetLow() const
 {
   return itsLimits.Low;
 }
@@ -340,11 +340,11 @@ template <class T> inline Vector<T> Vector<T>::SubVector(subsc_t l,subsc_t h) co
   return SubVector(VecLimits(l,h));
 }
 
-template <class T> template <class B, Data D> inline 
+template <class T> template <class B, Data D> inline
 Vector<T>& Vector<T>::operator=(const Indexable<T,B,Full,D,VectorShape>& v)
 {
   if (size()==0) SetLimits(v.GetLimits());
-  AssignFrom(v); //Choose op[i] or op(i) depending on whether v is abstract.
+  this->AssignFrom(v); //Choose op[i] or op(i) depending on whether v is abstract.
   return *this;
 }
 
@@ -401,10 +401,10 @@ template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T>& b)
 template <class T> void Vector<T>::ReIndex(const Array<index_t>& index)
 {
   assert(size()==index.size());
-  
+
   Array<index_t>::const_iterator b=index.begin();
   Vector<T>                      dest(GetLimits());
-  iterator                       i=dest.begin();  
+  iterator                       i=dest.begin();
   for (;b!=index.end();b++,i++) *i=(*this)[*b];
   *this=dest;
 }
