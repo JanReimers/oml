@@ -138,22 +138,23 @@ template <class T> class Matrix
   typedef MatrixRowAsArray   <T,Matrix<T>,Full,Real> RowArrayType;
   typedef MatrixColumnAsArray<T,Matrix<T>,Full,Real> ColArrayType;
   typedef MatrixDiagonal<T,Matrix<T>,Full,Real> DiagType;
+  typedef MatrixDiagonalAsArray<T,Matrix<T>,Full,Real> DiagArrayType;
 
   /*! \name Slice operations.
    These member functions return proxies that behave like Vectors.
   */
   //@{
   //! Return slice proxy.
-  RowType             GetRow          (subsc_t row)       {return RowType (*this,row);}
-  ColType             GetColumn       (subsc_t col)       {return ColType (*this,col);}
-  RowArrayType        GetRowAsArray   (subsc_t row)       {return RowArrayType (*this,row);}
-  ColArrayType        GetColumnAsArray(subsc_t col)       {return ColArrayType (*this,col);}
-  DiagType            GetDiagonal     (           )       {return DiagType(*this    );}
-  const RowType       GetRow          (subsc_t row) const {return RowType (*this,row);}
-  const ColType       GetColumn       (subsc_t col) const {return ColType (*this,col);}
-  const RowArrayType  GetRowAsArray   (subsc_t row) const {return RowArrayType (*this,row);}
-  const ColArrayType  GetColumnAsArray(subsc_t col) const {return ColArrayType (*this,col);}
-  const DiagType      GetDiagonal     (           ) const {return DiagType(*this    );}
+  RowType             GetRow            (subsc_t row)       {return RowType (*this,row);}
+  ColType             GetColumn         (subsc_t col)       {return ColType (*this,col);}
+  RowArrayType        GetRowAsArray     (subsc_t row)       {return RowArrayType (*this,row);}
+  ColArrayType        GetColumnAsArray  (subsc_t col)       {return ColArrayType (*this,col);}
+  DiagType            GetDiagonal       (           )       {return DiagType(*this    );}
+  const RowType       GetRow            (subsc_t row) const {return RowType (*this,row);}
+  const ColType       GetColumn         (subsc_t col) const {return ColType (*this,col);}
+  const RowArrayType  GetRowAsArray     (subsc_t row) const {return RowArrayType (*this,row);}
+  const ColArrayType  GetColumnAsArray  (subsc_t col) const {return ColArrayType (*this,col);}
+  const DiagArrayType GetDiagonalAsArray(           ) const {return DiagArrayType(*this    );}
   //@}
 
   /*! \name Iterators.

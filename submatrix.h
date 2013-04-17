@@ -86,6 +86,13 @@ template <class T> class RefSubMatrix
     for (int ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ic);
     return ret;
   }
+  Array<T> GetDiagonal() const
+  {
+    assert(GetLimits().Col==GetLimits().Row);
+    Array<T> ret(GetNumRows());
+    for (int ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ir);
+    return ret;
+  }
 #if DEBUG
 #define CHECK(i,j) assert(i>=0&&i<itsNumRows); assert(j>=0&&j<itsNumCols)
 #else

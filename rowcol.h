@@ -419,6 +419,80 @@ private:
     A&    itsMatrix;
 };
 
+//---------------------------------------------------------------------
+//
+//  Matrix diagonal as Array proxy class.
+//
+template <class T, class A, Store M, Data D> class MatrixDiagonalAsArray
+    : public Indexable<T,MatrixDiagonalAsArray<T,A,M,D>,Full,Abstract,ArrayShape>
+{
+public:
+    MatrixDiagonalAsArray(Indexable<T,A,M,D,MatrixShape>& m)
+        : itsMatrix(static_cast<A&>(m))
+    {
+        assert(m.GetLimits().Row==m.GetLimits().Col);
+    };
+    MatrixDiagonalAsArray(const Indexable<T,A,M,D,MatrixShape>& m)
+        : itsMatrix(static_cast<A&>(const_cast<Indexable<T,A,M,D,MatrixShape>&>(m)))
+    {
+        assert(m.GetLimits().Row==m.GetLimits().Col);
+    };
+    MatrixDiagonalAsArray(const MatrixDiagonalAsArray& m)
+        : itsMatrix(m.itsMatrix)
+    {};
+    ~MatrixDiagonalAsArray() {};
+    MatrixDiagonalAsArray& operator=(const MatrixDiagonalAsArray& r)
+    {
+        ArrayAssign(*this,r);
+        return *this;
+    }
+    MatrixDiagonalAsArray& operator=(T t)
+    {
+        ArrayAssign(*this,t);
+        return *this;
+    }
+    template <class A1,Store M1, Data D1> MatrixDiagonalAsArray& operator=(const Indexable<T,A1,M1,D1,ArrayShape>& v)
+    {
+        ArrayAssign(*this,v);
+        return *this;
+    }
+
+    index_t   size  () const
+    {
+        return itsMatrix.GetLimits().Row.size();
+    }
+
+    T  operator[](subsc_t i) const
+    {
+        return itsMatrix(i,i);
+    }
+    T& operator[](subsc_t i)
+    {
+        return itsMatrix(i,i);
+    }
+
+     class ArraySubscriptor
+    {
+    public:
+        ArraySubscriptor(Indexable<T,MatrixDiagonalAsArray<T,A,M,D>,Full,Abstract,ArrayShape>& a)
+            : itsS(static_cast<MatrixDiagonalAsArray<T,A,M,D>&>(a).itsMatrix)
+        {};
+
+        T& operator[](subsc_t i)
+        {
+            return itsS(i,i);    //Let matrix do bounds check.
+        }
+    private:
+        typename A::Subscriptor itsS;
+    };
+
+private:
+    friend class Indexable<T,MatrixDiagonalAsArray,Full,Abstract,ArrayShape>;
+    friend class ArraySubscriptor;
+
+    A&    itsMatrix;
+};
+
 
 
 #endif //_RowCol_H_
