@@ -54,12 +54,12 @@ template <class T> class List
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.
-  friend std::ostream& operator<<(std::ostream& os,const List& l) 
+  friend std::ostream& operator<<(std::ostream& os,const List& l)
   {
     return os << static_cast<const TStreamableObject<List<T> >& >(l);
   }
 
-	
+
   /*! \name Subscripting operators
     If \c DEBUG is defined, every index will be checked that it is in range.
     For fast write access with \c op[] make a \c Subscriptor, then the COW check is only done once
@@ -77,11 +77,11 @@ template <class T> class List
   //! Change the size of the array and optionally preserve as many values as possible.
   void    SetSize(index_t, bool preserve=false)      ;
   //! Does A[i]=A[index[i]] for i=0...n-1.  Used for sorting.
-  void    ReIndex(const Array<index_t>& index);  
+  void    ReIndex(const Array<index_t>& index);
   //! Extract a subarray.  Involves a deep copy.
   List    SubList(index_t, index_t) const;
- 
-  
+
+
   /*! \name List operatorations
     These functions try to emulate an STL std::vector.
   */
@@ -91,11 +91,11 @@ template <class T> class List
   void     push_back(const T&         )      ;
   //! Add one element to the end of the List.
   void     pop_back (                 )      ;
-  //! Get last element. 
+  //! Get last element.
   const T& back     (                 ) const;
   //! Get first element.
   const T& front    (                 ) const;
-  //! Get last element. 
+  //! Get last element.
         T& back     (                 )      ;
   //! Get first element.
         T& front    (                 )      ;
@@ -112,18 +112,20 @@ template <class T> class List
   //! Clear out the List. Size goes to zero.
   void     Empty    (                 )      ;
   //! Look if a value is in the list.
-  bool     IsInList (const T&         ) const; 
+  bool     IsInList (const T&         ) const;
+
+  List& operator&(const List& b);
   //@}
-  
+
 #if DEBUG
   #define CHECK(i) assert(i>=0&&i<itsSize)
 #else
   #define CHECK(i)
 #endif
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,List,Full,Real,ArrayShape>& a) 
+    ArraySubscriptor(Indexable<T,List,Full,Real,ArrayShape>& a)
       : itsPtr(static_cast<List&>(a).Get()), itsSize(a.size()) {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -142,7 +144,7 @@ template <class T> class List
   //! Default Subscriptor.
   typedef ArraySubscriptor Subscriptor;
   //@}
-  
+
  private:
   friend class ArraySubscriptor;
   friend class Iterable <T,List>;
@@ -165,13 +167,13 @@ template <class T> class List
   #define CHECK(i)
 #endif
 
-template <class T> inline const T&  List<T>::operator[](index_t i) const 
+template <class T> inline const T&  List<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& List<T>::operator[](index_t i) 
+template <class T> inline T& List<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
@@ -186,9 +188,9 @@ template <class T> inline T& List<T>::operator[](index_t i)
 template <class T> inline index_t  List<T>::size() const
 {
   return itsNext;
-} 
+}
 
-template <class T> inline const T* List<T>::Get() const 
+template <class T> inline const T* List<T>::Get() const
 {
   return itsData.Get();
 }
@@ -201,9 +203,9 @@ template <class T> inline T* List<T>::Get()
 template <class T> inline bool  List<T>::IsInList(const T& t) const
 {
   return find(t)<itsNext;
-} 
+}
 
-template <class T> template <class T1,class A> inline 
+template <class T> template <class T1,class A> inline
 List<T>::List(const Indexable<T1,A,Full,Real,ArrayShape>&x)
 : itsData(x.size())
 , itsNext(x.size())
@@ -213,8 +215,8 @@ List<T>::List(const Indexable<T1,A,Full,Real,ArrayShape>&x)
 }
 
 
-template <class T> inline 
-List<T>& List<T>::operator=(const List<T>& x) 
+template <class T> inline
+List<T>& List<T>::operator=(const List<T>& x)
 {
   itsData=x.itsData; //Shallow copy.
   itsNext=x.itsNext;
@@ -222,8 +224,8 @@ List<T>& List<T>::operator=(const List<T>& x)
   return *this;
 }
 
-template <class T> template <class T1,class A> inline 
-List<T>& List<T>::operator=(const Indexable<T1,A,Full,Real,ArrayShape>& x) 
+template <class T> template <class T1,class A> inline
+List<T>& List<T>::operator=(const Indexable<T1,A,Full,Real,ArrayShape>& x)
 {
   SetSize(x.size());
   ArrayAssign(*this,x);
@@ -328,7 +330,7 @@ template <class T> inline List<T> operator&(const List<T>& a, const List<T>& b)
 template <class T> inline void List<T>::ReIndex(const Array<index_t>& index)
 {
   assert(size()==index.size());
-  
+
   List<T> dest(size());
 
   Array<index_t>::const_iterator b=index.begin();
@@ -380,7 +382,7 @@ template <class T> void List<T>::InsertAt(const T& element, index_t e)
 template <class T> inline bool List<T>::Remove(const T& element)
 {
   index_t i=find(element);
-  if (i<itsNext) 
+  if (i<itsNext)
   {
     RemoveAt(i);
     return true;
@@ -418,6 +420,14 @@ template <class T> index_t List<T>::find(const T& element) const
   index_t i;
   for (i=0;i<size();i++) if ((*this)[i]==element) break;
   return i;
+}
+
+//! Append another list.
+template <class T> inline List<T>& List<T>::operator&(const List<T>& b)
+{
+  typedef typename List<T>::const_iterator CI;
+  for (CI bb=b.begin();bb!=b.end();bb++) this->push_back(*bb);
+  return *this;
 }
 
 #endif //_List_H_
