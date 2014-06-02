@@ -5,6 +5,7 @@
 // Copyright (1994-2003), Jan N. Reimers
 
 #include "oml/mixtypes.h"
+#include <cmath>
 
 //-----------------------------------------------------------------
 //
@@ -149,22 +150,22 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,MatrixSha
 template <Data D1, Data D2> class BinaryData;
 template <Data D> class BinaryData<D,D>
 {
- public: 
+ public:
   static const Data RetData=D;
 };
 template <Data D> class BinaryData<D,Abstract>
 {
- public: 
+ public:
   static const Data RetData=Abstract;
 };
 template <Data D> class BinaryData<Abstract,D>
 {
- public: 
+ public:
   static const Data RetData=Abstract;
 };
 template <> class BinaryData<Abstract,Abstract>
 {
- public: 
+ public:
   static const Data RetData=Abstract;
 };
 

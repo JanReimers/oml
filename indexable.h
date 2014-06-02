@@ -15,21 +15,21 @@ namespace std {template <class T> class complex;}
 //
 template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 
-template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexable<T,A,M,D,S>& a)                                        
-{            
+template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexable<T,A,M,D,S>& a)
+{
   T ret(0);
   int n=a.size();
   for (int i=0;i<n;i++) ret+=a[i];
   return ret;
-}                                                                                      
+}
 
-template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)                                        
-{      
+template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)
+{
   bool ret(true);
   int n=a.size();
   for (int i=0;i<n;i++) ret=ret && a[i];
   return ret;
-}                                                                                      
+}
 
 //------------------------------------------------------------------
 //
@@ -43,7 +43,7 @@ template <class T, class A, class Op, Store M, Data D, Shape S> class MinMax
   {
     int n=a.size();
     T ret=n>0 ? a[0] : T(0); // Don't try and read a[0] if there is no data in a!
-    for (int i=1;i<n;i++) 
+    for (int i=1;i<n;i++)
       {
 	T ai=a[i];
 	if (Op::apply(ai,ret)) ret=ai;
@@ -56,26 +56,26 @@ template <class T, class A, class Op, Store M, Data D, Shape S> class MinMax
 //  These won't work for expression template, because A won't be a useful return type.
 //
 template <class T,class A, Store M, Data D, Shape S> inline A Integrate(const Indexable<T,A,M,D,S>& a,T y0=0)
-{      
+{
   int n=a.size();
   A ret(n);
-  for (int i=0;i<n;i++) 
+  for (int i=0;i<n;i++)
   {
     y0+=a[i];
     ret[i]=y0;
   }
   return ret;
-}                                                                                      
+}
 
 template <class T,class A, Store M, Data D, Shape S> inline A Differentiate(const Indexable<T,A,M,D,S>& a)
-{      
+{
   int n=a.size();
   A ret(n);
-  typename A::ArraySubscriptor s(ret); 
+  typename A::ArraySubscriptor s(ret);
   s[0]=a[0]; //Save integration constant in case caller needs it.
   for (int i=1;i<n;i++) s[i]=a[i]-a[i-1];
   return ret;
-}                                                                                      
+}
 
 #include "oml/xpr.h"
 #include "oml/binop.h"
@@ -84,7 +84,7 @@ template <class T,class A, Store M, Data D, Shape S> inline A Differentiate(cons
 
 //--------------------------------------------------------------
 //
-//  Macros for generating template functions that return 
+//  Macros for generating template functions that return
 //  expressions.
 //
 #define ObOb(Func,Op)\
@@ -146,8 +146,8 @@ Func (const Indexable <Type1,A,M,D,S>& a, const Type2& b)                       
 {                                                                                                    \
    typedef Op<Type1,Type2>::RT Type3;\
    typedef Ref<Type1,Indexable<Type1,A,M,D,S>,S> RefA;                                               \
-   typedef XprBinOp<typename Op<Type1,Type2>::RT,RefA,Val<Type2,RefA,S>,Op<Type1,Type2>,S> ExprT;    \
-   return Xpr<typename Op<Type1,Type2>::RT,ExprT,M,D,S>(ExprT(RefA(a),Val<Type2,RefA,S>(b,RefA(a))));\
+   typedef XprBinOp<Type3,RefA,Val<Type2,RefA,S>,Op<Type1,Type2>,S> ExprT;    \
+   return Xpr<Type3,ExprT,M,D,S>(ExprT(RefA(a),Val<Type2,RefA,S>(b,RefA(a))));\
 }                                                                                                    \
 template <class B, Store M, Data D, Shape S> inline                                                  \
 Xpr<typename Op<Type1,Type2>::RT,XprBinOp<typename Op<Type1,Type2>::RT,                              \
@@ -248,14 +248,14 @@ ObScMix(Equal     ,OpEqual,std::complex<double>,double)
   Ob(operator-  , OpMinus  )
   Ob(operator+  , OpPlus  )
   Ob(sin  , Opsin  )
-  Ob(cos  , Opcos  )  
-  Ob(tan  , Optan  )  
+  Ob(cos  , Opcos  )
+  Ob(tan  , Optan  )
   Ob(asin , Opasin )
   Ob(acos , Opacos )
   Ob(atan , Opatan )
   Ob(sinh , Opsinh )
-  Ob(cosh , Opcosh )  
-  Ob(tanh , Optanh )  
+  Ob(cosh , Opcosh )
+  Ob(tanh , Optanh )
   Ob(exp  , Opexp  )
   Ob(log  , Oplog  )
   Ob(pow2 , Oppow2 )
@@ -272,51 +272,51 @@ ObScMix(Equal     ,OpEqual,std::complex<double>,double)
   Ob(real , Opreal )
   Ob(imag , Opimag )
 
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline 
+template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
 T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
 {
   return Sum(DirectMultiply(a,b));
 }
 
 template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S>
-inline std::complex<T> 
+inline std::complex<T>
 Dot(const Indexable<std::complex<T>,A,MA,DA,S>& a,const Indexable<std::complex<T>,B,MB,DB,S>& b)
 {
   return Sum(DirectMultiply(a,conj(b)));
 }
 
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline 
+template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
 typename OpEqual<T,T>::RT operator==(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b)
 {
 	return True(Equal(a,b));
 }
 
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline 
+template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
 typename OpEqual<T,T>::RT operator!=(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b)
 {
 	return !True(Equal(a,b));
 }
 
-template <class T, class A, Store M, Data D, Shape S> inline 
+template <class T, class A, Store M, Data D, Shape S> inline
 typename OpEqual<T,T>::RT operator==(const Indexable<T,A,M,D,S>& a, T b)
 {
 	return True(Equal(a,b));
 }
 
-template <class T, class A, Store M, Data D, Shape S> inline 
+template <class T, class A, Store M, Data D, Shape S> inline
 typename OpEqual<T,T>::RT operator!=(const Indexable<T,A,M,D,S>& a, T b)
 {
 	return !True(Equal(a,b));
 }
 
-template <class T, class A, Store M, Data D, Shape S> inline T Min(const Indexable<T,A,M,D,S>& a)                                        
-{                                                                                      
+template <class T, class A, Store M, Data D, Shape S> inline T Min(const Indexable<T,A,M,D,S>& a)
+{
 	return MinMax<T,A,OpLT<T>,M,D,S>::apply(a);
-}                                                                                      
+}
 
-template <class T, class A, Store M, Data D, Shape S> inline T Max(const Indexable<T,A,M,D,S>& a)                                        
-{                                                                                      
+template <class T, class A, Store M, Data D, Shape S> inline T Max(const Indexable<T,A,M,D,S>& a)
+{
 	return MinMax<T,A,OpGT<T>,M,D,S>::apply(a);
-}                                                                                      
+}
 
 #endif // _indexable_h_
