@@ -45,7 +45,7 @@ template <class T, class A, class B> class MatrixMMOp
     : itsA(a)
     , itsB(b)
   {
-    assert(itsA.GetLimits().Row==itsB.GetLimits().Col);
+    assert(itsA.GetLimits().Col==itsB.GetLimits().Row);
   };
   MatrixMMOp(const MatrixMMOp& m)
     : itsA(m.itsA)
@@ -54,11 +54,11 @@ template <class T, class A, class B> class MatrixMMOp
   T operator()(int i, int j) const
   {
     T ret(0);
-    subsc_t rh=itsA.GetLimits().Row.High;
-    for (subsc_t k=itsA.GetLimits().Row.Low;k<=rh;k++) ret+=itsA(i,k)*itsB(k,j);
+    subsc_t ch=itsA.GetLimits().Col.High;
+    for (subsc_t k=itsA.GetLimits().Col.Low;k<=ch;k++) ret+=itsA(i,k)*itsB(k,j);
     return ret;
   }
-  MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Col,itsB.GetLimits().Row);}
+  MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
 
  private:
   const A itsA;
