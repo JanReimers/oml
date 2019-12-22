@@ -176,7 +176,7 @@ template <class T> class Opconj
    static inline RetType apply(const T a) {return conj(a);}
 };
 
-template <> template <class T> class Opconj<std::complex<T> >
+template <class T> class Opconj<std::complex<T> >
 {
  public:
    typedef std::complex<T> RetType;
@@ -190,14 +190,14 @@ template <class T> class Opabs
    static inline RetType apply(const T a) {return abs(a);}
 };
 
-template <> template <class T> class Opabs<std::complex<T> >
+template <class T> class Opabs<std::complex<T> >
 {
  public:
    typedef  T RetType;
    static inline RetType apply(const std::complex<T> a) {return abs(a);}
 };
 
-template <> template <> class Opabs<double>
+template <> class Opabs<double>
 {
  public:
    typedef  double RetType;
@@ -211,7 +211,7 @@ template <class T> class Oparg
    static inline RetType apply(const T a) {return arg(a);}
 };
 
-template<> template <class T> class Oparg<std::complex<T> >
+template <class T> class Oparg<std::complex<T> >
 {
  public:
    typedef  T RetType;
@@ -225,7 +225,7 @@ template <class T> class Opnorm
    static inline RetType apply(const T a) {return norm(a);}
 };
 
-template<> template <class T> class Opnorm<std::complex<T> >
+template <class T> class Opnorm<std::complex<T> >
 {
  public:
    typedef  T RetType;
@@ -239,7 +239,7 @@ template <class T> class Opreal
    static inline RetType apply(const T a) {return real(a);}
 };
 
-template<> template <class T> class Opreal<std::complex<T> >
+template <class T> class Opreal<std::complex<T> >
 {
  public:
    typedef  T RetType;
@@ -253,7 +253,7 @@ template <class T> class Opimag
    static inline RetType apply(const T a) {return imag(a);}
 };
 
-template<> template <class T> class Opimag<std::complex<T> >
+template <class T> class Opimag<std::complex<T> >
 {
  public:
    typedef  T RetType;
