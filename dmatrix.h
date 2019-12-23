@@ -20,7 +20,7 @@ template <class T> class Array;
 //  Full matrix class with conventional direct subscripting, i.e. no list of
 //  column pointers is maintained.
 //
-template <class T> class DMatrix 
+template <class T> class DMatrix
   : public Indexable<T,DMatrix<T>,Full,Real,MatrixShape>
   , public MatrixBase
   , public Iterable<T,DMatrix<T> >
@@ -28,8 +28,8 @@ template <class T> class DMatrix
 {
  public:
   explicit DMatrix(                );
-  explicit DMatrix(index_t r, index_t c);  	
-  explicit DMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch);  
+  explicit DMatrix(index_t r, index_t c);
+  explicit DMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch);
   explicit DMatrix(const VecLimits& r,const VecLimits& c);
   explicit DMatrix(const MatLimits&);
   explicit DMatrix(const DMatrix& m);
@@ -40,9 +40,11 @@ template <class T> class DMatrix
   template <class A>                 DMatrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
   template <class A,Store M, Data D> DMatrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
 
+  //DMatrix& operator*=(const DMatrix&);
+
   std::ostream& Write(std::ostream&) const;
-  std::istream& Read (std::istream&)      ;	
-  friend std::ostream& operator<<(std::ostream& os,const DMatrix& a) 
+  std::istream& Read (std::istream&)      ;
+  friend std::ostream& operator<<(std::ostream& os,const DMatrix& a)
   {
     return os << static_cast<const TStreamableObject<DMatrix<T> >& >(a);
   }
@@ -53,7 +55,7 @@ template <class T> class DMatrix
 
   index_t   size  () const; //Required by iterable.
   MatLimits GetLimits() const;
-	
+
   void SetLimits(const MatLimits&                           , bool preserve=false);
   void SetLimits(index_t r, index_t c                       , bool preserve=false);
   void SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve=false);
@@ -68,7 +70,7 @@ template <class T> class DMatrix
   typedef MatrixRow     <T,DMatrix<T>,Full,Real> RowType;
   typedef MatrixColumn  <T,DMatrix<T>,Full,Real> ColType;
   typedef MatrixDiagonal<T,DMatrix<T>,Full,Real> DiagType;
-  
+
   RowType  GetRow     (subsc_t row) {return RowType (*this,row);}
   ColType  GetColumn  (subsc_t col) {return ColType (*this,col);}
   DiagType GetDiagonal(           ) {return DiagType(*this    );}
@@ -89,19 +91,19 @@ template <class T> class DMatrix
 //
 //  Allows fast L-value access.  Does COW check during construction.
 //
-  class Subscriptor 
+  class Subscriptor
   {
   public:
     Subscriptor(Indexable<T,DMatrix,Full,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits())
       , itsPtr(static_cast<DMatrix&>(m).Get())
       {};
-    
+
     T& operator()(subsc_t i,subsc_t j) {CHECK(i,j);return itsPtr[itsLimits.Offset(i,j)];}
-    
+
   private:
     MatLimits itsLimits;
-    T*        itsPtr; 
+    T*        itsPtr;
   };
 
 #undef CHECK
@@ -110,12 +112,12 @@ template <class T> class DMatrix
 #else
   #define CHECK(i)
 #endif
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,DMatrix,Full,Real,MatrixShape>& a) 
+    ArraySubscriptor(Indexable<T,DMatrix,Full,Real,MatrixShape>& a)
       : itsPtr(static_cast<DMatrix*>(&a)->Get())
-      , itsSize(a.size()) 
+      , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -124,7 +126,7 @@ template <class T> class DMatrix
   };
 
 #undef CHECK
- 	
+
  private:
   friend class Indexable<T,DMatrix,Full,Real,MatrixShape>;
   friend class Iterable<T,DMatrix>;
@@ -143,7 +145,7 @@ template <class T> class DMatrix
 
 //-----------------------------------------------------------------------------
 //
-//  Macro, which expands to an index checking function call, 
+//  Macro, which expands to an index checking function call,
 //  when DEBUG is on
 //
 #if DEBUG
@@ -153,7 +155,7 @@ template <class T> class DMatrix
 #endif
 
 
-template <class T> inline T DMatrix<T>::operator()(subsc_t i,subsc_t j) const 
+template <class T> inline T DMatrix<T>::operator()(subsc_t i,subsc_t j) const
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
@@ -173,20 +175,20 @@ template <class T> inline T& DMatrix<T>::operator()(subsc_t i,subsc_t j)
   #define CHECK(i)
 #endif
 
-template <class T> inline  T DMatrix<T>::operator[](index_t i) const 
+template <class T> inline  T DMatrix<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& DMatrix<T>::operator[](index_t i) 
+template <class T> inline T& DMatrix<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 #undef CHECK
 
-template <class T> template <class A> inline 
+template <class T> template <class A> inline
 DMatrix<T>::DMatrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
@@ -194,24 +196,25 @@ DMatrix<T>::DMatrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
     ArrayAssign(*this,m); //Use op[].
   }
 
-template <class T> template <class A,Store M, Data D> inline 
+template <class T> template <class A,Store M, Data D> inline
 DMatrix<T>::DMatrix(const Indexable<T,A,M,D,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
+    m.GetLimits();
     MatrixAssign(*this,m); //Use op(i,j).
   }
 
 
-template <class T> template <class A> inline 
+template <class T> template <class A> inline
 DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
 {
-	if (size()==0) SetLimits(m.GetLimits());
+  if (size()==0) SetLimits(m.GetLimits());
   ArrayAssign(*this,m); //Use op[].
   return *this;
 }
 
-template <class T> template <class A,Store M, Data D> inline 
+template <class T> template <class A,Store M, Data D> inline
 DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
 {
   if (size()==0) SetLimits(m.GetLimits());
@@ -219,17 +222,26 @@ DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
   return *this;
 }
 
+template <class T> DMatrix<T>& operator*=(DMatrix<T>& a,const DMatrix<T>& b)
+{
+    assert(a.GetLimits().Col==b.GetLimits().Row);
+    DMatrix<T> temp=a*b;
+    a.SetLimits(temp.GetLimits());
+    a=temp;
+    return a;
+}
+
 template <class T> inline index_t DMatrix<T>::size() const
 {
   return GetLimits().size();
 }
 
-template <class T> inline const T* DMatrix<T>::Get() const 
+template <class T> inline const T* DMatrix<T>::Get() const
 {
   return itsData.Get();
 }
 
-template <class T> inline T* DMatrix<T>::Get() 
+template <class T> inline T* DMatrix<T>::Get()
 {
   return itsData.Get();
 }
@@ -254,7 +266,7 @@ template <class T> inline void DMatrix<T>::SetLimits(const VecLimits& r,const Ve
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline MatLimits DMatrix<T>::GetLimits() const 
+template <class T> inline MatLimits DMatrix<T>::GetLimits() const
 {
   return MatrixBase::GetLimits();
 }
