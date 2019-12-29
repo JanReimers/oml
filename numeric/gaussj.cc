@@ -2,7 +2,6 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matrix.h"
 #include "oml/array.h"
 #include <cmath>
 #include <cassert>
@@ -39,11 +38,11 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
 
   typename Matrix<T>::Subscriptor a(A);
   typename Matrix<T>::Subscriptor b(B);
-  
+
   typename Array<index_t>::Subscriptor indxc(INDXC);
   typename Array<index_t>::Subscriptor indxr(INDXR);
   typename Array<index_t>::Subscriptor ipiv (IPIV);
-  
+
   for (subsc_t i=1;i<=n;i++)
   {
     T big=0.0;
@@ -61,7 +60,7 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
 	    } //if
 	  } //if
 	  else
-	    if (ipiv[k] > 1) 
+	    if (ipiv[k] > 1)
 	    {
 	      std::cerr << "GAUSSJ: Singular Matrix" << std::endl;
 	      assert(false);
@@ -75,7 +74,7 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
     } //if
     indxr[i]=irow;
     indxc[i]=icol;
-    if (a(icol,icol) == 0.0) 
+    if (a(icol,icol) == 0.0)
     {
       std::cerr << "GAUSSJ: Singular Matrix-2" << std::endl;
       assert(false);

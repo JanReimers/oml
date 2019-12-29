@@ -43,4 +43,4 @@ template <class T> Vector<T> SVSolver<T>::SolveFor(const Vector<T>& B, T eps)
 
 typedef TYPE Type;
 
-template class SVSolver<Type>;
+//template class SVSolver<Type>;

@@ -2,7 +2,6 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matrix.h"
 #include "oml/smatrix.h"
 #include <cmath>
 #include <cassert>
@@ -23,7 +22,7 @@ template <class T> void InvertTriangular(Matrix<T>& A)
   assert(A.GetColLow()==1);
 
   index_t n=A.GetNumRows();
-  
+
   typename Matrix<T>::Subscriptor a(A);
 
   for(subsc_t i=1; i<=n; i++) a(i,i)=1.0/a(i,i);
@@ -50,7 +49,7 @@ template <class T> void InvertTriangular(SMatrix<T>& A)
   assert(A.GetColLow()==1);
 
   index_t n=A.GetNumRows();
-  
+
   typename SMatrix<T>::Subscriptor a(A);
 
   for(subsc_t i=1; i<=n; i++) a(i,i)=1.0/a(i,i);

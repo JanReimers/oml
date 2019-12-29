@@ -2,14 +2,18 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matrix.h"
 #include "oml/vector.h"
+#include "oml/indexsort.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>
 
 #ifndef TYPE
 #error "svdcmp.cc TYPE not defined"
+#endif
+
+#ifndef MTYPE
+#error "svdcmp.cc MTYPE not defined"
 #endif
 
 
@@ -22,41 +26,45 @@ static TYPE maxarg1,maxarg2;
    (maxarg1) : (maxarg2))
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 
-template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
+template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 {
   assert(A.GetColLimits()==W.GetLimits());
   assert(A.GetColLimits()==V.GetRowLimits());
   assert(A.GetColLimits()==V.GetColLimits());
-	
+
   int flag,l=0,nm=0;
   T c,f,h,s,x,y,z;
   T anorm=0.0,g=0.0,scale=0.0;
   index_t m=A.GetNumRows();
   index_t n=A.GetNumCols();
 
-  if (m < n) 
+  if (m < n)
     {
-      std::cerr << "SVDCMP: You must augment A with extra zero rows" << std::endl;
+      std::cerr << "SVDCMP: Resizing A with extra zero rows" << std::endl;
+      A.SetLimits(n,n,true); //Add the requited rows automatically
+      for (int i=m+1;i<=n;i++)
+        for (int j=1;j<=n;j++)
+            A(i,j)=T(0.0);
     }
 
   Vector<T> RV1(n);
-	
-  typename Matrix<T>::Subscriptor a(A);
-  typename Matrix<T>::Subscriptor v(V);
+
+  typename M::Subscriptor a(A);
+  typename M::Subscriptor v(V);
   typename Vector<T>::Subscriptor w(W);
   typename Vector<T>::Subscriptor rv1(RV1);
-	
-  for (subsc_t i=1;i<=n;i++) 
+
+  for (subsc_t i=1;i<=n;i++)
     {
       l=i+1;
       rv1(i)=scale*g;
       g=s=scale=0.0;
-      if (i <= m) 
+      if (i <= m)
 	{
 	  for (subsc_t k=i;k<=m;k++) scale += fabs(a(k,i));
-	  if (scale) 
+	  if (scale)
 	    {
-	      for (subsc_t k=i;k<=m;k++) 
+	      for (subsc_t k=i;k<=m;k++)
 		{
 		  a(k,i) /= scale;
 		  s += a(k,i)*a(k,i);
@@ -65,9 +73,9 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	      g = -SIGN(sqrt(s),f);
 	      h=f*g-s;
 	      a(i,i)=f-g;
-	      if (i != n) 
+	      if (i != n)
 		{
-		  for (subsc_t j=l;j<=n;j++) 
+		  for (subsc_t j=l;j<=n;j++)
 		    {
 		      s=0.0;
 		      for (subsc_t k=i;k<=m;k++) s += a(k,i)*a(k,j);
@@ -80,12 +88,12 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	}
       w(i)=scale*g;
       g=s=scale=0.0;
-      if (i <= m && i != n) 
+      if (i <= m && i != n)
 	{
 	  for (subsc_t k=l;k<=n;k++) scale += fabs(a(i,k));
-	  if (scale) 
+	  if (scale)
 	    {
-	      for (subsc_t k=l;k<=n;k++) 
+	      for (subsc_t k=l;k<=n;k++)
 		{
 		  a(i,k) /= scale;
 		  s += a(i,k)*a(i,k);
@@ -96,7 +104,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	      a(i,l)=f-g;
 	      for (subsc_t k=l;k<=n;k++) rv1(k)=a(i,k)/h;
 	      if (i != m) {
-		for (subsc_t j=l;j<=m;j++) 
+		for (subsc_t j=l;j<=m;j++)
 		  {
 		    s=0.0;
 		    for (subsc_t k=l;k<=n;k++) s += a(j,k)*a(i,k);
@@ -108,14 +116,14 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	}
       anorm=MAX(anorm,(fabs(w(i))+fabs(rv1(i))));
     }
-  for (subsc_t i=n;i>=1;i--) 
+  for (subsc_t i=n;i>=1;i--)
     {
-      if (i < n) 
+      if (i < n)
 	{
-	  if (g) 
+	  if (g)
 	    {
 	      for (subsc_t j=l;j<=n;j++) v(j,i)=(a(i,j)/a(i,l))/g;
-	      for (subsc_t j=l;j<=n;j++) 
+	      for (subsc_t j=l;j<=n;j++)
 		{
 		  s=0.0;
 		  for (subsc_t k=l;k<=n;k++) s += a(i,k)*v(k,j);
@@ -128,17 +136,17 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
       g=rv1(i);
       l=i;
     }
-  for (subsc_t i=n;i>=1;i--) 
+  for (subsc_t i=n;i>=1;i--)
     {
       l=i+1;
       g=w(i);
       if (i < n)
 	for (subsc_t j=l;j<=n;j++) a(i,j)=0.0;
-      if (g) 
+      if (g)
 	{
 	  g=1.0/g;
 	  if (i != n) {
-	    for (subsc_t j=l;j<=n;j++) 
+	    for (subsc_t j=l;j<=n;j++)
 	      {
 		s=0.0;
 		for (subsc_t k=l;k<=m;k++) s += a(k,i)*a(k,j);
@@ -147,36 +155,36 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	      }
 	  }
 	  for (subsc_t j=i;j<=m;j++) a(j,i) *= g;
-	} 
-      else 
+	}
+      else
 	{
 	  for (subsc_t j=i;j<=m;j++) a(j,i)=0.0;
 	}
       ++a(i,i);
     }
-  for (subsc_t k=n;k>=1;k--) 
+  for (subsc_t k=n;k>=1;k--)
     {
-      for (subsc_t its=1;its<=30;its++) 
+      for (subsc_t its=1;its<=30;its++)
 	{
 	  flag=1;
-	  for (l=k;l>=1;l--) 
+	  for (l=k;l>=1;l--)
 	    {
 	      nm=l-1;
-	      if (fabs(rv1(l))+anorm == anorm) 
+	      if (fabs(rv1(l))+anorm == anorm)
 		{
 		  flag=0;
 		  break;
 		}
 	      if (fabs(w(nm))+anorm == anorm) break;
 	    }
-	  if (flag) 
+	  if (flag)
 	    {
 	      c=0.0;
 	      s=1.0;
-	      for (subsc_t i=l;i<=k;i++) 
+	      for (subsc_t i=l;i<=k;i++)
 		{
 		  f=s*rv1(i);
-		  if (fabs(f)+anorm != anorm) 
+		  if (fabs(f)+anorm != anorm)
 		    {
 		      g=w(i);
 		      h=PYTHAG(f,g);
@@ -184,7 +192,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 		      h=1.0/h;
 		      c=g*h;
 		      s=(-f*h);
-		      for (subsc_t j=1;j<=m;j++) 
+		      for (subsc_t j=1;j<=m;j++)
 			{
 			  y=a(j,nm);
 			  z=a(j,i);
@@ -195,16 +203,16 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 		}
 	    }
 	  z=w(k);
-	  if (l == k) 
+	  if (l == k)
 	    {
-	      if (z < 0.0) 
+	      if (z < 0.0)
 		{
 		  w(k) = -z;
 		  for (subsc_t j=1;j<=n;j++) v(j,k)=(-v(j,k));
 		}
 	      break;
 	    }
-	  if (its == 30) 
+	  if (its == 30)
 	    {
 	      std::cerr << "No convergence in 30 SVDCMP iterations" << std::endl;
 	    }
@@ -217,7 +225,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	  g=PYTHAG(f,1.0);
 	  f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x;
 	  c=s=1.0;
-	  for (subsc_t j=l;j<=nm;j++) 
+	  for (subsc_t j=l;j<=nm;j++)
 	    {
 	      subsc_t i=j+1;
 	      g=rv1(i);
@@ -232,7 +240,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	      g=g*c-x*s;
 	      h=y*s;
 	      y=y*c;
-	      for (subsc_t jj=1;jj<=n;jj++) 
+	      for (subsc_t jj=1;jj<=n;jj++)
 		{
 		  x=v(jj,j);
 		  z=v(jj,i);
@@ -241,7 +249,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 		}
 	      z=PYTHAG(f,h);
 	      w(j)=z;
-	      if (z) 
+	      if (z)
 		{
 		  z=1.0/z;
 		  c=f*z;
@@ -249,7 +257,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 		}
 	      f=(c*g)+(s*y);
 	      x=(c*y)-(s*g);
-	      for (subsc_t jj=1;jj<=m;jj++) 
+	      for (subsc_t jj=1;jj<=m;jj++)
 		{
 		  y=a(jj,j);
 		  z=a(jj,i);
@@ -262,6 +270,22 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 	  w(k)=x;
 	}
     }
+    //
+    // Sort for descending singular values
+    //
+    Array<int> index=MakeDescendingIndex(W); //order of s is preserved.
+    W.ReIndex(index);
+    A.ReIndexColumns(index);
+    V.ReIndexColumns(index);
+    //
+    //  Reshape to remove temp junk
+    //
+    if (m < n)
+    {
+        W.SetLimits(m,true);
+        A.SetLimits(m,m,true);
+        V.SetLimits(m,n,true);
+    }
 }
 
 #undef SIGN
@@ -269,4 +293,7 @@ template <class T> void SVDecomp(Matrix<T>& A, Vector<T>& W, Matrix<T>& V)
 #undef PYTHAG
 
 typedef TYPE Type;
-template void SVDecomp(Matrix<Type>&,Vector<Type>&,Matrix<Type>&);
+typedef MTYPE<Type> MType;
+template void SVDecomp<Type,MType>(MType&,Vector<Type>&,MType&);
+
+

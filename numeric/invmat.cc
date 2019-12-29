@@ -2,7 +2,6 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matrix.h"
 #include "oml/smatrix.h"
 #include "oml/numeric.h"
 #include "oml/array.h"
@@ -17,7 +16,7 @@
 //  Matrix inversion.
 //
 template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
-{ 
+{
   Matrix<T> temp(m);
   Array<index_t> SwapIndex(temp.GetNumRows());
   Matrix<T> inv(temp.GetLimits());
@@ -45,14 +44,14 @@ template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
 {
   int n=m.GetNumRows();
   SMatrix<T> ret (m.GetLimits());
-  Fill(ret,0.0); 
-	
+  Fill(ret,0.0);
+
   SMatrix<T> temp(m);
   Vector<T> norm=Normalize(temp); //Normalize.
   Cholsky(temp);             //Decompose.
   InvertTriangular(temp);    //Invert upper triangular matrix.
   typename SMatrix<T>::Subscriptor      sr(ret);
-	
+
   for (int i=1;i<=n;i++)
     for (int j=i;j<=n;j++)
       for (int k=1;k<=i;k++) sr(i,j)+=temp(k,i)*temp(k,j);

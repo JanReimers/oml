@@ -1,8 +1,10 @@
+#include "oml/matrix.h"
 //---------------------------------------------------------------------------------
 //
 //  Make template instance
 //
-#define TYPE double
+#define TYPE  double
+#define MTYPE Matrix
 #include "numeric/cholsky.cc"
 #include "numeric/eigsort.cc"
 #include "numeric/gaussj.cc"

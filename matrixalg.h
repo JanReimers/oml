@@ -37,6 +37,7 @@ template <class T, class Mat> class MatrixTranspose
 //
 //  Multiplication, Matrix * Matrix Proxy.
 //
+#include <iostream>
 template <class T, class A, class B> class MatrixMMOp
 : public Indexable<T,MatrixMMOp<T,A,B>,Full,Abstract,MatrixShape>
 {
@@ -45,6 +46,7 @@ template <class T, class A, class B> class MatrixMMOp
     : itsA(a)
     , itsB(b)
   {
+    //std::cout << "Alim="<< itsA.GetLimits() << " Blim=" << itsB.GetLimits()<< std::endl;
     assert(itsA.GetLimits().Col==itsB.GetLimits().Row);
   };
   MatrixMMOp(const MatrixMMOp& m)

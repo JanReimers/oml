@@ -43,7 +43,7 @@ template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& O
 //! Single value back substitution.
 template <class T> void SVBackSub(const Matrix<T>& U, const Vector<T>& W,const Matrix<T>& V, const Vector<T>& B, Vector<T>& X);
 //! Single value decomposition.
-template <class T> void SVDecomp (      Matrix<T>& A,       Vector<T>& W, Matrix<T>& V);
+template <class T, class M> void SVDecomp (M& A,Vector<T>& W,M& V);
 
 //! Invert a square matrix (not neccesarily symmetric).
 template <class T> Matrix <T> InvertSquare   (const Matrix <T>&);

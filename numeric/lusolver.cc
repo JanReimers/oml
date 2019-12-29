@@ -3,7 +3,6 @@
 // Copyright (1994-2003), Jan N. Reimers
 
 #include "oml/lusolver.h"
-#include "oml/matrix.h"
 #include "oml/vector.h"
 #include "oml/numeric.h"
 

@@ -2,7 +2,6 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matrix.h"
 #include "oml/array.h"
 #include <cmath>
 #include <cassert>
@@ -29,11 +28,11 @@ template <class T> void LUBackSub(const Matrix<T>& a, Matrix<T>& B, const Array<
 
   typename Matrix<T>::Subscriptor b(B);
   index_t n =a.GetNumRows();
-  
+
   for (subsc_t isub=1; isub<=n; isub++)
   {
     int i,ii=0,ip,j;
-    T sum;    
+    T sum;
     for (i=1; i<=n; i++)
     {
       ip=Index[i-1];
