@@ -4,7 +4,7 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-/*! \file cnumeric.h 
+/*! \file cnumeric.h
   \brief Numerical methods as template functions for complex matricies.
 */
 //! eigen values of symmtric tridiagonal matrix by the rational ql method.
@@ -12,7 +12,7 @@ void tqlrat(Vector<double>& d, Vector<double>& e2 ,int ierr);
 //! Convert Hermitian matrix into tridiagonal for.
 void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z, int ierr);
 //! Reduce an hermitian matrix to a real symmetric tridiagonal matrix using unitary similarity transformations.
-void htridi(Matrix<std::complex<double> >& A, 
+void htridi(Matrix<std::complex<double> >& A,
 	    Vector<double>& d ,Vector<double>& e,
 	    Vector<double>& e2,Vector<std::complex<double> >& tau);
 //! Eigenstd::vectors of a complex hermitian matrix by back transforming those of the corresponding real symmetric tridiagonal matrix determined by  htridi.
@@ -31,7 +31,7 @@ template <class T> Vector<T> Diagonalize(Matrix<std::complex<T> >& A, const SMat
   int err=0;
   ch(A,EigenValues,true,err);
   assert(!err);
-    
+
   return EigenValues;
 }
 
@@ -43,6 +43,34 @@ template <class T> Vector<T> Diagonalize(Matrix<std::complex<T> >& A)
   int err=0;
   ch(A,EigenValues,true,err);
   assert(!err);
-    
+
   return EigenValues;
 }
+
+//! Fortran SVD algorithm for complex<double>
+
+extern"C" {
+typedef std::complex<double> eType;
+
+void csvd_(eType* a, int* mmax, int* nmax, int* m, int* n, int* p, int* nu, int* nv,
+double* s, eType* u, eType* v );
+
+}
+
+//! sts::complex<double> version of SVDecomp
+template <class TM> void CSVDecomp(TM& A, Vector<double>& s, TM& V)
+{
+    int M=A.GetNumRows();
+    int N=A.GetNumCols();
+    assert(N<=M); //Required by fortran routine
+    assert(M<=1000);  ////Required by fortran routine
+    assert(s.size()==M);
+    assert(V.GetNumRows()==N);
+    assert(V.GetNumCols()==N);
+    TM U(M,M);
+    int p=0;
+    csvd_ ( &A(1,1), &M, &N, &M, &N, &p, &N, &N, &s(1), &U(1,1), &V(1,1) );
+    A=U;
+}
+
+
