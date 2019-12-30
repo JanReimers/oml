@@ -52,6 +52,7 @@
 		<Unit filename="binio.h" />
 		<Unit filename="binop.h" />
 		<Unit filename="cnumeric.h" />
+		<Unit filename="cnumeric/SVD.f" />
 		<Unit filename="cnumeric/ch.cc" />
 		<Unit filename="cnumeric/epsilon.cc" />
 		<Unit filename="cnumeric/htribk.cc" />
