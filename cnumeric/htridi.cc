@@ -5,10 +5,16 @@
 #include <cmath>
 #include <complex>
 
+#ifndef TYPE
+#error "htridi.cc TYPE not defined"
+#endif
+
+#ifndef MTYPE
+#error "htridi.cc MTYPE not defined"
+#endif
+
 // Modifications for oml containers Copyright (1994-2003), Jan N. Reimers
 
-double pythag(double,double);
-inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
 
 
 //----------------------------------------------------------------------
@@ -17,10 +23,8 @@ inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
 //    to a real symmetric tridiagonal matrix using
 //    unitary similarity transformations.
 //
-
-void htridi(Matrix<std::complex<double > >& A,
-	    Vector<double>& d ,Vector<double>& evals,
-	    Vector<double>& e2,Vector<std::complex<double> >& tau)
+template <class T, class M> void htridi(M& A, Vector<T>& d ,Vector<T>& evals,
+	    Vector<T>& e2,Vector<std::complex<T> >& tau)
 {
   int n=d.size();
   assert(n==evals .size());
@@ -29,17 +33,17 @@ void htridi(Matrix<std::complex<double > >& A,
   assert(n==A.GetNumCols());
   assert(n==tau.size());
 
-  Vector<std::complex<double> > ee(tau.GetLimits());
+  Vector<std::complex<T> > ee(tau.GetLimits());
 
-  Matrix<std::complex<double > >::Subscriptor sA(A);
-  Vector<double           >::Subscriptor sd(d);
-  Vector<std::complex<double > >::Subscriptor se(ee);
-  Vector<std::complex<double > >::Subscriptor stau(tau);
+  typename M::Subscriptor sA(A);
+  typename Vector<T                >::Subscriptor sd(d);
+  typename Vector<std::complex<T > >::Subscriptor se(ee);
+  typename Vector<std::complex<T > >::Subscriptor stau(tau);
   int i,j,k,l,ii,jp1;
   double f,g,h,hh,scale;
 
 
-  stau(n) = se(n) = std::complex<double>(1.0,0.0);
+  stau(n) = se(n) = std::complex<T>(1.0,0.0);
   d=real(A.GetDiagonal());
 
   for (ii=1;ii<=n;ii++)//    do 300 ii = 1, n
@@ -52,7 +56,7 @@ void htridi(Matrix<std::complex<double > >& A,
     for (k=1;k<=l;k++) scale = scale + fabs(real(sA(i,k))) + fabs(imag(sA(i,k)));
 
     if (scale != 0.0) goto L140;
-    stau(l) = std::complex<double>(1.0,0.0);
+    stau(l) = std::complex<T>(1.0,0.0);
 		se(l)= 0.0;
     L130:
     e2(i) = 0.0;
@@ -67,26 +71,26 @@ void htridi(Matrix<std::complex<double > >& A,
 
     e2(i) = scale * scale * h;
     g = sqrt(h);
-    se(i) = std::complex<double>(scale * g,imag(se(i)));
+    se(i) = std::complex<T>(scale * g,imag(se(i)));
     f = pythag(real(sA(i,l)),imag(sA(i,l)));
 
     if (f == 0.0) goto L160;
 
-    stau(l) = -conj(sA(i,l)*std::complex<double>(real(stau(i)),imag(se(i))))/f;
+    stau(l) = -conj(sA(i,l)*std::complex<T>(real(stau(i)),imag(se(i))))/f;
     h = h + f * g;
     g = 1.0 + g / f;
     sA(i,l) *= g;
     if (l == 1) goto L270;
     goto L170;
 L160:
-    stau(l) = std::complex<double>(-real(stau(i)),imag(stau(i)));
-    sA(i,l) = std::complex<double>(g,imag(sA(i,l)));
+    stau(l) = std::complex<T>(-real(stau(i)),imag(stau(i)));
+    sA(i,l) = std::complex<T>(g,imag(sA(i,l)));
 L170:
     f = 0.0;
 
     for (j=1;j<=l;j++)//     do 240 j = 1, l
     {
-      std::complex<double> gg(0.0);
+      std::complex<T> gg(0.0);
       for (k=1;k<=j;k++) gg+=sA(j,k)*conj(sA(i,k));
 
       jp1 = j + 1;
@@ -105,14 +109,19 @@ L220:
     L270:
     for (k=1;k<=l;k++) sA(i,k) *= scale;
 
-    se(l) = std::complex<double>(real(se(l)),-imag(stau(l)));
+    se(l) = std::complex<T>(real(se(l)),-imag(stau(l)));
     L290:
     hh = sd(i);
     sd(i) = real(sA(i,i));
-    sA(i,i) = std::complex<double>(hh,scale * sqrt(h));
+    sA(i,i) = std::complex<T>(hh,scale * sqrt(h));
   };//L300:
 	evals=real(ee);
-	for (int i=1;i<=n;i++) stau(i)=std::complex<double>(real(stau(i)),imag(se(i)));
+	for (int i=1;i<=n;i++) stau(i)=std::complex<T>(real(stau(i)),imag(se(i)));
   return;
 }
 
+
+typedef TYPE Type;
+typedef MTYPE<std::complex<Type> > MType;
+template void htridi<Type,MType>(MType& A, Vector<Type>& d ,Vector<Type>& evals,
+	    Vector<Type>& e2,Vector<std::complex<Type> >& tau);

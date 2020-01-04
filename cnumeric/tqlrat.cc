@@ -7,24 +7,27 @@
 #include <cmath>
 #include <iostream>
 
+#ifndef TYPE
+#error "tqlrat.cc TYPE not defined"
+#endif
+
 double pythag(double,double);
 double epsilon(double);
 
-inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
 
 //--------------------------------------------------------------------------
 //
 //    this subroutine finds the eigenvalues of a symmetric
 //    tridiagonal matrix by the rational ql method.
 //
-void tqlrat(Vector<double>& d, Vector<double>& e2 ,int ierr)
+template <class T> void tqlrat(Vector<T>& d, Vector<T>& e2 ,int& ierr)
 {
 	int i,j,l,m,ii,l1,mml;
-	double b=0,c=0,f,g,h,p,r,s,t;
+	T b=0,c=0,f,g,h,p,r,s,t;
 	int n=d.size();
-	
+
 	std::cout << "in tqlrat" << std::endl;
-	
+
 	assert(d.size()==e2.size());
 
 	ierr = 0;
@@ -54,7 +57,7 @@ void tqlrat(Vector<double>& d, Vector<double>& e2 ,int ierr)
     if (m != l)
 		{
 L130:
-			if (j == 30) 
+			if (j == 30)
 			{
 				ierr=l;
 				return;
@@ -115,3 +118,6 @@ L270:
 
 	return;
 }
+
+typedef TYPE Type;
+template void tqlrat<Type>(Vector<Type>& d, Vector<Type>& e2 ,int& ierr);

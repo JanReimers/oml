@@ -8,21 +8,30 @@
   \brief Numerical methods as template functions for complex matricies.
 */
 //! eigen values of symmtric tridiagonal matrix by the rational ql method.
-void tqlrat(Vector<double>& d, Vector<double>& e2 ,int ierr);
+template <class T> void tqlrat(Vector<T>& d, Vector<T>& e2 ,int& ierr);
 //! Convert Hermitian matrix into tridiagonal for.
-void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z, int ierr);
+template <class T, class M> void tql2(Vector<T>& d, Vector<T>& e, M& z, int& ierr);
 //! Reduce an hermitian matrix to a real symmetric tridiagonal matrix using unitary similarity transformations.
-void htridi(Matrix<std::complex<double> >& A,
-	    Vector<double>& d ,Vector<double>& e,
-	    Vector<double>& e2,Vector<std::complex<double> >& tau);
+
+template <class T, class M> void htridi(M& A, Vector<T>& d ,Vector<T>& e,
+	    Vector<T>& e2,Vector<std::complex<T> >& tau);
 //! Eigenstd::vectors of a complex hermitian matrix by back transforming those of the corresponding real symmetric tridiagonal matrix determined by  htridi.
-void htribk(const Matrix<std::complex<double> >& A,const Vector<std::complex<double> >& tau,
-	    Matrix<std::complex<double> >& Z);
+template <class T, class M> void htribk(const M& A,const Vector<std::complex<T> >& tau, M& Z);
 //! Get eigenvalues and optionally eigen std::vectors of a complex hermitian matrix.
-void ch(Matrix<std::complex<double> >& A, Vector<double>& w ,bool matz,int ierr);
+template <class T, class M> void ch(M& A,Vector<T>& w ,bool matz,int& ierr);
+
+double pythag(double,double);
+inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
+//inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
+//inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
+inline double max(double a, double b) {return a>b ? a : b;}
+inline double min(double a, double b) {return a<b ? a : b;}
+inline double square(double a) {return a*a;}
+
+
 
 //! Diangaonlize a complex hermitian matrix. Eigen vextors return in A.
-template <class T> Vector<T> Diagonalize(Matrix<std::complex<T> >& A, const SMatrix<std::complex<T> >& hm)
+template <class T, class M> Vector<T> Diagonalize(M& A, const M& hm)
 {
   assert(hm.GetRowLimits()==hm.GetColLimits());
 
@@ -36,7 +45,7 @@ template <class T> Vector<T> Diagonalize(Matrix<std::complex<T> >& A, const SMat
 }
 
 //! Diangaonlize a complex general matrix. Eigen vextors return in A.
-template <class T> Vector<T> Diagonalize(Matrix<std::complex<T> >& A)
+template <class T, class M> Vector<T> Diagonalize(M& A)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   Vector<T> EigenValues(A.GetRowLimits());

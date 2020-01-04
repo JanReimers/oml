@@ -53,12 +53,27 @@
 		<Unit filename="binop.h" />
 		<Unit filename="cnumeric.h" />
 		<Unit filename="cnumeric/SVD.f" />
-		<Unit filename="cnumeric/ch.cc" />
+		<Unit filename="cnumeric/ch.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="cnumeric/epsilon.cc" />
-		<Unit filename="cnumeric/htribk.cc" />
-		<Unit filename="cnumeric/htridi.cc" />
-		<Unit filename="cnumeric/tql2.cc" />
-		<Unit filename="cnumeric/tqlrat.cc" />
+		<Unit filename="cnumeric/htribk.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="cnumeric/htridi.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="cnumeric/tql2.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="cnumeric/tqlrat.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="cow.h" />
 		<Unit filename="dmatrix.h" />
 		<Unit filename="heapsort.h" />
@@ -129,6 +144,7 @@
 		<Unit filename="shellsort.h" />
 		<Unit filename="smatindex.h" />
 		<Unit filename="smatrix.h" />
+		<Unit filename="src/CNumericsDoubleDMatrix.cpp" />
 		<Unit filename="src/InstanceComplex1.cpp" />
 		<Unit filename="src/InstanceComplex2.cpp" />
 		<Unit filename="src/InstanceComplex3.cpp" />

@@ -1,4 +1,4 @@
-// File: tgl2.cc
+// File: tql2.cc
 
 // Modifications for oml containers Copyright (1994-2003), Jan N. Reimers
 
@@ -8,11 +8,13 @@
 #include <cmath>
 #include <complex>
 
-inline double max(double a, double b) {return a>b ? a : b;}
-inline double min(double a, double b) {return a<b ? a : b;}
-inline double square(double a) {return a*a;}
-inline double sign(double a, double b) {return b<0 ? -fabs(a) : fabs(a);}
+#ifndef TYPE
+#error "tql2.cc TYPE not defined"
+#endif
 
+#ifndef MTYPE
+#error "tql2.cc MTYPE not defined"
+#endif
 
 //----------------------------------------------------------------------
 //
@@ -39,29 +41,29 @@ double pythag(double a,double b)
 	return p;
 }
 
-void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z, int ierr)
+template <class T, class M> void tql2(Vector<T>& d, Vector<T>& e, M& z, int& ierr)
 {
   int n=d.size();
   assert(d.size()==e.size());
   assert(d.size()==z.GetNumRows());
   assert(d.size()==z.GetNumCols());
 
-	Vector<double>::Subscriptor sd(d);
-	Vector<double>::Subscriptor se(e);
-	Matrix<std::complex<double> >::Subscriptor sz(z);
+  typename Vector<T>::Subscriptor sd(d);
+  typename Vector<T>::Subscriptor se(e);
+  typename M::Subscriptor sz(z);
 
   ierr = 0;
   if (n == 1) return;
 
   for (int j=2;j<=n;j++) se(j-1) = se(j);
 
-  double f = 0.0;
-  double tst1 = 0.0;
+  T f = 0.0;
+  T tst1 = 0.0;
   se(n) = 0.0;
   for (int l=1;l<=n;l++)
   {
     int j = 0;
-    double h = fabs(sd(l)) + fabs(se(l));
+    T h = fabs(sd(l)) + fabs(se(l));
     if (tst1 < h) tst1 = h;
     //
     //  look for small sub-diagonal element
@@ -84,12 +86,12 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
 	//
 	int l1 = l + 1;
 	int l2 = l1 + 1;
-	double g = sd(l);
-	double p = (sd(l1) - g) / (2.0 * se(l));
-	double r = pythag(p,1.0);
+	T g = sd(l);
+	T p = (sd(l1) - g) / (2.0 * se(l));
+	T r = pythag(p,1.0);
 	sd(l) = se(l) / (p + sign(r,p));
 	sd(l1) = se(l) * (p + sign(r,p));
-	double dl1 = sd(l1);
+	T dl1 = sd(l1);
 	h = g - sd(l);
 	//		if (l2 <= n)
 	for(int k=l2;k<=n;k++) sd(k) = sd(k) - h;
@@ -98,10 +100,10 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
 	//     .......... ql transformation ..........
 	//
 	p = sd(m);
-	double c = 1.0;
-	double c2 = c, c3=c;
-	double el1 = se(l1);
-	double s = 0.0, s2=0.0;
+	T c = 1.0;
+	T c2 = c, c3=c;
+	T el1 = se(l1);
+	T s = 0.0, s2=0.0;
 	//				int mml = m - l;
 	for (int ii = 1;ii<=m-l;ii++)
 	{
@@ -139,7 +141,7 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
   {
     int i = ii - 1;
     int k = i;
-    double p = sd(i);
+    T p = sd(i);
 
     for(int j = ii;j<=n;j++)
       if (sd(j) < p) {k = j;p = sd(j);}
@@ -153,3 +155,9 @@ void tql2(Vector<double>& d, Vector<double>& e, Matrix<std::complex<double> >& z
   }
   return;
 }
+
+typedef TYPE Type;
+typedef MTYPE<std::complex<Type> > MType;
+
+template void tql2<Type,MType>(Vector<Type>& d, Vector<Type>& e, MType& z, int& ierr);
+

@@ -3,6 +3,13 @@
 #include <cassert>
 #include <complex>
 
+#ifndef TYPE
+#error "htribk.cc TYPE not defined"
+#endif
+
+#ifndef MTYPE
+#error "htribk.cc MTYPE not defined"
+#endif
 using std::real;
 
 // Modifications for oml containers Copyright (1994-2003), Jan N. Reimers
@@ -18,12 +25,10 @@ using std::real;
 //    matrix by back transforming those of the corresponding
 //    real symmetric tridiagonal matrix determined by  htridi.
 //
-void htribk(const Matrix<std::complex<double> >& A,
-	    const Vector<std::complex<double> >& tau,
-	    Matrix<std::complex<double> >& Z)
+template <class T, class M> void htribk(const M& A,const Vector<std::complex<T> >& tau, M& Z)
 {
   int i,j,k,l,m,n;
-  double h;
+  T h;
 
   m=A.GetNumRows();
   n=m;
@@ -32,7 +37,7 @@ void htribk(const Matrix<std::complex<double> >& A,
   assert(m==Z.GetNumCols());
   assert(m==tau.size());
 
-  Matrix<std::complex<double> >::Subscriptor sZ(Z);
+  typename M::Subscriptor sZ(Z);
 
   if (m == 0) return;
   for (k=1;k<=n;k++)
@@ -47,7 +52,7 @@ void htribk(const Matrix<std::complex<double> >& A,
     if (h == 0.0) break;
     for (j=1;j<=m;j++)
     {
-      std::complex<double> s(0.0);
+      std::complex<T> s(0.0);
       for (k=1;k<=l;k++) s += A(i,k)*sZ(k,j);
       s = (s / h) / h; // double divisions avoid possible underflow.
       for (k=1;k<=l;k++) sZ(k,j) -= s*conj(A(i,k));
@@ -55,3 +60,8 @@ void htribk(const Matrix<std::complex<double> >& A,
   }
   return;
 }
+
+typedef TYPE Type;
+typedef MTYPE<std::complex<Type> > MType;
+template void htribk<Type,MType>(const MType& A,const Vector<std::complex<Type> >& tau, MType& Z);
+
