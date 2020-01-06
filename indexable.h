@@ -278,12 +278,12 @@ T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
   return Sum(DirectMultiply(a,b));
 }
 
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S>
+/*template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S>
 inline std::complex<T>
 Dot(const Indexable<std::complex<T>,A,MA,DA,S>& a,const Indexable<std::complex<T>,B,MB,DB,S>& b)
 {
   return Sum(DirectMultiply(a,conj(b)));
-}
+}*/
 
 template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
 typename OpEqual<T,T>::RT operator==(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b)
