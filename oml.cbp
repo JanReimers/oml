@@ -40,6 +40,8 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-pg" />
+			<Add option="-fPIC" />
 			<Add directory="../" />
 			<Add directory="./" />
 		</Compiler>

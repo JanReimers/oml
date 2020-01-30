@@ -16,7 +16,7 @@
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="..\..\..\..\usr\local\lib\libgtest.a" />
+					<Add library="../../../../usr/local/lib/libgtest.a" />
 					<Add directory="../Debug" />
 					<Add directory="../../../../usr/local/lib" />
 				</Linker>
