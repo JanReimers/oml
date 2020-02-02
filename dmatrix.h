@@ -50,8 +50,8 @@ template <class T> class DMatrix
   }
 
 
-  T  operator()(subsc_t,subsc_t) const;
-  T& operator()(subsc_t,subsc_t)      ;
+  const T& operator()(subsc_t,subsc_t) const;
+        T& operator()(subsc_t,subsc_t)      ;
 
   index_t   size  () const; //Required by iterable.
   MatLimits GetLimits() const;
@@ -155,7 +155,7 @@ template <class T> class DMatrix
 #endif
 
 
-template <class T> inline T DMatrix<T>::operator()(subsc_t i,subsc_t j) const
+template <class T> inline const T& DMatrix<T>::operator()(subsc_t i,subsc_t j) const
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
