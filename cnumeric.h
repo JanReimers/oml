@@ -28,6 +28,19 @@ inline double max(double a, double b) {return a>b ? a : b;}
 inline double min(double a, double b) {return a<b ? a : b;}
 inline double square(double a) {return a*a;}
 
+//! Eigne values complex hermitian matrix.
+template <class T, class M> Vector<T> EigenValuesOnly(const M& hm)
+{
+  assert(hm.GetRowLimits()==hm.GetColLimits());
+
+  Vector<T> EigenValues(hm.GetRowLimits());
+  M A(hm);
+  int err=0;
+  ch(A,EigenValues,false,err);
+  assert(!err);
+
+  return EigenValues;
+}
 
 
 //! Diangaonlize a complex hermitian matrix. Eigen vextors return in A.
@@ -55,6 +68,7 @@ template <class T, class M> Vector<T> Diagonalize(M& A)
 
   return EigenValues;
 }
+
 
 //! Fortran SVD algorithm for complex<double>
 

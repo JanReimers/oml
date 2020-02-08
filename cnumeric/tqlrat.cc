@@ -26,7 +26,7 @@ template <class T> void tqlrat(Vector<T>& d, Vector<T>& e2 ,int& ierr)
 	T b=0,c=0,f,g,h,p,r,s,t;
 	int n=d.size();
 
-	std::cout << "in tqlrat" << std::endl;
+	//std::cout << "in tqlrat" << std::endl;
 
 	assert(d.size()==e2.size());
 

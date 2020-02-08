@@ -32,9 +32,11 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wall" />
+					<Add option="-pg" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
+					<Add option="-pg" />
 					<Add library="user32" />
 				</Linker>
 			</Target>
