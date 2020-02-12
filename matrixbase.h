@@ -40,7 +40,7 @@ class MatrixBase
 inline MatrixBase::MatrixBase(                    ) : itsLimits(   ) {}
 inline MatrixBase::MatrixBase(const MatLimits& lim) : itsLimits(lim) {}
 
-inline void MatrixBase::SetLimits(const MatLimits& lim,bool preserve)
+inline void MatrixBase::SetLimits(const MatLimits& lim,bool /*preserve*/)
 {
   itsLimits=lim;
 }
