@@ -282,6 +282,20 @@ bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m)
   return m==conj(Transpose(m));
 }
 
+// Check if complex matrix  is Hermitian to within a specified precision eps.
+template <class T, class A, Data D> inline
+bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m, double eps)
+{
+  return Max(abs(m-conj(Transpose(m))))<=eps;
+}
+
+// Dummy check for real matrices.
+template <class T, class A, Data D> inline
+bool IsHermitian(const Indexable<T,A,Full,D,MatrixShape>& m, double eps)
+{
+  return true;
+}
+
 // Force a Matrix to be symmetric by averaging off diagonal elements.
 template <class T, class A>
 double MakeSymmetric(Indexable<T,A,Full,Real,MatrixShape>& m)
