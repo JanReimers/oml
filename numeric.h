@@ -9,6 +9,7 @@
 #include "oml/vector.h"
 
 template <class T> class Matrix;
+template <class T> class DMatrix;
 template <class T> class SMatrix;
 
 //----------------------------------------------------------------------------
@@ -20,7 +21,7 @@ template <class T> void Cholsky          (Matrix <T>&                         );
 //! Cholsky decomposition of a symmetric matrix, that is stored symmetrically.
 template <class T> void Cholsky          (SMatrix<T>&                         );
 //! Sort columns of eigenstd::vectors based on the order of eigen values.
-template <class T> void EigenSort        (Matrix <T>&, Vector<T>& EigenValues);
+template <class T,class M> void EigenSort        (M&, Vector<T>& EigenValues);
 //! Solve Ax=B using GJ elimintaion. x is returned in A.
 template <class T> void GaussJordanSolver(Matrix <T>& A, Matrix<T>& B          );
 //! Invert an upper triangular matrix.
@@ -28,7 +29,7 @@ template <class T> void InvertTriangular (Matrix <T>&                         );
 //! Invert an upper triangular matrix stored symmetrically.
 template <class T> void InvertTriangular (SMatrix<T>&                         );
 //! Solve tri-diagonal system TDx=A. x is returned in A.
-template <class T> void TriDiagonal      (Matrix <T>& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal);
+template <class T, class M> void TriDiagonal      (M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal);
 //! Diagonalize matrix A. Eigen std::vectors returned in A, eigen value returned as a new Vector.
 template <class T> Vector<T> Diagonalize(Matrix<T>& A);
 
@@ -39,7 +40,7 @@ template <class T> void LUBackSub(const Matrix<T>& A, Matrix<T>& B,const Array<i
 //! LU decomposition of A=L*U.
 template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d);
 //! QL decomposition.  Used for eigen problems.
-template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal);
+template <class T,class M> void QLDecomp( M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal);
 //! Single value back substitution.
 template <class T> void SVBackSub(const Matrix<T>& U, const Vector<T>& W,const Matrix<T>& V, const Vector<T>& B, Vector<T>& X);
 //! Single value decomposition.
@@ -63,6 +64,20 @@ Vector<double> SolveTriDiag(const Vector<double> & OffDiagonal,
 			    const Vector<double> & r);
 
 template <class T> Vector<T> Diagonalize(Matrix<T>& m)
+{
+  assert(m.GetRowLimits()==m.GetColLimits());
+  assert(m.GetRowLimits()==m.GetColLimits());
+  assert(IsSymmetric(m));
+
+  Vector<T> EigenValues(m.GetRowLimits());
+  Vector<T> OffDiagonal(m.GetRowLimits());
+
+  TriDiagonal(m,EigenValues,OffDiagonal);
+  QLDecomp   (m,EigenValues,OffDiagonal);
+  EigenSort  (m,EigenValues);
+  return EigenValues;
+}
+template <class T> Vector<T> Diagonalize(DMatrix<T>& m)
 {
   assert(m.GetRowLimits()==m.GetColLimits());
   assert(m.GetRowLimits()==m.GetColLimits());

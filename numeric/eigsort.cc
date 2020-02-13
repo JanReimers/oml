@@ -17,15 +17,15 @@
 //  rearranged
 //
 
-template <class T> void EigenSort(Matrix<T>& A, Vector<T>& EigenValues)
+template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
   assert(A.GetColLow()==1);
 
-  typename Matrix<T>::Subscriptor a(A);
+  typename M        ::Subscriptor a(A);
   typename Vector<T>::Subscriptor e(EigenValues);
-  
+
   index_t n=A.GetNumRows(), k;
 
   for (subsc_t i=1;i<n;i++)
@@ -42,4 +42,5 @@ template <class T> void EigenSort(Matrix<T>& A, Vector<T>& EigenValues)
 
 
 typedef TYPE Type;
-template void EigenSort(Matrix<Type>&, Vector<Type>&);
+template void EigenSort( Matrix<Type>&, Vector<Type>&);
+template void EigenSort(DMatrix<Type>&, Vector<Type>&);

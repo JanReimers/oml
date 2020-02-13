@@ -24,7 +24,7 @@
 #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
 
 
-template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
+template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
@@ -34,7 +34,7 @@ template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& O
 
   T g,r,s,c,p,f,b;
 
-  typename Matrix<T>::Subscriptor a (A);
+  typename M        ::Subscriptor a (A);
   typename Vector<T>::Subscriptor d (   Diagonal);
   typename Vector<T>::Subscriptor od(OffDiagonal);
 
@@ -105,3 +105,4 @@ template <class T> void QLDecomp(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& O
 
 typedef TYPE Type;
 template void QLDecomp(Matrix<Type>&,Vector<Type>&,Vector<Type>&);
+template void QLDecomp(DMatrix<Type>&,Vector<Type>&,Vector<Type>&);

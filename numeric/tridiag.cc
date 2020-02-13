@@ -3,6 +3,7 @@
 // Modifications for C++ and oml containers Copyright (1994-2003), Jan N. Reimers
 
 #include "oml/matrix.h"
+#include "oml/dmatrix.h"
 #include "oml/vector.h"
 #include <cmath>
 #include <cassert>
@@ -22,7 +23,7 @@
 //  OffDiagonal- Output std::vector of off diagonal elements
 //
 
-template <class T> void TriDiagonal(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
+template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
@@ -31,7 +32,7 @@ template <class T> void TriDiagonal(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>
   index_t n=A.GetNumRows();
   T       f,g,hh;
 
-  typename Matrix<T>::Subscriptor a (A);
+  typename M        ::Subscriptor a (A);
   typename Vector<T>::Subscriptor d (   Diagonal);
   typename Vector<T>::Subscriptor od(OffDiagonal);
 
@@ -99,4 +100,7 @@ template <class T> void TriDiagonal(Matrix<T>& A, Vector<T>& Diagonal, Vector<T>
 }
 
 typedef TYPE Type;
-template void TriDiagonal(Matrix<Type>&,Vector<Type>&,Vector<Type>&);
+typedef Matrix<Type> M;
+typedef DMatrix<Type> DM;
+template void TriDiagonal( M&,Vector<Type>&,Vector<Type>&);
+template void TriDiagonal(DM&,Vector<Type>&,Vector<Type>&);
