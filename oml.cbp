@@ -80,6 +80,7 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="cow.h" />
+		<Unit filename="diagonalmatrix.h" />
 		<Unit filename="dmatrix.h" />
 		<Unit filename="heapsort.h" />
 		<Unit filename="histogram.h" />
@@ -153,10 +154,12 @@
 		<Unit filename="src/InstanceComplex1.cpp" />
 		<Unit filename="src/InstanceComplex2.cpp" />
 		<Unit filename="src/InstanceComplex3.cpp" />
+		<Unit filename="src/InstanceComplex4.cpp" />
 		<Unit filename="src/InstanceComplexVec3.cpp" />
 		<Unit filename="src/InstanceDouble1.cpp" />
 		<Unit filename="src/InstanceDouble2.cpp" />
 		<Unit filename="src/InstanceDouble3.cpp" />
+		<Unit filename="src/InstanceDouble4.cpp" />
 		<Unit filename="src/InstanceVec2.cpp" />
 		<Unit filename="src/InstanceVec3.cpp" />
 		<Unit filename="src/NumericsDouble.cpp" />
