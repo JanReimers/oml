@@ -21,7 +21,7 @@
 //
 
 enum Shape {ArrayShape,VectorShape,MatrixShape};
-enum Store {Full,Symmetric};
+enum Store {Full,Symmetric,Diagonal};
 enum Data  {Real,Abstract};
 
 #endif // _shape_h_

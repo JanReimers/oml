@@ -9,6 +9,8 @@
 #include "oml/vecindex.h"
 
 template <class T> class complex;
+template <class T> class DiagonalMatrix;
+
 
 /*! \class Vector vector.h oml/vector.h
   \brief Numerical container with FORTRAN array symatics.
@@ -151,6 +153,7 @@ template <class T> class Vector
   friend class Iterable <T,Vector>;
   friend class Subscriptor;
   friend class ArraySubscriptor;
+  friend class DiagonalMatrix<T>;
 
   T  operator[](index_t) const;
   T& operator[](index_t)      ;

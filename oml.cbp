@@ -15,6 +15,7 @@
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
 				</Compiler>
@@ -180,10 +181,6 @@
 		<Unit filename="vector3d.h" />
 		<Unit filename="vector_io.h" />
 		<Unit filename="xpr.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
