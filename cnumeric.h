@@ -1,6 +1,8 @@
 #include "oml/matrix.h"
+#include "oml/diagonalmatrix.h"
 #include "oml/smatrix.h"
 #include "oml/vector.h"
+#include <tuple>
 
 // Copyright (1994-2003), Jan N. Reimers
 
@@ -85,7 +87,7 @@ double* s, eType* u, eType* v );
 
 using std::cout;
 using std::endl;
-//! sts::complex<double> version of SVDecomp
+//! std::complex<double> version of SVDecomp
 template <class TM> void CSVDecomp(TM& A, Vector<double>& s, TM& V)
 {
     int M=A.GetNumRows();
@@ -124,5 +126,45 @@ template <class TM> void CSVDecomp(TM& A, Vector<double>& s, TM& V)
         A.SetLimits(M,N,true); //Reshape
     }
 }
+
+//! std::complex<double> version of SVDecomp
+template <class TM> std::tuple<TM,DiagonalMatrix<double>,TM> CSVDecomp(const TM& A)
+{
+    int M=A.GetNumRows();
+    int N=A.GetNumCols();
+
+    TM A1;
+    bool transpose=N>M;
+    if (transpose)
+    {
+        int it=M;M=N;N=it;
+        A1=Transpose(A); //TODO make a Transpose member function
+    }
+    else
+    {
+        A1=A;
+    }
+    assert(N<=M); //Required by fortran routine
+    assert(M<=1000);  ////Required by fortran routine
+    Vector<double> s(N);
+    TM             V(N,N);
+    TM             U(M,M);
+    int p=0;
+//      A1(MxN) = U(MxM) S(N) V*(NxN)
+//      M>=N
+    csvd_ ( &A1(1,1), &M, &N, &M, &N, &p, &N, &N, &s(1), &U(1,1), &V(1,1) );
+    U.SetLimits(M,N,true); //Reshape
+
+    if (transpose)
+    {
+        TM temp=conj(V); //Store U in A for return
+        V.SetLimits(0,0);
+        V=conj(U);
+        U.SetLimits(0,0);
+        U=temp;
+    }
+    return std::make_tuple(U,DiagonalMatrix<double>(s),V);
+}
+
 
 

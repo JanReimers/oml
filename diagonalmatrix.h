@@ -28,6 +28,12 @@ template <class T> class DiagonalMatrix
   explicit DiagonalMatrix(index_t n);
   explicit DiagonalMatrix(subsc_t nl,subsc_t nh);
   explicit DiagonalMatrix(const Vector<T>&);
+  explicit DiagonalMatrix(const DiagonalMatrix&);
+  DiagonalMatrix& operator=(const DiagonalMatrix& dm)
+  {
+     itsData=dm.itsData;
+     return *this;
+  }
 
 //  template <class A>                 DiagonalMatrix(const Indexable<T,A,Full,Real,MatrixShape>&);
 //  template <class A,Store M, Data D> DiagonalMatrix(const Indexable<T,A,M,D,MatrixShape>&);
@@ -124,6 +130,14 @@ DiagonalMatrix<T>::DiagonalMatrix(const Vector<T>& v)
   : MatrixBase(MatLimits(v.size(),v.size()))
   , itsData   (v) //Shallow copy
   {}
+
+template <class T> inline
+DiagonalMatrix<T>::DiagonalMatrix(const DiagonalMatrix& dm)
+  : MatrixBase(dm.GetLimits())
+  , itsData   (dm.itsData) //Shallow copy
+  {}
+
+
 
 template <class T> DiagonalMatrix<T>& operator*=(DiagonalMatrix<T>& a,const DiagonalMatrix<T>& b)
 {
