@@ -48,7 +48,7 @@ template <class T> std::istream& DiagonalMatrix<T>::Read(std::istream& is)
   MatLimits lim;
   is >> lim;
   if (size()==0)
-    SetLimits(lim);
+    SetLimits(lim.size());
    else
     assert(size()==0);
 

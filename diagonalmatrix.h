@@ -58,32 +58,10 @@ template <class T> class DiagonalMatrix
   index_t   size  () const; //Required by iterable.
   MatLimits GetLimits() const;
 
-//  void SetLimits(const MatLimits&                           , bool preserve=false);
-//  void SetLimits(index_t r, index_t c                       , bool preserve=false);
-//  void SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve=false);
-//  void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
+  const Vector<T>& GetDiagonal() const {return itsData;}
+  void SetLimits(int n,bool preserve=false) {itsData.SetLimits(n,preserve);}
 
-//  void ReIndexRows   (const Array<index_t>& index) {::ReIndexRows   (*this,index);}
-//  void ReIndexColumns(const Array<index_t>& index) {::ReIndexColumns(*this,index);}
-//  void SwapRows   (subsc_t i,subsc_t j) {::SwapRows   (*this,i,j);}
-//  void SwapColumns(subsc_t i,subsc_t j) {::SwapColumns(*this,i,j);}
-//  DMatrix SubMatrix(const MatLimits& lim) const {DMatrix ret(lim);::SubMatrix(ret,*this);return ret;}
-
-//  typedef MatrixRow     <T,DMatrix<T>,Full,Real> RowType;
-//  typedef MatrixColumn  <T,DMatrix<T>,Full,Real> ColType;
-//  typedef MatrixDiagonal<T,DMatrix<T>,Full,Real> DiagType;
-
-//  RowType  GetRow     (subsc_t row) {return RowType (*this,row);}
-//  ColType  GetColumn  (subsc_t col) {return ColType (*this,col);}
-//  DiagType GetDiagonal(           ) {return DiagType(*this    );}
-
-//  const RowType  GetRow     (subsc_t row) const {return RowType (*this,row);}
-//  const ColType  GetColumn  (subsc_t col) const {return ColType (*this,col);}
-//  const DiagType GetDiagonal(           ) const {return DiagType(*this    );}
-
-//  typedef typename Iterable <T,DMatrix>::const_iterator  const_iterator ;
-//  typedef typename Iterable <T,DMatrix>::iterator iterator;
-
+  DiagonalMatrix& operator*=(const T& s) {itsData*=s;return *this;}
 
  private:
   friend class Indexable<T,DiagonalMatrix,Diagonal,Abstract,MatrixShape>;
