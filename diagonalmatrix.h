@@ -59,7 +59,11 @@ template <class T> class DiagonalMatrix
   MatLimits GetLimits() const;
 
   const Vector<T>& GetDiagonal() const {return itsData;}
-  void SetLimits(int n,bool preserve=false) {itsData.SetLimits(n,preserve);}
+  void SetLimits(int n,bool preserve=false)
+  {
+    MatrixBase::SetLimits(MatLimits(n,n));
+    itsData.SetLimits(n,preserve);
+  }
 
   DiagonalMatrix& operator*=(const T& s) {itsData*=s;return *this;}
 
