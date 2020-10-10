@@ -4,7 +4,6 @@
 
 // Copyright (1994-2004), Jan N. Reimers
 
-#include "config.h"
 #include <complex>
 #include <cassert>
 #include <climits>

@@ -3,6 +3,6 @@
 //  Make template instance
 //
 #define TYPE double
-#include "src/matrix.cc"
+#include "oml/src/matrix.cc"
 
 

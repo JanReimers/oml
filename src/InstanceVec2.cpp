@@ -2,8 +2,8 @@
 //
 //  Make template instance
 //
-#include "vector2d.h"
-#include "io2d.h"
+#include "oml/vector2d.h"
+#include "oml/io2d.h"
 #define TYPE Vector2d<double>
-#include "src/matrix.cc"
+#include "oml/src/matrix.cc"
 
