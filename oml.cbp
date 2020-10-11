@@ -46,7 +46,6 @@
 			<Add option="-pg" />
 			<Add option="-fPIC" />
 			<Add directory="../" />
-			<Add directory="./" />
 		</Compiler>
 		<Linker>
 			<Add option="-pg" />
