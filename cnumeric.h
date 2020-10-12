@@ -71,6 +71,21 @@ template <class T, class M> Vector<T> Diagonalize(M& A)
   return EigenValues;
 }
 
+//! Diagonalize with multiple return values using structured bindings
+template <class T> std::tuple<Matrix<std::complex<T> >,Vector<T> >
+oml_Diagonalize(const DMatrix<std::complex<T> >& A)
+{
+  assert(A.GetRowLimits()==A.GetColLimits());
+  assert(IsHermitian(A,1e-13));
+  Vector<T> EigenValues(A.GetRowLimits());
+  DMatrix<std::complex<T> > EigenVectors(A);
+  int err=0;
+  ch(EigenVectors,EigenValues,true,err);
+  assert(!err);
+
+  return std::make_tuple(EigenVectors,EigenValues);
+
+}
 
 //! Fortran SVD algorithm for complex<double>
 
