@@ -108,6 +108,12 @@ template <class T> inline T& DiagonalMatrix<T>::operator()(subsc_t i,subsc_t j)
 #undef CHECK
 
 template <class T> inline
+DiagonalMatrix<T>::DiagonalMatrix()
+  : MatrixBase(MatLimits(0,0))
+  , itsData   (0)
+  {}
+
+template <class T> inline
 DiagonalMatrix<T>::DiagonalMatrix(const Vector<T>& v)
   : MatrixBase(MatLimits(v.size(),v.size()))
   , itsData   (v) //Shallow copy
