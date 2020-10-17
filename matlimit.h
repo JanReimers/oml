@@ -15,7 +15,7 @@
 
   \nosubgrouping
 */
-class MatLimits 
+class MatLimits
 {
  public:
   /*! \name Constructors*/
@@ -26,7 +26,7 @@ class MatLimits
   MatLimits(const VecLimits&,const VecLimits&);//!<Construct from lower and upper bounds.
   //@}
  ~MatLimits();
-	
+
   static index_t size(index_t,index_t                  );
   static index_t size(subsc_t,subsc_t,subsc_t,subsc_t  );
   static index_t size(const VecLimits&,const VecLimits&);
@@ -55,7 +55,7 @@ class MatLimits
   std::ostream& Write(std::ostream&) const;//!<Write to stream.
   std::istream& Read (std::istream&)      ;//!<Read from stream.
   //@}
-     
+
   VecLimits Row; //!<Row    index limits.
   VecLimits Col; //!<Column index limits.
 };
@@ -67,22 +67,22 @@ class MatLimits
 //
 inline MatLimits::MatLimits()
   : Row()
-  , Col() 
+  , Col()
   {}
 
 inline MatLimits::MatLimits(subsc_t rowLow, subsc_t rowHigh,subsc_t colLow, subsc_t colHigh)
   : Row(rowLow,rowHigh)
-  , Col(colLow,colHigh) 
+  , Col(colLow,colHigh)
   {}
 
 inline MatLimits::MatLimits(index_t rowSize, index_t colSize)
   : Row(rowSize)
-  , Col(colSize) 
+  , Col(colSize)
   {}
 
 inline MatLimits::MatLimits(const VecLimits& rowLimits, const VecLimits& colLimits)
   : Row(rowLimits)
-  , Col(colLimits) 
+  , Col(colLimits)
   {}
 
 inline MatLimits::~MatLimits() {}
@@ -105,17 +105,17 @@ inline index_t MatLimits::size(subsc_t rowLow, subsc_t rowHigh,subsc_t colLow, s
   return size(VecLimits(rowLow,rowHigh),VecLimits(colLow,colHigh) );
 }
 
-inline index_t MatLimits::GetNumRows() const 
+inline index_t MatLimits::GetNumRows() const
 {
   return Row.size();
 }
 
-inline index_t MatLimits::GetNumCols() const 
+inline index_t MatLimits::GetNumCols() const
 {
   return Col.size();
 }
 
-inline index_t MatLimits::size() const 
+inline index_t MatLimits::size() const
 {
   return size(GetNumRows(),GetNumCols());
 }
@@ -129,7 +129,7 @@ inline bool MatLimits::operator==(const MatLimits& lim) const
   return (Row==lim.Row)&&(Col==lim.Col);
 }
 
-inline bool MatLimits::operator!=(const MatLimits& l) const 
+inline bool MatLimits::operator!=(const MatLimits& l) const
 {
   return !((*this)==l);
 }
@@ -138,22 +138,22 @@ inline bool MatLimits::operator!=(const MatLimits& l) const
 //
 //  Other inline functions for the MatLimits class.
 //
-inline bool MatLimits::Check() const 
+inline bool MatLimits::Check() const
 {
   return Row.Check()&&Col.Check();
 }
 
-inline index_t MatLimits::Offset(subsc_t i,subsc_t j) const 
+inline index_t MatLimits::Offset(subsc_t i,subsc_t j) const
 {
   return Row.Offset(i)+GetNumRows()*Col.Offset(j);
 }
 
-inline std::ostream& operator<<(std::ostream& os,const MatLimits& lim) 
+inline std::ostream& operator<<(std::ostream& os,const MatLimits& lim)
 {
   return lim.Write(os);
 }
- 
-inline std::istream& operator>>(std::istream& is, MatLimits& lim) 
+
+inline std::istream& operator>>(std::istream& is, MatLimits& lim)
 {
   return lim.Read (is);
 }

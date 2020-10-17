@@ -286,13 +286,14 @@ operator*(const Indexable<T,A,MA,DA,MatrixShape>& a,const Indexable<T,B,MB,DB,Ma
 //
 //  Matrix * Vector, returns a proxy.
 //
-template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-MatrixMVOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,MB,DB,VectorShape>,VectorShape> >
-operator*(const Indexable<T,A,MA,DA,MatrixShape>& a,const Indexable<T,B,MB,DB,VectorShape>& b)
+//MatrixMVOp<TA,Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape>,Ref<TB,Indexable<TB,B,MB,DB,VectorShape>,VectorShape> >
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,VectorShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<T,Indexable<T,B,MB,DB,VectorShape>,VectorShape> refb;
-  return MatrixMVOp<T,refa,refb>(refa(a),refb(b));
+  typedef Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape> refa;
+  typedef Ref<TB,Indexable<TB,B,MB,DB,VectorShape>,VectorShape> refb;
+  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
+  return MatrixMVOp<TR,refa,refb>(refa(a),refb(b));
 }
 
 //------------------------------------------------------------
@@ -381,6 +382,13 @@ bool IsSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m)
   return m==Transpose(m);
 }
 
+// Check if matrix is symmetric. This allows for some tolerance.
+template <class T, class A,Data D> inline
+bool IsSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+  return Max(abs(m-Transpose(m)))<=eps;
+}
+
 // Check if matrix is anit-symmetric.
 template <class T, class A, Data D> inline
 bool IsAntiSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m)
@@ -406,7 +414,7 @@ bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m, doubl
 template <class T, class A, Data D> inline
 bool IsHermitian(const Indexable<T,A,Full,D,MatrixShape>& m, double eps)
 {
-  return true;
+  return IsSymmetric(m,eps);
 }
 
 // Force a Matrix to be symmetric by averaging off diagonal elements.
