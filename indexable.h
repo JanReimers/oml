@@ -195,7 +195,18 @@ Func (const Indexable <T,A,M,D,S>& a)                                           
   return Xpr<typename Op<T>::RetType,ExprT,M,D,S>(ExprT(RefA(a)));                                           \
 }                                                                                                            \
 
+#define T std::complex<double>
 
+template <class A, Store M, Data D, Shape S> inline
+Xpr<typename Opabs<T>::RetType,XprUnaryOp<typename Opabs<T>::RetType,Ref<T,Indexable<T,A,M,D,S>,S>,Opabs<T>,S>,M,D,S>
+fabs(const Indexable <T,A,M,D,S>& a)
+{
+  typedef Ref<T,Indexable<T,A,M,D,S>,S> RefA;
+  typedef XprUnaryOp<typename Opabs<T>::RetType,RefA,Opabs<T>,S> ExprT;
+  return Xpr<typename Opabs<T>::RetType,ExprT,M,D,S>(ExprT(RefA(a)));
+}
+
+#undef T
 //----------------------------------------------------------------------------
 //
 //  Generate lots of expression template functions.

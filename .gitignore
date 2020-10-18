@@ -6,3 +6,9 @@ obj/
 *.layout
 
 *.save
+
+*.dat
+
+UTDebug
+
+UTRelease

@@ -375,6 +375,12 @@ void Unit(Indexable<T,A,M,Real,MatrixShape>& m)
   a.GetDiagonal()=1;
 }
 
+template <class T, class A, Store M, Data D> inline
+A operator~(const Indexable<std::complex<T>,A,M,D,MatrixShape>& m)
+{
+  return conj(Transpose(m));
+}
+
 // Check if matrix is symmetric. This allows for no roundoff errors.
 template <class T, class A,Data D> inline
 bool IsSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m)

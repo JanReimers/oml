@@ -519,14 +519,6 @@ bool TestM9()
         }
 
         FillRandom(A,10.0);
-        FillRandom(V,10.0);
-        Temp=A;
-        X=V;
-        SVSolver<double> sv(A);
-        V=sv.SolveFor(X);
-        EXPECT(Sum(abs(Temp*V-X))<1e-10,true);
-
-        FillRandom(A,10.0);
         FillRandom(B,10.0);
         Temp=A;
         BTemp=B;

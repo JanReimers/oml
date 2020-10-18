@@ -16,9 +16,7 @@
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="../../../../usr/local/lib/libgtest.a" />
 					<Add directory="../Debug" />
-					<Add directory="../../../../usr/local/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -28,10 +26,12 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-m64" />
 				</Compiler>
 				<Linker>
+					<Add option="-O2" />
+					<Add option="-m64" />
 					<Add directory="../Release" />
-					<Add directory="../../../../usr/local/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -39,40 +39,17 @@
 			<Add alias="all" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-std=c++17" />
 			<Add directory="../" />
 		</Compiler>
 		<Linker>
 			<Add library="oml" />
 			<Add library="gtest" />
 			<Add library="pthread" />
-			<Add directory="../Debug" />
-			<Add directory="/usr/local/lib" />
 		</Linker>
-		<Unit filename="UnitTests/UT-Array-double.cc" />
-		<Unit filename="UnitTests/UT-Array-int.cc" />
-		<Unit filename="UnitTests/UT-DMatrix-double.cc" />
-		<Unit filename="UnitTests/UT-Eigen-double.cc" />
-		<Unit filename="UnitTests/UT-List-double.cc" />
-		<Unit filename="UnitTests/UT-List-int.cc" />
-		<Unit filename="UnitTests/UT-Matrix-double.cc" />
-		<Unit filename="UnitTests/UT-Matrix3D-double.cc" />
-		<Unit filename="UnitTests/UT-Matrix3D.cc" />
-		<Unit filename="UnitTests/UT-Random-double.cc" />
-		<Unit filename="UnitTests/UT-SMatrix-double.cc" />
-		<Unit filename="UnitTests/UT-SolveTriDiagonal.cc" />
-		<Unit filename="UnitTests/UT-SubMatrix-double.cc" />
-		<Unit filename="UnitTests/UT-Vector-double.cc" />
-		<Unit filename="UnitTests/UT-Vector-int.cc" />
-		<Unit filename="UnitTests/UT-Vector3D-double.cc" />
-		<Unit filename="UnitTests/UT-Vector3D.cc" />
-		<Unit filename="UnitTests/UT-cow-array-int.cc" />
-		<Unit filename="UnitTests/UnitTest.H" />
-		<Unit filename="UnitTests/UnitTest.cc" />
+		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
