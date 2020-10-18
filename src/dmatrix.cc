@@ -10,10 +10,6 @@
 #include <iomanip>
 #include <cassert>
 
-#ifndef TYPE
-#error "DMatrix.cc TYPE was not defined"
-#endif
-
 #ifdef DEBUG
 #define CHECK Check()
 #else
@@ -128,14 +124,3 @@ template <class T> std::istream& DMatrix<T>::Read(std::istream& is)
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//  Make template instance
-//
-typedef TYPE Type;
-typedef DMatrix<Type> Mat;
-const Store MatStore=Full;
-
-template class DMatrix<Type>;
-
-#include "oml/matsub.ci"

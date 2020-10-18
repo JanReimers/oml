@@ -1,11 +1,28 @@
-// File: vector_io.h  IO routines for vectors
-#ifndef _vector_io_h_
-#define _vector_io_h_
-
-// Copyright (1994-2003), Jan N. Reimers
-
 #include "oml/vector.h"
-#include "oml/iterable_io.h"
+#include "oml/iterable.h"
+#include "oml/random.h"
+
+template <class T> void Vector<T>::Fill(FillType ft)
+{
+    switch (ft)
+    {
+        case (FillType::None)   : break;
+        case (FillType::Zero)   : Fill(T(0));break;
+        case (FillType::Random) : ::FillRandom(*this);break;
+        case (FillType::Unit)   : Fill(T(1));break;
+    }
+}
+
+template <class T> void Vector<T>::Fill(const T& fillValue)
+{
+    ::Fill(*this,fillValue);
+}
+
+template <class T> void Vector<T>::FillRandom()
+{
+    ::FillRandom(*this);
+}
+
 #include <iostream>
 #include <iomanip>
 #include <cassert>
@@ -53,4 +70,3 @@ template <class T> std::istream& Vector<T>::Read(std::istream& is)
 
 #undef CHECK
 
-#endif //_std::vector_io_h_

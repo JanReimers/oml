@@ -8,7 +8,6 @@
 #include "oml/veclimit.h"
 #include "oml/vecindex.h"
 
-template <class T> class complex;
 template <class T> class DiagonalMatrix;
 
 
@@ -31,6 +30,9 @@ template <class T> class DiagonalMatrix;
 
   \nosubgrouping
 */
+
+enum class FillType {None,Zero,Random,Unit};
+
 template <class T> class Vector
   : public Indexable<T,Vector<T>,Full,Real,VectorShape>
   , public Iterable<T,Vector<T> >
@@ -41,15 +43,24 @@ template <class T> class Vector
   Copy constructor and op=(Vector) are automaically supplied by the compiler.
   */
   //@{
-           Vector(                ); //!< Vector with size=0;
-  explicit Vector(index_t         ); //!<  All elements are un-initiated, low index is 1.
-  explicit Vector(index_t,index_t ); //!<  Specify lower and upper index.
-  Vector(const VecLimits&); //!<  Specify lower and upper index.
+  //!< Vector with size=0;
+           Vector() : Vector<T>(VecLimits(1,1)) {};
+  //!<  All elements are un-initiated, low index is 1.
+  explicit Vector(index_t  size, FillType ft=FillType::None) : Vector<T>(VecLimits(1,size),ft) {};
+  explicit Vector(index_t  size, const T&  fillValue) : Vector<T>(VecLimits(1,size),fillValue) {};
+  //!<  Specify lower and upper index.
+  explicit Vector(index_t l,index_t h, FillType ft=FillType::None) : Vector<T>(VecLimits(l,h),ft) {};
+  explicit Vector(index_t l,index_t h, const T&  fillValue) : Vector<T>(VecLimits(l,h),fillValue) {};
+  Vector(const VecLimits&, FillType ft=FillType::None); //!<  Specify lower and upper index.
+  Vector(const VecLimits&, const T&  fillValue       ); //!<  Specify lower and upper index.
   //! Allows construction from an expression template.
   template <class B,Data D> Vector(const Indexable<T,B,Full,D,VectorShape>&);
   //! Allows assignment from an expression template.
   template <class B,Data D> Vector& operator=(const Indexable<T,B,Full,D,VectorShape>&);
   //@}
+  void Fill(FillType);
+  void Fill(const T& fillValue);
+  void FillRandom();
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
@@ -255,31 +266,19 @@ template <class T> inline T& Vector<T>::operator[](index_t i)
 #define CHECK
 #endif
 
-template <class T> inline Vector<T>::Vector()
-  : itsData(0)
-  {
-    CHECK;
-  }
 
-template <class T> inline Vector<T>::Vector(index_t size)
-  : itsLimits(size)
-  , itsData  (size)
-  {
-    CHECK;
-  }
-
-template <class T> inline Vector<T>::Vector(index_t l,index_t h)
-  : itsLimits(l,h)
-  , itsData  (itsLimits.size())
-  {
-    CHECK;
-  }
-
-template <class T> inline Vector<T>::Vector(const VecLimits& lim)
+template <class T> inline Vector<T>::Vector(const VecLimits& lim,FillType ft)
   : itsLimits(lim          )
   , itsData  (lim.size())
   {
     CHECK;
+    Fill(ft);
+  }
+
+template <class T> inline Vector<T>::Vector(const VecLimits& lim,const T& fillValue)
+  : Vector<T>(lim)
+  {
+     Fill(fillValue);
   }
 
 template <class T> inline index_t Vector<T>::size() const

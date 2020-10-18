@@ -181,7 +181,6 @@
 		<Unit filename="vector.h" />
 		<Unit filename="vector2d.h" />
 		<Unit filename="vector3d.h" />
-		<Unit filename="vector_io.h" />
 		<Unit filename="xpr.h" />
 		<Extensions />
 	</Project>

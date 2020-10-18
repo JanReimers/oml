@@ -91,6 +91,22 @@ TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
     MatrixT A2=A1.SubMatrix(MatLimits(5,4));
     A1.SetLimits(5,4,true);
     EXPECT_EQ(A1,A2);
+
+    typedef Vector <TypeParam> VectorT;
+    VectorT V1(10,TypeParam(0.5));
+ //   VectorT V1(10,0.5); for T=complex this fails since the compiler promotes 0.5 to int rather than complex.
+// using  enum  FillType; C++20
+    VectorT V2(10,FillType::Zero);
+    VectorT V3(10,FillType::Random);
+    VectorT V4(10,FillType::Unit);
+    VectorT V5(10);
+    EXPECT_EQ(V1(10),0.5);
+    EXPECT_EQ(V2(10),0.0);
+    EXPECT_EQ(V4(10),1.0);
+
+    V5.Fill(2.0);
+    EXPECT_EQ(V5(10),2.0);
+    V5.FillRandom();
 }
 
 TYPED_TEST_P(MatrixTests,Transpose_Slices)
