@@ -28,8 +28,8 @@ template <class T> std::ostream& operator<<(std::ostream& os,const Vector2d<T>& 
   if (StreamableObject::Ascii()) os << v.x << " " << v.y << " ";
   if (StreamableObject::Pretty())
   {
-    int prec=os.precision();
-    int wid =os.width();
+    std::streamsize prec=os.precision();
+    std::streamsize wid =os.width();
     os << std::setw(0) << "("
        << std::setw(wid) << std::setprecision(prec) << v.x << ","
        << std::setw(wid) << std::setprecision(prec) << v.y << ")";

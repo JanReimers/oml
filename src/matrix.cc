@@ -40,7 +40,7 @@ template <class T> Matrix<T>::Matrix(index_t r, index_t c)
     CHECK;
   }
 
-template <class T> Matrix<T>::Matrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch)
+template <class T> Matrix<T>::Matrix(index_t rl,index_t rh,index_t cl,index_t ch)
   : MatrixBase(MatLimits(rl,rh,cl,ch))
   , itsData   (GetLimits().size()   )
   , itsColumns(0)
@@ -137,7 +137,7 @@ template <class T> void Matrix<T>::NewColumnPointers()
     //    std::cout << "NewColumnPointers() reloading old columns!!" << std::endl;
     exit(-1);
   }
-  for (subsc_t i=0;i<num_cols;i++) itsColumns[i+col_low]=(&itsData.Get()[i*num_rows]-row_low);
+  for (index_t i=0;i<num_cols;i++) itsColumns[i+col_low]=(&itsData.Get()[i*num_rows]-row_low);
 }
 
 
@@ -152,7 +152,7 @@ template <class T> void Matrix<T>::Check() const
   assert(GetLimits().size()==itsData.size());
   bool ok=true;
   index_t num_rows=GetNumRows();
-  for (subsc_t i=0;i<GetNumCols();i++)
+  for (index_t i=0;i<GetNumCols();i++)
   {
     ok = ok && itsColumns[i+GetLimits().Col.Low]==(&itsData.Get()[i*num_rows]-GetLimits().Row.Low);
     if (!ok) std::cerr << "col pointer problem i=" << i
@@ -181,10 +181,10 @@ template <class T> std::ostream& Matrix<T>::Write(std::ostream& os) const
     int wid =os.width();
     const Matrix<T>& s(*this);
     os << std::setw(0) << GetLimits() << std::endl;
-    for (subsc_t i=GetRowLow();i<=GetRowHigh();i++)
+    for (index_t i=GetRowLow();i<=GetRowHigh();i++)
     {
       os << "[ ";
-      for (subsc_t j=GetColLow();j<=GetColHigh();j++)
+      for (index_t j=GetColLow();j<=GetColHigh();j++)
         os  << std::setw(wid) << std::setprecision(prec) << s(i,j) << " ";
       os << "]" << std::endl;
     }

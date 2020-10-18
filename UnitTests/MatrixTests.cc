@@ -106,19 +106,19 @@ TYPED_TEST_P(MatrixTests,Transpose_Slices)
 //    A1.Transpose(); TODO: transpose in place
 //    EXPECT_EQ(A1.GetLimits(),A2.GetLimits());
 
-    int N=10;
+    index_t N=10;
     MatrixT A3(N,N);
     FillRandom(A3);
     VectorT D=A3.GetDiagonal();
     EXPECT_EQ(D.size(),N);
-    for (int i=1; i<=N; i++)
+    for (index_t i=1; i<=N; i++)
         EXPECT_EQ(A3(i,i),D(i));
 }
 
 TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
 {
     typedef DMatrix<TypeParam> MatrixT;
-    int M=2,N=4,mn=M*N;
+    index_t M=2,N=4,mn=M*N;
     MatrixT A(M,N),B(A);
     FillLinear<TypeParam>(A,1.0/4,2.0); //all elements should be exactly represented in floating point
     //cout << A << endl;
@@ -146,7 +146,7 @@ TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
 TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 {
     typedef DMatrix<TypeParam> MatrixT;
-    int M=10,N=5;
+    index_t M=10,N=5;
     MatrixT A(M,N),B(A);
     Fill<TypeParam>(A,1.0);
     B=A;
@@ -175,7 +175,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebra)
 {
     typedef DMatrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
-    int M=2,N=4;
+    index_t M=2,N=4;
     MatrixT A(M,N),B;
     FillLinear<TypeParam>(A,1.0/4,8.0/4);
     B=Transpose(A);
@@ -200,7 +200,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
     typedef DMatrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
 #ifdef DEBUG
-    int N=20,Nreplicates=10;
+    index_t N=20,Nreplicates=10;
 #else
     int N=200,Nreplicates=10;
 #endif
@@ -243,7 +243,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
 
 }
 
-inline double fabs(std::complex<double>& c) {return std::abs(c);}
+//inline double fabs(std::complex<double>& c) {return std::abs(c);}
 
 TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
 {

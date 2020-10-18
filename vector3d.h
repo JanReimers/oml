@@ -59,9 +59,9 @@ template <class T> class Vector3D
  ~Vector3D() {};
 
   //! Element access
-  const T& operator()(subsc_t i) const {return (&x)[i-1];}
+  const T& operator()(index_t i) const {return (&x)[i-1];}
   //! Element access
-  T& operator()(subsc_t i)       {return (&x)[i-1];}
+  T& operator()(index_t i)       {return (&x)[i-1];}
 
 
   /*! \name Coordinates*/

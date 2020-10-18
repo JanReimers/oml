@@ -18,16 +18,16 @@ template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexable<T,A,M,D,S>& a)
 {
   T ret(0);
-  int n=a.size();
-  for (int i=0;i<n;i++) ret+=a[i];
+  index_t n=a.size();
+  for (index_t i=0;i<n;i++) ret+=a[i];
   return ret;
 }
 
 template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)
 {
   bool ret(true);
-  int n=a.size();
-  for (int i=0;i<n;i++) ret=ret && a[i];
+  index_t n=a.size();
+  for (index_t i=0;i<n;i++) ret=ret && a[i];
   return ret;
 }
 
@@ -41,9 +41,9 @@ template <class T, class A, class Op, Store M, Data D, Shape S> class MinMax
  public:
   static T apply(const Indexable<T,A,M,D,S>& a)
   {
-    int n=a.size();
+    index_t n=a.size();
     T ret=n>0 ? a[0] : T(0); // Don't try and read a[0] if there is no data in a!
-    for (int i=1;i<n;i++)
+    for (index_t i=1;i<n;i++)
       {
 	T ai=a[i];
 	if (Op::apply(ai,ret)) ret=ai;
@@ -57,9 +57,9 @@ template <class T, class A, class Op, Store M, Data D, Shape S> class MinMax
 //
 template <class T,class A, Store M, Data D, Shape S> inline A Integrate(const Indexable<T,A,M,D,S>& a,T y0=0)
 {
-  int n=a.size();
+  index_t n=a.size();
   A ret(n);
-  for (int i=0;i<n;i++)
+  for (index_t i=0;i<n;i++)
   {
     y0+=a[i];
     ret[i]=y0;
@@ -69,11 +69,11 @@ template <class T,class A, Store M, Data D, Shape S> inline A Integrate(const In
 
 template <class T,class A, Store M, Data D, Shape S> inline A Differentiate(const Indexable<T,A,M,D,S>& a)
 {
-  int n=a.size();
+  index_t n=a.size();
   A ret(n);
   typename A::ArraySubscriptor s(ret);
   s[0]=a[0]; //Save integration constant in case caller needs it.
-  for (int i=1;i<n;i++) s[i]=a[i]-a[i-1];
+  for (index_t i=1;i<n;i++) s[i]=a[i]-a[i-1];
   return ret;
 }
 

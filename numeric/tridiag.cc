@@ -36,18 +36,18 @@ template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T
   typename Vector<T>::Subscriptor d (   Diagonal);
   typename Vector<T>::Subscriptor od(OffDiagonal);
 
-  for (subsc_t i=n;i>=2;i--)
+  for (index_t i=n;i>=2;i--)
   {
-    subsc_t l=i-1;
+    index_t l=i-1;
     T h=0.0, scale=0.0;
     if (l > 1)
     {
-      for (subsc_t k=1;k<=l;k++) scale += fabs(a(i,k));
+      for (index_t k=1;k<=l;k++) scale += fabs(a(i,k));
       if (scale == 0.0)
       {	od(i)=a(i,l);}
       else
       {
-	for (subsc_t k=1;k<=l;k++)
+	for (index_t k=1;k<=l;k++)
 	{
 	  a(i,k) /= scale;
 	  h += a(i,k)*a(i,k);
@@ -58,21 +58,21 @@ template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T
 	h -= f*g;
 	a(i,l)=f-g;
 	f=0.0;
-	for (subsc_t j=1;j<=l;j++)
+	for (index_t j=1;j<=l;j++)
 	{
 	  a(j,i)=a(i,j)/h;
 	  g=0.0;
-	  for (subsc_t k=1  ;k<=j;k++) g += a(j,k)*a(i,k);
-	  for (subsc_t k=j+1;k<=l;k++) g += a(k,j)*a(i,k);
+	  for (index_t k=1  ;k<=j;k++) g += a(j,k)*a(i,k);
+	  for (index_t k=j+1;k<=l;k++) g += a(k,j)*a(i,k);
 	  od(j)=g/h;
 	  f += od(j)*a(i,j);
 	}
 	hh=f/(h+h);
-	for (subsc_t j=1;j<=l;j++)
+	for (index_t j=1;j<=l;j++)
 	{
 	  f=a(i,j);
 	  od(j)=g=od(j)-hh*f;
-	  for (subsc_t k=1;k<=j;k++) a(j,k) -= (f*od(k)+g*a(i,k));
+	  for (index_t k=1;k<=j;k++) a(j,k) -= (f*od(k)+g*a(i,k));
 	}
       }
     }
@@ -81,21 +81,21 @@ template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T
   }
   d(1)=0.0;
   od(1)=0.0;
-  for (subsc_t i=1;i<=n;i++)
+  for (index_t i=1;i<=n;i++)
   {
-    subsc_t l=i-1;
+    index_t l=i-1;
     if (d(i))
     {
-      for (subsc_t j=1;j<=l;j++)
+      for (index_t j=1;j<=l;j++)
       {
 	g=0.0;
-	for (subsc_t k=1;k<=l;k++) g += a(i,k)*a(k,j);
-	for (subsc_t k=1;k<=l;k++) a(k,j) -= g*a(k,i);
+	for (index_t k=1;k<=l;k++) g += a(i,k)*a(k,j);
+	for (index_t k=1;k<=l;k++) a(k,j) -= g*a(k,i);
       }
     }
     d(i)=a(i,i);
     a(i,i)=1.0;
-    for (subsc_t j=1;j<=l;j++) a(j,i)=a(i,j)=0.0;
+    for (index_t j=1;j<=l;j++) a(j,i)=a(i,j)=0.0;
   }
 }
 

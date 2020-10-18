@@ -30,7 +30,7 @@ template <class T, class R> class Ref<T,R,VectorShape>
  public:
   Ref(const R& r) : itsRef(r) {};
   T         operator[](index_t n) const {return itsRef[n];}
-  T         operator()(subsc_t n) const {return itsRef(n);}
+  T         operator()(index_t n) const {return itsRef(n);}
   index_t   size      (         ) const {return itsRef.size();}
   VecLimits GetLimits (         ) const {return itsRef.GetLimits();}
  private:
@@ -42,7 +42,7 @@ template <class T, class R> class Ref<T,R,MatrixShape>
  public:
   Ref(const R& r) : itsRef(r), itsLimits(r.GetLimits()) {};
   T         operator[](index_t n          ) const {return itsRef[n];}
-  T         operator()(subsc_t i,subsc_t j) const {return itsRef(i,j);}
+  T         operator()(index_t i,index_t j) const {return itsRef(i,j);}
   index_t   size      (                   ) const {return itsRef.size();}
   MatLimits GetLimits (                   ) const {return itsLimits;}
  private:
@@ -73,7 +73,7 @@ template <class T, class A> class Val<T,A, VectorShape>
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsALimits(a.GetLimits()) {};
   T         operator[](index_t) const {return itsVal;}
-  T         operator()(subsc_t) const {return itsVal;}
+  T         operator()(index_t) const {return itsVal;}
   index_t   size      (       ) const {return itsALimits.size();}
   VecLimits GetLimits (       ) const {return itsALimits;}
  private:
@@ -87,7 +87,7 @@ template <class T, class A> class Val<T,A,MatrixShape>
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsALimits(a.GetLimits()) {};
   T         operator[](index_t        ) const {return itsVal;}
-  T         operator()(subsc_t,subsc_t) const {return itsVal;}
+  T         operator()(index_t,index_t) const {return itsVal;}
   index_t   size      (               ) const {return itsA.size();}
   MatLimits GetLimits (               ) const {return itsALimits;}
  private:
@@ -128,7 +128,7 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,V
   ~Xpr() {};
 
   T         operator[](index_t n) const {return itsExp[n];}
-  T         operator()(subsc_t i) const {return itsExp(i);}
+  T         operator()(index_t i) const {return itsExp(i);}
   index_t   size      (         ) const {return itsExp.size();}
   VecLimits GetLimits (         ) const {return itsExp.GetLimits();}
  private:
@@ -144,7 +144,7 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,M
   ~Xpr() {};
 
   T         operator[](index_t n          ) const {return itsExp[n];}
-  T         operator()(subsc_t i,subsc_t j) const {return itsExp(i,j);}
+  T         operator()(index_t i,index_t j) const {return itsExp(i,j);}
   index_t   size      (                   ) const {return itsExp.size();}
   MatLimits GetLimits (                   ) const {return itsExp.GetLimits();}
 

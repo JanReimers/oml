@@ -69,7 +69,7 @@ template <class T> class Matrix
   //@{
   explicit Matrix(                );//!< Matrix with size=0;
   explicit Matrix(index_t r, index_t c);  //!<Construct from row and column size, use default lower bound.
-  explicit Matrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch);  //!<Construct from lower and upper bounds.
+  explicit Matrix(index_t rl,index_t rh,index_t cl,index_t ch);  //!<Construct from lower and upper bounds.
   explicit Matrix(const VecLimits& r,const VecLimits& c);//!<Construct from lower and upper bounds.
   explicit Matrix(const MatLimits&);//!<Construct from lower and upper bounds.
   //! Copy constructor.
@@ -104,9 +104,9 @@ template <class T> class Matrix
   */
   //@{
   //! const element acces operator, fast and \e cannot trigger a COW operation.
-  T  operator()(subsc_t,subsc_t) const;
+  T  operator()(index_t,index_t) const;
   //! non-const version can trigger a COW operation, and checks for this with every access.
-  T& operator()(subsc_t,subsc_t)      ;
+  T& operator()(index_t,index_t)      ;
   //@}
 
   index_t   size     () const; //!<Returns number elements in the Matrix.
@@ -118,7 +118,7 @@ template <class T> class Matrix
   //@{
   void SetLimits(const MatLimits&                           , bool preserve=false); //!<Resize from new limits.
   void SetLimits(index_t r, index_t c                       , bool preserve=false); //!<Resize from new rol and column sizes.
-  void SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve=false); //!<Resize from new limits.
+  void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false); //!<Resize from new limits.
   void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false); //!<Resize from new limits.
   //@}
 
@@ -127,9 +127,9 @@ template <class T> class Matrix
   //! Does \c M(i,j)=M(i,index[j]) for i=low...high.  Used for sorting.
   void ReIndexColumns(const Array<index_t>& index) {::ReIndexColumns(*this,index);}
   //! Does \c M(i,k)=M(j,k) for k=low...high.  Used for sorting.
-  void SwapRows   (subsc_t i,subsc_t j) {::SwapRows   (*this,i,j);}
+  void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
   //! Does \c M(k,i)=M(k,j) for k=low...high.  Used for sorting.
-  void SwapColumns(subsc_t i,subsc_t j) {::SwapColumns(*this,i,j);}
+  void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
   //! Exctract a portion of the matrix. Returns a new Matrix object.
   Matrix SubMatrix(const MatLimits& lim) const {Matrix ret(lim);::SubMatrix(ret,*this);return ret;}
 
@@ -145,15 +145,15 @@ template <class T> class Matrix
   */
   //@{
   //! Return slice proxy.
-  RowType             GetRow            (subsc_t row)       {return RowType (*this,row);}
-  ColType             GetColumn         (subsc_t col)       {return ColType (*this,col);}
-  RowArrayType        GetRowAsArray     (subsc_t row)       {return RowArrayType (*this,row);}
-  ColArrayType        GetColumnAsArray  (subsc_t col)       {return ColArrayType (*this,col);}
+  RowType             GetRow            (index_t row)       {return RowType (*this,row);}
+  ColType             GetColumn         (index_t col)       {return ColType (*this,col);}
+  RowArrayType        GetRowAsArray     (index_t row)       {return RowArrayType (*this,row);}
+  ColArrayType        GetColumnAsArray  (index_t col)       {return ColArrayType (*this,col);}
   DiagType            GetDiagonal       (           )       {return DiagType(*this    );}
-  const RowType       GetRow            (subsc_t row) const {return RowType (*this,row);}
-  const ColType       GetColumn         (subsc_t col) const {return ColType (*this,col);}
-  const RowArrayType  GetRowAsArray     (subsc_t row) const {return RowArrayType (*this,row);}
-  const ColArrayType  GetColumnAsArray  (subsc_t col) const {return ColArrayType (*this,col);}
+  const RowType       GetRow            (index_t row) const {return RowType (*this,row);}
+  const ColType       GetColumn         (index_t col) const {return ColType (*this,col);}
+  const RowArrayType  GetRowAsArray     (index_t row) const {return RowArrayType (*this,row);}
+  const ColArrayType  GetColumnAsArray  (index_t col) const {return ColArrayType (*this,col);}
   const DiagArrayType GetDiagonalAsArray(           ) const {return DiagArrayType(*this    );}
   //@}
 
@@ -185,7 +185,7 @@ template <class T> class Matrix
       , itsPtr(static_cast<Matrix&>(m).GetColumns())
       {};
 
-    T& operator()(subsc_t i,subsc_t j) {CHECK(i,j);return itsPtr[j][i];}
+    T& operator()(index_t i,index_t j) {CHECK(i,j);return itsPtr[j][i];}
 
    private:
     MatLimits itsLimits;
@@ -264,13 +264,13 @@ template <class T> inline Matrix<T>::~Matrix()
   ReleaseColumns();
 }
 
-template <class T> inline T Matrix<T>::operator()(subsc_t i,subsc_t j) const
+template <class T> inline T Matrix<T>::operator()(index_t i,index_t j) const
 {
   CHECK(i,j);
   return GetColumns()[j][i];
 }
 
-template <class T> inline T& Matrix<T>::operator()(subsc_t i,subsc_t j)
+template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
   return GetColumns()[j][i]; //Force COW check.
@@ -338,7 +338,7 @@ template <class T> inline void Matrix<T>::SetLimits(index_t r, index_t c , bool 
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline void Matrix<T>::SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve)
 {
   SetLimits(MatLimits(rl,rh,cl,ch),preserve);
 }

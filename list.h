@@ -275,7 +275,7 @@ template <class T> void List<T>::SetCapacity(index_t newsize, bool preserve)
   assert(newsize >= 0);
   if (itsData.size()!=newsize)
   {
-    int n=size();
+    index_t n=size();
     if (preserve && n>0)
     {
       List<T> dest(newsize);
@@ -346,7 +346,7 @@ template <class T> inline void List<T>::ReIndex(const Array<index_t>& index)
 //
 template <class T> inline void List<T>::push_back(const T& element)
 {
-  int N=itsData.size();
+  index_t N=itsData.size();
   assert(itsNext <= N);
   if(itsNext == N) SetCapacity(N>0 ? N*2 : start_size,true);
   (*this)[itsNext++]=element;

@@ -26,10 +26,10 @@ class MatrixBase
   index_t   GetNumRows  () const;
   index_t   GetNumCols  () const;
   index_t   size        () const;
-  subsc_t   GetRowLow   () const;
-  subsc_t   GetRowHigh  () const;
-  subsc_t   GetColLow   () const;
-  subsc_t   GetColHigh  () const;
+  index_t   GetRowLow   () const;
+  index_t   GetRowHigh  () const;
+  index_t   GetColLow   () const;
+  index_t   GetColHigh  () const;
   //@}
   void SetLimits(const MatLimits&, bool preserve=false);
 
@@ -75,22 +75,22 @@ inline VecLimits MatrixBase::GetColLimits() const
   return itsLimits.Col;
 }
 
-inline subsc_t MatrixBase::GetRowLow() const
+inline index_t MatrixBase::GetRowLow() const
 {
   return itsLimits.Row.Low;
 }
 
-inline subsc_t MatrixBase::GetRowHigh() const
+inline index_t MatrixBase::GetRowHigh() const
 {
   return itsLimits.Row.High;
 }
 
-inline subsc_t MatrixBase::GetColLow() const
+inline index_t MatrixBase::GetColLow() const
 {
   return itsLimits.Col.Low;
 }
 
-inline subsc_t MatrixBase::GetColHigh() const
+inline index_t MatrixBase::GetColHigh() const
 {
   return itsLimits.Col.High;
 }

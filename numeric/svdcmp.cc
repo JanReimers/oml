@@ -54,17 +54,17 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
   typename Vector<T>::Subscriptor w(W);
   typename Vector<T>::Subscriptor rv1(RV1);
 
-  for (subsc_t i=1;i<=n;i++)
+  for (index_t i=1;i<=n;i++)
     {
       l=i+1;
       rv1(i)=scale*g;
       g=s=scale=0.0;
       if (i <= m)
 	{
-	  for (subsc_t k=i;k<=m;k++) scale += fabs(a(k,i));
+	  for (index_t k=i;k<=m;k++) scale += fabs(a(k,i));
 	  if (scale)
 	    {
-	      for (subsc_t k=i;k<=m;k++)
+	      for (index_t k=i;k<=m;k++)
 		{
 		  a(k,i) /= scale;
 		  s += a(k,i)*a(k,i);
@@ -75,25 +75,25 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	      a(i,i)=f-g;
 	      if (i != n)
 		{
-		  for (subsc_t j=l;j<=n;j++)
+		  for (index_t j=l;j<=n;j++)
 		    {
 		      s=0.0;
-		      for (subsc_t k=i;k<=m;k++) s += a(k,i)*a(k,j);
+		      for (index_t k=i;k<=m;k++) s += a(k,i)*a(k,j);
 		      f=s/h;
-		      for (subsc_t k=i;k<=m;k++) a(k,j) += f*a(k,i);
+		      for (index_t k=i;k<=m;k++) a(k,j) += f*a(k,i);
 		    }
 		}
-	      for (subsc_t k=i;k<=m;k++) a(k,i) *= scale;
+	      for (index_t k=i;k<=m;k++) a(k,i) *= scale;
 	    }
 	}
       w(i)=scale*g;
       g=s=scale=0.0;
       if (i <= m && i != n)
 	{
-	  for (subsc_t k=l;k<=n;k++) scale += fabs(a(i,k));
+	  for (index_t k=l;k<=n;k++) scale += fabs(a(i,k));
 	  if (scale)
 	    {
-	      for (subsc_t k=l;k<=n;k++)
+	      for (index_t k=l;k<=n;k++)
 		{
 		  a(i,k) /= scale;
 		  s += a(i,k)*a(i,k);
@@ -102,69 +102,69 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	      g = -SIGN(sqrt(s),f);
 	      h=f*g-s;
 	      a(i,l)=f-g;
-	      for (subsc_t k=l;k<=n;k++) rv1(k)=a(i,k)/h;
+	      for (index_t k=l;k<=n;k++) rv1(k)=a(i,k)/h;
 	      if (i != m) {
-		for (subsc_t j=l;j<=m;j++)
+		for (index_t j=l;j<=m;j++)
 		  {
 		    s=0.0;
-		    for (subsc_t k=l;k<=n;k++) s += a(j,k)*a(i,k);
-		    for (subsc_t k=l;k<=n;k++) a(j,k) += s*rv1(k);
+		    for (index_t k=l;k<=n;k++) s += a(j,k)*a(i,k);
+		    for (index_t k=l;k<=n;k++) a(j,k) += s*rv1(k);
 		  }
 	      }
-	      for (subsc_t k=l;k<=n;k++) a(i,k) *= scale;
+	      for (index_t k=l;k<=n;k++) a(i,k) *= scale;
 	    }
 	}
       anorm=MAX(anorm,(fabs(w(i))+fabs(rv1(i))));
     }
-  for (subsc_t i=n;i>=1;i--)
+  for (index_t i=n;i>=1;i--)
     {
       if (i < n)
 	{
 	  if (g)
 	    {
-	      for (subsc_t j=l;j<=n;j++) v(j,i)=(a(i,j)/a(i,l))/g;
-	      for (subsc_t j=l;j<=n;j++)
+	      for (index_t j=l;j<=n;j++) v(j,i)=(a(i,j)/a(i,l))/g;
+	      for (index_t j=l;j<=n;j++)
 		{
 		  s=0.0;
-		  for (subsc_t k=l;k<=n;k++) s += a(i,k)*v(k,j);
-		  for (subsc_t k=l;k<=n;k++) v(k,j) += s*v(k,i);
+		  for (index_t k=l;k<=n;k++) s += a(i,k)*v(k,j);
+		  for (index_t k=l;k<=n;k++) v(k,j) += s*v(k,i);
 		}
 	    }
-	  for (subsc_t j=l;j<=n;j++) v(i,j)=v(j,i)=0.0;
+	  for (index_t j=l;j<=n;j++) v(i,j)=v(j,i)=0.0;
 	}
       v(i,i)=1.0;
       g=rv1(i);
       l=i;
     }
-  for (subsc_t i=n;i>=1;i--)
+  for (index_t i=n;i>=1;i--)
     {
       l=i+1;
       g=w(i);
       if (i < n)
-	for (subsc_t j=l;j<=n;j++) a(i,j)=0.0;
+	for (index_t j=l;j<=n;j++) a(i,j)=0.0;
       if (g)
 	{
 	  g=1.0/g;
 	  if (i != n) {
-	    for (subsc_t j=l;j<=n;j++)
+	    for (index_t j=l;j<=n;j++)
 	      {
 		s=0.0;
-		for (subsc_t k=l;k<=m;k++) s += a(k,i)*a(k,j);
+		for (index_t k=l;k<=m;k++) s += a(k,i)*a(k,j);
 		f=(s/a(i,i))*g;
-		for (subsc_t k=i;k<=m;k++) a(k,j) += f*a(k,i);
+		for (index_t k=i;k<=m;k++) a(k,j) += f*a(k,i);
 	      }
 	  }
-	  for (subsc_t j=i;j<=m;j++) a(j,i) *= g;
+	  for (index_t j=i;j<=m;j++) a(j,i) *= g;
 	}
       else
 	{
-	  for (subsc_t j=i;j<=m;j++) a(j,i)=0.0;
+	  for (index_t j=i;j<=m;j++) a(j,i)=0.0;
 	}
       ++a(i,i);
     }
-  for (subsc_t k=n;k>=1;k--)
+  for (index_t k=n;k>=1;k--)
     {
-      for (subsc_t its=1;its<=30;its++)
+      for (index_t its=1;its<=30;its++)
 	{
 	  flag=1;
 	  for (l=k;l>=1;l--)
@@ -181,7 +181,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	    {
 	      c=0.0;
 	      s=1.0;
-	      for (subsc_t i=l;i<=k;i++)
+	      for (index_t i=l;i<=k;i++)
 		{
 		  f=s*rv1(i);
 		  if (fabs(f)+anorm != anorm)
@@ -192,7 +192,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 		      h=1.0/h;
 		      c=g*h;
 		      s=(-f*h);
-		      for (subsc_t j=1;j<=m;j++)
+		      for (index_t j=1;j<=m;j++)
 			{
 			  y=a(j,nm);
 			  z=a(j,i);
@@ -208,7 +208,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	      if (z < 0.0)
 		{
 		  w(k) = -z;
-		  for (subsc_t j=1;j<=n;j++) v(j,k)=(-v(j,k));
+		  for (index_t j=1;j<=n;j++) v(j,k)=(-v(j,k));
 		}
 	      break;
 	    }
@@ -225,9 +225,9 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	  g=PYTHAG(f,1.0);
 	  f=((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x;
 	  c=s=1.0;
-	  for (subsc_t j=l;j<=nm;j++)
+	  for (index_t j=l;j<=nm;j++)
 	    {
-	      subsc_t i=j+1;
+	      index_t i=j+1;
 	      g=rv1(i);
 	      y=w(i);
 	      h=s*g;
@@ -240,7 +240,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 	      g=g*c-x*s;
 	      h=y*s;
 	      y=y*c;
-	      for (subsc_t jj=1;jj<=n;jj++)
+	      for (index_t jj=1;jj<=n;jj++)
 		{
 		  x=v(jj,j);
 		  z=v(jj,i);
@@ -257,7 +257,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 		}
 	      f=(c*g)+(s*y);
 	      x=(c*y)-(s*g);
-	      for (subsc_t jj=1;jj<=m;jj++)
+	      for (index_t jj=1;jj<=m;jj++)
 		{
 		  y=a(jj,j);
 		  z=a(jj,i);
@@ -273,7 +273,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
     //
     // Sort for descending singular values
     //
-    Array<int> index=MakeDescendingIndex(W); //order of s is preserved.
+    Array<index_t> index=MakeDescendingIndex(W); //order of s is preserved.
     W.ReIndex(index);
     A.ReIndexColumns(index);
     V.ReIndexColumns(index);

@@ -29,10 +29,10 @@ template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d)
     typename Array<index_t>::Subscriptor indx(Index);
 
     d=1.0;
-    for (subsc_t i=1; i<=n; i++)
+    for (index_t i=1; i<=n; i++)
     {
         big=0.0;
-        for (subsc_t j=1; j<=n; j++)
+        for (index_t j=1; j<=n; j++)
             if ((temp=fabs(a(i,j))) > big) big=temp;
         if (big == 0.0)
         {
@@ -41,20 +41,20 @@ template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d)
         }
         vv(i)=1.0/big;
     }
-    for (subsc_t j=1; j<=n; j++)
+    for (index_t j=1; j<=n; j++)
     {
-        for (subsc_t i=1; i<j; i++)
+        for (index_t i=1; i<j; i++)
         {
             sum=a(i,j);
-            for (subsc_t k=1; k<i; k++) sum -= a(i,k)*a(k,j);
+            for (index_t k=1; k<i; k++) sum -= a(i,k)*a(k,j);
             a(i,j)=sum;
         }
         big=-1.0;
         imax=0;
-        for (subsc_t i=j; i<=n; i++)
+        for (index_t i=j; i<=n; i++)
         {
             sum=a(i,j);
-            for (subsc_t k=1; k<j; k++)
+            for (index_t k=1; k<j; k++)
                 sum -= a(i,k)*a(k,j);
             a(i,j)=sum;
             if ( (dum=vv(i)*fabs(sum)) >= big)
@@ -66,7 +66,7 @@ template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d)
         assert(imax>0);
         if (j != imax)
         {
-            for (subsc_t k=1; k<=n; k++)
+            for (index_t k=1; k<=n; k++)
             {
                 dum=a(imax,k);
                 a(imax,k)=a(j,k);
@@ -80,7 +80,7 @@ template <class T> bool LUDecomp(Matrix<T>& A, Array<index_t>& Index ,T& d)
         if (j != n)
         {
             dum=1.0/(a(j,j));
-            for (subsc_t i=j+1; i<=n; i++) a(i,j) *= dum;
+            for (index_t i=j+1; i<=n; i++) a(i,j) *= dum;
         }
     }
     return true;

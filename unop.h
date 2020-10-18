@@ -317,7 +317,7 @@ template <class T, class A, class Op> class XprUnaryOp<T,A,Op,VectorShape>
   ~XprUnaryOp() {};
 
   T         operator[](index_t n) const {return Op::apply(itsA[n]);}
-  T         operator()(subsc_t n) const {return Op::apply(itsA(n));}
+  T         operator()(index_t n) const {return Op::apply(itsA(n));}
   index_t   size   (         ) const {return itsA.size();}
   VecLimits GetLimits (         ) const {return itsA.GetLimits();}
  private:
@@ -331,7 +331,7 @@ template <class T, class A, class Op> class XprUnaryOp<T,A,Op,MatrixShape>
   ~XprUnaryOp() {};
 
   T         operator[](index_t n          ) const {return Op::apply(itsA[n]);}
-  T         operator()(subsc_t i,subsc_t j) const {return Op::apply(itsA(i,j));}
+  T         operator()(index_t i,index_t j) const {return Op::apply(itsA(i,j));}
   index_t   size   (                   ) const {return itsA.size();}
   MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
  private:

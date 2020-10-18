@@ -30,7 +30,7 @@ template <class T> SMatrix<T>::SMatrix()
   , itsData(0)
   {}
 
-template <class T> SMatrix<T>::SMatrix(index_t r, index_t c) 
+template <class T> SMatrix<T>::SMatrix(index_t r, index_t c)
   : MatrixBase(MatLimits(r,c))
   , itsN      (GetLimits().GetNumRows() )
   , itsData   (size(itsN))
@@ -38,7 +38,7 @@ template <class T> SMatrix<T>::SMatrix(index_t r, index_t c)
     CHECK;
   }
 
-template <class T> SMatrix<T>::SMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch) 
+template <class T> SMatrix<T>::SMatrix(index_t rl,index_t rh,index_t cl,index_t ch)
   : MatrixBase(MatLimits(rl,rh,cl,ch))
   , itsN      (GetLimits().GetNumRows() )
   , itsData   (size(itsN))
@@ -46,7 +46,7 @@ template <class T> SMatrix<T>::SMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t 
     CHECK;
   }
 
-template <class T> SMatrix<T>::SMatrix(const VecLimits& r,const VecLimits& c) 
+template <class T> SMatrix<T>::SMatrix(const VecLimits& r,const VecLimits& c)
   : MatrixBase(MatLimits(r,c))
   , itsN      (GetLimits().GetNumRows() )
   , itsData   (size(itsN))
@@ -54,7 +54,7 @@ template <class T> SMatrix<T>::SMatrix(const VecLimits& r,const VecLimits& c)
     CHECK;
   }
 
-template <class T> SMatrix<T>::SMatrix(const MatLimits& lim) 
+template <class T> SMatrix<T>::SMatrix(const MatLimits& lim)
   : MatrixBase(lim              )
   , itsN      (GetLimits().GetNumRows() )
   , itsData   (size(itsN))
@@ -62,7 +62,7 @@ template <class T> SMatrix<T>::SMatrix(const MatLimits& lim)
     CHECK;
   }
 
-template <class T> SMatrix<T>::SMatrix(const SMatrix<T>& m) 
+template <class T> SMatrix<T>::SMatrix(const SMatrix<T>& m)
   : MatrixBase(m)
   , itsN      (m.itsN)
   , itsData   (m.itsData)
@@ -105,7 +105,7 @@ template <class T> std::ostream& SMatrix<T>::Write(std::ostream& os) const
   if (!this->Pretty())
   {
     os << GetLimits();
-    if (this->Binary()) 
+    if (this->Binary())
       BinaryWrite(itsN,os);
     else
       os << itsN << " ";
@@ -116,12 +116,12 @@ template <class T> std::ostream& SMatrix<T>::Write(std::ostream& os) const
     int prec=os.precision();
     int wid =os.width();
     os << std::setw(0) << GetLimits() << std::endl;
-    for (subsc_t i=GetRowLow();i<=GetRowHigh();i++)
+    for (index_t i=GetRowLow();i<=GetRowHigh();i++)
     {
       os << "[ ";
-      for (subsc_t j=GetColLow();j<=GetColHigh();j++)
+      for (index_t j=GetColLow();j<=GetColHigh();j++)
       {
-        if (i<=j) 
+        if (i<=j)
 	  os << std::setw(wid) << std::setprecision(prec) << (*this)(i,j) << " ";
 	else
 	  for (int n=0;n<=wid;n++) os << " ";
@@ -137,12 +137,12 @@ template <class T> std::istream& SMatrix<T>::Read(std::istream& is)
   assert(is);
   MatLimits lim;
   is >> lim;
-  
+
   if (this->Binary())
     BinaryRead(itsN,is);
   else
     is >> itsN;
-  
+
   if (size()==0)
     SetLimits(lim);
    else

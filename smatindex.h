@@ -13,12 +13,12 @@
 template <class T, class Derived, Data D> class Indexable<T,Derived,Symmetric,D,MatrixShape>
 {
  public:
-  explicit Indexable() {}; 
+  explicit Indexable() {};
   ~Indexable() {};
-  
+
   T operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
-  
+  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
@@ -37,7 +37,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Symmetric,D,
 	 public:
 		Subscriptor(Indexable& v) : Derived::ArraySubscriptor(v) {};
 	};
-	
+
  protected:
   template <class B> void AssignFrom(const Indexable<T,B,Symmetric,Real    ,MatrixShape>& b) { ArrayAssign(*this,b);}
   template <class B> void AssignFrom(const Indexable<T,B,Symmetric,Abstract,MatrixShape>& b) {MatrixAssign(*this,b);}
@@ -47,53 +47,53 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Symmetric,D,
   Indexable(const Indexable&);
 };
 
-template <class A> inline bool True(const Indexable<bool,A,Symmetric,Abstract,MatrixShape>& a)                                        
-{      
+template <class A> inline bool True(const Indexable<bool,A,Symmetric,Abstract,MatrixShape>& a)
+{
 	bool ret(true);
-  subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
-    for (int j=i;j<=ch;j++)
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
+    for (index_t j=i;j<=ch;j++)
       ret=ret&&a(i,j);
 	return ret;
-}                                                                                      
+}
 
-template <class T, class A, Data D> inline T Sum(const Indexable<T,A,Symmetric,D,MatrixShape>& a)                                        
-{      
+template <class T, class A, Data D> inline T Sum(const Indexable<T,A,Symmetric,D,MatrixShape>& a)
+{
 	T ret(0);
-  subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
 	{
 		ret+=a(i,i);
-    for (int j=i+1;j<=ch;j++)
+    for (index_t j=i+1;j<=ch;j++)
       ret+=T(2)*a(i,j);
 	}
 	return ret;
-}                                                                                      
+}
 
-template <class T, class A, Data D> inline 
-	std::complex<T> Sum(const Indexable<std::complex<T>,A,Symmetric,D,MatrixShape>& a)                                        
-{      
+template <class T, class A, Data D> inline
+	std::complex<T> Sum(const Indexable<std::complex<T>,A,Symmetric,D,MatrixShape>& a)
+{
 	std::complex<T> ret(0);
-  subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++) 
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
 	{
 		ret+=a(i,i);
-    for (int j=i+1;j<=ch;j++)
+    for (index_t j=i+1;j<=ch;j++)
       ret+=T(2)*real(a(i,j));
 	}
 	return ret;
-}                                                                                      
+}
 
 template <class T, class A, class Op> class MinMax<T,A,Op,Symmetric,Abstract,MatrixShape>
 {
  public:
   static T apply(const Indexable<T,A,Symmetric,Abstract,MatrixShape>& a)
 	{
-		subsc_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
-		subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+		index_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
+		index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
 		T ret=a(rl,cl);
-		for (int i=rl;i<=rh;i++) 
-			for (int j=i;j<=ch;j++)
+		for (index_t i=rl;i<=rh;i++)
+			for (index_t j=i;j<=ch;j++)
 		  {
 				T ai=a(i,j);
 				if (Op::apply(ai,ret)) ret=ai;

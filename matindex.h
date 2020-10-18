@@ -18,7 +18,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
   ~Indexable() {};
 
   T operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -58,7 +58,7 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
   ~Indexable() {};
 
 //  T operator[] Not supported for abstract matricies.
-  T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -92,7 +92,7 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,Ma
   ~Indexable() {};
 
 //  T operator[] Not supported for abstract matricies.
-  T operator()(subsc_t i,subsc_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -133,9 +133,9 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,MatrixShape>& 
 template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixShape>& a)
 {
 	bool ret(true);
-  subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (int j=a.GetLimits().Col.Low;j<=ch;j++)
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
+    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
       ret=ret&&a(i,j);
 	return ret;
 }
@@ -143,9 +143,9 @@ template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixS
 template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
 {
 	T ret(0);
-  subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (int i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (int j=a.GetLimits().Col.Low;j<=ch;j++)
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
+    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
       ret+=a(i,j);
 	return ret;
 }
@@ -155,11 +155,11 @@ template <class T, class A, class Op> class MinMax<T,A,Op,Full,Abstract,MatrixSh
  public:
   static T apply(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
 	{
-		subsc_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
-		subsc_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+		index_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
+		index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
 		T ret=a(rl,cl);
-		for (int i=rl;i<=rh;i++)
-			for (int j=cl;j<=ch;j++)
+		for (index_t i=rl;i<=rh;i++)
+			for (index_t j=cl;j<=ch;j++)
 		  {
 				T ai=a(i,j);
 				if (Op::apply(ai,ret)) ret=ai;

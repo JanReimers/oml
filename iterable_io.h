@@ -14,8 +14,8 @@
 //------------------------------------------------------------------------------
 //
 //  IO stuff.  Just dumps the data to the stream, ... thats it.
-//  
-template <class T, class A> inline std::ostream& Write(std::ostream& os,const Iterable<T,A>& arr) 
+//
+template <class T, class A> inline std::ostream& Write(std::ostream& os,const Iterable<T,A>& arr)
 {
   assert(os);
   typename A::const_iterator b=arr.begin();
@@ -23,8 +23,8 @@ template <class T, class A> inline std::ostream& Write(std::ostream& os,const It
   if (StreamableObject::Ascii ()) for(;b!=arr.end();b++) os << *b << " ";
   if (StreamableObject::Pretty())
   {
-    int prec=os.precision();
-    int wid =os.width();
+    std::streamsize prec=os.precision();
+    std::streamsize wid =os.width();
     os << "{ ";
     for(;b!=arr.end();b++) os << std::setw(wid) << std::setprecision(prec) << *b << " ";
     os << "}";
@@ -47,4 +47,4 @@ template <class T, class A> inline std::istream& Read(std::istream& is,Iterable<
 }
 
 #endif //_iterable_io_h_
- 
+

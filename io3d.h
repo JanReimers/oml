@@ -21,20 +21,20 @@
 //
 template <class T> std::ostream& operator<<(std::ostream& os,const Vector3D<T>& v)
 {
-  if (StreamableObject::Binary()) 
+  if (StreamableObject::Binary())
   {
     BinaryWrite(v.x,os);
     BinaryWrite(v.y,os);
     BinaryWrite(v.z,os);
   }
-  if (StreamableObject::Ascii()) os << v.x << " " << v.y << " " << v.z << " "; 
-  if (StreamableObject::Pretty()) 
+  if (StreamableObject::Ascii()) os << v.x << " " << v.y << " " << v.z << " ";
+  if (StreamableObject::Pretty())
   {
-    int prec=os.precision();
-    int wid =os.width();
-    os << std::setw(0) << "(" 
-       << std::setw(wid) << std::setprecision(prec) << v.x << "," 
-       << std::setw(wid) << std::setprecision(prec) << v.y << "," 
+    std::streamsize prec=os.precision();
+    std::streamsize wid =os.width();
+    os << std::setw(0) << "("
+       << std::setw(wid) << std::setprecision(prec) << v.x << ","
+       << std::setw(wid) << std::setprecision(prec) << v.y << ","
        << std::setw(wid) << std::setprecision(prec) << v.z << ")";
   }
   return os;
@@ -42,7 +42,7 @@ template <class T> std::ostream& operator<<(std::ostream& os,const Vector3D<T>& 
 
 template <class T> std::istream& operator>>(std::istream& is,Vector3D<T>& v)
 {
-  if (StreamableObject::Binary()) 
+  if (StreamableObject::Binary())
   {
     BinaryRead(v.x,is);
     BinaryRead(v.y,is);
@@ -94,26 +94,26 @@ template <class T> std::ostream& operator<<(std::ostream& os,const Matrix3D<T>& 
    }
    if (StreamableObject::Pretty())
    {
-      int prec=os.precision();
-      int wid =os.width();
+      std::streamsize prec=os.precision();
+      std::streamsize wid =os.width();
       os << std::setw(0);
-      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M11 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M12 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M13 
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M11
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M12
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M13
          << " ]" << std::endl;
-      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M21 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M22 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M23 
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M21
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M22
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M23
          << " ]" << std::endl;
-      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M31 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M32 
-         << " "  << std::setw(wid) << std::setprecision(prec) << a.M33 
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M31
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M32
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M33
          << " ]" << std::endl;
    }
   return os;
 }
 
-template <class T> std::istream& operator>>(std::istream& is,Matrix3D<T>& a) 
+template <class T> std::istream& operator>>(std::istream& is,Matrix3D<T>& a)
 {
    if (StreamableObject::Binary())
    {

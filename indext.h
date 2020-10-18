@@ -2,9 +2,9 @@
 #ifndef _IndexType_H_
 #define _IndexType_H_
 
+#include <cstdint>
 // Copyright (1994-2003), Jan N. Reimers
 
-typedef int index_t;
-typedef int subsc_t;
+typedef int64_t index_t;
 
 #endif //_IndexType_H_

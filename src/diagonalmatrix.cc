@@ -31,10 +31,10 @@ template <class T> std::ostream& DiagonalMatrix<T>::Write(std::ostream& os) cons
     int prec=os.precision();
     int wid =os.width();
     os << std::setw(0) << GetLimits() << std::endl;
-    for (subsc_t i=GetRowLow();i<=GetRowHigh();i++)
+    for (index_t i=GetRowLow();i<=GetRowHigh();i++)
     {
       os << "[ ";
-      for (subsc_t j=GetColLow();j<=GetColHigh();j++)
+      for (index_t j=GetColLow();j<=GetColHigh();j++)
         os << std::setw(wid) << std::setprecision(prec) << (*this)(i,j) << " ";
       os << "]" << std::endl;
     }

@@ -28,14 +28,14 @@ template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
 
   index_t n=A.GetNumRows(), k;
 
-  for (subsc_t i=1;i<n;i++)
+  for (index_t i=1;i<n;i++)
   {
     T p=e(k=i);
-    for (subsc_t j=i+1;j<=n;j++) if (e(j) <= p) p=e(k=j);
+    for (index_t j=i+1;j<=n;j++) if (e(j) <= p) p=e(k=j);
     if (k != i)
     {
       e(k)=e(i); e(i)=p;
-      for (subsc_t j=1;j<=n;j++) {p=a(j,i); a(j,i)=a(j,k); a(j,k)=p;}
+      for (index_t j=1;j<=n;j++) {p=a(j,i); a(j,i)=a(j,k); a(j,k)=p;}
     }
   }
 }

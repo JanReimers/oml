@@ -19,7 +19,7 @@ public:
    T M21,M22,M23;
    T M31,M32,M33;
 
-   
+
   Matrix3D();
   Matrix3D(const T&,const T&,const T&,
  	   const T&,const T&,const T&,
@@ -30,11 +30,11 @@ public:
   Matrix3D(const Matrix3D<T>& m);
 
   Matrix3D& operator =(const Matrix3D<T>&);
-  Vector3D<T> GetRow(subsc_t) const;
-  Vector3D<T> GetCol(subsc_t) const;
-   
-  const T& operator()(subsc_t i, subsc_t j) const {return (&M11)[3*(i-1)+j-1];}
-        T& operator()(subsc_t i, subsc_t j)       {return (&M11)[3*(i-1)+j-1];}
+  Vector3D<T> GetRow(index_t) const;
+  Vector3D<T> GetCol(index_t) const;
+
+  const T& operator()(index_t i, index_t j) const {return (&M11)[3*(i-1)+j-1];}
+        T& operator()(index_t i, index_t j)       {return (&M11)[3*(i-1)+j-1];}
 };
 
 //------------------------------------------------------------------------
@@ -86,14 +86,14 @@ template <class T> inline Matrix3D<T>& Matrix3D<T>::operator=(const Matrix3D<T>&
 //
 //  Comparison
 //
-template <class T> inline 
+template <class T> inline
 bool operator==(const Matrix3D<T>& a,const Matrix3D<T>& b)
 {
   return a.M11==b.M11 && a.M12==b.M12 && a.M13==b.M13 &&
          a.M21==b.M21 && a.M22==b.M22 && a.M23==b.M23 &&
          a.M31==b.M31 && a.M32==b.M32 && a.M33==b.M33   ;
 }
-template <class T> inline 
+template <class T> inline
 bool operator!=(const Matrix3D<T>& a,const Matrix3D<T>& b)
 {
 	return !(a==b);
@@ -107,8 +107,8 @@ template <class T> inline Matrix3D<T> Transpose(const Matrix3D<T>& m)
 {
 	return Matrix3D<T>
      (
-      m.M11 , m.M12 , m.M13, 
-      m.M21 , m.M22 , m.M23, 
+      m.M11 , m.M12 , m.M13,
+      m.M21 , m.M22 , m.M23,
       m.M31 , m.M32 , m.M33
       );
 }
@@ -118,12 +118,12 @@ template <class T> inline Matrix3D<T> operator~(const Matrix3D<T>& m)
 	return Transpose(m);
 }
 
-template <class T> inline Vector3D<T> Matrix3D<T>::GetRow(subsc_t r) const
+template <class T> inline Vector3D<T> Matrix3D<T>::GetRow(index_t r) const
 {
    return Vector3D<T>((*this)(r,1),(*this)(r,2),(*this)(r,3));
 }
 
-template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(subsc_t c) const
+template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(index_t c) const
 {
    return Vector3D<T>((*this)(1,c),(*this)(2,c),(*this)(3,c));
 }
@@ -131,8 +131,8 @@ template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(subsc_t c) const
 //
 //  Algebra
 //
-template <class T1, class T2> inline 
-Matrix3D<typename BinaryRetType<T1,T2>::RetType>  
+template <class T1, class T2> inline
+Matrix3D<typename BinaryRetType<T1,T2>::RetType>
 operator+(const Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
   return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
@@ -143,7 +143,7 @@ operator+(const Matrix3D<T1>& a,const Matrix3D<T2>& b)
   );
 }
 
-template <class T1, class T2> inline 
+template <class T1, class T2> inline
 Matrix3D<T1>& operator+=(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
   a.M11+=b.M11; a.M12+=b.M12; a.M13+=b.M13;
@@ -152,8 +152,8 @@ Matrix3D<T1>& operator+=(Matrix3D<T1>& a,const Matrix3D<T2>& b)
   return a;
 }
 
-template <class T1, class T2> inline 
-Matrix3D<typename BinaryRetType<T1,T2>::RetType> 
+template <class T1, class T2> inline
+Matrix3D<typename BinaryRetType<T1,T2>::RetType>
 operator-(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
   return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
@@ -164,7 +164,7 @@ operator-(Matrix3D<T1>& a,const Matrix3D<T2>& b)
   );
 }
 
-template <class T1, class T2> inline 
+template <class T1, class T2> inline
 Matrix3D<T1>& operator-=(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
   a.M11-=b.M11; a.M12-=b.M12; a.M13-=b.M13;
@@ -174,40 +174,40 @@ Matrix3D<T1>& operator-=(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 }
 
 
-template <class T> inline 
+template <class T> inline
 Matrix3D<T> operator*(const Matrix3D<T>& m, const T& c)
 {
    return Matrix3D<T>
      (
-      m.M11*c , m.M12*c , m.M13*c, 
-      m.M21*c , m.M22*c , m.M23*c, 
+      m.M11*c , m.M12*c , m.M13*c,
+      m.M21*c , m.M22*c , m.M23*c,
       m.M31*c , m.M32*c , m.M33*c
       );
 }
 
-template <class T> inline 
+template <class T> inline
 Matrix3D<T> operator*(const T& c, const Matrix3D<T>& m)
 {
    return m*c;
 }
 
-template <class T> inline 
+template <class T> inline
 Matrix3D<T> operator/(const Matrix3D<T>& m, const T& c)
 {
    return Matrix3D<T>
      (
-      m.M11/c , m.M12/c , m.M13/c, 
-      m.M21/c , m.M22/c , m.M23/c, 
+      m.M11/c , m.M12/c , m.M13/c,
+      m.M21/c , m.M22/c , m.M23/c,
       m.M31/c , m.M32/c , m.M33/c
       );
 }
 
-template <class T> inline T SumSquares(const Matrix3D<T>& a) 
+template <class T> inline T SumSquares(const Matrix3D<T>& a)
 {
   return
      a.M11*a.M11 + a.M12*a.M12 + a.M13*a.M13 +
      a.M21*a.M21 + a.M22*a.M22 + a.M23*a.M23 +
-     a.M31*a.M31 + a.M32*a.M32 + a.M33*a.M33 
+     a.M31*a.M31 + a.M32*a.M32 + a.M33*a.M33
      ;
 }
 
@@ -215,8 +215,8 @@ template <class T> inline Matrix3D<T> operator-(const Matrix3D<T>& m)
 {
    return Matrix3D<T>
      (
-      -m.M11 , -m.M21 , -m.M31, 
-      -m.M12 , -m.M22 , -m.M32, 
+      -m.M11 , -m.M21 , -m.M31,
+      -m.M12 , -m.M22 , -m.M32,
       -m.M13 , -m.M23 , -m.M33
       );
 }
@@ -225,8 +225,8 @@ template <class T> inline Matrix3D<T> operator-(const Matrix3D<T>& m)
 //
 //  Matrix Algebra
 //
-template <class T1, class T2> inline 
-Matrix3D<typename BinaryRetType<T1,T2>::RetType>  
+template <class T1, class T2> inline
+Matrix3D<typename BinaryRetType<T1,T2>::RetType>
 operator*(const Matrix3D<T1>& a, const Matrix3D<T2>& b)
 {
   return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
@@ -246,30 +246,30 @@ operator*(const Matrix3D<T1>& a, const Matrix3D<T2>& b)
 
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> 
+Vector3D<typename BinaryRetType<T1,T2>::RetType>
 operator*(const Matrix3D<T2>& m, const Vector3D<T1>& v)
 {
    return Vector3D<typename BinaryRetType<T1,T2>::RetType>
    (
-	m.M11*v.x + m.M12*v.y + m.M13*v.z, 
-	m.M21*v.x + m.M22*v.y + m.M23*v.z, 
+	m.M11*v.x + m.M12*v.y + m.M13*v.z,
+	m.M21*v.x + m.M22*v.y + m.M23*v.z,
 	m.M31*v.x + m.M32*v.y + m.M33*v.z
    );
 }
 
-template <class T1, class T2> inline 
-Vector3D<typename BinaryRetType<T1,T2>::RetType> 
+template <class T1, class T2> inline
+Vector3D<typename BinaryRetType<T1,T2>::RetType>
 operator*(const Vector3D<T1>& v, const Matrix3D<T2>& m)
 {
    return Vector3D<typename BinaryRetType<T1,T2>::RetType>
    (
-      m.M11*v.x + m.M21*v.y + m.M31*v.z, 
-      m.M12*v.x + m.M22*v.y + m.M32*v.z, 
+      m.M11*v.x + m.M21*v.y + m.M31*v.z,
+      m.M12*v.x + m.M22*v.y + m.M32*v.z,
       m.M13*v.x + m.M23*v.y + m.M33*v.z
    );
 }
 
-template <class T> inline T Determinant(const Matrix3D<T>& a) 
+template <class T> inline T Determinant(const Matrix3D<T>& a)
 {
   return
     a.M11*(a.M22*a.M33-a.M32*a.M23) +

@@ -21,14 +21,14 @@ class MatLimits
   /*! \name Constructors*/
   //@{
   MatLimits(                                 );//!<Limits for a null Matrix.
-  MatLimits(subsc_t,subsc_t,subsc_t,subsc_t  );//!<Construct from lower and upper bounds.
+  MatLimits(index_t,index_t,index_t,index_t  );//!<Construct from lower and upper bounds.
   MatLimits(index_t,index_t                  );//!<Construct from row and column size, use default lower bound.
   MatLimits(const VecLimits&,const VecLimits&);//!<Construct from lower and upper bounds.
   //@}
  ~MatLimits();
 
   static index_t size(index_t,index_t                  );
-  static index_t size(subsc_t,subsc_t,subsc_t,subsc_t  );
+  static index_t size(index_t,index_t,index_t,index_t  );
   static index_t size(const VecLimits&,const VecLimits&);
 
   //! Returns number of rows.
@@ -38,9 +38,9 @@ class MatLimits
   //! Returns number of elements.
   index_t size           (       ) const;
 
-  index_t Offset    (subsc_t,subsc_t) const;
+  index_t Offset    (index_t,index_t) const;
   bool    Check     (               ) const;
-  bool    CheckIndex(subsc_t,subsc_t) const;
+  bool    CheckIndex(index_t,index_t) const;
 
   //! Comparison.
   bool operator==(const MatLimits&) const;
@@ -70,7 +70,7 @@ inline MatLimits::MatLimits()
   , Col()
   {}
 
-inline MatLimits::MatLimits(subsc_t rowLow, subsc_t rowHigh,subsc_t colLow, subsc_t colHigh)
+inline MatLimits::MatLimits(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
   : Row(rowLow,rowHigh)
   , Col(colLow,colHigh)
   {}
@@ -100,7 +100,7 @@ inline index_t MatLimits::size(const VecLimits& row, const VecLimits& col)
   return row.size()*col.size();
 }
 
-inline index_t MatLimits::size(subsc_t rowLow, subsc_t rowHigh,subsc_t colLow, subsc_t colHigh)
+inline index_t MatLimits::size(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
 {
   return size(VecLimits(rowLow,rowHigh),VecLimits(colLow,colHigh) );
 }
@@ -143,7 +143,7 @@ inline bool MatLimits::Check() const
   return Row.Check()&&Col.Check();
 }
 
-inline index_t MatLimits::Offset(subsc_t i,subsc_t j) const
+inline index_t MatLimits::Offset(index_t i,index_t j) const
 {
   return Row.Offset(i)+GetNumRows()*Col.Offset(j);
 }

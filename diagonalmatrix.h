@@ -26,7 +26,7 @@ template <class T> class DiagonalMatrix
  public:
   explicit DiagonalMatrix();
   explicit DiagonalMatrix(index_t n);
-  explicit DiagonalMatrix(subsc_t nl,subsc_t nh);
+  explicit DiagonalMatrix(index_t nl,index_t nh);
   explicit DiagonalMatrix(const Vector<T>&);
   explicit DiagonalMatrix(const DiagonalMatrix&);
   DiagonalMatrix& operator=(const DiagonalMatrix& dm)
@@ -52,14 +52,14 @@ template <class T> class DiagonalMatrix
   }
 
 
-        T  operator()(subsc_t,subsc_t) const;
-        T& operator()(subsc_t,subsc_t)      ;
+        T  operator()(index_t,index_t) const;
+        T& operator()(index_t,index_t)      ;
 
   index_t   size  () const; //Required by iterable.
   MatLimits GetLimits() const;
 
   const Vector<T>& GetDiagonal() const {return itsData;}
-  void SetLimits(int n,bool preserve=false)
+  void SetLimits(index_t n,bool preserve=false)
   {
     MatrixBase::SetLimits(MatLimits(n,n));
     itsData.SetLimits(n,preserve);
@@ -91,14 +91,14 @@ const T* Get() const {return itsData.Get();}
 #endif
 
 
-template <class T> inline T DiagonalMatrix<T>::operator()(subsc_t i,subsc_t j) const
+template <class T> inline T DiagonalMatrix<T>::operator()(index_t i,index_t j) const
 {
   static T zero(0);
   CHECK(i,j);
   return i==j ? itsData(i) : zero;
 }
 
-template <class T> inline T& DiagonalMatrix<T>::operator()(subsc_t i,subsc_t j)
+template <class T> inline T& DiagonalMatrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
   assert(i==j);  //Cannot allow write off diagonal elements

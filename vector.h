@@ -43,7 +43,7 @@ template <class T> class Vector
   //@{
            Vector(                ); //!< Vector with size=0;
   explicit Vector(index_t         ); //!<  All elements are un-initiated, low index is 1.
-  explicit Vector(subsc_t,subsc_t ); //!<  Specify lower and upper index.
+  explicit Vector(index_t,index_t ); //!<  Specify lower and upper index.
   Vector(const VecLimits&); //!<  Specify lower and upper index.
   //! Allows construction from an expression template.
   template <class B,Data D> Vector(const Indexable<T,B,Full,D,VectorShape>&);
@@ -68,15 +68,15 @@ template <class T> class Vector
   */
   //@{
   //! const element acces operator, fast and \e cannot trigger a COW operation.
-  T  operator()(subsc_t) const;
+  T  operator()(index_t) const;
   //! non-const version can trigger a COW operation, and checks for this with every access.
-  T& operator()(subsc_t)      ;
+  T& operator()(index_t)      ;
   //@}
 
   index_t   size     () const; //!<Returns number elements in the Vector.
   VecLimits GetLimits() const; //!<Returns lower and upper limits in a structure.
-  subsc_t   GetLow   () const; //!<Returns lower index.
-  subsc_t   GetHigh  () const; //!<Returns upper index.
+  index_t   GetLow   () const; //!<Returns lower index.
+  index_t   GetHigh  () const; //!<Returns upper index.
 
   /*! \name Resize functions
     The data can be optionally preserved.
@@ -84,7 +84,7 @@ template <class T> class Vector
   //@{
   void SetLimits(const VecLimits&, bool preserve=false); //!<Resize from new limits.
   void SetLimits(index_t         , bool preserve=false); //!<Resize from new size.
-  void SetLimits(subsc_t,subsc_t , bool preserve=false); //!<Resize from new limits.
+  void SetLimits(index_t,index_t , bool preserve=false); //!<Resize from new limits.
   //@}
 
   //! Does V(i)=V(index[i]) for i=low...high.  Used for sorting.
@@ -94,7 +94,7 @@ template <class T> class Vector
   //@{
   Vector SubVector(const VecLimits&) const; //!< From limits.
   Vector SubVector(index_t         ) const; //!< First n elements.
-  Vector SubVector(subsc_t,subsc_t ) const; //!< From limits.
+  Vector SubVector(index_t,index_t ) const; //!< From limits.
   //@}
 
   /*! \name Iterators.
@@ -120,7 +120,7 @@ template <class T> class Vector
       , itsPtr(static_cast<Vector*>(&a)->Get()-itsLimits.Low)
       {assert(itsPtr);}
 
-    T& operator()(subsc_t i) {CHECK(i);return itsPtr[i];}
+    T& operator()(index_t i) {CHECK(i);return itsPtr[i];}
 
    private:
     VecLimits itsLimits;
@@ -215,13 +215,13 @@ void Normalize(Indexable<T,A,M,D,VectorShape>& v)
   #define CHECK(i)
 #endif
 
-template <class T> inline T Vector<T>::operator()(subsc_t i) const
+template <class T> inline T Vector<T>::operator()(index_t i) const
 {
   CHECK(i);
   return itsData.Get()[itsLimits.Offset(i)];
 }
 
-template <class T> inline T& Vector<T>::operator()(subsc_t i)
+template <class T> inline T& Vector<T>::operator()(index_t i)
 {
   CHECK(i);
   return itsData.Get()[itsLimits.Offset(i)];
@@ -313,12 +313,12 @@ template <class T> inline  VecLimits Vector<T>::GetLimits() const
   return itsLimits;
 }
 
-template <class T> inline subsc_t Vector<T>::GetLow() const
+template <class T> inline index_t Vector<T>::GetLow() const
 {
   return itsLimits.Low;
 }
 
-template <class T> inline subsc_t Vector<T>::GetHigh() const
+template <class T> inline index_t Vector<T>::GetHigh() const
 {
   return itsLimits.High;
 }
@@ -328,7 +328,7 @@ template <class T> inline void Vector<T>::SetLimits(index_t size,bool preserve)
   SetLimits(VecLimits(size),preserve);
 }
 
-template <class T> inline void Vector<T>::SetLimits(subsc_t l,subsc_t h,bool preserve)
+template <class T> inline void Vector<T>::SetLimits(index_t l,index_t h,bool preserve)
 {
   SetLimits(VecLimits(l,h),preserve);
 }
@@ -338,7 +338,7 @@ template <class T> inline Vector<T> Vector<T>::SubVector(index_t size) const
   return SubVector(VecLimits(size));
 }
 
-template <class T> inline Vector<T> Vector<T>::SubVector(subsc_t l,subsc_t h) const
+template <class T> inline Vector<T> Vector<T>::SubVector(index_t l,index_t h) const
 {
   return SubVector(VecLimits(l,h));
 }
@@ -373,12 +373,12 @@ template <class T> void Vector<T>::SetLimits(const VecLimits& theLimits, bool pr
     {
       Vector<T> dest(theLimits);
 
-      subsc_t low =Max(GetLow() ,theLimits.Low );   //Limits of old and new
-      subsc_t high=Min(GetHigh(),theLimits.High);   //data overlap.
+      index_t low =Max(GetLow() ,theLimits.Low );   //Limits of old and new
+      index_t high=Min(GetHigh(),theLimits.High);   //data overlap.
 
       Subscriptor source(*this);         //Destination subscriptor.
 
-      for (subsc_t i=low;i<=high;i++) dest(i)=source(i); //Transfer any overlaping data.
+      for (index_t i=low;i<=high;i++) dest(i)=source(i); //Transfer any overlaping data.
       *this=dest;
     }
     else
@@ -418,7 +418,7 @@ template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
   assert(GetLimits().High >= lim.High);
   Vector<T> ret(lim);
   Subscriptor r(ret);
-  for (subsc_t i=ret.GetLimits().Low;i<=ret.GetLimits().High;i++) r(i)=(*this)(i);
+  for (index_t i=ret.GetLimits().Low;i<=ret.GetLimits().High;i++) r(i)=(*this)(i);
   return ret;
 }
 

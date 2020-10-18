@@ -104,14 +104,14 @@ c_str StreamableObject::PeekAtName(std::istream& is)
 }
 
 
-void OMLArrayIndexError(int i, int n)
+void OMLArrayIndexError(index_t i, index_t n)
 {
   std::cerr << "Array index " << i
 	    << " exceeds the array bounds (0:" << n
 	    << ")" << std::endl;
 }
 
-void OMLListIndexError(int i, int n)
+void OMLListIndexError(index_t i, index_t n)
 {
   std::cerr << "List index " << i
 	    << " exceeds the list bounds (0:" << n

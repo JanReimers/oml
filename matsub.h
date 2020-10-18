@@ -10,17 +10,17 @@
 template <class T> class Array;
 class MatLimits;
 
-template <class T,class A, Store M> 
+template <class T,class A, Store M>
 void SetLimits     (Indexable<T,A,M,Real,MatrixShape>& m,const MatLimits& theLimits, bool preserve);
-template <class T,class A, Store M> 
+template <class T,class A, Store M>
 void ReIndexRows   (Indexable<T,A,M,Real,MatrixShape>& m,const Array<index_t>& index);
-template <class T,class A, Store M>         
+template <class T,class A, Store M>
 void ReIndexColumns(Indexable<T,A,M,Real,MatrixShape>& m,const Array<index_t>& index);
-template <class T,class A, Store M>         
-void SwapRows      (Indexable<T,A,M,Real,MatrixShape>& m,subsc_t i,subsc_t j);
-template <class T,class A, Store M>         
-void SwapColumns   (Indexable<T,A,M,Real,MatrixShape>& m,subsc_t i,subsc_t j);
-template <class T,class A, Store M> 
+template <class T,class A, Store M>
+void SwapRows      (Indexable<T,A,M,Real,MatrixShape>& m,index_t i,index_t j);
+template <class T,class A, Store M>
+void SwapColumns   (Indexable<T,A,M,Real,MatrixShape>& m,index_t i,index_t j);
+template <class T,class A, Store M>
 void SubMatrix     (Indexable<T,A,M,Real,MatrixShape>& m,const Indexable<T,A,M,Real,MatrixShape>& old);
 
 

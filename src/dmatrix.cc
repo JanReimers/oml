@@ -30,35 +30,35 @@ template <class T> DMatrix<T>::DMatrix()
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(index_t r, index_t c) 
+template <class T> DMatrix<T>::DMatrix(index_t r, index_t c)
   : MatrixBase(MatLimits(r,c))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch) 
+template <class T> DMatrix<T>::DMatrix(index_t rl,index_t rh,index_t cl,index_t ch)
   : MatrixBase(MatLimits(rl,rh,cl,ch))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const VecLimits& r,const VecLimits& c) 
+template <class T> DMatrix<T>::DMatrix(const VecLimits& r,const VecLimits& c)
   : MatrixBase(MatLimits(r,c))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const MatLimits& lim) 
+template <class T> DMatrix<T>::DMatrix(const MatLimits& lim)
   : MatrixBase(lim          )
   , itsData   (lim.size())
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const DMatrix<T>& m) 
+template <class T> DMatrix<T>::DMatrix(const DMatrix<T>& m)
   : MatrixBase(m)
   , itsData   (m.itsData)
   {
@@ -100,10 +100,10 @@ template <class T> std::ostream& DMatrix<T>::Write(std::ostream& os) const
     int prec=os.precision();
     int wid =os.width();
     os << std::setw(0) << GetLimits() << std::endl;
-    for (subsc_t i=GetRowLow();i<=GetRowHigh();i++)
+    for (index_t i=GetRowLow();i<=GetRowHigh();i++)
     {
       os << "[ ";
-      for (subsc_t j=GetColLow();j<=GetColHigh();j++)
+      for (index_t j=GetColLow();j<=GetColHigh();j++)
         os << std::setw(wid) << std::setprecision(prec) << (*this)(i,j) << " ";
       os << "]" << std::endl;
     }

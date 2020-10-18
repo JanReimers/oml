@@ -12,7 +12,7 @@ template <class T> class RefSubMatrix
   , public MatrixBase
 {
  public:
-    RefSubMatrix(Matrix<T>& v, subsc_t rstart, subsc_t rstop,subsc_t cstart, subsc_t cstop)
+    RefSubMatrix(Matrix<T>& v, index_t rstart, index_t rstop,index_t cstart, index_t cstop)
       : MatrixBase(MatLimits(0,rstop-rstart,0,cstop-cstart))
       , itsRep(v)
       , itsRowOffset(rstart-v.GetRowLow()) , itsColOffset(cstart-v.GetColLow())
@@ -31,8 +31,8 @@ template <class T> class RefSubMatrix
   template <class B> RefSubMatrix& operator=(const Indexable<T,B,Full,Real,MatrixShape>& a)
   {
     assert(GetLimits()==a.GetLimits());
-    for (int i=0;i<this->GetNumRows();i++)
-      for (int j=0;j<GetNumCols();j++)
+    for (index_t i=0;i<this->GetNumRows();i++)
+      for (index_t j=0;j<GetNumCols();j++)
 	(*this)(i,j)=a(i,j);
     return *this;
   }
@@ -40,15 +40,15 @@ template <class T> class RefSubMatrix
   RefSubMatrix& operator=(const RefSubMatrix& a)
   {
     assert(GetLimits()==a.GetLimits());
-    for (int i=0;i<GetNumRows();i++)
-      for (int j=0;j<GetNumCols();j++)
+    for (index_t i=0;i<GetNumRows();i++)
+      for (index_t j=0;j<GetNumCols();j++)
 	(*this)(i,j)=a(i,j);
     return *this;
   }
 
   index_t size() const {return MatrixBase::size();}
 
-  T  operator()(subsc_t i,subsc_t j) const
+  T  operator()(index_t i,index_t j) const
     {
       assert(i>=0);
       assert(i<GetNumRows());
@@ -56,7 +56,7 @@ template <class T> class RefSubMatrix
       assert(j<GetNumCols());
       return const_cast<const Matrix<T>&>(itsRep)(itsRowOffset+i,itsColOffset+j);
     }
-  T& operator()(subsc_t i,subsc_t j)
+  T& operator()(index_t i,index_t j)
     {
       assert(i>=0);
       assert(i<GetNumRows());
@@ -67,7 +67,7 @@ template <class T> class RefSubMatrix
 
   MatLimits GetLimits() const {return MatrixBase::GetLimits();}
 
-  void SetLimits(subsc_t rstart, subsc_t rstop,subsc_t cstart, subsc_t cstop)
+  void SetLimits(index_t rstart, index_t rstop,index_t cstart, index_t cstop)
   {
     MatrixBase::SetLimits(MatLimits(rstart,rstop,cstart,cstop));
     itsRowOffset=rstart;
@@ -79,18 +79,18 @@ template <class T> class RefSubMatrix
   }
 
 
-  Array<T> GetColumn(int ic) const
+  Array<T> GetColumn(index_t ic) const
   {
     assert(GetLimits().Col.CheckIndex(ic));
     Array<T> ret(GetNumRows());
-    for (int ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ic);
+    for (index_t ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ic);
     return ret;
   }
   Array<T> GetDiagonal() const
   {
     assert(GetLimits().Col==GetLimits().Row);
     Array<T> ret(GetNumRows());
-    for (int ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ir);
+    for (index_t ir=0;ir<GetNumRows();ir++) ret[ir]=(*this)(ir,ir);
     return ret;
   }
 #if DEBUG
@@ -122,32 +122,32 @@ template <class T> class RefSubMatrix
 /*         T* Get()       {return &itsRep[0]+itsOffset;} //Required by iterable. */
 
   Matrix<T>& itsRep;
-  subsc_t   itsRowOffset,itsColOffset;
+  index_t   itsRowOffset,itsColOffset;
 };
 
 template <class T,class M, class A> inline Array<T>
 operator*(const Indexable<T,M,Full,Abstract,MatrixShape>& m, const Indexable<T,A,Full,Real,ArrayShape>& a)
 {
-  int Nr=m.GetLimits().GetNumRows();
-  int Nc=m.GetLimits().GetNumCols();
+  index_t Nr=m.GetLimits().GetNumRows();
+  index_t Nc=m.GetLimits().GetNumCols();
   assert(a.size()==Nc);
   Array<T> ret(Nr);
   Fill(ret,0.0);
-  for (int i=0;i<Nr;i++)
-    for (int j=0;j<Nc;j++)
+  for (index_t i=0;i<Nr;i++)
+    for (index_t j=0;j<Nc;j++)
       ret[i]+=m(i,j)*a[j];
   return ret;
 }
 template <class T,class M, class A> inline Array<T>
 operator*(const Indexable<T,M,Full,Real,MatrixShape>& m, const Indexable<T,A,Full,Real,ArrayShape>& a)
 {
-  int Nr=m.GetLimits().GetNumRows();
-  int Nc=m.GetLimits().GetNumCols();
+  index_t Nr=m.GetLimits().GetNumRows();
+  index_t Nc=m.GetLimits().GetNumCols();
   assert(a.size()==Nc);
   Array<T> ret(Nr);
   Fill(ret,0.0);
-  for (int i=0;i<Nr;i++)
-    for (int j=0;j<Nc;j++)
+  for (index_t i=0;i<Nr;i++)
+    for (index_t j=0;j<Nc;j++)
       ret[i]+=m(i,j)*a[j];
   return ret;
 }

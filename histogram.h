@@ -137,8 +137,8 @@ template <class T> void Histogram<T>::UnPack()
    itsBins.SetLimits(GetUnpackedLimits(),true);
 
    Array<int   >::Subscriptor sb(itsBins);
-   for(subsc_t i=GetUnpackedLimits().Low; i<oldlim.Low; i++) sb[i]=0;
-   for(subsc_t i=oldlim.High+1; i<=GetUnpackedLimits().High; i++) sb[i]=0;
+   for(index_t i=GetUnpackedLimits().Low; i<oldlim.Low; i++) sb[i]=0;
+   for(index_t i=oldlim.High+1; i<=GetUnpackedLimits().High; i++) sb[i]=0;
    }*/
 
 #endif // _histogram_h_

@@ -38,12 +38,12 @@ template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& 
   typename Vector<T>::Subscriptor d (   Diagonal);
   typename Vector<T>::Subscriptor od(OffDiagonal);
 
-  for (subsc_t i=2;i<=n;i++) od(i-1)=od(i);
+  for (index_t i=2;i<=n;i++) od(i-1)=od(i);
   od(n)=0.0;
-  for (subsc_t l=1;l<=n;l++)
+  for (index_t l=1;l<=n;l++)
   {
     index_t iter=0;
-    subsc_t m;
+    index_t m;
     do
     {
       for (m=l;m<=n-1;m++)
@@ -63,7 +63,7 @@ template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& 
 	g=d(m)-d(l)+od(l)/(g+SIGN(r,g));
 	s=c=1.0;
 	p=0.0;
-	for (subsc_t i=m-1;i>=l;i--)
+	for (index_t i=m-1;i>=l;i--)
 	{
 	  f=s*od(i);
 	  b=c*od(i);
@@ -86,7 +86,7 @@ template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& 
 	  p=s*r;
 	  d(i+1)=g+p;
 	  g=c*r-b;
-	  for (subsc_t k=1;k<=n;k++)
+	  for (index_t k=1;k<=n;k++)
 	  {
 	    f=a(k,i+1);
 	    a(k,i+1)=s*a(k,i)+c*f;

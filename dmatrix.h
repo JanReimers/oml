@@ -29,7 +29,7 @@ template <class T> class DMatrix
  public:
   explicit DMatrix(                );
   explicit DMatrix(index_t r, index_t c);
-  explicit DMatrix(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch);
+  explicit DMatrix(index_t rl,index_t rh,index_t cl,index_t ch);
   explicit DMatrix(const VecLimits& r,const VecLimits& c);
   explicit DMatrix(const MatLimits&);
   explicit DMatrix(const DMatrix& m);
@@ -50,33 +50,33 @@ template <class T> class DMatrix
   }
 
 
-  const T& operator()(subsc_t,subsc_t) const;
-        T& operator()(subsc_t,subsc_t)      ;
+  const T& operator()(index_t,index_t) const;
+        T& operator()(index_t,index_t)      ;
 
   index_t   size  () const; //Required by iterable.
   MatLimits GetLimits() const;
 
   void SetLimits(const MatLimits&                           , bool preserve=false);
   void SetLimits(index_t r, index_t c                       , bool preserve=false);
-  void SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve=false);
+  void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false);
   void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
 
   void ReIndexRows   (const Array<index_t>& index) {::ReIndexRows   (*this,index);}
   void ReIndexColumns(const Array<index_t>& index) {::ReIndexColumns(*this,index);}
-  void SwapRows   (subsc_t i,subsc_t j) {::SwapRows   (*this,i,j);}
-  void SwapColumns(subsc_t i,subsc_t j) {::SwapColumns(*this,i,j);}
+  void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
+  void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
   DMatrix SubMatrix(const MatLimits& lim) const {DMatrix ret(lim);::SubMatrix(ret,*this);return ret;}
 
   typedef MatrixRow     <T,DMatrix<T>,Full,Real> RowType;
   typedef MatrixColumn  <T,DMatrix<T>,Full,Real> ColType;
   typedef MatrixDiagonal<T,DMatrix<T>,Full,Real> DiagType;
 
-  RowType  GetRow     (subsc_t row) {return RowType (*this,row);}
-  ColType  GetColumn  (subsc_t col) {return ColType (*this,col);}
+  RowType  GetRow     (index_t row) {return RowType (*this,row);}
+  ColType  GetColumn  (index_t col) {return ColType (*this,col);}
   DiagType GetDiagonal(           ) {return DiagType(*this    );}
 
-  const RowType  GetRow     (subsc_t row) const {return RowType (*this,row);}
-  const ColType  GetColumn  (subsc_t col) const {return ColType (*this,col);}
+  const RowType  GetRow     (index_t row) const {return RowType (*this,row);}
+  const ColType  GetColumn  (index_t col) const {return ColType (*this,col);}
   const DiagType GetDiagonal(           ) const {return DiagType(*this    );}
 
   typedef typename Iterable <T,DMatrix>::const_iterator  const_iterator ;
@@ -99,7 +99,7 @@ template <class T> class DMatrix
       , itsPtr(static_cast<DMatrix&>(m).Get())
       {};
 
-    T& operator()(subsc_t i,subsc_t j) {CHECK(i,j);return itsPtr[itsLimits.Offset(i,j)];}
+    T& operator()(index_t i,index_t j) {CHECK(i,j);return itsPtr[itsLimits.Offset(i,j)];}
 
   private:
     MatLimits itsLimits;
@@ -155,13 +155,13 @@ template <class T> class DMatrix
 #endif
 
 
-template <class T> inline const T& DMatrix<T>::operator()(subsc_t i,subsc_t j) const
+template <class T> inline const T& DMatrix<T>::operator()(index_t i,index_t j) const
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
 }
 
-template <class T> inline T& DMatrix<T>::operator()(subsc_t i,subsc_t j)
+template <class T> inline T& DMatrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
@@ -256,7 +256,7 @@ template <class T> inline void DMatrix<T>::SetLimits(index_t r, index_t c , bool
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline void DMatrix<T>::SetLimits(subsc_t rl,subsc_t rh,subsc_t cl,subsc_t ch, bool preserve)
+template <class T> inline void DMatrix<T>::SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve)
 {
   SetLimits(MatLimits(rl,rh,cl,ch),preserve);
 }

@@ -28,7 +28,7 @@ template <class T, class M>
 void ch(M& A,Vector<T>& w ,bool matz,int& ierr)
 {
   assert(A.GetNumRows()==A.GetNumRows());
-  int n=A.GetNumRows();
+  index_t n=A.GetNumRows();
 
   Vector<T> fv1(n),fv2(n);
   Vector<std::complex<T> > fm1(n);

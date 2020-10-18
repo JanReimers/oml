@@ -118,7 +118,7 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,VectorSha
   ~XprBinOp() {};
 
   T         operator[](index_t n) const {return Op::apply(itsA[n],itsB[n]);}
-  T         operator()(subsc_t n) const {return Op::apply(itsA(n),itsB(n));}
+  T         operator()(index_t n) const {return Op::apply(itsA(n),itsB(n));}
   index_t   size      (         ) const {return itsA.size();}
   VecLimits GetLimits (         ) const {return itsA.GetLimits();}
  private:
@@ -133,7 +133,7 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,MatrixSha
   ~XprBinOp() {};
 
   T         operator[](index_t n          ) const {return Op::apply(itsA[n],itsB[n]);}
-  T         operator()(subsc_t i,subsc_t j) const {return Op::apply(itsA(i,j),itsB(i,j));}
+  T         operator()(index_t i,index_t j) const {return Op::apply(itsA(i,j),itsB(i,j));}
   index_t   size      (                   ) const {return itsA.size();}
   MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
  private:

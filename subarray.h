@@ -6,7 +6,7 @@
 
 #include "oml/array.h"
 
-template <class T> class SubArray  
+template <class T> class SubArray
   : public Indexable<T,SubArray<T>,Full,Real,ArrayShape>
   , public Iterable<T,SubArray<T> >
 {
@@ -18,14 +18,14 @@ template <class T> class SubArray
       assert(itsSize>=0);
     }
 
-  SubArray(Array<T>& v, subsc_t start, subsc_t stop)
+  SubArray(Array<T>& v, index_t start, index_t stop)
     : itsRep(v), itsOffset(start), itsSize(stop-start+1)
     {
       assert(&itsRep);
       assert(itsOffset>=0);
       assert(itsSize>=0);
     }
-  
+
   SubArray(const SubArray& sv)
     : itsRep(sv.itsRep), itsOffset(sv.itsOffset), itsSize(sv.itsSize) {};
 
@@ -41,26 +41,26 @@ template <class T> class SubArray
   {
     assert(itsSize==a.size());
     for (int i=0;i<itsSize;i++)
-      (*this)[i]=a[i];    
+      (*this)[i]=a[i];
     return *this;
   }
 
-  T  operator[](subsc_t i) const
+  T  operator[](index_t i) const
     {
       assert(i>=0);
       assert(i<itsSize);
       return const_cast<const Array<T>&>(itsRep)[itsOffset+i];
     }
-  T& operator[](subsc_t i)
+  T& operator[](index_t i)
     {
       assert(i>=0);
       assert(i<itsSize);
       return itsRep[itsOffset+i];
     }
-  
+
   index_t size() const {return itsSize;}
 
-  void SetLimits(subsc_t start, subsc_t stop)
+  void SetLimits(index_t start, index_t stop)
   {
     itsOffset=start;
     itsSize=stop-start+1;
@@ -72,10 +72,10 @@ template <class T> class SubArray
 #else
   #define CHECK(i)
 #endif
-  class ArraySubscriptor 
+  class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,SubArray,Full,Real,ArrayShape>& a) 
+    ArraySubscriptor(Indexable<T,SubArray,Full,Real,ArrayShape>& a)
       : itsPtr(static_cast<SubArray&>(a).Get()), itsSize(a.size()) {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
    private:
@@ -93,8 +93,8 @@ template <class T> class SubArray
         T* Get()       {return &itsRep[0]+itsOffset;} //Required by iterable.
 
   Array<T>& itsRep;
-  subsc_t   itsOffset;
-  subsc_t   itsSize;
+  index_t   itsOffset;
+  index_t   itsSize;
 };
 
 #endif //_subarray_h_

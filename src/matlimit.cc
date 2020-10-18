@@ -18,15 +18,15 @@
 //
 //  Checking functions.
 //
-bool MatLimits::CheckIndex(subsc_t row, subsc_t col) const
+bool MatLimits::CheckIndex(index_t row, index_t col) const
 {
   bool ok=true;
-  if (!Row.CheckIndex(row)) 
+  if (!Row.CheckIndex(row))
   {
     std::cout << "Matrix row index " << row << " out of range " << Row << std::endl;
     ok=false;
   }
-  if (!Col.CheckIndex(col)) 
+  if (!Col.CheckIndex(col))
   {
     std::cout << "Matrix column index " << col << " out of range " << Col << std::endl;
     ok=false;

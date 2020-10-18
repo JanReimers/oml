@@ -23,14 +23,14 @@
 template <class T> std::ostream& Vector<T>::Write(std::ostream& os) const
 {
   assert(os);
-  if (!this->Pretty()) 
+  if (!this->Pretty())
     os << GetLimits();
    else
   {
-    int prec=os.precision();
-    int wid =os.width();
+    std::streamsize prec=os.precision();
+    std::streamsize wid =os.width();
     os << GetLimits();
-    os << std::setw(wid) << std::setprecision(prec);    
+    os << std::setw(wid) << std::setprecision(prec);
   }
   return ::Write(os,*this);
 }

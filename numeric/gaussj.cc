@@ -32,9 +32,9 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
   index_t m=B.GetNumCols();
 
   Array<index_t> INDXC(n+1),INDXR(n+1),IPIV(n+1);
-  subsc_t icol=0,irow=0;
+  index_t icol=0,irow=0;
 
-  Fill(IPIV,0);
+  Fill(IPIV,0L);
 
   typename Matrix<T>::Subscriptor a(A);
   typename Matrix<T>::Subscriptor b(B);
@@ -43,12 +43,12 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
   typename Array<index_t>::Subscriptor indxr(INDXR);
   typename Array<index_t>::Subscriptor ipiv (IPIV);
 
-  for (subsc_t i=1;i<=n;i++)
+  for (index_t i=1;i<=n;i++)
   {
     T big=0.0;
-    for (subsc_t j=1;j<=n;j++)
+    for (index_t j=1;j<=n;j++)
       if (ipiv[j] != 1)
-	for (subsc_t k=1;k<=n;k++)
+	for (index_t k=1;k<=n;k++)
 	{
 	  if (ipiv[k] == 0)
 	  {
@@ -69,8 +69,8 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
     ++(ipiv[icol]);
     if (irow != icol)
     {
-      for (subsc_t l=1;l<=n;l++) SWAP(a(irow,l),a(icol,l));
-      for (subsc_t l=1;l<=m;l++) SWAP(b(irow,l),b(icol,l));
+      for (index_t l=1;l<=n;l++) SWAP(a(irow,l),a(icol,l));
+      for (index_t l=1;l<=m;l++) SWAP(b(irow,l),b(icol,l));
     } //if
     indxr[i]=irow;
     indxc[i]=icol;
@@ -81,21 +81,21 @@ template <class T> void GaussJordanSolver(Matrix<T>& A, Matrix<T>& B)
     }
     T pivinv=1.0/a(icol,icol);
     a(icol,icol)=1.0;
-    for (subsc_t l=1;l<=n;l++) a(icol,l) *= pivinv;
-    for (subsc_t l=1;l<=m;l++) b(icol,l) *= pivinv;
-    for (subsc_t ll=1;ll<=n;ll++)
+    for (index_t l=1;l<=n;l++) a(icol,l) *= pivinv;
+    for (index_t l=1;l<=m;l++) b(icol,l) *= pivinv;
+    for (index_t ll=1;ll<=n;ll++)
     if (ll != icol)
     {
       T dum=a(ll,icol);
       a(ll,icol)=0.0;
-      for (subsc_t l=1;l<=n;l++) a(ll,l) -= a(icol,l)*dum;
-      for (subsc_t l=1;l<=m;l++) b(ll,l) -= b(icol,l)*dum;
+      for (index_t l=1;l<=n;l++) a(ll,l) -= a(icol,l)*dum;
+      for (index_t l=1;l<=m;l++) b(ll,l) -= b(icol,l)*dum;
     } //if
   }
-  for (subsc_t l=n;l>=1;l--)
+  for (index_t l=n;l>=1;l--)
   {
     if (indxr[l] != indxc[l])
-      for (subsc_t k=1;k<=n;k++) SWAP(a(k,indxr[l]),a(k,indxc[l]));
+      for (index_t k=1;k<=n;k++) SWAP(a(k,indxr[l]),a(k,indxc[l]));
   } //for l
 }
 

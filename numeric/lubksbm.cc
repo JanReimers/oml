@@ -29,7 +29,7 @@ template <class T> void LUBackSub(const Matrix<T>& a, Matrix<T>& B, const Array<
   typename Matrix<T>::Subscriptor b(B);
   index_t n =a.GetNumRows();
 
-  for (subsc_t isub=1; isub<=n; isub++)
+  for (index_t isub=1; isub<=n; isub++)
   {
     int i,ii=0,ip,j;
     T sum;

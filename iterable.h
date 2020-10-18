@@ -58,21 +58,21 @@ template <class T,class A> inline void FillLinear(Iterable<T,A>& arr,T start, T 
 {
   T del = (stop-start)/(double)(static_cast<A&>(arr).size()-1);
   typename A::iterator i=arr.begin();
-  for (int n=0;i!=arr.end();i++,n++) *i = start + static_cast<double>(n)*del;
+  for (index_t n=0;i!=arr.end();i++,n++) *i = start + static_cast<double>(n)*del;
 }
 
 template <class A> inline void FillLinear(Iterable<int,A>& arr,int start, int stop)
 {
-  int del = (stop-start)/(static_cast<A&>(arr).size()-1);
+  index_t del = (stop-start)/(static_cast<A&>(arr).size()-1);
   typename A::iterator i=arr.begin();
-  for (int n=0;i!=arr.end();i++,n++) *i = start + n*del;
+  for (index_t n=0;i!=arr.end();i++,n++) *i = start + n*del;
 }
 
 template <class T,class A> inline void FillPower(Iterable<T,A>& arr,T start, T stop)
 {
   double del=(std::log(stop/start))/(double)(static_cast<A&>(arr).size()-1);
   typename A::iterator i=arr.begin();
-  for (int n=0;i!=arr.end();i++,n++) *i=T(start*std::exp(n*del));
+  for (index_t n=0;i!=arr.end();i++,n++) *i=T(start*std::exp(n*del));
 }
 
 template <class T1,class T2, template <class T> class A>

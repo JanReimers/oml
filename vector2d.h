@@ -35,8 +35,8 @@ template <class T> class Vector2d
   Vector2d<double> GetValue() const {return Vector2d<double>(x.GetValue(),y.GetValue()); }
 
 
-  const T& operator()(subsc_t i) const {return (&x)[i-1];}
-        T& operator()(subsc_t i)       {return (&x)[i-1];}
+  const T& operator()(index_t i) const {return (&x)[i-1];}
+        T& operator()(index_t i)       {return (&x)[i-1];}
 
   T x,y;    //Coordinates.  WOW real data!
 };

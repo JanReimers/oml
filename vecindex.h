@@ -16,7 +16,7 @@ template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D
  public:
 
   T operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T operator()(subsc_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
+  T operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -62,7 +62,7 @@ template <class T, class Derived, Store M> class Indexable<T,Derived,M,Abstract,
   explicit Indexable() {};
   ~Indexable() {};
 
-  T operator()(subsc_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
+  T operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -102,8 +102,8 @@ template <class T, class A, Store M> inline
 T Sum(const Indexable<T,A,M,Abstract,VectorShape>& a)
 {
   T ret(0);
-  int hi=a.GetLimits().High;
-  for (int i=a.GetLimits().Low;i<=hi;i++) ret+=a(i);
+  index_t hi=a.GetLimits().High;
+  for (index_t i=a.GetLimits().Low;i<=hi;i++) ret+=a(i);
   return ret;
 }
 
@@ -111,8 +111,8 @@ template <class A, Store M> inline
 bool True(const Indexable<bool,A,M,Abstract,VectorShape>& a)
 {
   bool ret(true);
-  int hi=a.GetLimits().High;
-  for (int i=a.GetLimits().Low;i<=hi;i++) ret=ret&&a(i);
+  index_t hi=a.GetLimits().High;
+  for (index_t i=a.GetLimits().Low;i<=hi;i++) ret=ret&&a(i);
   return ret;
 }
 
@@ -121,10 +121,10 @@ template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,Ve
  public:
   static T apply(const Indexable<T,A,M,Abstract,VectorShape>& a)
   {
-    int low=a.GetLimits().Low;
-    int hi =a.GetLimits().High;
+    index_t low=a.GetLimits().Low;
+    index_t hi =a.GetLimits().High;
     T ret=a(low);
-    for (int i=low+1;i<=hi;i++)
+    for (index_t i=low+1;i<=hi;i++)
     {
       T ai=a(i);
       if (Op::apply(ai,ret)) ret=ai;

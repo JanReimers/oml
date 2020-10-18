@@ -30,27 +30,27 @@ template <class T> void Cholsky(Matrix<T>& A)
 
     typename Matrix<T>::Subscriptor a(A);
 
-    for(subsc_t j=n; j>=1; j--)
+    for(index_t j=n; j>=1; j--)
     {
         T temp=0.0;
-        for(subsc_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
+        for(index_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
         if (temp>a(j,j))
         {
             std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
             exit(-1);
         }
          a(j,j)=sqrt(a(j,j)-temp);
-        for(subsc_t i=1; i<=j-1; i++)
+        for(index_t i=1; i<=j-1; i++)
         {
             temp=0.0;
-            for(subsc_t k=j+1; k<=n; k++) temp+=a(i,k)*a(j,k);
+            for(index_t k=j+1; k<=n; k++) temp+=a(i,k)*a(j,k);
             temp=a(i,j)-temp;
             if (temp!=0) a(i,j)=temp/a(j,j);
             else a(i,j)=0.0;
         }
     }
-    for(subsc_t j=1; j<=n; j++)
-        for(subsc_t i=j+1; i<=n; i++) a(i,j)=0.0;
+    for(index_t j=1; j<=n; j++)
+        for(index_t i=j+1; i<=n; i++) a(i,j)=0.0;
 }
 
 //###########################################################################
@@ -70,20 +70,20 @@ template <class T> void Cholsky(SMatrix<T>& A)
 
     typename SMatrix<T>::Subscriptor a(A);
 
-    for(subsc_t j=n; j>=1; j--)
+    for(index_t j=n; j>=1; j--)
     {
         T temp=0.0;
-        for(subsc_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
+        for(index_t k=j+1; k<=n; k++) temp+=a(j,k)*a(j,k);
         if (temp>a(j,j))
         {
             std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
             exit(-1);
         }
         a(j,j)=sqrt(a(j,j)-temp);
-        for(subsc_t i=1; i<=j-1; i++)
+        for(index_t i=1; i<=j-1; i++)
         {
             temp=0.0;
-            for(subsc_t k=j+1; k<=n; k++) temp+=a(i,k)*a(j,k);
+            for(index_t k=j+1; k<=n; k++) temp+=a(i,k)*a(j,k);
             temp=a(i,j)-temp;
             if (temp!=0) a(i,j)=temp/a(j,j);
             else a(i,j)=0.0;

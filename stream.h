@@ -1,6 +1,7 @@
 // File: StreamableObject.H  mixin class for streamable objects.
 #ifndef _StreamableObject_H_
 #define _StreamableObject_H_
+#include "oml/indext.h"
 
 // Copyright (1994-2003), Jan N. Reimers
 
@@ -52,7 +53,7 @@ class StreamableObject
   static  bool theCheckArrayTypes;
 };
 
-void OMLArrayIndexError(int i, int n);
-void OMLListIndexError(int i, int n);
+void OMLArrayIndexError(index_t i, index_t n);
+void OMLListIndexError(index_t i, index_t n);
 
 #endif //_StreamabelObject_H_

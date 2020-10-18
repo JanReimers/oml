@@ -1,4 +1,4 @@
-// File: veclimit.cc   Member functios for VectLimits 
+// File: veclimit.cc   Member functios for VectLimits
 
 // Copyright (1994-2003), Jan N. Reimers
 
@@ -10,7 +10,7 @@
 
 
 
- 
+
 //-----------------------------------------------------------------------------
 //
 //  IO
@@ -43,15 +43,15 @@ bool VecLimits::Check() const
   return High+1 >= Low;
 }
 
-bool VecLimits::CheckIndex(subsc_t i) const
+bool VecLimits::CheckIndex(index_t i) const
 {
   bool ok=true;
-  if (i< Low ) 
+  if (i< Low )
   {
     std::cout << "Index " << i << " too low in VecLimits, Low=" << Low << std::endl;
     ok=false;
   }
-  if (i>High) 
+  if (i>High)
   {
     std::cout << "Index " << i << " too high in VecLimits, High=" << High << std::endl;
     ok=false;
