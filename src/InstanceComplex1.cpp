@@ -3,6 +3,7 @@
 //  Make template instance
 //
 #include "oml/src/dmatrix.cc"
+#include "oml/src/vector.cc"
 
 typedef std::complex<double> dcmplx;
 template class DMatrix<dcmplx>;

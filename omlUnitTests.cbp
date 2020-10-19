@@ -41,11 +41,13 @@
 		<Compiler>
 			<Add option="-std=c++17" />
 			<Add directory="../" />
+			<Add directory="../googletest/googletest/include" />
 		</Compiler>
 		<Linker>
 			<Add library="oml" />
 			<Add library="gtest" />
 			<Add library="pthread" />
+			<Add directory="../googletest/lib" />
 		</Linker>
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />

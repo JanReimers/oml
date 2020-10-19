@@ -272,13 +272,14 @@ OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
 //
 //  Matrix * Matrix, returns a proxy.
 //
-template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-MatrixMMOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
-operator*(const Indexable<T,A,MA,DA,MatrixShape>& a,const Indexable<T,B,MB,DB,MatrixShape>& b)
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
+//MatrixMMOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
+auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  return MatrixMMOp<T,refa,refb>(refa(a),refb(b));
+  typedef Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape> refa;
+  typedef Ref<TB,Indexable<TB,B,MB,DB,MatrixShape>,MatrixShape> refb;
+  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
+  return MatrixMMOp<TR,refa,refb>(refa(a),refb(b));
 }
 
 
@@ -300,13 +301,14 @@ auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,M
 //
 //  Vector * Matrix, returns a proxy.
 //
-template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-MatrixVMOp<T,Ref<T,Indexable<T,A,MA,DA,VectorShape>,VectorShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
-operator*(const Indexable<T,A,MA,DA,VectorShape>& a,const Indexable<T,B,MB,DB,MatrixShape>& b)
+//MatrixVMOp<T,Ref<T,Indexable<T,A,MA,DA,VectorShape>,VectorShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,MA,DA,VectorShape>,VectorShape> refa;
-  typedef Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  return MatrixVMOp<T,refa,refb>(refa(a),refb(b));
+  typedef Ref<TA,Indexable<TA,A,MA,DA,VectorShape>,VectorShape> refa;
+  typedef Ref<TB,Indexable<TB,B,MB,DB,MatrixShape>,MatrixShape> refb;
+  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
+  return MatrixVMOp<TR,refa,refb>(refa(a),refb(b));
 }
 
 //---------------------------------------------------------------------

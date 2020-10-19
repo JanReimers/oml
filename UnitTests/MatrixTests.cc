@@ -247,15 +247,23 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
     s.Start();
     for (int i=1;i<=Nreplicates;i++) d1=V*A*V;
     s.Stop();
-
     double MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
     std::cout << "Exp template " << MFlops << " MFlops" << std::endl;
+
+
     s.Start();
     for (int i=1;i<=Nreplicates;i++) d2=vmul(V,A,V);
     s.Stop();
     assert(fabs(d1-d2)<1e-6);
     MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
-    std::cout << "Hand coaded  " << MFlops << " MFlops" << std::endl;
+    std::cout << "Hand coaded 1 " << MFlops << " MFlops" << std::endl;
+
+    s.Start();
+    for (int i=1;i<=Nreplicates;i++) d2=vmul1(V,A,V);
+    s.Stop();
+    assert(fabs(d1-d2)<1e-6);
+    MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
+    std::cout << "Hand coaded 2 " << MFlops << " MFlops" << std::endl;
 
 }
 
@@ -319,8 +327,22 @@ template <class T> T vmul(const Vector<T> V1,const DMatrix<T>& A, const Vector<T
   for (int i=1;i<=N;i++)
   {
     T t(0);
-    for (int j=1;j<=N;j++) t+=A(i,j)*V2(j);
+    for (int j=1;j<=N;j++)
+        t+=A(i,j)*V2(j);
     ret+=V1(i)*t;
+  }
+  return ret;
+}
+template <class T> T vmul1(const Vector<T> V1,const DMatrix<T>& A, const Vector<T>& V2)
+{
+  T ret=0;
+  int N=A.GetLimits().Row.High;
+  for (int j=1;j<=N;j++)
+  {
+    T t(0);
+    for (int i=1;i<=N;i++)
+        t+=V1(i)*A(i,j);
+    ret+=V2(j)*t;
   }
   return ret;
 }
@@ -386,6 +408,42 @@ TEST_F(MatrixComplexTests,fabsHermitianConj)
     VR=conj(VL);
     dcmplx s=VL*B*VR;
     EXPECT_NEAR(imag(s),0.0,1e-14);
+}
+
+TEST_F(MatrixComplexTests,MixedTypes)
+{
+    typedef std::complex<double> dcmplx;
+    typedef DMatrix<dcmplx> MatrixCT;
+    typedef Vector <dcmplx> VectorCT;
+    typedef DMatrix<double> MatrixRT;
+    typedef Vector <double> VectorRT;
+
+    int N=10;
+    MatrixCT Ac(N,N);
+    MatrixRT Ar(N,N);
+    Fill(Ac,dcmplx(2,-2));
+    Fill(Ar,0.5);
+    VectorCT Vc(N,dcmplx(0.25,0.5));
+    VectorRT Vr(N,2.0);
+    dcmplx   Sc(0.5,-0.25);
+    double   Sr(4.0);
+    EXPECT_EQ((Ac*Ar)(1,2),dcmplx(10,-10));
+    EXPECT_EQ((Ar*Ac)(1,2),dcmplx(10,-10));
+    EXPECT_EQ((Ac*Vr)(1),dcmplx(40,-40));
+    EXPECT_EQ((Vr*Ac)(1),dcmplx(40,-40));
+    EXPECT_EQ((Vc*Ar)(1),dcmplx(1.25,2.5));
+    EXPECT_EQ((Ar*Vc)(1),dcmplx(1.25,2.5));
+    EXPECT_EQ((Vc*Vc)     ,dcmplx(-1.875,2.5));
+    EXPECT_EQ((Vc*Vr)     ,dcmplx(5,10));
+    EXPECT_EQ((Vr*Vc)     ,dcmplx(5,10));
+    EXPECT_EQ((Ac*Sr)(1,2),dcmplx(8,-8));
+    EXPECT_EQ((Sr*Ac)(1,2),dcmplx(8,-8));
+    EXPECT_EQ((Sc*Ar)(1,2),dcmplx(.25,-.125));
+    EXPECT_EQ((Ar*Sc)(1,2),dcmplx(.25,-.125));
+    EXPECT_EQ((Vc*Sr)(1),dcmplx(1,2));
+    EXPECT_EQ((Sr*Vc)(1),dcmplx(1,2));
+    EXPECT_EQ((Sc*Vr)(1),dcmplx(1,-0.5));
+    EXPECT_EQ((Vr*Sc)(1),dcmplx(1,-0.5));
 }
 
 

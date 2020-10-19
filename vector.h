@@ -7,6 +7,7 @@
 #include "oml/array.h"
 #include "oml/veclimit.h"
 #include "oml/vecindex.h"
+#include "oml/random.h"
 
 template <class T> class DiagonalMatrix;
 
@@ -31,7 +32,7 @@ template <class T> class DiagonalMatrix;
   \nosubgrouping
 */
 
-enum class FillType {None,Zero,Random,Unit};
+enum class FillType {Zero,Random,Unit};
 
 template <class T> class Vector
   : public Indexable<T,Vector<T>,Full,Real,VectorShape>
@@ -46,12 +47,15 @@ template <class T> class Vector
   //!< Vector with size=0;
            Vector() : Vector<T>(VecLimits(1,1)) {};
   //!<  All elements are un-initiated, low index is 1.
-  explicit Vector(index_t  size, FillType ft=FillType::None) : Vector<T>(VecLimits(1,size),ft) {};
+  explicit Vector(index_t  size) : Vector<T>(VecLimits(1,size)) {};
+  explicit Vector(index_t  size, FillType ft) : Vector<T>(VecLimits(1,size),ft) {};
   explicit Vector(index_t  size, const T&  fillValue) : Vector<T>(VecLimits(1,size),fillValue) {};
   //!<  Specify lower and upper index.
-  explicit Vector(index_t l,index_t h, FillType ft=FillType::None) : Vector<T>(VecLimits(l,h),ft) {};
+  explicit Vector(index_t l,index_t h) : Vector<T>(VecLimits(l,h)) {};
+  explicit Vector(index_t l,index_t h, FillType ft) : Vector<T>(VecLimits(l,h),ft) {};
   explicit Vector(index_t l,index_t h, const T&  fillValue) : Vector<T>(VecLimits(l,h),fillValue) {};
-  Vector(const VecLimits&, FillType ft=FillType::None); //!<  Specify lower and upper index.
+  Vector(const VecLimits&); //!<  Specify lower and upper index.
+  Vector(const VecLimits&, FillType ft); //!<  Specify lower and upper index.
   Vector(const VecLimits&, const T&  fillValue       ); //!<  Specify lower and upper index.
   //! Allows construction from an expression template.
   template <class B,Data D> Vector(const Indexable<T,B,Full,D,VectorShape>&);
@@ -188,11 +192,16 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,VectorShape>& 
   return os << Vector<T>(a);
 }
 
+
 // The define op* as a vector dot (inner) product.
-template <class T, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-T operator*(const Indexable<T,A,MA,DA,VectorShape>& a, const Indexable<T,B,MB,DB,VectorShape>& b)
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a, const Indexable<TB,B,MB,DB,VectorShape>& b)
 {
-   return Dot(a,b);
+    typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
+    TR ret(0);
+    index_t ch=a.GetLimits().High;
+    for (index_t k=a.GetLimits().Low;k<=ch;k++) ret+=a(k)*b(k);
+    return ret;
 }
 
 // Calculate the magnitue of a vector.
@@ -266,12 +275,9 @@ template <class T> inline T& Vector<T>::operator[](index_t i)
 #define CHECK
 #endif
 
-
 template <class T> inline Vector<T>::Vector(const VecLimits& lim,FillType ft)
-  : itsLimits(lim          )
-  , itsData  (lim.size())
+  : Vector<T>(lim)
   {
-    CHECK;
     Fill(ft);
   }
 
@@ -280,6 +286,38 @@ template <class T> inline Vector<T>::Vector(const VecLimits& lim,const T& fillVa
   {
      Fill(fillValue);
   }
+
+//
+//  All other constructors should delegate to this one.
+//
+template <class T> inline Vector<T>::Vector(const VecLimits& lim)
+  : itsLimits(lim          )
+  , itsData  (lim.size())
+  {
+    CHECK;
+  }
+
+
+ template <class T> inline void Vector<T>::Fill(FillType ft)
+{
+    switch (ft)
+    {
+        case (FillType::Zero)   : Fill(T(0));break;
+        case (FillType::Random) : ::FillRandom(*this);break;
+        case (FillType::Unit)   : Fill(T(1));break;
+    }
+}
+
+template <class T> inline void Vector<T>::Fill(const T& fillValue)
+{
+    ::Fill(*this,fillValue);
+}
+
+template <class T> inline void Vector<T>::FillRandom()
+{
+    ::FillRandom(*this);
+}
+
 
 template <class T> inline index_t Vector<T>::size() const
 {
