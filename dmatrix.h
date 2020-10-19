@@ -27,6 +27,9 @@ template <class T> class DMatrix
   , public TStreamableObject<DMatrix<T> >
 {
  public:
+  typedef Indexable<T,DMatrix<T>,Full,Real,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   explicit DMatrix(                );
   explicit DMatrix(index_t r, index_t c);
   explicit DMatrix(index_t rl,index_t rh,index_t cl,index_t ch);

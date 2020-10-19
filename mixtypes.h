@@ -11,25 +11,34 @@ namespace std {template <class T> class complex;}
 //  Specify how different types are allowed to mix in binary operators.
 //  Main thing is to define a return type that does not lose any information.
 //
+enum class eOp {Null,Mul};
 class OpNull {}; //Marker for operations that don't change dimensions.
 
 template <class TA, class TB> class OpMul; //Forward declare
 template <class TA, class TB> class OpDiv; //Forward declare
 
 template <class T1, class T2,class Op=OpNull> struct BinaryRetType;
+template <class T1, class T2,eOp=eOp::Null> struct eBinaryRetType;
 //
 //  Allow case where both types are the same.  Assumes no units.
 //
 template <class T> struct BinaryRetType<T,T> {typedef T RetType;};
+template <class T> struct eBinaryRetType<T,T,eOp::Mul> {typedef T RetType;};
+template <class T> struct eBinaryRetType<T,T> {typedef T RetType;};
 //
 //  complex/scalar mixing is allowed.
 //
-template <class T,class Op> struct BinaryRetType<             T ,std::complex<T>,Op> 
+template <class T,class Op> struct BinaryRetType<             T ,std::complex<T>,Op>
 {typedef std::complex<T> RetType;};
-template <class T,class Op> struct BinaryRetType<std::complex<T>,             T ,Op> 
+template <class T,class Op> struct BinaryRetType<std::complex<T>,             T ,Op>
 {typedef std::complex<T> RetType;};
 template <class T> struct BinaryRetType<std::complex<T>,std::complex<T>,OpMul<std::complex<T>,std::complex<T> > > {typedef std::complex<T> RetType;};
 template <class T> struct BinaryRetType<std::complex<T>,std::complex<T>,OpDiv<std::complex<T>,std::complex<T> > > {typedef std::complex<T> RetType;};
+
+template <class T> struct eBinaryRetType<             T ,std::complex<T>,eOp::Mul> {typedef std::complex<T> RetType;};
+template <class T> struct eBinaryRetType<std::complex<T>,             T ,eOp::Mul> {typedef std::complex<T> RetType;};
+//template <class T> struct BinaryRetType<std::complex<T>,std::complex<T>,OpMul<std::complex<T>,std::complex<T> > > {typedef std::complex<T> RetType;};
+//template <class T> struct BinaryRetType<std::complex<T>,std::complex<T>,OpDiv<std::complex<T>,std::complex<T> > > {typedef std::complex<T> RetType;};
 //
 //  double int is allowed
 //

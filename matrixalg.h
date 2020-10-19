@@ -23,6 +23,9 @@ template <class T, class Mat> class MatrixTranspose
 : public Indexable<T,MatrixTranspose<T,Mat>,Full,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,MatrixTranspose<T,Mat>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   MatrixTranspose(Mat m) : itsMatrix(m) {};
   MatrixTranspose(const MatrixTranspose<T,Mat>& mt) : itsMatrix(mt.itsMatrix) {};
 
@@ -42,6 +45,9 @@ template <class T, class A, class B> class MatrixMMOp
 : public Indexable<T,MatrixMMOp<T,A,B>,Full,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,MatrixMMOp<T,A,B>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   MatrixMMOp(const A& a, const B& b)
     : itsA(a)
     , itsB(b)
@@ -75,6 +81,9 @@ template <class T, class A, class V> class MatrixMVOp
 : public Indexable<T,MatrixMVOp<T,A,V>,Full,Abstract,VectorShape>
 {
  public:
+  typedef Indexable<T,MatrixMVOp<T,A,V>,Full,Abstract,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
   MatrixMVOp(const A& a, const V& v)
     : itsA(a)
     , itsV(v)
@@ -108,6 +117,9 @@ template <class T, class V, class B> class MatrixVMOp
 : public Indexable<T,MatrixVMOp<T,V,B>,Full,Abstract,VectorShape>
 {
  public:
+  typedef Indexable<T,MatrixVMOp<T,V,B>,Full,Abstract,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
   MatrixVMOp(const V& v, const B& b)
     : itsV(v)
     , itsB(b)
@@ -201,6 +213,9 @@ template <class T,class V1,class V2> class MatrixOuterProduct
 : public Indexable<T,MatrixOuterProduct<T,V1,V2>,Full,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,MatrixOuterProduct<T,V1,V2>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   MatrixOuterProduct(const V1& a, const V2& b) : itsA(a), itsB(b) {};
   MatrixOuterProduct(const MatrixOuterProduct& op) : itsA(op.itsA), itsB(op.itsB) {};
 
@@ -273,13 +288,10 @@ OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
 //  Matrix * Matrix, returns a proxy.
 //
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-//MatrixMMOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
 auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<TB,Indexable<TB,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
-  return MatrixMMOp<TR,refa,refb>(refa(a),refb(b));
+  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  return MatrixMMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
 
@@ -291,24 +303,19 @@ auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,M
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,VectorShape>& b)
 {
-  typedef Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<TB,Indexable<TB,B,MB,DB,VectorShape>,VectorShape> refb;
-  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
-  return MatrixMVOp<TR,refa,refb>(refa(a),refb(b));
+  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  return MatrixMVOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
 //------------------------------------------------------------
 //
 //  Vector * Matrix, returns a proxy.
 //
-//MatrixVMOp<T,Ref<T,Indexable<T,A,MA,DA,VectorShape>,VectorShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef Ref<TA,Indexable<TA,A,MA,DA,VectorShape>,VectorShape> refa;
-  typedef Ref<TB,Indexable<TB,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  typedef typename BinaryRetType<TA,TB,OpMul<TA,TB> >::RetType TR;
-  return MatrixVMOp<TR,refa,refb>(refa(a),refb(b));
+  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  return MatrixVMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
 //---------------------------------------------------------------------
@@ -319,8 +326,8 @@ template <class T, class A, class B, Store MA, Data DA> inline
 MatrixMDOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,Diagonal,Abstract,MatrixShape>,MatrixShape> >
 operator*(const Indexable<T,A,MA,DA,MatrixShape>& a,const Indexable<T,B,Diagonal,Abstract,MatrixShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<T,Indexable<T,B,Diagonal,Abstract,MatrixShape>,MatrixShape> refb;
+  typedef typename A::RefT refa;
+  typedef typename B::RefT refb;
   return MatrixMDOp<T,refa,refb>(refa(a),refb(b));
 }
 

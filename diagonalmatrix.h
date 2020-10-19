@@ -24,6 +24,9 @@ template <class T> class DiagonalMatrix
   , public TStreamableObject<DiagonalMatrix<T> >
 {
  public:
+  typedef Indexable<T,DiagonalMatrix<T>,Diagonal,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   explicit DiagonalMatrix();
   explicit DiagonalMatrix(index_t n);
   explicit DiagonalMatrix(index_t nl,index_t nh);

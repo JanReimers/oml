@@ -62,6 +62,8 @@ template <class T> class Matrix
   , public MatrixBase
 {
  public:
+  typedef Indexable<T,Matrix<T>,Full,Real,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   /*! \name Constructors/Assignment
   Copy constructor and op=(Matrix) are automaically supplied by the compiler.

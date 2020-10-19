@@ -40,6 +40,9 @@ template <class T> class Vector
   , public TStreamableObject<Vector<T> >
 {
  public:
+  typedef Indexable<T,Vector<T>,Full,Real,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
   /*! \name Constructors/Assignment
   Copy constructor and op=(Vector) are automaically supplied by the compiler.
   */

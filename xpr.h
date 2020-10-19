@@ -123,6 +123,9 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,V
 : public Indexable<T,Xpr<T,Expression,M,D,VectorShape>,M,D,VectorShape>
 {
  public:
+  typedef Indexable<T,Xpr<T,Expression,M,D,VectorShape>,M,D,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
   Xpr(Expression e) : itsExp(e) {};
   Xpr(const Xpr& x) : itsExp(x.itsExp) {};
   ~Xpr() {};
@@ -139,6 +142,9 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,M
 : public Indexable<T,Xpr<T,Expression,M,D,MatrixShape>,M,D,MatrixShape>
 {
  public:
+  typedef Indexable<T,Xpr<T,Expression,M,D,MatrixShape>,M,D,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   Xpr(Expression e) : itsExp(e) {};
   Xpr(const Xpr& x) : itsExp(x.itsExp) {};
   ~Xpr() {};

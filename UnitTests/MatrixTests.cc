@@ -427,12 +427,13 @@ TEST_F(MatrixComplexTests,MixedTypes)
     VectorRT Vr(N,2.0);
     dcmplx   Sc(0.5,-0.25);
     double   Sr(4.0);
+    // Try every combination we can think of
     EXPECT_EQ((Ac*Ar)(1,2),dcmplx(10,-10));
     EXPECT_EQ((Ar*Ac)(1,2),dcmplx(10,-10));
-    EXPECT_EQ((Ac*Vr)(1),dcmplx(40,-40));
-    EXPECT_EQ((Vr*Ac)(1),dcmplx(40,-40));
-    EXPECT_EQ((Vc*Ar)(1),dcmplx(1.25,2.5));
-    EXPECT_EQ((Ar*Vc)(1),dcmplx(1.25,2.5));
+    EXPECT_EQ((Ac*Vr)(1)  ,dcmplx(40,-40));
+    EXPECT_EQ((Vr*Ac)(1)  ,dcmplx(40,-40));
+    EXPECT_EQ((Vc*Ar)(1)  ,dcmplx(1.25,2.5));
+    EXPECT_EQ((Ar*Vc)(1)  ,dcmplx(1.25,2.5));
     EXPECT_EQ((Vc*Vc)     ,dcmplx(-1.875,2.5));
     EXPECT_EQ((Vc*Vr)     ,dcmplx(5,10));
     EXPECT_EQ((Vr*Vc)     ,dcmplx(5,10));
@@ -440,10 +441,16 @@ TEST_F(MatrixComplexTests,MixedTypes)
     EXPECT_EQ((Sr*Ac)(1,2),dcmplx(8,-8));
     EXPECT_EQ((Sc*Ar)(1,2),dcmplx(.25,-.125));
     EXPECT_EQ((Ar*Sc)(1,2),dcmplx(.25,-.125));
-    EXPECT_EQ((Vc*Sr)(1),dcmplx(1,2));
-    EXPECT_EQ((Sr*Vc)(1),dcmplx(1,2));
-    EXPECT_EQ((Sc*Vr)(1),dcmplx(1,-0.5));
-    EXPECT_EQ((Vr*Sc)(1),dcmplx(1,-0.5));
+    EXPECT_EQ((Vc*Sr)(1)  ,dcmplx(1,2));
+    EXPECT_EQ((Sr*Vc)(1)  ,dcmplx(1,2));
+    EXPECT_EQ((Sc*Vr)(1)  ,dcmplx(1,-0.5));
+    EXPECT_EQ((Vr*Sc)(1)  ,dcmplx(1,-0.5));
+    // Try some long chains of mixed type multiplications
+    EXPECT_EQ((Ac*Ar*Ac*Ar*Ar*Ac)(1,2),dcmplx(-200000,-200000));
+    EXPECT_EQ((Vc*Ac*Ar*Ac*Ar*Ar*Ac*Vr),dcmplx(10000000,-30000000));
+    EXPECT_EQ((Ac*Ar*Sc*Ar*Ar*Sc)(1,2),dcmplx(-15.625,-109.375));
+    EXPECT_EQ((Vc*Ac*Sc*Ar*Sc*Ar*Ar*Ac*Vr),dcmplx(62500,-343750));
+
 }
 
 
