@@ -105,14 +105,14 @@ using std::endl;
 //! std::complex<double> version of SVDecomp
 template <class TM> std::tuple<TM,DiagonalMatrix<double>,TM> oml_CSVDecomp(const TM& A)
 {
-    index_t M=A.GetNumRows();
-    index_t N=A.GetNumCols();
+    int M=A.GetNumRows();
+    int N=A.GetNumCols();
 
     TM A1;
     bool transpose=N>M;
     if (transpose)
     {
-        index_t it=M;M=N;N=it;
+        int it=M;M=N;N=it;
         A1=Transpose(A); //TODO make a Transpose member function
     }
     else
@@ -124,7 +124,7 @@ template <class TM> std::tuple<TM,DiagonalMatrix<double>,TM> oml_CSVDecomp(const
     Vector<double> s(N);
     TM             V(N,N);
     TM             U(M,M);
-    index_t p=0;
+    int p=0;
 //      A1(MxN) = U(MxM) S(N) V*(NxN)
 //      M>=N
     csvd_ ( &A1(1,1), &M, &N, &M, &N, &p, &N, &N, &s(1), &U(1,1), &V(1,1) );
