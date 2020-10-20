@@ -185,6 +185,31 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
     EXPECT_EQ((A/=3.0)(1,1),3.0);
     EXPECT_EQ((A/=3  )(1,1),1.0);
 
+    typedef Vector<TypeParam> VectorT;
+    VectorT V1(N),V2(N);
+    Fill<TypeParam>(V1,1.0);
+    Fill<TypeParam>(V2,1.0);
+    EXPECT_EQ(V1,V2);
+    EXPECT_EQ(V1==V2,true);
+    EXPECT_EQ(V1!=V2,false);
+    EXPECT_EQ((V1+V2)(1),2.0); // Use Fill constructors EXPECT_EQ((A+B),MatrixT(A.GetLimits(),2.0)
+    //EXPECT_EQ((A+B),MatrixT(A.GetLimits(),2.0); TODO
+    EXPECT_EQ((V1-V2  )(1),0.0);
+    EXPECT_EQ((V1*3.0 )(1),3.0);
+    EXPECT_EQ((V1*3   )(1),3.0);
+    EXPECT_EQ((3.0*V1 )(1),3.0);
+    EXPECT_EQ((3*V1   )(1),3.0);
+    EXPECT_EQ((V1/2.0 )(1),0.5);
+    EXPECT_EQ((V1/2   )(1),0.5);
+    EXPECT_EQ((V1+=V2 )(1),2.0);
+    EXPECT_EQ((V1-=V2 )(1),1.0);
+    EXPECT_EQ((V1*=3.0)(1),3.0);
+    EXPECT_EQ((V1*=3  )(1),9.0);
+    EXPECT_EQ((V1/=3.0)(1),3.0);
+    EXPECT_EQ((V1/=3  )(1),1.0);
+
+    EXPECT_EQ((V1+V2-V1*2+V2*V1)(1),5.0);
+
 }
 
 TYPED_TEST_P(MatrixTests,MatrixAlgebra)
@@ -353,9 +378,13 @@ TEST_F(MatrixRealTests,MinMax)
     int M=2,N=4,mn=M*N;
     MatrixT A(M,N),B(A);
     FillLinear(A,1.0/4,2.0); //all elements should be exactly represented in floating point
+    FillLinear(B,1.0/4,2.0); //all elements should be exactly represented in floating point
 
     EXPECT_EQ(Max(A),2.0);
     EXPECT_EQ(Min(A),0.25);
+    EXPECT_EQ(Max(A+B),4.0);
+    EXPECT_EQ(Min(A+B),0.5);
+
     {
         MatrixT Ran(100,10);
         FillRandom(Ran,100.0);
@@ -374,6 +403,12 @@ TEST_F(MatrixRealTests,MinMax)
     FillRandom(A1);
     MatrixT A2=Transpose(A1);
     EXPECT_EQ(~A2,A1); //Transpose operator
+
+    DMatrix<double> VT(10,5),I(5,5);
+    FillRandom(VT);
+    Unit(I);
+    DMatrix<double> V=Transpose((VT));
+    double err=Max(fabs(V*VT-I));
 }
 
 TEST_F(MatrixComplexTests,fabsHermitianConj)
@@ -537,6 +572,45 @@ TYPED_TEST_P(MatrixTests,BinaryOps)
     EXPECT_FALSE(Vr!=Vr);
 
 }
+
+
+TEST_F(MatrixComplexTests,RangeBasedLoops)
+{
+    using dcmplx=std::complex<double>;
+    typedef DMatrix<dcmplx> MatrixCT;
+    typedef Vector <dcmplx> VectorCT;
+    typedef DMatrix<double> MatrixRT;
+    typedef Vector <double> VectorRT;
+
+    int N=10;
+    MatrixCT Ac(N,N);
+    MatrixRT Ar(N,N);
+    Fill(Ac,dcmplx(2,-2));
+    Fill(Ar,0.5);
+    VectorCT Vc(N,dcmplx(0.25,0.5));
+    VectorRT Vr(N,2.0);
+    dcmplx   Sc(0.5,-0.25);
+    double   Sr(4.0);
+
+    for (double d:Vr) {cout << d << " ";}
+    cout << endl;
+    for (dcmplx d:Vc) {cout << d << " ";}
+    cout << endl;
+    for (double d:Ar) {cout << d << " ";}
+    cout << endl;
+    for (dcmplx d:Ac) {cout << d << " ";}
+    cout << endl;
+
+    for (index_t i:Ar.rows())
+        for (index_t j:Ar.cols())
+            Ar(i,j)=i*10+j;
+
+    for (index_t i:Ar.rows())
+        for (index_t j:Ar.cols())
+            cout << "Ar(" << i << "," << j << ")=" << Ar(i,j) << endl;
+
+}
+
 
 REGISTER_TYPED_TEST_SUITE_P(
             MatrixTests,

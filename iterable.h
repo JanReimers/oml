@@ -44,6 +44,31 @@ template <class T, class Derived> class Iterable
 
   index_t size() const {return static_cast<const Derived*>(this)->size();}
 
+  class index_iterator
+  {
+    public:
+        index_iterator(index_t i) : current{i} {};
+        index_iterator operator++(){current++;return (*this);}
+        const index_t operator*() const {return current;}
+        index_t operator*() {return current;}
+        friend bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
+    private:
+        index_t current;
+  };
+
+    class iterator_proxy
+    {
+    public:
+        iterator_proxy(index_t l, index_t h) : low(l), high(h) {};
+        index_iterator begin() const {return low;}
+        index_iterator end  () const {return high+1;}
+    private:
+        index_t low;
+        index_t high;
+    };
+
+  iterator_proxy all () const {return iterator_proxy(0,size()-1);}
+
 };
 
 #undef CHECK
@@ -51,9 +76,7 @@ template <class T, class Derived> class Iterable
 
 template <class T,class A> inline void Fill(Iterable<T,A>& arr,T value)
 {
-  typename A::iterator i=arr.begin();
-  for (;i!=arr.end();i++) *i = value;
-//  for (auto i:arr) *i = value; Sill fails for complex
+  for (T& a:arr) a = value; //Sill fails for complex
 }
 
 template <class T,class A> inline void FillLinear(Iterable<T,A>& arr,T start, T stop)
@@ -77,14 +100,14 @@ template <class T,class A> inline void FillPower(Iterable<T,A>& arr,T start, T s
   for (index_t n=0;i!=arr.end();i++,n++) *i=T(start*std::exp(n*del));
 }
 
-template <class T1,class T2, template <class T> class A>
+/*template <class T1,class T2, template <class T> class A>
 void OML_static_cast(Iterable<T1*,A<T1> >& dest,const Iterable<T2*,A<T2> >& source)
 {
   typename Iterable<T1*,A<T1> >::iterator        i=dest.begin();
   typename Iterable<T2*,A<T2> >::const_iterator  b=source.begin();
   for (;i!=dest.end()&&b!=source.end();i++,b++)  *i = static_cast<T1*>(*b);
 }
-
+*/
 template <class T,class A> std::ostream& Write  (std::ostream&,const Iterable<T,A>&);
 template <class T,class A> std::istream& Read   (std::istream&,      Iterable<T,A>&);
 

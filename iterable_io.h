@@ -18,15 +18,14 @@
 template <class T, class A> inline std::ostream& Write(std::ostream& os,const Iterable<T,A>& arr)
 {
   assert(os);
-  typename A::const_iterator b=arr.begin();
-  if (StreamableObject::Binary()) for(;b!=arr.end();b++) BinaryWrite(*b,os);
-  if (StreamableObject::Ascii ()) for(;b!=arr.end();b++) os << *b << " ";
+  if (StreamableObject::Binary()) for(T b:arr) BinaryWrite(b,os);
+  if (StreamableObject::Ascii ()) for(T b:arr) os << b << " ";
   if (StreamableObject::Pretty())
   {
     std::streamsize prec=os.precision();
     std::streamsize wid =os.width();
     os << "{ ";
-    for(;b!=arr.end();b++) os << std::setw(wid) << std::setprecision(prec) << *b << " ";
+    for(T b:arr) os << std::setw(wid) << std::setprecision(prec) << b << " ";
     os << "}";
   }
   assert(os);
@@ -36,11 +35,10 @@ template <class T, class A> inline std::ostream& Write(std::ostream& os,const It
 template <class T, class A> inline std::istream& Read(std::istream& is,Iterable<T,A>& arr)
 {
   assert(is);
-  typename A::iterator i=arr.begin();
   if(StreamableObject::Binary())
-    for(;i!=arr.end();i++) BinaryRead(*i,is);
+    for(T i:arr) BinaryRead(i,is);
   else
-    for(;i!=arr.end();i++) is >> *i;
+    for(T& i:arr) is >> i;
 
   assert(is);
   return is;

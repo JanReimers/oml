@@ -8,6 +8,7 @@
 #include "oml/shape.h"
 #include "oml/veclimit.h"
 #include "oml/matlimit.h"
+#include "oml/indexable_base.h"
 
 //----------------------------------------------------
 //
@@ -38,6 +39,7 @@ template <class T, class R> class Ref<T,R,VectorShape>
 };
 
 template <class T, class R> class Ref<T,R,MatrixShape>
+: public IndexableBase<Ref<T,R,MatrixShape>,MatrixShape> //Get index iterators
 {
  public:
   Ref(const R& r) : itsRef(r), itsLimits(r.GetLimits()) {};

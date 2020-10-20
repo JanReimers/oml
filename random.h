@@ -13,33 +13,29 @@
   Random number are supplied by a 2 tap xor random number generator. Very fast!
  */
 //! Fill with random numbers, range = (-1,1).
-template <class T,class A> void FillRandom(Iterable<T,A>& arr) 
+template <class T,class A> void FillRandom(Iterable<T,A>& arr)
 {
-  for (typename A::iterator i=arr.begin();i!=arr.end();i++) 
-    *i=OMLRand<T>();
+  for (T& i:arr) i=OMLRand<T>();
 }
 
 //! Fill with positive random numbers, range = [0,1).
-template <class T,class A> void FillRandomPositive(Iterable<T,A>& arr) 
+template <class T,class A> void FillRandomPositive(Iterable<T,A>& arr)
 {
-  for (typename A::iterator i=arr.begin();i!=arr.end();i++) 
-    *i=OMLRandPos<T>();
+  for (T& i:arr) i=OMLRandPos<T>();
 }
 
 //! Fill with positive random numbers, range = [-max,max).
-template <class T,class A> void FillRandom(Iterable<T,A>& arr,T max) 
+template <class T,class A> void FillRandom(Iterable<T,A>& arr,T max)
 {
   double scale=OMLRandScale<T>(max);
-  for (typename A::iterator i=arr.begin();i!=arr.end();i++) 
-     *i = (T)(OMLRand<T>() * scale);
+  for (T& i:arr) i = (T)(OMLRand<T>() * scale);
 }
 
 //! Fill with positive random numbers, range = [0,max).
-template <class T,class A> void FillRandomPositive(Iterable<T,A>& arr,T max) 
+template <class T,class A> void FillRandomPositive(Iterable<T,A>& arr,T max)
 {
   double scale=OMLRandScale<T>(max);
-  for (typename A::iterator i=arr.begin();i!=arr.end();i++) 
-     *i = (T)(OMLRandPos<T>() * scale);
+  for (T& i:arr) i = (T)(OMLRandPos<T>() * scale);
 }
 
 #endif //_Random_h_

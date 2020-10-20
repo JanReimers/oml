@@ -85,6 +85,7 @@ template <class T> class DMatrix
   typedef typename Iterable <T,DMatrix>::const_iterator  const_iterator ;
   typedef typename Iterable <T,DMatrix>::iterator iterator;
 
+
 #if DEBUG
   #define CHECK(i,j) assert(itsLimits.CheckIndex(i,j));
 #else

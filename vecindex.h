@@ -12,11 +12,14 @@
 //  template specialization for Vectors's.
 //
 template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D,VectorShape>
+ : public IndexableBase<Derived,VectorShape>
 {
  public:
 
-  T operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
+  T  operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
+  T& operator[](index_t n)       {return static_cast<      Derived*>(this)->operator[](n);}
+  T  operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
+  T& operator()(index_t n)       {return static_cast<      Derived*>(this)->operator()(n);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -57,6 +60,7 @@ template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D
 //  Template specialization for abstract vectors.
 //
 template <class T, class Derived, Store M> class Indexable<T,Derived,M,Abstract,VectorShape>
+ : public IndexableBase<Derived,VectorShape>
 {
  public:
   explicit Indexable() {};
@@ -102,8 +106,7 @@ template <class T, class A, Store M> inline
 T Sum(const Indexable<T,A,M,Abstract,VectorShape>& a)
 {
   T ret(0);
-  index_t hi=a.GetLimits().High;
-  for (index_t i=a.GetLimits().Low;i<=hi;i++) ret+=a(i);
+  for (index_t i:a.indices()) ret+=a(i);
   return ret;
 }
 

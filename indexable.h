@@ -5,6 +5,8 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/shape.h"
+#include "oml/indexable_base.h"
+#include <cassert>
 
 namespace std {template <class T> class complex;}
 
@@ -18,18 +20,18 @@ template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexable<T,A,M,D,S>& a)
 {
   T ret(0);
-  index_t n=a.size();
-  for (index_t i=0;i<n;i++) ret+=a[i];
+  for (index_t i: a.array_indices()) ret+=a[i];
   return ret;
 }
 
-template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)
+/*template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)
 {
   bool ret(true);
   index_t n=a.size();
   for (index_t i=0;i<n;i++) ret=ret && a[i];
   return ret;
 }
+*/
 
 //------------------------------------------------------------------
 //
@@ -38,18 +40,17 @@ template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bo
 //
 template <class T, class A, class Op, Store M, Data D, Shape S> class MinMax
 {
- public:
-  static T apply(const Indexable<T,A,M,D,S>& a)
-  {
-    index_t n=a.size();
-    T ret=n>0 ? a[0] : T(0); // Don't try and read a[0] if there is no data in a!
-    for (index_t i=1;i<n;i++)
-      {
-	T ai=a[i];
-	if (Op::apply(ai,ret)) ret=ai;
-      }
-    return ret;
-  }
+public:
+    static T apply(const Indexable<T,A,M,D,S>& a)
+    {
+        T ret=a.size()>0 ? a[0] : T(0); // Don't try and read a[0] if there is no data in a!
+        for (index_t i:a.array_indices())
+        {
+            T ai=a[i];
+            if (Op::apply(ai,ret)) ret=ai;
+        }
+        return ret;
+    }
 };
 
 //
@@ -59,7 +60,7 @@ template <class T,class A, Store M, Data D, Shape S> inline A Integrate(const In
 {
   index_t n=a.size();
   A ret(n);
-  for (index_t i=0;i<n;i++)
+  for (index_t i:a)
   {
     y0+=a[i];
     ret[i]=y0;
@@ -285,10 +286,11 @@ inline bool LogicalII(const Iterable<T,A>& a, const Iterable<T,B>& b,const L& la
 {
   assert(a.size()==b.size());
   bool ret(true);
-  int N=std::distance(a.begin(),a.end());
-  for (int i=0;ret && i<N ;i++)
+  for (index_t i:a.all())
+  {
     ret = ret && lambda(a[i],b[i]);
-  //for(int i : a) ret = ret && lambda(a[i],b[i]); //fails for DMatrix<complex<double>> ?!?!?
+    if (!ret) break;
+  }
   return ret;
 }
 template <class T, class A, class L>
@@ -310,9 +312,8 @@ inline bool Logical(const Indexable<T,A,MA,DA,MatrixShape>& a, const Indexable<T
 {
   assert(a.GetLimits()==b.GetLimits());
   bool ret(true);
-  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
+    for (index_t i:a.rows())
+        for (index_t j:a.cols())
         ret = ret && lambda(a(i,j),b(i,j));
   return ret;
 }

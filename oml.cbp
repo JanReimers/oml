@@ -84,6 +84,7 @@
 		<Unit filename="heapsort.h" />
 		<Unit filename="histogram.h" />
 		<Unit filename="indexable.h" />
+		<Unit filename="indexable_base.h" />
 		<Unit filename="indexsort.h" />
 		<Unit filename="indext.h" />
 		<Unit filename="io2d.h" />
@@ -149,7 +150,9 @@
 		<Unit filename="shellsort.h" />
 		<Unit filename="smatindex.h" />
 		<Unit filename="smatrix.h" />
-		<Unit filename="src/CNumericsDoubleDMatrix.cpp" />
+		<Unit filename="src/CNumericsDoubleDMatrix.cpp">
+			<Option compile="0" />
+		</Unit>
 		<Unit filename="src/InstanceComplex1.cpp">
 			<Option compile="0" />
 		</Unit>

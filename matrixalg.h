@@ -62,10 +62,10 @@ template <class T, class A, class B> class MatrixMMOp
   T operator()(index_t i, index_t j) const
   {
     T ret(0);
-    index_t ch=itsA.GetLimits().Col.High;
-    for (index_t k=itsA.GetLimits().Col.Low;k<=ch;k++) ret+=itsA(i,k)*itsB(k,j);
+    for (index_t k:itsA.cols()) ret+=itsA(i,k)*itsB(k,j);
     return ret;
   }
+  index_t size() const {return MatLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
 
  private:
@@ -97,8 +97,7 @@ template <class T, class A, class V> class MatrixMVOp
   T operator()(index_t i) const
   {
     T ret(0);
-    index_t ch=itsA.GetLimits().Col.High;
-    for (index_t k=itsA.GetLimits().Col.Low;k<=ch;k++) ret+=itsA(i,k)*itsV(k);
+    for (index_t k:itsA.cols()) ret+=itsA(i,k)*itsV(k);
     return ret;
   }
   VecLimits GetLimits() const {return itsA.GetLimits().Row;}
@@ -133,8 +132,7 @@ template <class T, class V, class B> class MatrixVMOp
   T operator()(index_t i) const
   {
     T ret(0);
-    index_t rh=itsB.GetLimits().Row.High;
-    for (index_t k=itsB.GetLimits().Row.Low;k<=rh;k++) ret+=itsV(k)*itsB(k,i);
+    for (index_t k: itsB.rows()) ret+=itsV(k)*itsB(k,i);
     return ret;
   }
   VecLimits GetLimits() const {return itsB.GetLimits().Col;}
@@ -227,6 +225,7 @@ template <class T,class V1,class V2> class MatrixOuterProduct
 
   T operator()(index_t i, index_t j) const {return itsA(i)*itsB(j);}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits(),itsB.GetLimits());}
+  index_t size() const {return MatLimits().size();}
 
  private:
   const V1  itsA;
@@ -245,6 +244,7 @@ template <class T,class V> class SymMatrixOuterProduct
 
   T operator()(index_t i, index_t j) const {return itsV(i)*itsV(j);}
   MatLimits GetLimits() const {return MatLimits(itsV.GetLimits(),itsV.GetLimits());}
+  index_t size() const {return MatLimits().size();}
 
  private:
   const V itsV;

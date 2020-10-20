@@ -7,18 +7,21 @@
 #include "oml/indexable.h"
 #include "oml/memops.h"
 
+
 //-------------------------------------------------
 //
 //  template specialization for Matricies's.
 //
 template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,MatrixShape>
+ : public IndexableBase<Derived,MatrixShape>
 {
  public:
   explicit Indexable() {};
   ~Indexable() {};
 
-  T operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T  operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
+  T& operator[](index_t n          )       {return static_cast<      Derived*>(this)->operator[](n);}
+  T  operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -52,6 +55,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
 //  template specialization for abstract Matricies's.
 //
 template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,MatrixShape>
+ : public IndexableBase<Derived,MatrixShape>
 {
  public:
   explicit Indexable() {};
@@ -86,6 +90,7 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
 //  template specialization for diagonal Matricies's.
 //
 template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,MatrixShape>
+ : public IndexableBase<Derived,MatrixShape>
 {
  public:
   explicit Indexable() {};
@@ -123,63 +128,30 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,MatrixShape>& 
   return os << DMatrix<T>(a);
 }
 
-
-
-//----------------------------------------------------------------
-//
-//  Abstract matrix specializations for some helper functions.
-//
-
-template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixShape>& a)
-{
-	bool ret(true);
-  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
-      ret=ret&&a(i,j);
-	return ret;
-}
-
-template <class T, class A,Store M, Data D> inline
-bool True1(const Indexable<T,A,M,D,MatrixShape>& a,const T&b, bool (*f)(const T&, const T&))
-{
-  bool ret(true);
-  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
-      ret=ret&&f(a(i,j),b);
-  return ret;
-}
-
-
 template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
 {
 	T ret(0);
-  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
-    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
+    for (index_t i:a.rows())
+        for (index_t j:a.cols())
       ret+=a(i,j);
 	return ret;
 }
 
-template <class T, class A, class Op> class MinMax<T,A,Op,Full,Abstract,MatrixShape>
+template <class T, class A, class Op, Store M, Data D> class MinMax<T,A,Op,M,D,MatrixShape>
 {
- public:
-  static T apply(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
-	{
-		index_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
-		index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-		T ret=a(rl,cl);
-		for (index_t i=rl;i<=rh;i++)
-			for (index_t j=cl;j<=ch;j++)
-		  {
-				T ai=a(i,j);
-				if (Op::apply(ai,ret)) ret=ai;
-			}
-		return ret;
-	}
+public:
+    static T apply(const Indexable<T,A,M,D,MatrixShape>& a)
+    {
+        T ret=a.size()>0 ? a(1,1) : T(0); // Don't try and read a[0] if there is no data in a!
+        for (index_t i:a.rows())
+        for (index_t j:a.cols())
+        {
+            T ai=a(i,j);
+            if (Op::apply(ai,ret)) ret=ai;
+        }
+        return ret;
+    }
 };
-
 
 
 
