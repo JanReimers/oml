@@ -42,7 +42,7 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-std=c++17" />
-			<Add directory="../" />
+			<Add directory="include" />
 			<Add directory="../googletest/googletest/include" />
 		</Compiler>
 		<Linker>

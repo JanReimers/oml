@@ -2,7 +2,7 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/stream.h"
+#include "oml/imp/stream.h"
 #include <typeinfo>
 #include <cassert>
 #include <iostream>

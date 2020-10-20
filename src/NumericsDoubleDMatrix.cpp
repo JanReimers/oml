@@ -1,4 +1,4 @@
-#include "oml/dmatrix.h"
+#include "oml/matrix.h"
 //---------------------------------------------------------------------------------
 //
 //  Make template instance
@@ -17,7 +17,7 @@
 //#include "oml/numeric/qldecomp.cc"
 //#include "oml/numeric/solvetri.cc"
 //#include "oml/numeric/svbksb.cc"
-#include "oml/numeric/svdcmp.cc"
+#include "src/numeric/svdcmp.cc"
 //#include "oml/numeric/svsolver.cc"
 //#include "oml/numeric/tridiag.cc"
 

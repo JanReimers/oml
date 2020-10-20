@@ -3,10 +3,9 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/smatrix.h"
-#include "oml/array.h"
-#include "oml/minmax.h"
-#include "oml/binio.h"
-#include "oml/iterable_io.h"
+#include "oml/imp/minmax.h"
+#include "oml/imp/binio.h"
+#include "oml/imp/iterable_io.h"
 #include <iostream>
 #include <iomanip>
 #include <cassert>
@@ -166,4 +165,4 @@ const Store MatStore=Symmetric;
 
 template class SMatrix<Type>;
 
-#include "oml/matsub.ci"
+#include "oml/imp/matsub.ci"

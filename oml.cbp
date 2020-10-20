@@ -45,168 +45,103 @@
 			<Add option="-std=c++17" />
 			<Add option="-pg" />
 			<Add option="-fPIC" />
-			<Add directory="../" />
+			<Add directory="./include" />
+			<Add directory="./" />
 		</Compiler>
 		<Linker>
 			<Add option="-pg" />
 		</Linker>
-		<Unit filename="array.h" />
-		<Unit filename="array_io.h" />
-		<Unit filename="arrindex.h" />
-		<Unit filename="binio.h" />
-		<Unit filename="binop.h" />
-		<Unit filename="cnumeric.h" />
-		<Unit filename="cnumeric/SVD.f" />
-		<Unit filename="cnumeric/ch.cc">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="cnumeric/epsilon.cc" />
-		<Unit filename="cnumeric/htribk.cc">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="cnumeric/htridi.cc">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="cnumeric/tql2.cc">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="cnumeric/tqlrat.cc">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="cow.h" />
-		<Unit filename="diagonalmatrix.h" />
-		<Unit filename="dmatrix.h" />
-		<Unit filename="heapsort.h" />
-		<Unit filename="histogram.h" />
-		<Unit filename="indexable.h" />
-		<Unit filename="indexable_base.h" />
-		<Unit filename="indexsort.h" />
-		<Unit filename="indext.h" />
-		<Unit filename="io2d.h" />
-		<Unit filename="io3d.h" />
-		<Unit filename="isnan.h" />
-		<Unit filename="iterable.h" />
-		<Unit filename="iterable_io.h" />
-		<Unit filename="list.h" />
-		<Unit filename="list_io.h" />
-		<Unit filename="lusolver.h" />
-		<Unit filename="matindex.h" />
-		<Unit filename="matlimit.h" />
-		<Unit filename="matrix.h" />
-		<Unit filename="matrix3d.h" />
-		<Unit filename="matrixalg.h" />
-		<Unit filename="matrixbase.h" />
-		<Unit filename="matsub.h" />
-		<Unit filename="memops.h" />
-		<Unit filename="minmax.h" />
-		<Unit filename="mixtypes.h" />
-		<Unit filename="numeric.h" />
-		<Unit filename="numeric/gaussj.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/invmat.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/invtri.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/lubksb.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/lubksbm.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/ludcmp.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/lusolver.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/qldecomp.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/solvetri.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/svbksb.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/svdcmp.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="numeric/svsolver.cc">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="omlcomplex.h" />
-		<Unit filename="ran250.h" />
-		<Unit filename="random.h" />
-		<Unit filename="rowcol.h" />
-		<Unit filename="shape.h" />
-		<Unit filename="shellsort.h" />
-		<Unit filename="smatindex.h" />
-		<Unit filename="smatrix.h" />
-		<Unit filename="src/CNumericsDoubleDMatrix.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceComplex1.cpp">
-			<Option compile="0" />
-		</Unit>
+		<Unit filename="include/oml/cnumeric.h" />
+		<Unit filename="include/oml/diagonalmatrix.h" />
+		<Unit filename="include/oml/imp/binio.h" />
+		<Unit filename="include/oml/imp/binop.h" />
+		<Unit filename="include/oml/imp/cow.h" />
+		<Unit filename="include/oml/imp/index_t.h" />
+		<Unit filename="include/oml/imp/indexable.h" />
+		<Unit filename="include/oml/imp/indexable_base.h" />
+		<Unit filename="include/oml/imp/indexsort.h" />
+		<Unit filename="include/oml/imp/isnan.h" />
+		<Unit filename="include/oml/imp/iterable.h" />
+		<Unit filename="include/oml/imp/iterable_io.h" />
+		<Unit filename="include/oml/imp/matindex.h" />
+		<Unit filename="include/oml/imp/matlimit.h" />
+		<Unit filename="include/oml/imp/matrixalg.h" />
+		<Unit filename="include/oml/imp/matrixbase.h" />
+		<Unit filename="include/oml/imp/matsub.ci" />
+		<Unit filename="include/oml/imp/matsub.h" />
+		<Unit filename="include/oml/imp/memops.h" />
+		<Unit filename="include/oml/imp/minmax.h" />
+		<Unit filename="include/oml/imp/mixtypes.h" />
+		<Unit filename="include/oml/imp/ran250.h" />
+		<Unit filename="include/oml/imp/rowcol.h" />
+		<Unit filename="include/oml/imp/shape.h" />
+		<Unit filename="include/oml/imp/smatindex.h" />
+		<Unit filename="include/oml/imp/stream.h" />
+		<Unit filename="include/oml/imp/submatrix.h" />
+		<Unit filename="include/oml/imp/subvector.h" />
+		<Unit filename="include/oml/imp/tstream.h" />
+		<Unit filename="include/oml/imp/unop.h" />
+		<Unit filename="include/oml/imp/vecindex.h" />
+		<Unit filename="include/oml/imp/veclimit.h" />
+		<Unit filename="include/oml/imp/xpr.h" />
+		<Unit filename="include/oml/matrix.h" />
+		<Unit filename="include/oml/numeric.h" />
+		<Unit filename="include/oml/numeric/lusolver.h" />
+		<Unit filename="include/oml/numeric/svsolver.h" />
+		<Unit filename="include/oml/random.h" />
+		<Unit filename="include/oml/smatrix.h" />
+		<Unit filename="include/oml/vector.h" />
+		<Unit filename="src/CNumericsDoubleDMatrix.cpp" />
+		<Unit filename="src/InstanceComplex1.cpp" />
 		<Unit filename="src/InstanceComplex2.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceComplex3.cpp">
 			<Option compile="0" />
 		</Unit>
 		<Unit filename="src/InstanceComplex4.cpp">
 			<Option compile="0" />
 		</Unit>
-		<Unit filename="src/InstanceComplexVec3.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceDouble1.cpp">
-			<Option compile="0" />
-		</Unit>
+		<Unit filename="src/InstanceDouble1.cpp" />
 		<Unit filename="src/InstanceDouble2.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceDouble3.cpp">
 			<Option compile="0" />
 		</Unit>
 		<Unit filename="src/InstanceDouble4.cpp">
 			<Option compile="0" />
 		</Unit>
-		<Unit filename="src/InstanceVec2.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceVec3.cpp">
-			<Option compile="0" />
-		</Unit>
 		<Unit filename="src/NumericsDouble.cpp" />
 		<Unit filename="src/NumericsDoubleDMatrix.cpp" />
+		<Unit filename="src/cnumeric/SVD.f" />
+		<Unit filename="src/cnumeric/ch.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/cnumeric/epsilon.cc" />
+		<Unit filename="src/cnumeric/htribk.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/cnumeric/htridi.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/cnumeric/tql2.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/cnumeric/tqlrat.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/dmatrix.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="src/matlimit.cc" />
 		<Unit filename="src/ran250.cc" />
 		<Unit filename="src/stream.cc" />
 		<Unit filename="src/veclimit.cc" />
-		<Unit filename="stopw.h" />
-		<Unit filename="stream.h" />
-		<Unit filename="subarray.h" />
-		<Unit filename="submatrix.h" />
-		<Unit filename="subvector.h" />
-		<Unit filename="svsolver.h" />
-		<Unit filename="tstream.h" />
-		<Unit filename="unop.h" />
-		<Unit filename="unpickle.h" />
-		<Unit filename="vecindex.h" />
-		<Unit filename="veclimit.h" />
-		<Unit filename="vector.h" />
-		<Unit filename="vector2d.h" />
-		<Unit filename="vector3d.h" />
-		<Unit filename="xpr.h" />
+		<Unit filename="src/vector.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

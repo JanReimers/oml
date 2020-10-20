@@ -2,9 +2,10 @@
 
 // Copyright (1994-2020), Jan N. Reimers
 
-#include "oml/dmatrix.h"
+#include "oml/matrix.h"
+#include "oml/vector.h"
 #include "oml/random.h"
-#include "oml/stopw.h"
+#include "stopw.h"
 #include "gtest/gtest.h"
 #include <iostream>
 #include <fstream>
@@ -12,11 +13,6 @@
 
 using std::cout;
 using std::endl;
-
-//#include "oml/vector_io.h"
-//#include "oml/matrix.h"
-//#include "oml/minmax.h"
-
 
 template <class T> class MatrixTests : public ::testing::Test
 {
@@ -592,22 +588,14 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
     dcmplx   Sc(0.5,-0.25);
     double   Sr(4.0);
 
-    for (double d:Vr) {cout << d << " ";}
-    cout << endl;
-    for (dcmplx d:Vc) {cout << d << " ";}
-    cout << endl;
-    for (double d:Ar) {cout << d << " ";}
-    cout << endl;
-    for (dcmplx d:Ac) {cout << d << " ";}
-    cout << endl;
+    for (double d:Vr) Sr+=d;
+    for (dcmplx c:Vc) Sc+=c;
+    for (double d:Ar) Sr+=d;
+    for (dcmplx c:Ac) Sc+=c;
 
     for (index_t i:Ar.rows())
         for (index_t j:Ar.cols())
             Ar(i,j)=i*10+j;
-
-    for (index_t i:Ar.rows())
-        for (index_t j:Ar.cols())
-            cout << "Ar(" << i << "," << j << ")=" << Ar(i,j) << endl;
 
 }
 

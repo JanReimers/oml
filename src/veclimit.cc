@@ -2,9 +2,9 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/veclimit.h"
-#include "oml/stream.h"
-#include "oml/binio.h"
+#include "oml/imp/veclimit.h"
+#include "oml/imp/stream.h"
+#include "oml/imp/binio.h"
 #include <iostream>
 #include <cassert>
 

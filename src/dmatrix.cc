@@ -2,10 +2,9 @@
 
 // Copyright (1994-2005), Jan N. Reimers
 
-#include "oml/dmatrix.h"
-#include "oml/array.h"
-#include "oml/minmax.h"
-#include "oml/iterable_io.h"
+#include "oml/matrix.h"
+#include "oml/imp/iterable_io.h"
+#include <vector>
 #include <iostream>
 #include <iomanip>
 #include <cassert>
@@ -123,4 +122,5 @@ template <class T> std::istream& DMatrix<T>::Read(std::istream& is)
   return is;
 }
 
+#undef CHECK
 

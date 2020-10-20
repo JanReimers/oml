@@ -2,8 +2,8 @@
 
 // Modifications for C++ and oml containers Copyright (1994-2004), Jan N. Reimers
 
-#include "oml/ran250.h"
-#include "oml/minmax.h"
+#include "oml/imp/ran250.h"
+#include "oml/imp/minmax.h"
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif

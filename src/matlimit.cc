@@ -2,8 +2,8 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/matlimit.h"
-#include "oml/stream.h"
+#include "oml/imp/matlimit.h"
+#include "oml/imp/stream.h"
 #include <iostream>
 #include <cassert>
 
