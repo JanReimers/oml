@@ -54,8 +54,6 @@
 		<Unit filename="TODO_list" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
-		<Unit filename="indexable_base.h" />
-		<Unit filename="src/vector.cc" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
