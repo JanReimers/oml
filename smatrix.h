@@ -94,6 +94,9 @@ template <class T> class SMatrix
   , public TStreamableObject<SMatrix<T> >
 {
  public:
+  typedef Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   /*! \name Constructors/Assignment
   Copy constructor and op=(Vector) are automaically supplied by the compiler.
   */

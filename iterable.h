@@ -35,12 +35,13 @@ template <class T, class Derived> class Iterable
   typedef       T*       iterator;
   typedef const T* const_iterator;
 
+  T operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
+
   const_iterator begin() const {return static_cast<const Derived*>(this)->Get();}
         iterator begin()       {return static_cast<      Derived*>(this)->Get();}
   const_iterator end  () const {return static_cast<const Derived*>(this)->Get()+size();}
         iterator end  ()       {return static_cast<      Derived*>(this)->Get()+size();}
 
- private:
   index_t size() const {return static_cast<const Derived*>(this)->size();}
 
 };
@@ -52,6 +53,7 @@ template <class T,class A> inline void Fill(Iterable<T,A>& arr,T value)
 {
   typename A::iterator i=arr.begin();
   for (;i!=arr.end();i++) *i = value;
+//  for (auto i:arr) *i = value; Sill fails for complex
 }
 
 template <class T,class A> inline void FillLinear(Iterable<T,A>& arr,T start, T stop)

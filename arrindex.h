@@ -59,6 +59,7 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,ArrayShape>& a
 //  Macros for generating disambiguated template functions that return
 //  expressions.
 //
+/*
 #define DisObOb(Func,Op,SHP)\
 template <class TA, class TB, class A, class B, Store M, Data D> inline        \
 Xpr<typename Op<TA,TB>::RT,XprBinOp<typename Op<TA,TB>::RT,Ref<TA,Indexable<TA,A,M,D,SHP>,SHP>,  \
@@ -71,7 +72,7 @@ Func (const Indexable<TA,A,M,D,SHP>& a, const Indexable<TB,B,M,D,SHP>& b)      \
    return Xpr<typename Op<TA,TB>::RT,ExprT,M,D,SHP>(ExprT(RefA(a),RefB(b)));   \
 }                                                                              \
 
-DisObOb(operator*,OpMul,ArrayShape)
-DisObOb(operator/,OpDiv,ArrayShape)
-
+//DisObOb(operator*,OpMul,ArrayShape)
+//DisObOb(operator/,OpDiv,ArrayShape)
+*/
 #endif // _arrindex_h_

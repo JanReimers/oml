@@ -7,10 +7,6 @@
 #include "oml/mixtypes.h"
 #include <cmath>
 
-#if defined(__CYGWIN32__) || (__GNUC__==2)
-extern "C" {double pow(double,double);}
-inline double pow10(double x) {return pow(10.0,x);}
-#endif
 
 namespace std {template <class T> class complex;}
 
@@ -19,7 +15,7 @@ namespace std {template <class T> class complex;}
 //
 //  Concrete unary operations.
 //
-template <class T> class OpPlus
+/*template <class T> class OpPlus
 {
  public:
    typedef  T RetType;
@@ -36,13 +32,19 @@ template <class T> class OpMinus
 
 //Marker for all trig functions since they return the same units.
 template <class T> class OpTrig {typedef T RetType;};
-
+*/
 //
 //  Trig operators.
 //
+//auto SinLambda = [](const auto &x) { return sin(x); };
+/*
 template <class T> class Opsin
 {
  public:
+ // C++20 might allow
+ // static T Lambda = [](const T &x) { return sin(x); };
+//   static constexpr decltype(SinLambda) Lambda=SinLambda;
+   //T Lambda=[](const T &x) { return sin(x); };
    typedef typename UnaryRetType<T,OpTrig<T> >::RetType RetType;
    static inline RetType apply(const T a) {return sin(a);}
 };
@@ -259,7 +261,7 @@ template <class T> class Opimag<std::complex<T> >
    typedef  T RetType;
    static inline RetType apply(const std::complex<T> a) {return imag(a);}
 };
-
+*/
 template <class T> class OpLT
 {
  public:
@@ -295,6 +297,41 @@ template <class T> class OpGE
 //
 //  Temporary unary operation holder.
 //
+template <class T, class TR, class A, Shape S> class XprUnaryLambda
+{};
+
+
+template <class T, class TR, class A> class XprUnaryLambda<T,TR,A,VectorShape>
+{
+ public:
+  XprUnaryLambda(const A& a,TR(*f)(const T&)) : itsA(a), itsF(f) {};
+  ~XprUnaryLambda() {};
+
+  TR         operator[](index_t n) const {return itsF(itsA[n]);}
+  TR         operator()(index_t n) const {return itsF(itsA(n));}
+  index_t   size   (         ) const {return itsA.size();}
+  VecLimits GetLimits (         ) const {return itsA.GetLimits();}
+ private:
+   A itsA;
+   TR(*itsF)(const T&) ;
+};
+
+
+template <class T, class TR, class A> class XprUnaryLambda<T,TR,A,MatrixShape>
+{
+ public:
+  XprUnaryLambda(const A& a,TR(*f)(const T&)) : itsA(a), itsF(f) {};
+  ~XprUnaryLambda() {};
+
+  TR         operator[](index_t n          ) const {return itsF(itsA[n]);}
+  TR         operator()(index_t i,index_t j) const {return itsF(itsA(i,j));}
+  index_t   size   (                   ) const {return itsA.size();}
+  MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
+ private:
+   A itsA;
+   TR(*itsF)(const T&);
+};
+/*
 template <class T, class A, class Op, Shape S> class XprUnaryOp
 {};
 
@@ -338,8 +375,7 @@ template <class T, class A, class Op> class XprUnaryOp<T,A,Op,MatrixShape>
    A itsA;
 };
 
-
-
+*/
 
 
 #endif //_unop_h_

@@ -153,6 +153,9 @@ template <class T, class A, class D> class MatrixMDOp
 : public Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   MatrixMDOp(const A& a, const D& d)
     : itsA(a)
     , itsD(d)
@@ -183,6 +186,9 @@ template <class T, class D, class B> class MatrixDMOp
 : public Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   MatrixDMOp(const D& d, const B& b)
     : itsD(d)
     , itsB(b)
@@ -231,6 +237,9 @@ template <class T,class V> class SymMatrixOuterProduct
 : public Indexable<T,SymMatrixOuterProduct<T,V>,Symmetric,Abstract,MatrixShape>
 {
  public:
+  typedef Indexable<T,SymMatrixOuterProduct<T,V>,Symmetric,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
   SymMatrixOuterProduct(const V& v) : itsV(v) {};
   SymMatrixOuterProduct(const SymMatrixOuterProduct& op) : itsV(op.itsV) {};
 
@@ -401,7 +410,7 @@ bool IsSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m)
 template <class T, class A,Data D> inline
 bool IsSymmetric(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
-  return Max(abs(m-Transpose(m)))<=eps;
+  return Max(fabs(m-Transpose(m)))<=eps;
 }
 
 // Check if matrix is anit-symmetric.
@@ -422,7 +431,7 @@ bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m)
 template <class T, class A, Data D> inline
 bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m, double eps)
 {
-  return Max(abs(m-conj(Transpose(m))))<=eps;
+  return Max(fabs(m-conj(Transpose(m))))<=eps;
 }
 
 // Dummy check for real matrices.
@@ -437,7 +446,7 @@ template <class T, class A>
 double MakeSymmetric(Indexable<T,A,Full,Real,MatrixShape>& m)
 {
   A temp=Transpose(m);
-  double del=Max(abs(m-temp));
+  double del=Max(fabs(m-temp));
   static_cast<A&>(m)=(m+temp)/T(2);
   return del;
 }

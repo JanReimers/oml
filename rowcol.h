@@ -348,6 +348,9 @@ template <class T, class A, Store M, Data D> class MatrixDiagonal
     : public Indexable<T,MatrixDiagonal<T,A,M,D>,Full,Abstract,VectorShape>
 {
 public:
+    typedef Indexable<T,MatrixDiagonal<T,A,M,D>,Full,Abstract,VectorShape> IndexableT;
+     typedef Ref<T,IndexableT,VectorShape> RefT;
+
     MatrixDiagonal(Indexable<T,A,M,D,MatrixShape>& m)
         : itsMatrix(static_cast<A&>(m))
     {

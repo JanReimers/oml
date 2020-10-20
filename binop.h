@@ -11,6 +11,7 @@
 //
 //  Concrete binary operations.
 //
+/*
 template <class TA, class TB> class OpAdd
 {
  public:
@@ -88,7 +89,7 @@ template <class TA, class TB> class OpAnd
   typedef typename BinaryRetType<TA,TB>::RetType RT;
   static inline RT apply(const TA a, const TB b) {return a&&b;}
 };
-
+*/
 #include "oml/shape.h"
 #include "oml/indext.h"
 #include "oml/matlimit.h"
@@ -96,8 +97,43 @@ template <class TA, class TB> class OpAnd
 //
 //  Temporary binary operation holder.
 //
-template <class T, class A, class B, class Op, Shape S> class XprBinOp{};
+template <class TR, class TA, class TB, class A, class B, Shape S> class XprBinaryLambda
+{};
 
+
+template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<TR,TA,TB,A,B,VectorShape>
+{
+ public:
+   XprBinaryLambda(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
+  ~XprBinaryLambda() {};
+
+  TR        operator[](index_t n) const {return itsF(itsA[n],itsB[n]);}
+  TR        operator()(index_t n) const {return itsF(itsA(n),itsB(n));}
+  index_t   size      (         ) const {return itsA.size();}
+  VecLimits GetLimits (         ) const {return itsA.GetLimits();}
+ private:
+   A itsA;
+   B itsB;
+   TR(*itsF)(const TA&,const TB&);
+};
+
+template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<TR,TA,TB,A,B,MatrixShape>
+{
+ public:
+   XprBinaryLambda(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
+  ~XprBinaryLambda() {};
+
+  TR         operator[](index_t n          ) const {return itsF(itsA[n],itsB[n]);}
+  TR         operator()(index_t i,index_t j) const {return itsF(itsA(i,j),itsB(i,j));}
+  index_t   size      (                   ) const {return itsA.size();}
+  MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
+ private:
+   A itsA;
+   B itsB;
+   TR(*itsF)(const TA&,const TB&);
+};
+/*
+template <class T, class A, class B, class Op, Shape S> class XprBinOp{};
 template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,ArrayShape>
 {
  public:
@@ -110,7 +146,6 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,ArrayShap
    A itsA;
    B itsB;
 };
-
 template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,VectorShape>
 {
  public:
@@ -125,7 +160,6 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,VectorSha
    A itsA;
    B itsB;
 };
-
 template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,MatrixShape>
 {
  public:
@@ -141,7 +175,7 @@ template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,MatrixSha
    B itsB;
 };
 
-
+*/
 //---------------------------------------------------------
 //
 //  Sepecify result of mixing Real and Abstract Data types

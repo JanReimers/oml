@@ -140,6 +140,18 @@ template <class A> inline bool True(const Indexable<bool,A,Full,Abstract,MatrixS
 	return ret;
 }
 
+template <class T, class A,Store M, Data D> inline
+bool True1(const Indexable<T,A,M,D,MatrixShape>& a,const T&b, bool (*f)(const T&, const T&))
+{
+  bool ret(true);
+  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+  for (index_t i=a.GetLimits().Row.Low;i<=rh;i++)
+    for (index_t j=a.GetLimits().Col.Low;j<=ch;j++)
+      ret=ret&&f(a(i,j),b);
+  return ret;
+}
+
+
 template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)
 {
 	T ret(0);

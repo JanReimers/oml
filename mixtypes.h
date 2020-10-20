@@ -80,6 +80,7 @@ template <class Ts> struct Scalar;
 //
 //  Now make specializations for each allowed scalar type.
 //
+#include <complex>
 #define ScalarAllowed(S)\
 template <> struct Scalar<S>\
 {\
@@ -87,18 +88,24 @@ template <> struct Scalar<S>\
   const S& itsVal;\
 };\
 
+ScalarAllowed(std::complex<double>)
 ScalarAllowed(double)
 ScalarAllowed(float)
 ScalarAllowed(int)
 
 #undef ScalarAllowed
 
-
+/*
 template <class T> struct Scalar<std::complex<T> >
 {
   Scalar(const std::complex<T>& s) : itsVal(s) {};
   const std::complex<T>& itsVal;
 };
 
-
+template <> struct Scalar<std::complex<double> >
+{
+  Scalar(const std::complex<double>& s) : itsVal(s) {};
+  const std::complex<double>& itsVal;
+};
+*/
 #endif // _mixtypes_h_

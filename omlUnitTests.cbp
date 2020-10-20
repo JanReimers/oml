@@ -26,10 +26,12 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-pg" />
 					<Add option="-m64" />
 				</Compiler>
 				<Linker>
 					<Add option="-O2" />
+					<Add option="-pg" />
 					<Add option="-m64" />
 					<Add directory="../Release" />
 				</Linker>
@@ -49,6 +51,7 @@
 			<Add library="pthread" />
 			<Add directory="../googletest/lib" />
 		</Linker>
+		<Unit filename="TODO_list" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Unit filename="src/vector.cc" />

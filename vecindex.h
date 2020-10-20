@@ -107,6 +107,7 @@ T Sum(const Indexable<T,A,M,Abstract,VectorShape>& a)
   return ret;
 }
 
+/*
 template <class A, Store M> inline
 bool True(const Indexable<bool,A,M,Abstract,VectorShape>& a)
 {
@@ -116,6 +117,7 @@ bool True(const Indexable<bool,A,M,Abstract,VectorShape>& a)
   return ret;
 }
 
+*/
 template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,VectorShape>
 {
  public:

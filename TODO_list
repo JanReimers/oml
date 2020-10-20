@@ -1,0 +1,8 @@
+Disconnect HEAD in git
+Just do this:
+
+git checkout master
+Or, if you have changes that you want to keep, do this:
+
+git checkout -b temp
+git checkout -B master temp
