@@ -44,9 +44,6 @@ public:
 template <class T> void mmul(     Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B);
 template <class T> T    vmul(const Vector<T> V1,const Matrix<T>& A, const Vector<T>& V2);
 
-//
-//  Hand coded
-//
 TYPED_TEST_SUITE_P(MatrixTests);
 
 TYPED_TEST_P(MatrixTests,Constructors)
@@ -505,8 +502,6 @@ TEST_F(MatrixComplexTests,MixedTypes)
 }
 
 inline double conj(const double& d) {return d;}
-
-auto SinLambda = [](const auto &x) { return sin(x); };
 
 template <class T, typename Tf> void TestUnop(T dummy,Tf f)
 {

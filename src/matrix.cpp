@@ -125,33 +125,33 @@ template <class T> std::istream& Matrix<T>::Read(std::istream& is)
 //
 //  Changing size and/or limits.
 //
-template <class T,class A, Store M> void SetLimits(Indexable<T,A,M,Real,MatrixShape>& m,const MatLimits& theLimits, bool preserve)
+template <class T> void Matrix<T>::SetLimits(const MatLimits& theLimits, bool preserve)
 {
   theLimits.Check();
-  if (m.GetLimits()!=theLimits)
+  if (GetLimits()!=theLimits)
   {
     if (preserve)
     {
-			A dest(theLimits);
+        Matrix<T> dest(theLimits);
 
       index_t newrowlow=theLimits.Row.Low, newrowhigh=theLimits.Row.High;
       index_t newcollow=theLimits.Col.Low, newcolhigh=theLimits.Col.High;
-      index_t rowlow =Max(newrowlow ,m.GetLimits().Row.Low );   //Limits of old and new
-      index_t rowhigh=Min(newrowhigh,m.GetLimits().Row.High);   //data overlap.
-      index_t collow =Max(newcollow ,m.GetLimits().Col.Low );   //Limits of old and new
-      index_t colhigh=Min(newcolhigh,m.GetLimits().Col.High);   //data overlap.
+      index_t rowlow =Max(newrowlow ,GetLimits().Row.Low );   //Limits of old and new
+      index_t rowhigh=Min(newrowhigh,GetLimits().Row.High);   //data overlap.
+      index_t collow =Max(newcollow ,GetLimits().Col.Low );   //Limits of old and new
+      index_t colhigh=Min(newcolhigh,GetLimits().Col.High);   //data overlap.
 
-      typename A::Subscriptor sdest (dest);         //Destination subscriptor.
+      Subscriptor sdest (dest);         //Destination subscriptor.
 
       for (index_t i=rowlow;i<=rowhigh;i++)
         for (index_t j=collow;j<=colhigh;j++)
-          sdest(i,j)=m(i,j); //Transfer any overlaping data.
+          sdest(i,j)=(*this)(i,j); //Transfer any overlaping data.
 
-			static_cast<A&>(m)=dest;
+			(*this)=dest;
 		}
      else
     {
-			static_cast<A&>(m)=A(theLimits);
+			(*this)=Matrix<T>(theLimits);
     }
   }
 }
@@ -212,18 +212,20 @@ template <class T, class A, Store M> void SwapColumns(Indexable<T,A,M,Real,Matri
   }
 }
 
-template <class T,class A, Store M> void SubMatrix (Indexable<T,A,M,Real,MatrixShape>& dest,const Indexable<T,A,M,Real,MatrixShape>& source)
+template <class T> Matrix<T> Matrix<T>::SubMatrix(const MatLimits& lim) const
 {
-	assert(dest.GetLimits().Row.Low >=source.GetLimits().Row.Low );
-	assert(dest.GetLimits().Col.Low >=source.GetLimits().Col.Low );
-	assert(dest.GetLimits().Row.High<=source.GetLimits().Row.High);
-	assert(dest.GetLimits().Col.High<=source.GetLimits().Col.High);
-	typename A::Subscriptor s(dest);
+    Matrix<T> dest(lim);
+	assert(dest.GetLimits().Row.Low >=GetLimits().Row.Low );
+	assert(dest.GetLimits().Col.Low >=GetLimits().Col.Low );
+	assert(dest.GetLimits().Row.High<=GetLimits().Row.High);
+	assert(dest.GetLimits().Col.High<=GetLimits().Col.High);
+	Subscriptor s(dest);
 	index_t rh=dest.GetLimits().Row.High;
 	index_t ch=dest.GetLimits().Col.High;
 	for (index_t i=dest.GetLimits().Row.Low;i<=rh;i++)
 		for (index_t j=dest.GetLimits().Col.Low;j<=ch;j++)
-			s(i,j)=source(i,j);
+			s(i,j)=(*this)(i,j);
+    return dest;
 }
 
 

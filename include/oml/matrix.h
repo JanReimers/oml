@@ -67,7 +67,7 @@ template <class T> class Matrix
   void ReIndexColumns(const std::vector<index_t>& index) {::ReIndexColumns(*this,index);}
   void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
   void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
-  Matrix SubMatrix(const MatLimits& lim) const {Matrix ret(lim);::SubMatrix(ret,*this);return ret;}
+  Matrix SubMatrix(const MatLimits& lim) const;
 
   typedef MatrixRow     <T,Matrix<T>,Full,Real> RowType;
   typedef MatrixColumn  <T,Matrix<T>,Full,Real> ColType;
@@ -204,7 +204,7 @@ Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
-    m.GetLimits();
+    //m.GetLimits();
     MatrixAssign(*this,m); //Use op(i,j).
   }
 
@@ -212,7 +212,7 @@ Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
 template <class T> template <class A> inline
 Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
 {
-  if (size()==0) SetLimits(m.GetLimits());
+  SetLimits(m.GetLimits());
   ArrayAssign(*this,m); //Use op[].
   return *this;
 }
@@ -220,7 +220,7 @@ Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
 template <class T> template <class A,Store M, Data D> inline
 Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
 {
-  if (size()==0) SetLimits(m.GetLimits());
+  SetLimits(m.GetLimits());
   MatrixAssign(*this,m); //Use op(,).
   return *this;
 }
@@ -249,10 +249,7 @@ template <class T> inline T* Matrix<T>::Get()
   return itsData.Get();
 }
 
-template <class T> inline void Matrix<T>::SetLimits(const MatLimits& lim,bool preserve)
-{
-  ::SetLimits(*this,lim,preserve);
-}
+
 
 template <class T> inline void Matrix<T>::SetLimits(index_t r, index_t c , bool preserve)
 {

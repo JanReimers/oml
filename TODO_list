@@ -34,3 +34,4 @@ Work list:
         Matrix
         DiangonalMatrix
         SymmetricMatrix
+    Create vector T*, set num owners=2

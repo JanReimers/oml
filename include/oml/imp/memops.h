@@ -76,6 +76,24 @@ Derived& Matrix##NAME (Indexable<T,Derived,Symmetric,D,MatrixShape>& a,\
       s(i,j) OP##=b(i,j);\
   return static_cast<Derived&>(a);\
 }\
+/*Diagonal versions*/ \
+template <class T,class Derived,Data D,class B,Data DB> inline \
+Derived& Matrix##NAME (Indexable<T,Derived,Diagonal,D,MatrixShape>& a,\
+                  const Indexable<T,B,Diagonal,DB,MatrixShape>& b)\
+{\
+    typename Derived::Subscriptor s(a); \
+    for (index_t i:a.rows())\
+            s(i) OP##=b(i,i);\
+  return static_cast<Derived&>(a);\
+}\
+template <class T, class Derived,Data D> inline \
+Derived& Matrix##NAME (Indexable<T,Derived,Diagonal,D,MatrixShape>& a,const T& scalar)\
+{\
+  typename Derived::Subscriptor s(a); \
+  for (index_t i:a.rows())\
+      s(i) OP##=scalar;\
+  return static_cast<Derived&>(a);\
+}\
 
 OP(Add,+)
 OP(Sub,-)
@@ -92,8 +110,7 @@ template <class T, class Derived,Store M,Data DA,Shape S,class B, Data DB> inlin
 void ArrayAssign(Indexable<T,Derived,M,DA,S>& a,const Indexable<T,B,M,DB,S>& b)
 {
   assert(a.size()==b.size());
-  typename Derived::ArraySubscriptor s(a);
-  for (index_t i:a.array_indices()) s[i]=b[i];
+  for (index_t i:a.array_indices()) a[i]=b[i];
 }
 
 template <class T, class Derived,Store M,Data D,class B,Data DB> inline
@@ -141,6 +158,18 @@ void MatrixAssign(Indexable<T,Derived,Symmetric,D,MatrixShape>& a,const Indexabl
   for (index_t i:a.rows())
     for (index_t j:a.rows(i))
       s(i,j)=b(i,j);
+}
+
+template <class T, class Derived, Data D, class B, Data DB> inline
+void DiagonalAssign(Indexable<T,Derived,Diagonal,D,MatrixShape>& a,const Indexable<T,B,Diagonal,DB,MatrixShape>& b)
+{
+#ifdef WARN_DEEP_COPY
+  std::cerr << "Doing abstract MatrixAssign n=" << a.size() << std::endl;
+#endif
+  assert(a.GetLimits()==b.GetLimits());
+  typename Derived::Subscriptor s(a);
+  for (index_t i:a.rows())
+      s(i)=b(i,i);
 }
 
 #endif //_memops_h_

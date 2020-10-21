@@ -148,10 +148,10 @@ template <class T, class V, class B> class MatrixVMOp
 //  Multiplication, Matrix * Diagonal Proxy.
 //
 template <class T, class A, class D> class MatrixMDOp
-: public Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape>
+: public Indexable<T,MatrixMDOp<T,A,D>,Diagonal,Abstract,MatrixShape>
 {
  public:
-  typedef Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Indexable<T,MatrixMDOp<T,A,D>,Diagonal,Abstract,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   MatrixMDOp(const A& a, const D& d)
@@ -178,13 +178,13 @@ template <class T, class A, class D> class MatrixMDOp
 
 //----------------------------------------------------------------------
 //
-//  Multiplication, Vector * Matrix Proxy.
+//  Multiplication, Diagonal * Matrix Proxy.
 //
 template <class T, class D, class B> class MatrixDMOp
-: public Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape>
+: public Indexable<T,MatrixDMOp<T,D,B>,Diagonal,Abstract,MatrixShape>
 {
  public:
-  typedef Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Indexable<T,MatrixDMOp<T,D,B>,Diagonal,Abstract,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   MatrixDMOp(const D& d, const B& b)
@@ -200,6 +200,40 @@ template <class T, class D, class B> class MatrixDMOp
   T operator()(index_t i,index_t j) const
   {
     return itsD(i,i)*itsB(i,j);
+  }
+  MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
+  index_t   size  () const {return GetLimits().size();}
+
+ private:
+  const D itsD;
+  const B itsB;
+};
+
+//----------------------------------------------------------------------
+//
+//  Multiplication, Diagonal * Diagonal Proxy.
+//
+
+template <class T, class D, class B> class MatrixDDOp
+: public Indexable<T,MatrixDDOp<T,D,B>,Diagonal,Abstract,MatrixShape>
+{
+ public:
+  typedef Indexable<T,MatrixDDOp<T,D,B>,Diagonal,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
+  MatrixDDOp(const D& d, const B& b)
+    : itsD(d)
+    , itsB(b)
+  {
+    assert(itsD.GetLimits().Col==itsB.GetLimits().Row);
+  };
+  MatrixDDOp(const MatrixDDOp& m)
+    : itsD(m.itsD)
+    , itsB(m.itsB)
+    {};
+  T operator()(index_t i,index_t j) const
+  {
+    return j==i ? itsD(i,i)*itsB(i,i) : T(0);
   }
   MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
   index_t   size  () const {return GetLimits().size();}
@@ -296,8 +330,8 @@ OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
 //
 //  Matrix * Matrix, returns a proxy.
 //
-template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
-auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
 {
   typedef typename ReturnType<TA,TB>::RetType TR;
   return MatrixMMOp<TR,typename A::RefT,typename B::RefT>(a,b);
@@ -330,52 +364,35 @@ auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a,const Indexable<TB,B,M
 //
 //  Matrix * DiagonalMatrix, returns a proxy.
 //
-template <class T, class A, class B, Store MA, Data DA> inline
-MatrixMDOp<T,Ref<T,Indexable<T,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,Diagonal,Abstract,MatrixShape>,MatrixShape> >
-operator*(const Indexable<T,A,MA,DA,MatrixShape>& a,const Indexable<T,B,Diagonal,Abstract,MatrixShape>& b)
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
 {
-  typedef typename A::RefT refa;
-  typedef typename B::RefT refb;
-  return MatrixMDOp<T,refa,refb>(refa(a),refb(b));
-}
-
-//---------------------------------------------------------------------
-//
-//  Matrix<complex> * DiagonalMatrix<real>, returns a proxy.
-//
-template <class T, class A, class B, Store MA, Data DA> inline
-MatrixMDOp<std::complex<T>,Ref<std::complex<T>,Indexable<std::complex<T>,A,MA,DA,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,Diagonal,Abstract,MatrixShape>,MatrixShape> >
-operator*(const Indexable<std::complex<T>,A,MA,DA,MatrixShape>& a,const Indexable<T,B,Diagonal,Abstract,MatrixShape>& b)
-{
-  typedef Ref<std::complex<T>,Indexable<std::complex<T>,A,MA,DA,MatrixShape>,MatrixShape> refa;
-  typedef Ref<T              ,Indexable<              T,B,Diagonal,Abstract,MatrixShape>,MatrixShape> refb;
-  return MatrixMDOp<std::complex<T>,refa,refb>(refa(a),refb(b));
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixMDOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
 //------------------------------------------------------------
 //
 //  DiagonalMatrix * Matrix, returns a proxy.
 //
-template <class T, class A, class B, Store MB, Data DB> inline
-MatrixDMOp<T,Ref<T,Indexable<T,A,Diagonal,Abstract,MatrixShape>,MatrixShape>,Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> >
-operator*(const Indexable<T,A,Diagonal,Abstract,MatrixShape>& a,const Indexable<T,B,MB,DB,MatrixShape>& b)
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,Diagonal,Abstract,MatrixShape>,MatrixShape> refa;
-  typedef Ref<T,Indexable<T,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  return MatrixDMOp<T,refa,refb>(refa(a),refb(b));
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixDMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
 //------------------------------------------------------------
 //
-//  DiagonalMatrix<real> * Matrix<complex>, returns a proxy.
+//  DiagonalMatrix * DiagonalMatrix, returns a proxy.
 //
-template <class T, class A, class B, Store MB, Data DB> inline
-MatrixDMOp<std::complex<T>,Ref<T,Indexable<T,A,Diagonal,Abstract,MatrixShape>,MatrixShape>,Ref<std::complex<T>,Indexable<std::complex<T>,B,MB,DB,MatrixShape>,MatrixShape> >
-operator*(const Indexable<T,A,Diagonal,Abstract,MatrixShape>& a,const Indexable<std::complex<T>,B,MB,DB,MatrixShape>& b)
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto
+operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
 {
-  typedef Ref<T,Indexable<T,A,Diagonal,Abstract,MatrixShape>,MatrixShape> refa;
-  typedef Ref<std::complex<T>,Indexable<std::complex<T>,B,MB,DB,MatrixShape>,MatrixShape> refb;
-  return MatrixDMOp<std::complex<T>,refa,refb>(refa(a),refb(b));
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixDDOp<TR,typename A::RefT,typename B::RefT>(a,b);
+
 }
 
 //--------------------------------------------------------------

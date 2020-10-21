@@ -26,6 +26,13 @@ template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexab
   for (index_t i: a.array_indices()) ret+=a[i];
   return ret;
 }
+
+template <class T, class A, Data D, Shape S> inline T Sum(const Indexable<T,A,Diagonal,D,S>& a)
+{
+  T ret(0);
+  for (index_t i: a.rows()) ret+=a(i,i);
+  return ret;
+}
 //------------------------------------------------------------------
 //
 //  Use classes to workaround lack of support for partial

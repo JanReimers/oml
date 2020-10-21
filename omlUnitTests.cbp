@@ -52,6 +52,7 @@
 			<Add directory="../googletest/lib" />
 		</Linker>
 		<Unit filename="TODO_list" />
+		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>

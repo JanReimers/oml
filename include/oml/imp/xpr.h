@@ -4,11 +4,11 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
+//#include "oml/imp/indexable.h"
 #include "oml/imp/index_t.h"
 #include "oml/imp/shape.h"
 #include "oml/imp/veclimit.h"
 #include "oml/imp/matlimit.h"
-#include "oml/imp/indexable_base.h"
 
 //----------------------------------------------------
 //
@@ -105,7 +105,7 @@ template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 //  Hold a temporary expression.
 //
 template <class T, class Expression,Store M,Data D,Shape S> class Xpr;
-
+/*
 template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,ArrayShape>
 : public Indexable<T,Xpr<T,Expression,M,D,ArrayShape>,M,D,ArrayShape>
 {
@@ -120,7 +120,7 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,A
  private:
   Expression itsExp;
 };
-
+*/
 template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,VectorShape>
 : public Indexable<T,Xpr<T,Expression,M,D,VectorShape>,M,D,VectorShape>
 {

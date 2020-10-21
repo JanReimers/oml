@@ -3,16 +3,11 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/diagonalmatrix.h"
-#include "oml/array.h"
-#include "oml/minmax.h"
-#include "oml/iterable_io.h"
+#include "oml/imp/minmax.h"
+#include "oml/imp/iterable_io.h"
 #include <iostream>
 #include <iomanip>
 #include <cassert>
-
-#ifndef TYPE
-#error "DiagonalMatrix.cc TYPE was not defined"
-#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -57,15 +52,38 @@ template <class T> std::istream& DiagonalMatrix<T>::Read(std::istream& is)
   return is;
 }
 
+template <class T> void DiagonalMatrix<T>::ReIndexRows(const std::vector<index_t>& index)
+{
+    GetDiagonal().ReIndex(index);
+}
 
-//---------------------------------------------------------------------------------
-//
-//  Make template instance
-//
-typedef TYPE Type;
-typedef DiagonalMatrix<Type> Mat;
-const Store MatStore=Diagonal;
+template <class T> void DiagonalMatrix<T>::ReIndexColumns(const std::vector<index_t>& index)
+{
+    GetDiagonal().ReIndex(index);
+}
 
-template class DiagonalMatrix<Type>;
+template <class T> void DiagonalMatrix<T>::SwapRows(index_t i,index_t j)
+{
+     T temp=(*this)(i,i);
+     (*this)(i)=(*this)(j,j);
+     (*this)(j)=temp;
+}
 
-//#include "oml/matsub.ci"
+template <class T> void DiagonalMatrix<T>::SwapColumns(index_t i,index_t j)
+{
+     T temp=(*this)(i,i);
+     (*this)(i)=(*this)(j,j);
+     (*this)(j)=temp;
+}
+
+
+template <class T> DiagonalMatrix<T> DiagonalMatrix<T>::SubMatrix(const MatLimits& lim) const
+{
+	assert(lim.Row.Low >=GetLimits().Row.Low );
+	assert(lim.Row.High<=GetLimits().Row.High);
+	DiagonalMatrix<T> dest(lim);
+	for (index_t i:dest.rows())
+        dest(i)=(*this)(i,i);
+    return dest;
+}
+

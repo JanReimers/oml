@@ -89,15 +89,17 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
 //
 //  template specialization for diagonal Matricies's.
 //
-template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,MatrixShape>
+template <class T, class Derived> class Indexable<T,Derived,Diagonal,Real,MatrixShape>
  : public IndexableBase<Derived,MatrixShape>
 {
  public:
   explicit Indexable() {};
   ~Indexable() {};
 
-//  T operator[] Not supported for abstract matricies.
-  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T  operator[](index_t n          ) const {return static_cast<const Derived*>(this)->operator[](n);}
+  T& operator[](index_t n          )       {return static_cast<      Derived*>(this)->operator[](n);}
+  T  operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+  T& operator()(index_t i          )       {return static_cast<      Derived*>(this)->operator()(i);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
@@ -119,6 +121,43 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,Ma
   Indexable& operator=(const Indexable&);
   Indexable(const Indexable&);
 };
+
+//-------------------------------------------------
+//
+//  template specialization for abstract Diagonal Matricies's.
+//
+template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,MatrixShape>
+ : public IndexableBase<Derived,MatrixShape>
+{
+ public:
+  explicit Indexable() {};
+  ~Indexable() {};
+
+//  T operator[] Not supported for abstract matricies.
+  T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
+
+  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
+
+  Derived& operator+=(T scalar) {return MatrixAdd(*this,scalar);}
+  Derived& operator-=(T scalar) {return MatrixSub(*this,scalar);}
+  Derived& operator*=(T scalar) {return MatrixMul(*this,scalar);}
+  Derived& operator/=(T scalar) {return MatrixDiv(*this,scalar);}
+
+  template <class B,Data DB> Derived& operator+=(const Indexable<T,B,Diagonal,DB,MatrixShape>& b) {return MatrixAdd(*this,b);}
+  template <class B,Data DB> Derived& operator-=(const Indexable<T,B,Diagonal,DB,MatrixShape>& b) {return MatrixSub(*this,b);}
+
+// ArraySubscriptor Not supported for abstract matricies.
+
+ protected:
+  template <class B, Data DB> void AssignFrom(const Indexable<T,B,Diagonal,DB,MatrixShape>& b) {MatrixAssign(*this,b);}
+
+ private:
+  Indexable& operator=(const Indexable&);
+  Indexable(const Indexable&);
+};
+
+
 
 template <class T> class Matrix;
 
