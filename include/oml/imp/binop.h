@@ -10,102 +10,15 @@
 #include "oml/imp/matlimit.h"
 #include <cmath>
 
-//-----------------------------------------------------------------
-//
-//  Concrete binary operations.
-//
-/*
-template <class TA, class TB> class OpAdd
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return a+b;}
-};
-
-template <class TA, class TB> class OpSub
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return a-b;}
-};
-
-template <class TA, class TB> class OpMul
-{
- public:
-  typedef typename BinaryRetType<TA,TB,OpMul>::RetType RT;
-   static inline RT apply(const TA a, const TB b) {return a*b;}
-};
-
-template <class TA, class TB> class OpDiv
-{
- public:
-  typedef typename BinaryRetType<TA,TB,OpDiv>::RetType RT;
-   static inline RT apply(const TA a, const TB b) {return a/b;}
-};
-
-template <class TA, class TB> class OpMod
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return a%b;}
-};
-
-template <class TA, class TB> class Opfmod
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return fmod(a,b);}
-};
-
-template <class TA, class TB> class Oppow
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return pow(a,b);}
-};
-
-template <class TA, class TB> class Opatan2
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return atan2(a,b);}
-};
-
-template <class TA, class TB> class Ophypot
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return hypot(a,b);}
-};
-
-
-template <class TA, class TB> class OpEqual
-{
- public:
-  typedef bool RT;
-  static inline RT apply(const TA a, const TB b) {return a==b;}
-};
-
-template <class TA, class TB> class OpAnd
-{
- public:
-  typedef typename BinaryRetType<TA,TB>::RetType RT;
-  static inline RT apply(const TA a, const TB b) {return a&&b;}
-};
-*/
-//---------------------------------------------------------------
-//
-//  Temporary binary operation holder.
-//
-template <class TR, class TA, class TB, class A, class B, Shape S> class XprBinaryLambda
+template <class TR, class TA, class TB, class A, class B, Shape S> class XprBinary
 {};
 
 
-template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<TR,TA,TB,A,B,VectorShape>
+template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,TB,A,B,VectorShape>
 {
  public:
-   XprBinaryLambda(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
-  ~XprBinaryLambda() {};
+   XprBinary(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
+  ~XprBinary() {};
 
   TR        operator[](index_t n) const {return itsF(itsA[n],itsB[n]);}
   TR        operator()(index_t n) const {return itsF(itsA(n),itsB(n));}
@@ -117,11 +30,11 @@ template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<
    TR(*itsF)(const TA&,const TB&);
 };
 
-template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<TR,TA,TB,A,B,MatrixShape>
+template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,TB,A,B,MatrixShape>
 {
  public:
-   XprBinaryLambda(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
-  ~XprBinaryLambda() {};
+   XprBinary(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
+  ~XprBinary() {};
 
   TR         operator[](index_t n          ) const {return itsF(itsA[n],itsB[n]);}
   TR         operator()(index_t i,index_t j) const {return itsF(itsA(i,j),itsB(i,j));}
@@ -132,55 +45,7 @@ template <class TR, class TA, class TB, class A, class B> class XprBinaryLambda<
    B itsB;
    TR(*itsF)(const TA&,const TB&);
 };
-/*
-template <class T, class A, class B, class Op, Shape S> class XprBinOp{};
-template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,ArrayShape>
-{
- public:
-   XprBinOp(A a, B b) : itsA(a), itsB(b) {};
-  ~XprBinOp() {};
 
-  T       operator[](index_t n) const {return Op::apply(itsA[n],itsB[n]);}
-  index_t size      (         ) const {return itsA.size();}
- private:
-   A itsA;
-   B itsB;
-};
-template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,VectorShape>
-{
- public:
-   XprBinOp(A a, B b) : itsA(a), itsB(b) {};
-  ~XprBinOp() {};
-
-  T         operator[](index_t n) const {return Op::apply(itsA[n],itsB[n]);}
-  T         operator()(index_t n) const {return Op::apply(itsA(n),itsB(n));}
-  index_t   size      (         ) const {return itsA.size();}
-  VecLimits GetLimits (         ) const {return itsA.GetLimits();}
- private:
-   A itsA;
-   B itsB;
-};
-template <class T, class A, class B, class Op> class XprBinOp<T,A,B,Op,MatrixShape>
-{
- public:
-   XprBinOp(A a, B b) : itsA(a), itsB(b) {};
-  ~XprBinOp() {};
-
-  T         operator[](index_t n          ) const {return Op::apply(itsA[n],itsB[n]);}
-  T         operator()(index_t i,index_t j) const {return Op::apply(itsA(i,j),itsB(i,j));}
-  index_t   size      (                   ) const {return itsA.size();}
-  MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
- private:
-   A itsA;
-   B itsB;
-};
-
-*/
-//---------------------------------------------------------
-//
-//  Sepecify result of mixing Real and Abstract Data types
-//  in binary operators.
-//
 template <Data D1, Data D2> class BinaryData;
 template <Data D> class BinaryData<D,D>
 {

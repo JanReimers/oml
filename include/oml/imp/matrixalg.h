@@ -299,7 +299,7 @@ OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  typedef typename ReturnType<TA,TB>::RetType TR;
   return MatrixMMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
@@ -308,11 +308,10 @@ auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,M
 //
 //  Matrix * Vector, returns a proxy.
 //
-//MatrixMVOp<TA,Ref<TA,Indexable<TA,A,MA,DA,MatrixShape>,MatrixShape>,Ref<TB,Indexable<TB,B,MB,DB,VectorShape>,VectorShape> >
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,MB,DB,VectorShape>& b)
 {
-  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  typedef typename ReturnType<TA,TB>::RetType TR;
   return MatrixMVOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
@@ -323,7 +322,7 @@ auto operator*(const Indexable<TA,A,MA,DA,MatrixShape>& a,const Indexable<TB,B,M
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a,const Indexable<TB,B,MB,DB,MatrixShape>& b)
 {
-  typedef typename eBinaryRetType<TA,TB,eOp::Mul>::RetType TR;
+  typedef typename ReturnType<TA,TB>::RetType TR;
   return MatrixVMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 

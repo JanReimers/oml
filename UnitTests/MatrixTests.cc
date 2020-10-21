@@ -482,6 +482,26 @@ TEST_F(MatrixComplexTests,MixedTypes)
     EXPECT_EQ((Ac*Ar*Sc*Ar*Ar*Sc)(1,2),dcmplx(-15.625,-109.375));
     EXPECT_EQ((Vc*Ac*Sc*Ar*Sc*Ar*Ar*Ac*Vr),dcmplx(62500,-343750));
 
+    EXPECT_EQ((Ac+Sc)(1,1),dcmplx( 2.5,-2.25));
+    EXPECT_EQ((Ac-Sc)(1,1),dcmplx( 1.5,-1.75));
+    EXPECT_EQ((Sc+Ac)(1,1),dcmplx( 2.5,-2.25));
+    EXPECT_EQ((Sc-Ac)(1,1),dcmplx(-1.5, 1.75));
+    EXPECT_EQ((Ac+Sr)(1,1),dcmplx( 6.0,-2.0 ));
+    EXPECT_EQ((Ac-Sr)(1,1),dcmplx(-2.0,-2.0 ));
+    EXPECT_EQ((Sr+Ac)(1,1),dcmplx( 6.0,-2.0 ));
+    EXPECT_EQ((Sr-Ac)(1,1),dcmplx( 2.0, 2.0 ));
+    EXPECT_EQ((Ar+Sr)(1,1), 4.5);
+    EXPECT_EQ((Ar-Sr)(1,1),-3.5);
+    EXPECT_EQ((Sr+Ar)(1,1), 4.5);
+    EXPECT_EQ((Sr-Ar)(1,1), 3.5);
+    EXPECT_EQ((Ar+Sc)(1,1),dcmplx( 1.0,-.25 ));
+    EXPECT_EQ((Ar-Sc)(1,1),dcmplx( 0.0, .25 ));
+    EXPECT_EQ((Sc+Ar)(1,1),dcmplx( 1.0,-.25 ));
+    EXPECT_EQ((Sc-Ar)(1,1),dcmplx( 0.0,-.25 ));
+    EXPECT_EQ((Ar+1)(1,1), 1.5);
+    EXPECT_EQ((Ar-1)(1,1),-0.5);
+    EXPECT_EQ((1+Ar)(1,1), 1.5);
+    EXPECT_EQ((1-Ar)(1,1), 0.5);
 }
 
 inline double conj(const double& d) {return d;}
@@ -524,6 +544,8 @@ TYPED_TEST_P(MatrixTests,UnaryOps)
     //TestUnop(TypeParam(0),[](const auto &x) { return pow10(x); });
     TestUnop(TypeParam(0),[](const auto &x) { return sqrt(x); });
     TestUnop(TypeParam(0),[](const auto &x) { return fabs(x); });
+    TestUnop(TypeParam(0),[](const auto &x) { return -x; });
+    TestUnop(TypeParam(0),[](const auto &x) { return +x; });
 }
 
 TEST_F(MatrixComplexTests,UnaryOps)

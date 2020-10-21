@@ -67,7 +67,6 @@
 		<Unit filename="include/oml/imp/matlimit.h" />
 		<Unit filename="include/oml/imp/matrixalg.h" />
 		<Unit filename="include/oml/imp/matrixbase.h" />
-		<Unit filename="include/oml/imp/matsub.ci" />
 		<Unit filename="include/oml/imp/matsub.h" />
 		<Unit filename="include/oml/imp/memops.h" />
 		<Unit filename="include/oml/imp/minmax.h" />
@@ -91,54 +90,112 @@
 		<Unit filename="include/oml/random.h" />
 		<Unit filename="include/oml/smatrix.h" />
 		<Unit filename="include/oml/vector.h" />
-		<Unit filename="src/CNumericsDoubleDMatrix.cpp" />
-		<Unit filename="src/InstanceComplex1.cpp" />
-		<Unit filename="src/InstanceComplex2.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceComplex4.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceDouble1.cpp" />
-		<Unit filename="src/InstanceDouble2.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/InstanceDouble4.cpp">
-			<Option compile="0" />
-		</Unit>
-		<Unit filename="src/NumericsDouble.cpp" />
-		<Unit filename="src/NumericsDoubleDMatrix.cpp" />
 		<Unit filename="src/cnumeric/SVD.f" />
-		<Unit filename="src/cnumeric/ch.cc">
+		<Unit filename="src/cnumeric/ch.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/cnumeric/epsilon.cc" />
-		<Unit filename="src/cnumeric/htribk.cc">
+		<Unit filename="src/cnumeric/epsilon.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/cnumeric/htridi.cc">
+		<Unit filename="src/cnumeric/htribk.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/cnumeric/tql2.cc">
+		<Unit filename="src/cnumeric/htridi.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/cnumeric/tqlrat.cc">
+		<Unit filename="src/cnumeric/tql2.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/dmatrix.cc">
+		<Unit filename="src/cnumeric/tqlrat.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
-		<Unit filename="src/matlimit.cc" />
-		<Unit filename="src/ran250.cc" />
-		<Unit filename="src/stream.cc" />
-		<Unit filename="src/veclimit.cc" />
-		<Unit filename="src/vector.cc">
+		<Unit filename="src/diagonalmatrix.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/instance_complex.cpp" />
+		<Unit filename="src/instance_double.cpp" />
+		<Unit filename="src/linear_algebra_complex.cpp" />
+		<Unit filename="src/linear_algebra_double.cpp" />
+		<Unit filename="src/matlimit.cpp" />
+		<Unit filename="src/matrix.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/cholsky.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/eigsort.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/gaussj.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/invmat.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/invtri.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/lubksb.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/lubksbm.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/ludcmp.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/lusolver.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/qldecomp.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/solvetri.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/svbksb.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/svdcmp.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/svsolver.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/numeric/tridiag.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/ran250.cpp" />
+		<Unit filename="src/smatrix.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/stream.cpp" />
+		<Unit filename="src/veclimit.cpp" />
+		<Unit filename="src/vector.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>

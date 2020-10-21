@@ -11,8 +11,7 @@
 #include "oml/imp/binop.h"
 #include "oml/imp/unop.h"
 #include <cassert>
-
-namespace std {template <class T> class complex;}
+#include <complex>
 
 //---------------------------------------------------------------------------
 //
@@ -27,16 +26,6 @@ template <class T, class A, Store M, Data D, Shape S> inline T Sum(const Indexab
   for (index_t i: a.array_indices()) ret+=a[i];
   return ret;
 }
-
-/*template <class A, Store M, Data D, Shape S> inline bool True(const Indexable<bool,A,M,D,S>& a)
-{
-  bool ret(true);
-  index_t n=a.size();
-  for (index_t i=0;i<n;i++) ret=ret && a[i];
-  return ret;
-}
-*/
-
 //------------------------------------------------------------------
 //
 //  Use classes to workaround lack of support for partial
@@ -82,119 +71,19 @@ template <class T,class A, Store M, Data D, Shape S> inline A Differentiate(cons
   return ret;
 }
 
-
-/*
-//--------------------------------------------------------------
-//
-//  Macros for generating template functions that return
-//  expressions.
-//
-#define ObOb(Func,Op)\
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline          \
-Xpr<typename Op<TA,TB>::RT,XprBinOp<typename Op<TA,TB>::RT,Ref<TA,Indexable<TA,A,M,DA,S>,S>,        \
-Ref<TB,Indexable<TB,B,M,DB,S>,S>,Op<TA,TB>,S>,M,BinaryData<DA,DB>::RetData,S>                       \
-Func (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>& b)                             \
-{                                                                                                   \
-  typedef Ref<TA,Indexable<TA,A,M,DA,S>,S> RefA;                                                    \
-  typedef Ref<TB,Indexable<TB,B,M,DB,S>,S> RefB;                                                    \
-  typedef XprBinOp<typename Op<TA,TB>::RT,RefA,RefB,Op<TA,TB>,S > ExprT;                            \
-  return Xpr<typename Op<TA,TB>::RT,ExprT,M,BinaryData<DA,DB>::RetData,S>(ExprT(RefA(a),RefB(b)));  \
-}
-
-#define ObSc(Func,Op)\
-template <class T1, class T2, class A, Store M, Data D, Shape S> inline                              \
-Xpr<typename Op<T1,T2>::RT,XprBinOp<typename Op<T1,T2>::RT,Ref<T1,Indexable<T1,A,M,D,S>,S>,          \
-Val<T2,Ref<T1,Indexable<T1,A,M,D,S>,S>,S>,Op<T1,T2>,S>,M,D,S>                                        \
-Func (const Indexable <T1,A,M,D,S>& a, const Scalar<T2>& b)                                          \
-{                                                                                                    \
-   typedef Ref<T1,Indexable<T1,A,M,D,S>,S> RefA;                                                     \
-   typedef XprBinOp<typename Op<T1,T2>::RT,RefA,Val<T2,RefA,S>,Op<T1,T2>,S> ExprT;                   \
-   return Xpr<typename Op<T1,T2>::RT,ExprT,M,D,S>(ExprT(RefA(a),Val<T2,RefA,S>(b.itsVal,RefA(a))));  \
-}                                                                                                    \
-template <class T1, class T2, class B, Store M, Data D, Shape S> inline                              \
-Xpr<typename Op<T1,T2>::RT,XprBinOp<typename Op<T1,T2>::RT,Val<T1,Ref<T2,Indexable<T2,B,M,D,S>,S>,S>,\
-Ref<T2,Indexable<T2,B,M,D,S>,S>,Op<T1,T2>,S>,M,D,S>                                                  \
-Func (const Scalar<T1>& a ,const Indexable <T2,B,M,D,S>& b)                                          \
-{                                                                                                    \
-   typedef Ref<T2,Indexable<T2,B,M,D,S>,S> RefB;                                                     \
-   typedef XprBinOp<typename Op<T1,T2>::RT,Val<T1,RefB,S>,RefB,Op<T1,T2>,S> ExprT;                   \
-   return Xpr<typename Op<T1,T2>::RT,ExprT,M,D,S>(ExprT(Val<T1,RefB,S>(a.itsVal,RefB(b)),RefB(b)));  \
-}                                                                                                    \
-template <class T, class A, Store M, Data D, Shape S> inline                                   \
-Xpr<typename Op<T,T>::RT,XprBinOp<typename Op<T,T>::RT,Ref<T,Indexable<T,A,M,D,S>,S>,          \
-Val<T,Ref<T,Indexable<T,A,M,D,S>,S>,S>,Op<T,T>,S>,M,D,S>                                       \
-Func (const Indexable <T,A,M,D,S>& a, const T& b)                                              \
-{                                                                                              \
-   typedef Ref<T,Indexable<T,A,M,D,S>,S> RefA;                                                 \
-   typedef XprBinOp<typename Op<T,T>::RT,RefA,Val<T,RefA,S>,Op<T,T>,S> ExprT;                  \
-   return Xpr<typename Op<T,T>::RT,ExprT,M,D,S>(ExprT(RefA(a),Val<T,RefA,S>(b,RefA(a))));      \
-}                                                                                              \
-template <class T, class B, Store M, Data D, Shape S> inline                                   \
-Xpr<typename Op<T,T>::RT,XprBinOp<typename Op<T,T>::RT,Val<T,Ref<T,Indexable<T,B,M,D,S>,S>,S>, \
-Ref<T,Indexable<T,B,M,D,S>,S>,Op<T,T>,S>,M,D,S>                                                \
-Func (const T& a ,const Indexable <T,B,M,D,S>& b)                                              \
-{                                                                                              \
-   typedef Ref<T,Indexable<T,B,M,D,S>,S> RefB;                                                 \
-   typedef XprBinOp<typename Op<T,T>::RT,Val<T,RefB,S>,RefB,Op<T,T>,S> ExprT;                  \
-   return Xpr<typename Op<T,T>::RT,ExprT,M,D,S>(ExprT(Val<T,RefB,S>(a,RefB(b)),RefB(b)));      \
-}
-
-#define ObScMix(Func,Op,Type1,Type2)                                                                 \
-template <class A, Store M, Data D, Shape S> inline                                                  \
-Xpr<typename Op<Type1,Type2>::RT,XprBinOp<typename Op<Type1,Type2>::RT,                              \
-Ref<Type1,Indexable<Type1,A,M,D,S>,S>,                                                               \
-Val<Type2,Ref<Type1,Indexable<Type1,A,M,D,S>,S>,S>,Op<Type1,Type2>,S>,M,D,S>                         \
-Func (const Indexable <Type1,A,M,D,S>& a, const Type2& b)                                            \
-{                                                                                                    \
-   typedef Op<Type1,Type2>::RT Type3;\
-   typedef Ref<Type1,Indexable<Type1,A,M,D,S>,S> RefA;                                               \
-   typedef XprBinOp<Type3,RefA,Val<Type2,RefA,S>,Op<Type1,Type2>,S> ExprT;    \
-   return Xpr<Type3,ExprT,M,D,S>(ExprT(RefA(a),Val<Type2,RefA,S>(b,RefA(a))));\
-}                                                                                                    \
-template <class B, Store M, Data D, Shape S> inline                                                  \
-Xpr<typename Op<Type1,Type2>::RT,XprBinOp<typename Op<Type1,Type2>::RT,                              \
-Val<Type1,Ref<Type2,Indexable<Type2,B,M,D,S>,S>,S>,                                                  \
-Ref<Type2,Indexable<Type2,B,M,D,S>,S>,Op<Type1,Type2>,S>,M,D,S>                                      \
-Func (const Type1& a ,const Indexable <Type2,B,M,D,S>& b)                                            \
-{                                                                                                    \
-   typedef Ref<Type2,Indexable<Type2,B,M,D,S>,S> RefB;                                               \
-   typedef XprBinOp<typename Op<Type1,Type2>::RT,Val<Type1,RefB,S>,RefB,Op<Type1,Type2>,S> ExprT;    \
-   return Xpr<typename Op<Type1,Type2>::RT,ExprT,M,D,S>(ExprT(Val<Type1,RefB,S>(a,RefB(b)),RefB(b)));\
-}                                                                                                    \
-template <class A, Store M, Data D, Shape S> inline                                                  \
-Xpr<typename Op<Type2,Type1>::RT,XprBinOp<typename Op<Type2,Type1>::RT,                              \
-Ref<Type2,Indexable<Type2,A,M,D,S>,S>,                                                               \
-Val<Type1,Ref<Type2,Indexable<Type2,A,M,D,S>,S>,S>,Op<Type2,Type1>,S>,M,D,S>                         \
-Func (const Indexable <Type2,A,M,D,S>& a, const Type1& b)                                            \
-{                                                                                                    \
-   typedef Ref<Type2,Indexable<Type2,A,M,D,S>,S> RefA;                                               \
-   typedef XprBinOp<typename Op<Type2,Type1>::RT,RefA,Val<Type1,RefA,S>,Op<Type2,Type1>,S> ExprT;    \
-   return Xpr<typename Op<Type2,Type1>::RT,ExprT,M,D,S>(ExprT(RefA(a),Val<Type1,RefA,S>(b,RefA(a))));\
-}                                                                                                    \
-template <class B, Store M, Data D, Shape S> inline                                                  \
-Xpr<typename Op<Type2,Type1>::RT,XprBinOp<typename Op<Type2,Type1>::RT,                              \
-Val<Type2,Ref<Type1,Indexable<Type1,B,M,D,S>,S>,S>,                                                  \
-Ref<Type1,Indexable<Type1,B,M,D,S>,S>,Op<Type2,Type1>,S>,M,D,S>                                      \
-Func (const Type2& a ,const Indexable <Type1,B,M,D,S>& b)                                            \
-{                                                                                                    \
-   typedef Ref<Type1,Indexable<Type1,B,M,D,S>,S> RefB;                                               \
-   typedef XprBinOp<typename Op<Type2,Type1>::RT,Val<Type2,RefB,S>,RefB,Op<Type2,Type1>,S> ExprT;    \
-   return Xpr<typename Op<Type2,Type1>::RT,ExprT,M,D,S>(ExprT(Val<Type2,RefB,S>(a,RefB(b)),RefB(b)));\
-}
-*/
 //
 //  Ob Ob binary
 //
 template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
 auto BinaryFunction(const Indexable<TA,A,M,DA,S>& a,
                     const Indexable<TB,B,M,DB,S>& b,
-                    typename BinaryRetType<TA,TB>::RetType (*f)(const TA&, const TB&))
+                    typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
 {
   typedef typename A::RefT RefA;
   typedef typename B::RefT RefB;
   constexpr Data DR=BinaryData<DA,DB>::RetData ;
-  typedef typename BinaryRetType<TA,TB>::RetType TR;
-  typedef XprBinaryLambda<TR,TA,TB,RefA,RefB,S> ExprTLambda;
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  typedef XprBinary<TR,TA,TB,RefA,RefB,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,DR,S>(ExprTLambda(RefA(a),RefB(b),f));
 }
 
@@ -227,12 +116,12 @@ auto DirectDivide (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>
 template <class TA, class TB, class A, Store M, Data DA, Shape S> inline
 auto BinaryFunction(const Indexable<TA,A,M,DA,S>& a,
                     const TB& b,
-                    typename BinaryRetType<TA,TB>::RetType (*f)(const TA&, const TB&))
+                    typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
 {
   typedef typename A::RefT RefA;
   typedef  Val<TB,RefA,S> ValB;
-  typedef typename BinaryRetType<TA,TB>::RetType TR;
-  typedef XprBinaryLambda<TR,TA,TB,RefA,ValB,S> ExprTLambda;
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  typedef XprBinary<TR,TA,TB,RefA,ValB,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,DA,S>(ExprTLambda(RefA(a),ValB(b,RefA(a)),f));
 }
 
@@ -240,12 +129,12 @@ auto BinaryFunction(const Indexable<TA,A,M,DA,S>& a,
 template <class TA, class TB, class B, Store M, Data DB, Shape S> inline
 auto BinaryFunction(const TA& a,
                     const Indexable<TB,B,M,DB,S>& b,
-                    typename BinaryRetType<TA,TB>::RetType (*f)(const TA&, const TB&))
+                    typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
 {
   typedef typename B::RefT RefB;
   typedef  Val<TA,RefB,S> ValA;
-  typedef typename BinaryRetType<TA,TB>::RetType TR;
-  typedef XprBinaryLambda<TR,TA,TB,ValA,RefB,S> ExprTLambda;
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  typedef XprBinary<TR,TA,TB,ValA,RefB,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,DB,S>(ExprTLambda(ValA(a,RefB(b)),RefB(b),f));
 }
 
@@ -257,7 +146,7 @@ auto BinaryFunctionR(const Indexable<TA,A,M,DA,S>& a,
 {
   typedef typename A::RefT RefA;
   typedef  Val<TB,RefA,S> ValB;
-  typedef XprBinaryLambda<TR,TA,TB,RefA,ValB,S> ExprTLambda;
+  typedef XprBinary<TR,TA,TB,RefA,ValB,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,DA,S>(ExprTLambda(RefA(a),ValB(b,RefA(a)),f));
 }
 template <class TR, class TA, class TB, class B, Store M, Data DB, Shape S> inline
@@ -267,7 +156,7 @@ auto BinaryFunctionR(const TA& a,
 {
   typedef typename B::RefT RefB;
   typedef  Val<TA,RefB,S> ValA;
-  typedef XprBinaryLambda<TR,TA,TB,ValA,RefB,S> ExprTLambda;
+  typedef XprBinary<TR,TA,TB,ValA,RefB,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,DB,S>(ExprTLambda(ValA(a,RefB(b)),RefB(b),f));
 }
 
@@ -378,7 +267,7 @@ template <class T, class TR, class A, Store M, Data D, Shape S> inline
 auto UnaryFunction(const Indexable <T,A,M,D,S>& a,TR(*f)(const T&))
 {
   typedef typename A::RefT RefA;
-  typedef XprUnaryLambda<T,TR,RefA,S> ExprTLambda;
+  typedef XprUnary<T,TR,RefA,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,D,S>(ExprTLambda(RefA(a),f));
 }
 
@@ -430,37 +319,6 @@ T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
   return Sum(DirectMultiply(a,b));
 }
 
-/*template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S>
-inline std::complex<T>
-Dot(const Indexable<std::complex<T>,A,MA,DA,S>& a,const Indexable<std::complex<T>,B,MB,DB,S>& b)
-{
-  return Sum(DirectMultiply(a,conj(b)));
-}*/
-
-/*template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
-typename OpEqual<T,T>::RT operator==(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b)
-{
-	return True(Equal(a,b));
-}
-
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
-typename OpEqual<T,T>::RT operator!=(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b)
-{
-	return !True(Equal(a,b));
-}
-*/
-/*template <class T, class A, Store M, Data D, Shape S> inline
-typename OpEqual<T,T>::RT operator==(const Indexable<T,A,M,D,S>& a, T b)
-{
-	return True(Equal(a,b));
-}
-
-template <class T, class A, Store M, Data D, Shape S> inline
-typename OpEqual<T,T>::RT operator!=(const Indexable<T,A,M,D,S>& a, T b)
-{
-	return !True(Equal(a,b));
-}
-*/
 template <class T, class A, Store M, Data D, Shape S> inline T Min(const Indexable<T,A,M,D,S>& a)
 {
 	return MinMax<T,A,OpLT<T>,M,D,S>::apply(a);

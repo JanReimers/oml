@@ -203,7 +203,7 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,VectorShape>& 
 template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a, const Indexable<TB,B,MB,DB,VectorShape>& b)
 {
-    typedef typename BinaryRetType<TA,TB>::RetType TR;
+    typedef typename ReturnType<TA,TB>::RetType TR;
     TR ret(0);
     for (index_t k:a.indices()) ret+=a(k)*b(k);
     return ret;
