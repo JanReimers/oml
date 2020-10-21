@@ -4,11 +4,11 @@
 #include <complex>
 
 #ifndef TYPE
-#error "htribk.cc TYPE not defined"
+#error "htribk.cpp TYPE not defined"
 #endif
 
 #ifndef MTYPE
-#error "htribk.cc MTYPE not defined"
+#error "htribk.cpp MTYPE not defined"
 #endif
 using std::real;
 

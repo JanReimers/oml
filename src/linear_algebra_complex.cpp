@@ -6,9 +6,9 @@
 #define TYPE  double
 #define MTYPE DMatrix
 
-#include "src/cnumeric/ch.cc"
-#include "src/cnumeric/htridi.cc"
-#include "src/cnumeric/htribk.cc"
-#include "src/cnumeric/tql2.cc"
-#include "src/cnumeric/tqlrat.cc"
+#include "src/cnumeric/ch.cpp"
+#include "src/cnumeric/htridi.cpp"
+#include "src/cnumeric/htribk.cpp"
+#include "src/cnumeric/tql2.cpp"
+#include "src/cnumeric/tqlrat.cpp"
 
