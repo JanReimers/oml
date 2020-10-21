@@ -1,4 +1,4 @@
-// File: DMatrix.cc  Matrix stored directly in memeory as a 1D array.
+// File: Matrix.cc  Matrix stored directly in memeory as a 1D array.
 
 // Copyright (1994-2005), Jan N. Reimers
 
@@ -19,48 +19,48 @@
 //
 //  Constructors.
 //
-template <class T> DMatrix<T>::DMatrix()
+template <class T> Matrix<T>::Matrix()
   : itsData(0)
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(index_t r, index_t c)
+template <class T> Matrix<T>::Matrix(index_t r, index_t c)
   : MatrixBase(MatLimits(r,c))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(index_t rl,index_t rh,index_t cl,index_t ch)
+template <class T> Matrix<T>::Matrix(index_t rl,index_t rh,index_t cl,index_t ch)
   : MatrixBase(MatLimits(rl,rh,cl,ch))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const VecLimits& r,const VecLimits& c)
+template <class T> Matrix<T>::Matrix(const VecLimits& r,const VecLimits& c)
   : MatrixBase(MatLimits(r,c))
   , itsData   (GetLimits().size()   )
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const MatLimits& lim)
+template <class T> Matrix<T>::Matrix(const MatLimits& lim)
   : MatrixBase(lim          )
   , itsData   (lim.size())
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>::DMatrix(const DMatrix<T>& m)
+template <class T> Matrix<T>::Matrix(const Matrix<T>& m)
   : MatrixBase(m)
   , itsData   (m.itsData)
   {
     CHECK;
   }
 
-template <class T> DMatrix<T>& DMatrix<T>::operator=(const DMatrix<T>& m)
+template <class T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 {
   MatrixBase::operator=(m);
   itsData=m.itsData;
@@ -71,7 +71,7 @@ template <class T> DMatrix<T>& DMatrix<T>::operator=(const DMatrix<T>& m)
 //
 //  Internal consistency check.
 //
-template <class T> void DMatrix<T>::Check() const
+template <class T> void Matrix<T>::Check() const
 {
   assert(GetLimits().Check());
   assert(GetLimits().size()==itsData.size());
@@ -82,7 +82,7 @@ template <class T> void DMatrix<T>::Check() const
 //
 //  IO
 //
-template <class T> std::ostream& DMatrix<T>::Write(std::ostream& os) const
+template <class T> std::ostream& Matrix<T>::Write(std::ostream& os) const
 {
   assert(os);
   if (!this->Pretty())
@@ -106,7 +106,7 @@ template <class T> std::ostream& DMatrix<T>::Write(std::ostream& os) const
   return os;
 }
 
-template <class T> std::istream& DMatrix<T>::Read(std::istream& is)
+template <class T> std::istream& Matrix<T>::Read(std::istream& is)
 {
   assert(is);
   MatLimits lim;

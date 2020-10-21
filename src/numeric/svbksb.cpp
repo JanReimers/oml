@@ -11,7 +11,7 @@
 #error "svbksb.cc TYPE not defined"
 #endif
 
-template <class T> void SVBackSub(const DMatrix<T>& u, const Vector<T>& w,const DMatrix<T>& v, const Vector<T>& b, Vector<T>& X)
+template <class T> void SVBackSub(const Matrix<T>& u, const Vector<T>& w,const Matrix<T>& v, const Vector<T>& b, Vector<T>& X)
 {
    assert(u.GetColLimits()==w.GetLimits());
    assert(u.GetColLimits()==X.GetLimits());
@@ -47,5 +47,5 @@ template <class T> void SVBackSub(const DMatrix<T>& u, const Vector<T>& w,const 
 }
 
 typedef TYPE Type;
-template void SVBackSub(const DMatrix<Type>&,const Vector<Type>&,
-			const DMatrix<Type>&,const Vector<Type>&, Vector<Type>&);
+template void SVBackSub(const Matrix<Type>&,const Vector<Type>&,
+			const Matrix<Type>&,const Vector<Type>&, Vector<Type>&);

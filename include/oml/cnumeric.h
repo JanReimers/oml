@@ -72,13 +72,13 @@ template <class T, class M> Vector<T> Diagonalize(M& A)
 }
 
 //! Diagonalize with multiple return values using structured bindings
-template <class T> std::tuple<DMatrix<std::complex<T> >,Vector<T> >
-oml_Diagonalize(const DMatrix<std::complex<T> >& A)
+template <class T> std::tuple<Matrix<std::complex<T> >,Vector<T> >
+oml_Diagonalize(const Matrix<std::complex<T> >& A)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(IsHermitian(A,1e-13));
   Vector<T> EigenValues(A.GetRowLimits());
-  DMatrix<std::complex<T> > EigenVectors(A);
+  Matrix<std::complex<T> > EigenVectors(A);
   int err=0;
   ch(EigenVectors,EigenValues,true,err);
   assert(!err);

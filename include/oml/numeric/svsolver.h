@@ -14,7 +14,7 @@ template <class T> class SVSolver
 {
  public:
   //! Construct from and immediatly decompose only once.
-   SVSolver(DMatrix<T>& A);
+   SVSolver(Matrix<T>& A);
   //! Solve Ax=V, x is output in V.
    Vector<T> SolveFor(const Vector<T>& V) const;
   //! Solve Ax=V, x is output in V. eps is the cutoff on singular values.
@@ -22,8 +22,8 @@ template <class T> class SVSolver
 
    const Vector<T> GetSingularValues() const {return itsW;}
  private:
-  DMatrix<T>&     itsU;
-  DMatrix<T>      itsV;
+  Matrix<T>&     itsU;
+  Matrix<T>      itsV;
   Vector<T>      itsW;
   Vector<T>      itsWfixed;
 };

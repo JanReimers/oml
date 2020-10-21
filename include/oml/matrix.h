@@ -19,36 +19,36 @@
 //  Full matrix class with conventional direct subscripting, i.e. no list of
 //  column pointers is maintained.
 //
-template <class T> class DMatrix
-  : public Indexable<T,DMatrix<T>,Full,Real,MatrixShape>
+template <class T> class Matrix
+  : public Indexable<T,Matrix<T>,Full,Real,MatrixShape>
   , public MatrixBase
-  , public Iterable<T,DMatrix<T> >
-  , public TStreamableObject<DMatrix<T> >
+  , public Iterable<T,Matrix<T> >
+  , public TStreamableObject<Matrix<T> >
 {
  public:
-  typedef Indexable<T,DMatrix<T>,Full,Real,MatrixShape> IndexableT;
+  typedef Indexable<T,Matrix<T>,Full,Real,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
-  explicit DMatrix(                );
-  explicit DMatrix(index_t r, index_t c);
-  explicit DMatrix(index_t rl,index_t rh,index_t cl,index_t ch);
-  explicit DMatrix(const VecLimits& r,const VecLimits& c);
-  explicit DMatrix(const MatLimits&);
-  explicit DMatrix(const DMatrix& m);
-  template <class A>                 DMatrix(const Indexable<T,A,Full,Real,MatrixShape>&);
-  template <class A,Store M, Data D> DMatrix(const Indexable<T,A,M,D,MatrixShape>&);
+  explicit Matrix(                );
+  explicit Matrix(index_t r, index_t c);
+  explicit Matrix(index_t rl,index_t rh,index_t cl,index_t ch);
+  explicit Matrix(const VecLimits& r,const VecLimits& c);
+  explicit Matrix(const MatLimits&);
+  explicit Matrix(const Matrix& m);
+  template <class A>                 Matrix(const Indexable<T,A,Full,Real,MatrixShape>&);
+  template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
 
-  DMatrix& operator=(const DMatrix&);
-  template <class A>                 DMatrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
-  template <class A,Store M, Data D> DMatrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
+  Matrix& operator=(const Matrix&);
+  template <class A>                 Matrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
+  template <class A,Store M, Data D> Matrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
 
-  //DMatrix& operator*=(const DMatrix&);
+  //Matrix& operator*=(const Matrix&);
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
-  friend std::ostream& operator<<(std::ostream& os,const DMatrix& a)
+  friend std::ostream& operator<<(std::ostream& os,const Matrix& a)
   {
-    return os << static_cast<const TStreamableObject<DMatrix<T> >& >(a);
+    return os << static_cast<const TStreamableObject<Matrix<T> >& >(a);
   }
 
 
@@ -67,11 +67,11 @@ template <class T> class DMatrix
   void ReIndexColumns(const std::vector<index_t>& index) {::ReIndexColumns(*this,index);}
   void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
   void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
-  DMatrix SubMatrix(const MatLimits& lim) const {DMatrix ret(lim);::SubMatrix(ret,*this);return ret;}
+  Matrix SubMatrix(const MatLimits& lim) const {Matrix ret(lim);::SubMatrix(ret,*this);return ret;}
 
-  typedef MatrixRow     <T,DMatrix<T>,Full,Real> RowType;
-  typedef MatrixColumn  <T,DMatrix<T>,Full,Real> ColType;
-  typedef MatrixDiagonal<T,DMatrix<T>,Full,Real> DiagType;
+  typedef MatrixRow     <T,Matrix<T>,Full,Real> RowType;
+  typedef MatrixColumn  <T,Matrix<T>,Full,Real> ColType;
+  typedef MatrixDiagonal<T,Matrix<T>,Full,Real> DiagType;
 
   RowType  GetRow     (index_t row) {return RowType (*this,row);}
   ColType  GetColumn  (index_t col) {return ColType (*this,col);}
@@ -81,8 +81,8 @@ template <class T> class DMatrix
   const ColType  GetColumn  (index_t col) const {return ColType (*this,col);}
   const DiagType GetDiagonal(           ) const {return DiagType(*this    );}
 
-  typedef typename Iterable <T,DMatrix>::const_iterator  const_iterator ;
-  typedef typename Iterable <T,DMatrix>::iterator iterator;
+  typedef typename Iterable <T,Matrix>::const_iterator  const_iterator ;
+  typedef typename Iterable <T,Matrix>::iterator iterator;
 
 
 #if DEBUG
@@ -97,9 +97,9 @@ template <class T> class DMatrix
   class Subscriptor
   {
   public:
-    Subscriptor(Indexable<T,DMatrix,Full,Real,MatrixShape>& m)
+    Subscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits())
-      , itsPtr(static_cast<DMatrix&>(m).Get())
+      , itsPtr(static_cast<Matrix&>(m).Get())
       {};
 
     T& operator()(index_t i,index_t j) {CHECK(i,j);return itsPtr[itsLimits.Offset(i,j)];}
@@ -118,8 +118,8 @@ template <class T> class DMatrix
   class ArraySubscriptor
   {
    public:
-    ArraySubscriptor(Indexable<T,DMatrix,Full,Real,MatrixShape>& a)
-      : itsPtr(static_cast<DMatrix*>(&a)->Get())
+    ArraySubscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& a)
+      : itsPtr(static_cast<Matrix*>(&a)->Get())
       , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
@@ -131,8 +131,8 @@ template <class T> class DMatrix
 #undef CHECK
 
  private:
-  friend class Indexable<T,DMatrix,Full,Real,MatrixShape>;
-  friend class Iterable<T,DMatrix>;
+  friend class Indexable<T,Matrix,Full,Real,MatrixShape>;
+  friend class Iterable<T,Matrix>;
   friend class Subscriptor;
   friend class ArraySubscriptor;
 
@@ -158,13 +158,13 @@ template <class T> class DMatrix
 #endif
 
 
-template <class T> inline const T& DMatrix<T>::operator()(index_t i,index_t j) const
+template <class T> inline const T& Matrix<T>::operator()(index_t i,index_t j) const
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
 }
 
-template <class T> inline T& DMatrix<T>::operator()(index_t i,index_t j)
+template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
   return itsData.Get()[GetLimits().Offset(i,j)];
@@ -178,13 +178,13 @@ template <class T> inline T& DMatrix<T>::operator()(index_t i,index_t j)
   #define CHECK(i)
 #endif
 
-template <class T> inline  T DMatrix<T>::operator[](index_t i) const
+template <class T> inline  T Matrix<T>::operator[](index_t i) const
 {
   CHECK(i);
   return itsData.Get()[i];
 }
 
-template <class T> inline T& DMatrix<T>::operator[](index_t i)
+template <class T> inline T& Matrix<T>::operator[](index_t i)
 {
   CHECK(i);
   return itsData.Get()[i];
@@ -192,7 +192,7 @@ template <class T> inline T& DMatrix<T>::operator[](index_t i)
 #undef CHECK
 
 template <class T> template <class A> inline
-DMatrix<T>::DMatrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
+Matrix<T>::Matrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
@@ -200,7 +200,7 @@ DMatrix<T>::DMatrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
   }
 
 template <class T> template <class A,Store M, Data D> inline
-DMatrix<T>::DMatrix(const Indexable<T,A,M,D,MatrixShape>& m)
+Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
@@ -210,7 +210,7 @@ DMatrix<T>::DMatrix(const Indexable<T,A,M,D,MatrixShape>& m)
 
 
 template <class T> template <class A> inline
-DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
+Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
 {
   if (size()==0) SetLimits(m.GetLimits());
   ArrayAssign(*this,m); //Use op[].
@@ -218,58 +218,58 @@ DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
 }
 
 template <class T> template <class A,Store M, Data D> inline
-DMatrix<T>& DMatrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
+Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
 {
   if (size()==0) SetLimits(m.GetLimits());
   MatrixAssign(*this,m); //Use op(,).
   return *this;
 }
 
-template <class T> DMatrix<T>& operator*=(DMatrix<T>& a,const DMatrix<T>& b)
+template <class T> Matrix<T>& operator*=(Matrix<T>& a,const Matrix<T>& b)
 {
     assert(a.GetLimits().Col==b.GetLimits().Row);
-    DMatrix<T> temp=a*b;
+    Matrix<T> temp=a*b;
     a.SetLimits(temp.GetLimits());
     a=temp;
     return a;
 }
 
-template <class T> inline index_t DMatrix<T>::size() const
+template <class T> inline index_t Matrix<T>::size() const
 {
   return GetLimits().size();
 }
 
-template <class T> inline const T* DMatrix<T>::Get() const
+template <class T> inline const T* Matrix<T>::Get() const
 {
   return itsData.Get();
 }
 
-template <class T> inline T* DMatrix<T>::Get()
+template <class T> inline T* Matrix<T>::Get()
 {
   return itsData.Get();
 }
 
-template <class T> inline void DMatrix<T>::SetLimits(const MatLimits& lim,bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(const MatLimits& lim,bool preserve)
 {
   ::SetLimits(*this,lim,preserve);
 }
 
-template <class T> inline void DMatrix<T>::SetLimits(index_t r, index_t c , bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(index_t r, index_t c , bool preserve)
 {
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline void DMatrix<T>::SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve)
 {
   SetLimits(MatLimits(rl,rh,cl,ch),preserve);
 }
 
-template <class T> inline void DMatrix<T>::SetLimits(const VecLimits& r,const VecLimits& c , bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(const VecLimits& r,const VecLimits& c , bool preserve)
 {
   SetLimits(MatLimits(r,c),preserve);
 }
 
-template <class T> inline MatLimits DMatrix<T>::GetLimits() const
+template <class T> inline MatLimits Matrix<T>::GetLimits() const
 {
   return MatrixBase::GetLimits();
 }

@@ -8,7 +8,7 @@
 #include "oml/vector.h"
 
 template <class T> class Matrix;
-template <class T> class DMatrix;
+template <class T> class Matrix;
 template <class T> class SMatrix;
 
 //----------------------------------------------------------------------------
@@ -63,20 +63,6 @@ Vector<double> SolveTriDiag(const Vector<double> & OffDiagonal,
 			    const Vector<double> & r);
 
 template <class T> Vector<T> Diagonalize(Matrix<T>& m)
-{
-  assert(m.GetRowLimits()==m.GetColLimits());
-  assert(m.GetRowLimits()==m.GetColLimits());
-  assert(IsSymmetric(m));
-
-  Vector<T> EigenValues(m.GetRowLimits());
-  Vector<T> OffDiagonal(m.GetRowLimits());
-
-  TriDiagonal(m,EigenValues,OffDiagonal);
-  QLDecomp   (m,EigenValues,OffDiagonal);
-  EigenSort  (m,EigenValues);
-  return EigenValues;
-}
-template <class T> Vector<T> Diagonalize(DMatrix<T>& m)
 {
   assert(m.GetRowLimits()==m.GetColLimits());
   assert(m.GetRowLimits()==m.GetColLimits());

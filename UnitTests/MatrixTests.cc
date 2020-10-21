@@ -1,4 +1,4 @@
-// File: UT-DMatrix-double.cc  Unit test the DMatrix class for double data types.
+// File: UT-Matrix-double.cc  Unit test the Matrix class for double data types.
 
 // Copyright (1994-2020), Jan N. Reimers
 
@@ -41,8 +41,8 @@ public:
     }
 };
 
-template <class T> void mmul(     DMatrix<T>& C,const DMatrix<T>& A, const DMatrix<T>& B);
-template <class T> T    vmul(const Vector<T> V1,const DMatrix<T>& A, const Vector<T>& V2);
+template <class T> void mmul(     Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B);
+template <class T> T    vmul(const Vector<T> V1,const Matrix<T>& A, const Vector<T>& V2);
 
 //
 //  Hand coded
@@ -51,7 +51,7 @@ TYPED_TEST_SUITE_P(MatrixTests);
 
 TYPED_TEST_P(MatrixTests,Constructors)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     MatrixT A0;
     EXPECT_EQ(A0.GetNumRows(),0);
     EXPECT_EQ(A0.GetNumCols(),0);
@@ -81,7 +81,7 @@ TYPED_TEST_P(MatrixTests,Constructors)
 
 TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     MatrixT A1(10,5);
     FillRandom(A1);
     MatrixT A2=A1.SubMatrix(MatLimits(5,4));
@@ -107,7 +107,7 @@ TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
 
 TYPED_TEST_P(MatrixTests,Transpose_Slices)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
     MatrixT A1(10,5);
     FillRandom(A1);
@@ -129,7 +129,7 @@ TYPED_TEST_P(MatrixTests,Transpose_Slices)
 
 TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     index_t M=2,N=4,mn=M*N;
     MatrixT A(M,N),B(A);
     FillLinear<TypeParam>(A,1.0/4,2.0); //all elements should be exactly represented in floating point
@@ -157,7 +157,7 @@ TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
 
 TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     index_t M=10,N=5;
     MatrixT A(M,N),B(A);
     Fill<TypeParam>(A,1.0);
@@ -210,7 +210,7 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 
 TYPED_TEST_P(MatrixTests,MatrixAlgebra)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
     index_t M=2,N=4;
     MatrixT A(M,N),B;
@@ -234,7 +234,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebra)
 
 TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
 #ifdef DEBUG
     index_t N=20,Nreplicates=10;
@@ -292,7 +292,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
 
 TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     StreamableObject::SetToAscii();
     {
         MatrixT A(-10,20,-5,50),B;
@@ -328,10 +328,10 @@ TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
 
 
 
-template <class T> void mmul(DMatrix<T>& C,const DMatrix<T>& A, const DMatrix<T>& B)
+template <class T> void mmul(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
 {
   int N=A.GetLimits().Row.High;
-  typename DMatrix<T>::Subscriptor s(C);
+  typename Matrix<T>::Subscriptor s(C);
   for (int i=1;i<=N;i++)
     for (int j=1;j<=N;j++)
     {
@@ -341,7 +341,7 @@ template <class T> void mmul(DMatrix<T>& C,const DMatrix<T>& A, const DMatrix<T>
     }
 }
 
-template <class T> T vmul(const Vector<T> V1,const DMatrix<T>& A, const Vector<T>& V2)
+template <class T> T vmul(const Vector<T> V1,const Matrix<T>& A, const Vector<T>& V2)
 {
   T ret=0;
   int N=A.GetLimits().Row.High;
@@ -354,7 +354,7 @@ template <class T> T vmul(const Vector<T> V1,const DMatrix<T>& A, const Vector<T
   }
   return ret;
 }
-template <class T> T vmul1(const Vector<T> V1,const DMatrix<T>& A, const Vector<T>& V2)
+template <class T> T vmul1(const Vector<T> V1,const Matrix<T>& A, const Vector<T>& V2)
 {
   T ret=0;
   int N=A.GetLimits().Row.High;
@@ -370,7 +370,7 @@ template <class T> T vmul1(const Vector<T> V1,const DMatrix<T>& A, const Vector<
 
 TEST_F(MatrixRealTests,MinMax)
 {
-    typedef DMatrix<double> MatrixT;
+    typedef Matrix<double> MatrixT;
     int M=2,N=4,mn=M*N;
     MatrixT A(M,N),B(A);
     FillLinear(A,1.0/4,2.0); //all elements should be exactly represented in floating point
@@ -400,19 +400,19 @@ TEST_F(MatrixRealTests,MinMax)
     MatrixT A2=Transpose(A1);
     EXPECT_EQ(~A2,A1); //Transpose operator
 
-    DMatrix<double> VT(10,5),I(5,5);
+    Matrix<double> VT(10,5),I(5,5);
     FillRandom(VT);
     Unit(I);
-    DMatrix<double> V=Transpose((VT));
+    Matrix<double> V=Transpose((VT));
     double err=Max(fabs(V*VT-I));
 }
 
 TEST_F(MatrixComplexTests,fabsHermitianConj)
 {
     typedef std::complex<double> dcmplx;
-    typedef DMatrix<dcmplx> MatrixCT;
+    typedef Matrix<dcmplx> MatrixCT;
     typedef Vector <dcmplx> VectorCT;
-    typedef DMatrix<double> MatrixRT;
+    typedef Matrix<double> MatrixRT;
     typedef Vector <double> VectorRT;
 
     int N=10;
@@ -444,9 +444,9 @@ TEST_F(MatrixComplexTests,fabsHermitianConj)
 TEST_F(MatrixComplexTests,MixedTypes)
 {
     typedef std::complex<double> dcmplx;
-    typedef DMatrix<dcmplx> MatrixCT;
+    typedef Matrix<dcmplx> MatrixCT;
     typedef Vector <dcmplx> VectorCT;
-    typedef DMatrix<double> MatrixRT;
+    typedef Matrix<double> MatrixRT;
     typedef Vector <double> VectorRT;
 
     int N=10;
@@ -492,7 +492,7 @@ template <class T, typename Tf> void TestUnop(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
     double eps=1e-13;
-    typedef DMatrix<T> MatrixT;
+    typedef Matrix<T> MatrixT;
     typedef Vector <T> VectorT;
     index_t M=10,N=5;
     MatrixT A(M,N);
@@ -539,7 +539,7 @@ TEST_F(MatrixComplexTests,UnaryOps)
 
 TYPED_TEST_P(MatrixTests,BinaryOps)
 {
-    typedef DMatrix<TypeParam> MatrixT;
+    typedef Matrix<TypeParam> MatrixT;
     typedef Vector <TypeParam> VectorT;
     index_t M=10,N=5;
     MatrixT A(M,N),B(M,N);
@@ -573,10 +573,10 @@ TYPED_TEST_P(MatrixTests,BinaryOps)
 TEST_F(MatrixComplexTests,RangeBasedLoops)
 {
     using dcmplx=std::complex<double>;
-    typedef DMatrix<dcmplx> MatrixCT;
-    typedef Vector <dcmplx> VectorCT;
-    typedef DMatrix<double> MatrixRT;
-    typedef Vector <double> VectorRT;
+    typedef Matrix<dcmplx> MatrixCT;
+    typedef Vector<dcmplx> VectorCT;
+    typedef Matrix<double> MatrixRT;
+    typedef Vector<double> VectorRT;
 
     int N=10;
     MatrixCT Ac(N,N);

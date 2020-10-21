@@ -4,7 +4,7 @@
 //  Make template instance
 //
 #define TYPE  double
-#define MTYPE DMatrix
+#define MTYPE Matrix
 
 #include "src/cnumeric/ch.cpp"
 #include "src/cnumeric/htridi.cpp"

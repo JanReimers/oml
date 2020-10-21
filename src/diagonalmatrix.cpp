@@ -1,4 +1,4 @@
-// File: DMatrix.cc  Matrix stored directly in memeory as a 1D array.
+// File: Matrix.cc  Matrix stored directly in memeory as a 1D array.
 
 // Copyright (1994-2005), Jan N. Reimers
 

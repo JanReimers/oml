@@ -104,4 +104,4 @@ template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& 
 #undef SIGN
 
 typedef TYPE Type;
-template void QLDecomp(DMatrix<Type>&,Vector<Type>&,Vector<Type>&);
+template void QLDecomp(Matrix<Type>&,Vector<Type>&,Vector<Type>&);

@@ -41,11 +41,11 @@ template <class T> class DiagonalMatrix
 //  template <class A>                 DiagonalMatrix(const Indexable<T,A,Full,Real,MatrixShape>&);
 //  template <class A,Store M, Data D> DiagonalMatrix(const Indexable<T,A,M,D,MatrixShape>&);
 
-//  DMatrix& operator=(const DiagonalMatrix&);
+//  Matrix& operator=(const DiagonalMatrix&);
 //  template <class A>                 DiagonalMatrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
 //  template <class A,Store M, Data D> DiagonalMatrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
 
-  //DMatrix& operator*=(const DMatrix&);
+  //Matrix& operator*=(const Matrix&);
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;

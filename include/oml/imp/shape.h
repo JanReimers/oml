@@ -12,7 +12,6 @@
 //  Array               ArrayShape    Full    Real.
 //  Vector              VectorShape   Full    Real.
 //  Matrix              MatrixShape   Full    Real.
-//  DMatrix             MatrixShape   Full    Real.
 //  SMatrix             MatrixShape   Sym     Real.
 //  HMatrix             MatrixShape   Sym     Real.
 //  GetColumn(Matrix)   VectorShape   Full    Abstract.

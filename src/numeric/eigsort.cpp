@@ -42,4 +42,4 @@ template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
 
 
 typedef TYPE Type;
-template void EigenSort(DMatrix<Type>&, Vector<Type>&);
+template void EigenSort(Matrix<Type>&, Vector<Type>&);

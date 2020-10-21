@@ -120,12 +120,12 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,Ma
   Indexable(const Indexable&);
 };
 
-template <class T> class DMatrix;
+template <class T> class Matrix;
 
 template <class T, class A, Store M, Data D> inline
 std::ostream& operator<<(std::ostream& os,const Indexable<T,A,M,D,MatrixShape>& a)
 {
-  return os << DMatrix<T>(a);
+  return os << Matrix<T>(a);
 }
 
 template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,MatrixShape>& a)

@@ -99,5 +99,5 @@ template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T
 }
 
 typedef TYPE Type;
-typedef DMatrix<Type> DM;
+typedef Matrix<Type> DM;
 template void TriDiagonal(DM&,Vector<Type>&,Vector<Type>&);

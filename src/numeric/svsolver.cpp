@@ -11,7 +11,7 @@
 #error "svsolver.cc TYPE was not defined"
 #endif
 
-template <class T> SVSolver<T>::SVSolver(DMatrix<T>& A)
+template <class T> SVSolver<T>::SVSolver(Matrix<T>& A)
   : itsU(A)
   , itsV(itsU.GetColLimits(),itsU.GetColLimits())
   , itsW(itsU.GetColLimits())

@@ -4,7 +4,7 @@
 //  Make template instance
 //
 #define TYPE  double
-#define MTYPE DMatrix
+#define MTYPE Matrix
 #include "src/cnumeric/epsilon.cpp"
 //#include "src/numeric/cholsky.cpp"
 #include "src/numeric/eigsort.cpp"
