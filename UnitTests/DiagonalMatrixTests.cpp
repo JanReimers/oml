@@ -171,7 +171,7 @@ TYPED_TEST_P(DiagonalMatrixTests,MatrixAlgebra)
     Fill(F,TypeParam(2));
     EXPECT_EQ((A*F)(1,1), 0.5);
     EXPECT_EQ((F*A)(1,1), 0.5);
-    EXPECT_EQ((F*A*A*F*F*F*A*F*A)(1,1), 0.125);
+    EXPECT_EQ((F*A*A*F*F*F*A*F*A)(1,1), 58752.);
 
 }
 

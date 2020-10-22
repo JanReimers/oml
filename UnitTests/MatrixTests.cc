@@ -230,63 +230,6 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebra)
     EXPECT_EQ(Sum(OuterProduct(VL,VR)*OuterProduct(VR,VL)),16.);
 }
 
-TYPED_TEST_P(MatrixTests,MatrixAlgebraPerformance)
-{
-    typedef Matrix<TypeParam> MatrixT;
-    typedef Vector <TypeParam> VectorT;
-#ifdef DEBUG
-    index_t N=20,Nreplicates=10;
-#else
-    int N=200,Nreplicates=10;
-#endif
-    MatrixT A(N,N),B(N,N),C(N,N);
-    VectorT V(N);
-    FillRandom<TypeParam>(A);
-    FillRandom<TypeParam>(B);
-    FillRandom<TypeParam>(V);
-
-    StopWatch s;
-    s.Start();
-    for (int i=1;i<=Nreplicates;i++) C=A*B;
-    s.Stop();
-    double Flops=Nreplicates*N*N*N*2/s.GetTime();
-    std::cout << "Exp template " << Flops*1e-6 << " MFlops" << std::endl;
-    s.Start();
-    for (int i=1;i<=Nreplicates;i++) mmul(C,A,B);
-    s.Stop();
-    Flops=Nreplicates*N*N*N*2/s.GetTime();
-    std::cout << "Hand coaded  " << Flops*1e-6 << " MFlops" << std::endl;
-
-    N=1000;
-    A.SetLimits(N,N);
-    V.SetLimits(N);
-    FillRandom<TypeParam>(A);
-    FillRandom<TypeParam>(V);
-    TypeParam d1, d2=0;
-    s.Start();
-    for (int i=1;i<=Nreplicates;i++) d1=V*A*V;
-    s.Stop();
-    double MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
-    std::cout << "Exp template " << MFlops << " MFlops" << std::endl;
-
-
-    s.Start();
-    for (int i=1;i<=Nreplicates;i++) d2=vmul(V,A,V);
-    s.Stop();
-    assert(fabs(d1-d2)<1e-6);
-    MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
-    std::cout << "Hand coaded 1 " << MFlops << " MFlops" << std::endl;
-
-    s.Start();
-    for (int i=1;i<=Nreplicates;i++) d2=vmul1(V,A,V);
-    s.Stop();
-    assert(fabs(d1-d2)<1e-6);
-    MFlops=(Nreplicates*1e-6)*2*(N*N+N)/s.GetTime();
-    std::cout << "Hand coaded 2 " << MFlops << " MFlops" << std::endl;
-
-}
-
-//inline double fabs(std::complex<double>& c) {return std::abs(c);}
 
 TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
 {
@@ -517,7 +460,7 @@ template <class T, typename Tf> void TestUnop(T dummy,Tf f)
     Fill(A,s);
     EXPECT_EQ(f(A)(1,1),f(s));
     EXPECT_EQ(f(Vl)(1  ),f(s));
-    EXPECT_EQ(f(A*Vr)(1),f(s*s*sN));
+    EXPECT_NEAR(fabs(f(A*Vr)(1)-f(s*s*sN)),0.0,eps);
     EXPECT_NEAR(fabs(f(Vl*A)(1)-f(s*s*sM)),0.0,eps);
     EXPECT_EQ((f(A)*f(~A))(1,1),f(s)*f(conj(s))*sN);
     EXPECT_NEAR(fabs((f(A)*f(Vr))(1)-f(s)*f(s)*sN),0.0,eps);
@@ -617,18 +560,7 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
 
 }
 
-template <class T> void mmul_nomp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
-{
-    typename Matrix<T>::Subscriptor s(C);
-    for (index_t i : C.rows())
-        for (index_t j : C.cols())
-        {
-            double t=0.0;
-            for (index_t k : A.cols())
-                t+=A(i,k)*B(k,j);
-            s(i,j)=t;
-        }
-}
+
 
 template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
 {
@@ -647,39 +579,6 @@ template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>
     }
 }
 
-TEST_F(MatrixRealTests,OpenMPParallel)
-{
-    index_t N=400,Nreplicates=10;
-
-    Matrix<double> A(N,N),B(N,N),C(N,N);
-    FillRandom(A);
-    FillRandom(B);
-    Fill(C,0.0);
-
-    //omp_set_num_threads(8);
-
-    #pragma omp parallel
-    {
-        #pragma omp single
-        std::cout << "Number of available threads: " << omp_get_num_threads() << std::endl;
-    }
-    double MFlops_nomp(0.0),MFlops_mp(0.0),t_start,t_stop;
-    for (int i=1;i<=Nreplicates;i++)
-    {
-        t_start=omp_get_wtime();
-        mmul_nomp(C,A,B);
-        t_stop=omp_get_wtime();
-        MFlops_nomp+=1e-6*N*N*N*2/(t_stop-t_start);
-
-        t_start=omp_get_wtime();
-        mmul_mp(C,A,B);
-        t_stop=omp_get_wtime();
-        MFlops_mp+=1e-6*N*N*N*2/(t_stop-t_start);
-    }
-    std::cout << "No   MP " << MFlops_nomp/Nreplicates << " MFlops" << std::endl;
-    std::cout << "With MP " << MFlops_mp/Nreplicates << " MFlops" << std::endl;
-    std::cout << "Ratio   " << MFlops_mp/MFlops_nomp*100 << "%" << std::endl;
-}
 
 
 REGISTER_TYPED_TEST_SUITE_P(
@@ -690,7 +589,6 @@ REGISTER_TYPED_TEST_SUITE_P(
             Transpose_Slices,
             OverloadedOperators1,
             MatrixAlgebra,
-            MatrixAlgebraPerformance,
             AsciiAndBinaryIO,
             UnaryOps,
             BinaryOps
