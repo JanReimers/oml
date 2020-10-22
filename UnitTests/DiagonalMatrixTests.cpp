@@ -259,6 +259,20 @@ TEST_F(DiagonalMatrixComplexTests,MixedTypes)
     EXPECT_EQ((Ar-1)(1,1),-0.5);
     EXPECT_EQ((1+Ar)(1,1), 1.5);
     EXPECT_EQ((1-Ar)(1,1), 0.5);
+
+    N=2;
+    Matrix<dcmplx> U(N,N),Vdagger(N,N),Ac1(N,N);
+    Ar.SetLimits(N);
+    Fill(U,dcmplx(1.0));
+    Fill(Vdagger,dcmplx(1.0));
+//    Fill(Ar,0.5);
+    Ar(1)=2.0;
+    Ar(2)=0.5;
+
+    Fill(Ac1,dcmplx(1.0));
+    Matrix<dcmplx> R=U*Ar*Vdagger; //Make sure this compiles
+//    Matrix<dcmplx> R=U*Ar; //Make sure this compiles
+    cout << R << endl;
 }
 
 

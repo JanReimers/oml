@@ -65,8 +65,8 @@ template <class T> class Matrix
 
   void ReIndexRows   (const std::vector<index_t>& index) {::ReIndexRows   (*this,index);}
   void ReIndexColumns(const std::vector<index_t>& index) {::ReIndexColumns(*this,index);}
-  void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
-  void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
+  void SwapRows   (index_t i,index_t j);
+  void SwapColumns(index_t i,index_t j);
   Matrix SubMatrix(const MatLimits& lim) const;
 
   typedef MatrixRow     <T,Matrix<T>,Full,Real> RowType;

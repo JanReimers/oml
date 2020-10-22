@@ -46,26 +46,5 @@ template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,
    TR(*itsF)(const TA&,const TB&);
 };
 
-template <Data D1, Data D2> class BinaryData;
-template <Data D> class BinaryData<D,D>
-{
- public:
-  static const Data RetData=D;
-};
-template <Data D> class BinaryData<D,Abstract>
-{
- public:
-  static const Data RetData=Abstract;
-};
-template <Data D> class BinaryData<Abstract,D>
-{
- public:
-  static const Data RetData=Abstract;
-};
-template <> class BinaryData<Abstract,Abstract>
-{
- public:
-  static const Data RetData=Abstract;
-};
 
 #endif //_binop_h_

@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 //    testing::GTEST_FLAG(filter) = "My/MatrixTests/*.BinaryOps";
 //    testing::GTEST_FLAG(filter) = "MatrixComplexTests.RangeBasedLoops";
 //    testing::GTEST_FLAG(filter) = "My/DiagonalMatrixTests/*.MatrixAlgebra";
-//    testing::GTEST_FLAG(filter) = "DiagonalMatrixComplexTests.*";
+    testing::GTEST_FLAG(filter) = "DiagonalMatrixComplexTests.MixedTypes";
     return RUN_ALL_TESTS();
 }
 

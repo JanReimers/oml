@@ -190,10 +190,11 @@ template <class T,class A, Store M> void ReIndexColumns(Indexable<T,A,M,Real,Mat
 //
 //  Swapping
 //
-template <class T, class A, Store M> void SwapRows(Indexable<T,A,M,Real,MatrixShape>& m, index_t i,index_t j)
+
+template <class T> void Matrix<T>::SwapRows(index_t i,index_t j)
 {
-  typename A::Subscriptor s(m);
-  for (index_t c=m.GetLimits().Col.Low;c<=m.GetLimits().Col.High;c++)
+  Subscriptor s(*this);
+  for (index_t c : this->cols())
   {
      T temp=s(i,c);
      s(i,c)=s(j,c);
@@ -201,10 +202,10 @@ template <class T, class A, Store M> void SwapRows(Indexable<T,A,M,Real,MatrixSh
   }
 }
 
-template <class T, class A, Store M> void SwapColumns(Indexable<T,A,M,Real,MatrixShape>& m,index_t i,index_t j)
+template <class T> void Matrix<T>::SwapColumns(index_t i,index_t j)
 {
-  typename A::Subscriptor s(m);
-  for (index_t r=m.GetLimits().Row.Low;r<=m.GetLimits().Row.High;r++)
+  Subscriptor s(*this);
+  for (index_t r : this->rows())
   {
      T temp=s(r,i);
      s(r,i)=s(r,j);

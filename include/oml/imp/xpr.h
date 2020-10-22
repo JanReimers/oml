@@ -105,22 +105,7 @@ template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 //  Hold a temporary expression.
 //
 template <class T, class Expression,Store M,Data D,Shape S> class Xpr;
-/*
-template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,ArrayShape>
-: public Indexable<T,Xpr<T,Expression,M,D,ArrayShape>,M,D,ArrayShape>
-{
- public:
-  Xpr(Expression e) : itsExp(e) {};
-  Xpr(const Xpr& x) : itsExp(x.itsExp) {};
-  ~Xpr() {};
 
-  T       operator[](index_t n) const {return itsExp[n]       ;}
-  index_t size      (         ) const {return itsExp.size();}
-
- private:
-  Expression itsExp;
-};
-*/
 template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,VectorShape>
 : public Indexable<T,Xpr<T,Expression,M,D,VectorShape>,M,D,VectorShape>
 {

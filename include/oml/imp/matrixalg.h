@@ -148,10 +148,10 @@ template <class T, class V, class B> class MatrixVMOp
 //  Multiplication, Matrix * Diagonal Proxy.
 //
 template <class T, class A, class D> class MatrixMDOp
-: public Indexable<T,MatrixMDOp<T,A,D>,Diagonal,Abstract,MatrixShape>
+: public Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape>
 {
  public:
-  typedef Indexable<T,MatrixMDOp<T,A,D>,Diagonal,Abstract,MatrixShape> IndexableT;
+  typedef Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   MatrixMDOp(const A& a, const D& d)
@@ -181,10 +181,10 @@ template <class T, class A, class D> class MatrixMDOp
 //  Multiplication, Diagonal * Matrix Proxy.
 //
 template <class T, class D, class B> class MatrixDMOp
-: public Indexable<T,MatrixDMOp<T,D,B>,Diagonal,Abstract,MatrixShape>
+: public Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape>
 {
  public:
-  typedef Indexable<T,MatrixDMOp<T,D,B>,Diagonal,Abstract,MatrixShape> IndexableT;
+  typedef Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   MatrixDMOp(const D& d, const B& b)

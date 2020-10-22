@@ -81,40 +81,42 @@ template <class T,class A, Store M, Data D, Shape S> inline A Differentiate(cons
 //
 //  Ob Ob binary
 //
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
-auto BinaryFunction(const Indexable<TA,A,M,DA,S>& a,
-                    const Indexable<TB,B,M,DB,S>& b,
-                    typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
+auto BinaryFunction1(const Indexable<TA,A,MA,DA,S>& a,
+                     const Indexable<TB,B,MB,DB,S>& b,
+                     typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
 {
   typedef typename A::RefT RefA;
   typedef typename B::RefT RefB;
-  constexpr Data DR=BinaryData<DA,DB>::RetData ;
+  constexpr Data  DR=ReturnData <DA,DB>::RetType ;
+  constexpr Store MR=ReturnStore<MA,MB>::RetType;
   typedef typename ReturnType<TA,TB>::RetType TR;
   typedef XprBinary<TR,TA,TB,RefA,RefB,S> ExprTLambda;
-  return Xpr<TR,ExprTLambda,M,DR,S>(ExprTLambda(RefA(a),RefB(b),f));
+  return Xpr<TR,ExprTLambda,MR,DR,S>(ExprTLambda(RefA(a),RefB(b),f));
 }
 
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
-auto operator+  (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>& b)
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
+auto operator+  (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
-  return BinaryFunction<TA,TB,A,B,M,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa+xb; });
+  return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa+xb; });
 }
 
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
-auto operator-  (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>& b)
+template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
+auto operator-  (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
-  return BinaryFunction<TA,TB,A,B,M,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa-xb; });
+  return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa-xb; });
 }
 
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
-auto DirectMultiply (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>& b)
+
+template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
+auto DirectMultiply (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
-  return BinaryFunction<TA,TB,A,B,M,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa*xb; });
+  return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa*xb; });
 }
-template <class TA, class TB, class A, class B, Store M, Data DA, Data DB, Shape S> inline
-auto DirectDivide (const Indexable<TA,A,M,DA,S>& a, const Indexable<TB,B,M,DB,S>& b)
+template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
+auto DirectDivide (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
-  return BinaryFunction<TA,TB,A,B,M,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa/xb; });
+  return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa/xb; });
 }
 
 //
