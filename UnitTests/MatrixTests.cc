@@ -7,6 +7,7 @@
 #include "oml/random.h"
 #include "stopw.h"
 #include "gtest/gtest.h"
+#include <omp.h>
 #include <iostream>
 #include <fstream>
 #include <complex>
@@ -614,6 +615,70 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
         for (index_t j:Ar.cols())
             Ar(i,j)=i*10+j;
 
+}
+
+template <class T> void mmul_nomp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
+{
+    typename Matrix<T>::Subscriptor s(C);
+    for (index_t i : C.rows())
+        for (index_t j : C.cols())
+        {
+            double t=0.0;
+            for (index_t k : A.cols())
+                t+=A(i,k)*B(k,j);
+            s(i,j)=t;
+        }
+}
+
+template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
+{
+    {
+        typename Matrix<T>::Subscriptor s(C);
+        index_t N=C.GetNumRows();
+        #pragma omp parallel for collapse(2)
+        for (index_t i=1;i<=N;i++)
+            for (index_t j=1;j<=N;j++)
+            {
+                double t=0.0;
+                for (index_t k=1;k<=N;k++)
+                    t+=A(i,k)*B(k,j);
+                s(i,j)=t;
+            }
+    }
+}
+
+TEST_F(MatrixRealTests,OpenMPParallel)
+{
+    index_t N=400,Nreplicates=10;
+
+    Matrix<double> A(N,N),B(N,N),C(N,N);
+    FillRandom(A);
+    FillRandom(B);
+    Fill(C,0.0);
+
+    //omp_set_num_threads(8);
+
+    #pragma omp parallel
+    {
+        #pragma omp single
+        std::cout << "Number of available threads: " << omp_get_num_threads() << std::endl;
+    }
+    double MFlops_nomp(0.0),MFlops_mp(0.0),t_start,t_stop;
+    for (int i=1;i<=Nreplicates;i++)
+    {
+        t_start=omp_get_wtime();
+        mmul_nomp(C,A,B);
+        t_stop=omp_get_wtime();
+        MFlops_nomp+=1e-6*N*N*N*2/(t_stop-t_start);
+
+        t_start=omp_get_wtime();
+        mmul_mp(C,A,B);
+        t_stop=omp_get_wtime();
+        MFlops_mp+=1e-6*N*N*N*2/(t_stop-t_start);
+    }
+    std::cout << "No   MP " << MFlops_nomp/Nreplicates << " MFlops" << std::endl;
+    std::cout << "With MP " << MFlops_mp/Nreplicates << " MFlops" << std::endl;
+    std::cout << "Ratio   " << MFlops_mp/MFlops_nomp*100 << "%" << std::endl;
 }
 
 
