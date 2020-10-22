@@ -9,24 +9,27 @@
 
 template <class T> class cow_array
 {
- public:
-  cow_array(index_t theSize    );
-  cow_array(const cow_array& ca);
- ~cow_array(                   );
-  cow_array& operator=(const cow_array& ca);
+public:
+    cow_array(index_t theSize    );
+    cow_array(const cow_array& ca);
+    ~cow_array(                   );
+    cow_array& operator=(const cow_array& ca);
 
-  const T* Get    () const {                         return itsData;}
-        T* Get    ()       {if (*itsOwners>1) COW(); return itsData;}
-  index_t  size() const {return itsSize;}
-  int      GetNumOwners() const {return *itsOwners;}
+    const T* begin   () const {                         return itsData;}
+          T* begin   ()       {if (*itsOwners>1) COW(); return itsData;}
+    const T& operator[](index_t i) const {return itsData[i];}
+          T& operator[](index_t i)       {if (*itsOwners>1) COW(); return itsData[i];}
 
- private:
-  void Release();
-  void COW    ();
+    index_t  size() const {return itsSize;}
+    int      GetNumOwners() const {return *itsOwners;}
+
+private:
+    void Release();
+    void COW    ();
 
           index_t itsSize;
           T*      itsData;
-  mutable int*    itsOwners;
+    mutable int*    itsOwners;
 };
 
 
@@ -38,12 +41,18 @@ template <class T> class cow_array
 #else
   #define CHECK
 #endif
+#if WARN_DEEP_COPY
+  #include <iostream>
+#endif
 
 template <class T> inline cow_array<T>::cow_array(index_t theSize)
   : itsSize  (theSize       )
   , itsData  (new T[itsSize])
   , itsOwners(new int(1)    )
   {
+#if WARN_DEEP_COPY
+  std::cerr << "*** Copy-on-write array allocating size=" << itsSize << " ***" << std::endl;
+#endif
     CHECK
   }
 
@@ -88,12 +97,12 @@ template <class T> inline void cow_array<T>::Release()
   {
     delete [] itsData;
     delete    itsOwners;
+#if WARN_DEEP_COPY
+  std::cerr << "*** Copy-on-write array de-allocating size=" << itsSize << " ***" << std::endl;
+#endif
   }
 }
 
-#if WARN_DEEP_COPY
-  #include <iostream>
-#endif
 //
 //  Deep copy for COW (Copy On Write) symantics.
 //

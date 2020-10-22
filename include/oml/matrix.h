@@ -34,11 +34,14 @@ template <class T> class Matrix
   explicit Matrix(index_t rl,index_t rh,index_t cl,index_t ch);
   explicit Matrix(const VecLimits& r,const VecLimits& c);
   explicit Matrix(const MatLimits&);
-  explicit Matrix(const Matrix& m);
+  Matrix(const Matrix& m);
+  Matrix(Matrix&& m);
   template <class A>                 Matrix(const Indexable<T,A,Full,Real,MatrixShape>&);
-  template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
+template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
 
   Matrix& operator=(const Matrix&);
+  Matrix& operator=(Matrix&&);
+
   template <class A>                 Matrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
   template <class A,Store M, Data D> Matrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
 
@@ -143,7 +146,8 @@ template <class T> class Matrix
         T* Get()      ; //Required by iterable.
   void  Check () const; //Check internal consistency between limits and cow.
 
-  cow_array<T> itsData;   //Copy-On-Write array for the data.
+//  cow_array<T> itsData;   //Copy-On-Write array for the data.
+    std::vector<T> itsData;
 };
 
 //-----------------------------------------------------------------------------
@@ -161,19 +165,19 @@ template <class T> class Matrix
 template <class T> inline const T& Matrix<T>::operator()(index_t i,index_t j) const
 {
   CHECK(i,j);
-  return itsData.Get()[GetLimits().Offset(i,j)];
+  return itsData[GetLimits().Offset(i,j)];
 }
 
 template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
-  return itsData.Get()[GetLimits().Offset(i,j)];
+  return itsData[GetLimits().Offset(i,j)];
 }
 
 #undef CHECK
 
 #if DEBUG
-  #define CHECK(i) assert(i>=0 && i<itsData.size())
+  #define CHECK(i) assert(i>=0 && i<static_cast<index_t>(itsData.size()))
 #else
   #define CHECK(i)
 #endif
@@ -181,13 +185,13 @@ template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 template <class T> inline  T Matrix<T>::operator[](index_t i) const
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 
 template <class T> inline T& Matrix<T>::operator[](index_t i)
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 #undef CHECK
 
@@ -241,12 +245,12 @@ template <class T> inline index_t Matrix<T>::size() const
 
 template <class T> inline const T* Matrix<T>::Get() const
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 template <class T> inline T* Matrix<T>::Get()
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 

@@ -15,7 +15,7 @@ class MatrixBase
  public:
   MatrixBase(                    );
   MatrixBase(const MatLimits& lim);
-
+  // use dault op= and copy contructors
   /*! \name Limits info
   */
   //@{

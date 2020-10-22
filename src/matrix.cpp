@@ -57,13 +57,30 @@ template <class T> Matrix<T>::Matrix(const Matrix<T>& m)
   : MatrixBase(m)
   , itsData   (m.itsData)
   {
+//    std::cout << "Matrix<T> copy constructor" << std::endl;
     CHECK;
+  }
+
+template <class T> Matrix<T>::Matrix(Matrix<T>&& m)
+  : MatrixBase(m)
+  , itsData   (std::move(m.itsData))
+  {
+//    std::cout << "Matrix<T> move constructor m.itsData.size()=" << m.itsData.size() << std::endl;
   }
 
 template <class T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 {
   MatrixBase::operator=(m);
-  itsData=m.itsData;
+  itsData=std::move(m.itsData);
+//  std::cout << "Matrix<T> op=" << std::endl;
+  return *this;
+}
+
+template <class T> Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
+{
+  MatrixBase::operator=(m);
+  itsData=std::move(m.itsData);
+//  std::cout << "Matrix<T> move op=" << std::endl;
   return *this;
 }
 
@@ -74,7 +91,7 @@ template <class T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 template <class T> void Matrix<T>::Check() const
 {
   assert(GetLimits().Check());
-  assert(GetLimits().size()==itsData.size());
+  assert(GetLimits().size()==static_cast<index_t>(itsData.size()));
 }
 
 

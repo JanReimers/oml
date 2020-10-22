@@ -184,7 +184,8 @@ template <class T> class Vector
   void  Check () const; //Check internal consistency between limits and cow.
 
   VecLimits    itsLimits; //Manages the upper and lower vector limits.
-  cow_array<T> itsData;   //Copy-On-Write array for the data.
+  std::vector<T> itsData;
+//  cow_array<T> itsData;   //Copy-On-Write array for the data.
 };
 
 
@@ -243,19 +244,19 @@ void Normalize(Indexable<T,A,M,D,VectorShape>& v)
 template <class T> inline T Vector<T>::operator()(index_t i) const
 {
   CHECK(i);
-  return itsData.Get()[itsLimits.Offset(i)];
+  return itsData[itsLimits.Offset(i)];
 }
 
 template <class T> inline T& Vector<T>::operator()(index_t i)
 {
   CHECK(i);
-  return itsData.Get()[itsLimits.Offset(i)];
+  return itsData[itsLimits.Offset(i)];
 }
 
 #undef CHECK
 
 #if DEBUG
-  #define CHECK(i) assert(i>=0 && i<itsData.size())
+  #define CHECK(i) assert(i>=0 && i<static_cast<index_t>(itsData.size()))
 #else
   #define CHECK(i)
 #endif
@@ -263,13 +264,13 @@ template <class T> inline T& Vector<T>::operator()(index_t i)
 template <class T> inline  T Vector<T>::operator[](index_t i) const
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 
 template <class T> inline T& Vector<T>::operator[](index_t i)
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 
 #undef CHECK
@@ -331,12 +332,12 @@ template <class T> inline index_t Vector<T>::size() const
 
 template <class T> inline const T* Vector<T>::Get() const
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 template <class T> inline T* Vector<T>::Get()
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 template <class T> template <class B,Data D> inline
@@ -472,7 +473,7 @@ template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
 template <class T> void Vector<T>::Check() const
 {
   assert(itsLimits.Check());
-  assert(itsLimits.size()==itsData.size());
+  assert(itsLimits.size()==static_cast<index_t>(itsData.size()));
 }
 #endif //DEBUG
 

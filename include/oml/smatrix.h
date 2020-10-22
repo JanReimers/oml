@@ -289,13 +289,13 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,Symmetric,D,Matrix
 template <class T> inline  T SMatrix<T>::operator[](index_t i) const
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 
 template <class T> inline T& SMatrix<T>::operator[](index_t i)
 {
   CHECK(i);
-  return itsData.Get()[i];
+  return itsData[i];
 }
 #undef CHECK
 
@@ -327,12 +327,12 @@ template <class T> inline index_t SMatrix<T>::size() const
 
 template <class T> inline const T* SMatrix<T>::Get() const
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 template <class T> inline T* SMatrix<T>::Get()
 {
-  return itsData.Get();
+  return &*itsData.begin();
 }
 
 template <class T> inline void SMatrix<T>::SetLimits(const MatLimits& lim,bool preserve)
