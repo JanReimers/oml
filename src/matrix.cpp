@@ -61,28 +61,15 @@ template <class T> Matrix<T>::Matrix(const Matrix<T>& m)
     CHECK;
   }
 
-template <class T> Matrix<T>::Matrix(Matrix<T>&& m)
-  : MatrixBase(m)
-  , itsData   (std::move(m.itsData))
-  {
-//    std::cout << "Matrix<T> move constructor m.itsData.size()=" << m.itsData.size() << std::endl;
-  }
 
 template <class T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 {
   MatrixBase::operator=(m);
-  itsData=std::move(m.itsData);
+  itsData=m.itsData;
 //  std::cout << "Matrix<T> op=" << std::endl;
   return *this;
 }
 
-template <class T> Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
-{
-  MatrixBase::operator=(m);
-  itsData=std::move(m.itsData);
-//  std::cout << "Matrix<T> move op=" << std::endl;
-  return *this;
-}
 
 //-----------------------------------------------------------------------------
 //
@@ -144,7 +131,9 @@ template <class T> std::istream& Matrix<T>::Read(std::istream& is)
 //
 template <class T> void Matrix<T>::SetLimits(const MatLimits& theLimits, bool preserve)
 {
+#ifdef DEBUG
   theLimits.Check();
+#endif
   if (GetLimits()!=theLimits)
   {
     if (preserve)

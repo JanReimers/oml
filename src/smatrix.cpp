@@ -90,7 +90,7 @@ template <class T> void SMatrix<T>::Check() const
   assert(GetLimits().Check());
   assert(GetRowLimits()==GetColLimits());
   assert(itsN==GetNumRows());
-  assert(size(itsN)==itsData.size());
+  assert(size(itsN)==static_cast<index_t>(itsData.size()));
 }
 
 

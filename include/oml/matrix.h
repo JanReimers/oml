@@ -35,17 +35,19 @@ template <class T> class Matrix
   explicit Matrix(const VecLimits& r,const VecLimits& c);
   explicit Matrix(const MatLimits&);
   Matrix(const Matrix& m);
-  Matrix(Matrix&& m);
+  Matrix(Matrix& m) : Matrix<T>(const_cast<const Matrix&>(m)) {};
   template <class A>                 Matrix(const Indexable<T,A,Full,Real,MatrixShape>&);
-template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
+  template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
 
   Matrix& operator=(const Matrix&);
-  Matrix& operator=(Matrix&&);
-
   template <class A>                 Matrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
   template <class A,Store M, Data D> Matrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
 
-  //Matrix& operator*=(const Matrix&);
+#ifdef OML_MOVE_OPS
+  Matrix(Matrix&& m);
+  Matrix& operator=(Matrix&&);
+#endif
+
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
@@ -146,8 +148,11 @@ template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&)
         T* Get()      ; //Required by iterable.
   void  Check () const; //Check internal consistency between limits and cow.
 
-//  cow_array<T> itsData;   //Copy-On-Write array for the data.
-    std::vector<T> itsData;
+#ifdef OML_USE_STDVEC
+   std::vector<T> itsData;
+#else
+  cow_array<T> itsData;   //Copy-On-Write array for the data.
+#endif
 };
 
 //-----------------------------------------------------------------------------
@@ -228,6 +233,25 @@ Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
   MatrixAssign(*this,m); //Use op(,).
   return *this;
 }
+
+#ifdef OML_MOVE_OPS
+
+template <class T> inline Matrix<T>::Matrix(Matrix<T>&& m)
+  : MatrixBase(m)
+  , itsData   (std::move(m.itsData))
+  {
+//    std::cout << "Matrix<T> move constructor m.itsData.size()=" << m.itsData.size() << std::endl;
+  }
+
+template <class T> inline Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
+{
+  MatrixBase::operator=(m);
+  itsData=std::move(m.itsData);
+//  std::cout << "Matrix<T> move op=" << std::endl;
+  return *this;
+}
+#endif
+
 
 template <class T> Matrix<T>& operator*=(Matrix<T>& a,const Matrix<T>& b)
 {

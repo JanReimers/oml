@@ -67,6 +67,15 @@ template <class T> class Vector
   template <class B,Data D> Vector(const Indexable<T,B,Full,D,VectorShape>&);
   //! Allows assignment from an expression template.
   template <class B,Data D> Vector& operator=(const Indexable<T,B,Full,D,VectorShape>&);
+
+  Vector(const Vector& m);
+  Vector& operator=(const Vector&);
+
+#ifdef OML_MOVE_OPS
+  Vector(Vector&& m);
+  Vector& operator=(Vector&&);
+#endif
+
   //@}
   void Fill(FillType);
   void Fill(const T& fillValue);
@@ -184,8 +193,11 @@ template <class T> class Vector
   void  Check () const; //Check internal consistency between limits and cow.
 
   VecLimits    itsLimits; //Manages the upper and lower vector limits.
+#ifdef OML_USE_STDVEC
   std::vector<T> itsData;
-//  cow_array<T> itsData;   //Copy-On-Write array for the data.
+#else
+  cow_array<T> itsData;   //Copy-On-Write array for the data.
+#endif
 };
 
 
@@ -303,6 +315,35 @@ template <class T> inline Vector<T>::Vector(const VecLimits& lim)
     CHECK;
   }
 
+template <class T> inline Vector<T>::Vector(const Vector<T>& v)
+  : itsLimits(v.itsLimits)
+  , itsData  (v.itsData)
+  {}
+
+template <class T> inline Vector<T>& Vector<T>::operator=(const Vector<T>& v)
+{
+  itsLimits=v.itsLimits;
+  itsData  =v.itsData;
+//  std::cout << "Vector<T> move op=" << std::endl;
+  return *this;
+}
+#ifdef OML_MOVE_OPS
+
+template <class T> inline Vector<T>::Vector(Vector<T>&& v)
+  : itsLimits(std::move(v.itsLimits))
+  , itsData  (std::move(v.itsData))
+  {
+//    std::cout << "Vector<T> move constructor m.itsData.size()=" << m.itsData.size() << std::endl;
+  }
+
+template <class T> inline Vector<T>& Vector<T>::operator=(Vector<T>&& v)
+{
+  itsLimits=std::move(v.itsLimits);
+  itsData  =std::move(v.itsData);
+//  std::cout << "Vector<T> move op=" << std::endl;
+  return *this;
+}
+#endif
 
  template <class T> inline void Vector<T>::Fill(FillType ft)
 {

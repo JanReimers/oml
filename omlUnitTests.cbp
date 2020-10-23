@@ -16,6 +16,7 @@
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
+					<Add option="-fopenmp" />
 					<Add directory="../Debug" />
 				</Linker>
 			</Target>
@@ -28,11 +29,13 @@
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
+					<Add option="-fopenmp" />
 				</Compiler>
 				<Linker>
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
+					<Add option="-fopenmp" />
 					<Add directory="../Release" />
 				</Linker>
 			</Target>
@@ -52,6 +55,7 @@
 			<Add directory="../googletest/lib" />
 		</Linker>
 		<Unit filename="TODO_list" />
+		<Unit filename="UnitTests/Benchmarks.cpp" />
 		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />

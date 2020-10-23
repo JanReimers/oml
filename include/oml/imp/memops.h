@@ -142,8 +142,9 @@ void MatrixAssign(Indexable<T,Derived,Full,D,MatrixShape>& a,const Indexable<T,B
 #endif
   assert(a.GetLimits()==b.GetLimits());
   typename Derived::Subscriptor s(a);
-  for (index_t i:a.rows())
-    for (index_t j:a.cols())
+  #pragma omp parallel for collapse(2)
+  for (index_t i=a.GetLimits().Row.Low;i<=a.GetLimits().Row.High;i++)
+    for (index_t j=a.GetLimits().Col.Low;j<=a.GetLimits().Col.High;j++)
       s(i,j)=b(i,j);
 }
 

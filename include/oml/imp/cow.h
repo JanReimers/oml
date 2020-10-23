@@ -7,6 +7,9 @@
 #include "oml/imp/index_t.h"
 #include <cassert>
 
+
+
+#ifndef OML_USE_STDVEC
 template <class T> class cow_array
 {
 public:
@@ -41,7 +44,7 @@ private:
 #else
   #define CHECK
 #endif
-#if WARN_DEEP_COPY
+#ifdef WARN_DEEP_COPY
   #include <iostream>
 #endif
 
@@ -50,7 +53,7 @@ template <class T> inline cow_array<T>::cow_array(index_t theSize)
   , itsData  (new T[itsSize])
   , itsOwners(new int(1)    )
   {
-#if WARN_DEEP_COPY
+#ifdef WARN_DEEP_COPY
   std::cerr << "*** Copy-on-write array allocating size=" << itsSize << " ***" << std::endl;
 #endif
     CHECK
@@ -97,7 +100,7 @@ template <class T> inline void cow_array<T>::Release()
   {
     delete [] itsData;
     delete    itsOwners;
-#if WARN_DEEP_COPY
+#ifdef WARN_DEEP_COPY
   std::cerr << "*** Copy-on-write array de-allocating size=" << itsSize << " ***" << std::endl;
 #endif
   }
@@ -109,7 +112,7 @@ template <class T> inline void cow_array<T>::Release()
 template <class T> void cow_array<T>::COW()
 {
   CHECK
-#if WARN_DEEP_COPY
+#ifdef WARN_DEEP_COPY
   std::cerr << "*** Copy-on-write array doing deep copy, size=" << itsSize << " ***" << std::endl;
 #endif
 
@@ -124,5 +127,7 @@ template <class T> void cow_array<T>::COW()
 }
 
 #undef CHECK
+
+#endif //USE_STD_VEC
 
 #endif  //_cow_h_

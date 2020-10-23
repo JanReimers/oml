@@ -2,7 +2,7 @@
 
 // Copyright (1994-2020), Jan N. Reimers
 
-#define WARN_DEEP_COPY 1
+//#define WARN_DEEP_COPY 1
 #include "oml/matrix.h"
 #include "oml/vector.h"
 #include "oml/random.h"
@@ -59,7 +59,7 @@ inline std::vector<double>  NullFunctionVmove(int i, int N)
 
 TEST_F(BenchmarkRealTests,MatrixCopy)
 {
-    index_t N=4000,Nreplicates=10;
+    index_t N=400,Nreplicates=10000;
 
     Matrix<double> A(N,N),B(N,N),C(N,N);
     Ag.SetLimits(N,N);
@@ -73,7 +73,7 @@ TEST_F(BenchmarkRealTests,MatrixCopy)
         double expected_shallow_copy_time=0.0001;
         double expected_deep_copy_time=4.0;
     #else
-        double expected_matrix_shallow_copy_time=0.06   ;
+        double expected_matrix_shallow_copy_time=0.0007   ;
         double expected_matrix_deep_copy_time=5.0;
         double expected_shallow_copy_time=0.0004;
         double expected_deep_copy_time=4.0;
@@ -119,21 +119,6 @@ TEST_F(BenchmarkRealTests,MatrixCopy)
         EXPECT_LT(matrix_shallow_copy_time,expected_matrix_shallow_copy_time);
     }
     {
-        cout << "------------------std::vector shallow copy ------------------------" << endl;
-        tsum=0.0;
-        for (int i=1;i<=Nreplicates;i++)
-        {
-            Vg.resize(N*N);
-            t_start=omp_get_wtime();
-            std::vector<double> B1=NullFunctionVmove(i,N);
-            t_stop=omp_get_wtime();
-            tsum+=t_stop-t_start;
-        }
-        vector_shallow_copy_time=tsum/Nreplicates*1000/(N*N)*1000000;
-        cout << "vector shallow copy time=" << vector_shallow_copy_time << "ms/Mbyte" << endl;
-        EXPECT_LT(vector_shallow_copy_time,expected_shallow_copy_time);
-    }
-    {
         cout << "------------------std::vector deep copy ------------------------" << endl;
         tsum=0.0;
         std::vector<double> v(N*N);
@@ -150,8 +135,23 @@ TEST_F(BenchmarkRealTests,MatrixCopy)
         cout << "vector deep copy time=" << vector_deep_copy_time << "ms/Mbyte" << endl;
         EXPECT_LT(vector_deep_copy_time,expected_deep_copy_time);
     }
-     EXPECT_LT(matrix_shallow_copy_time/matrix_deep_copy_time,0.03);
-     EXPECT_LT(vector_shallow_copy_time/vector_deep_copy_time,0.0002);
+     EXPECT_LT(matrix_shallow_copy_time/matrix_deep_copy_time,0.001);
+     EXPECT_LT(vector_shallow_copy_time/vector_deep_copy_time,0.001);
+    {
+        cout << "------------------std::vector shallow copy ------------------------" << endl;
+        tsum=0.0;
+        for (int i=1;i<=Nreplicates;i++)
+        {
+            Vg.resize(N*N);
+            t_start=omp_get_wtime();
+            std::vector<double> B1=NullFunctionVmove(i,N);
+            t_stop=omp_get_wtime();
+            tsum+=t_stop-t_start;
+        }
+        vector_shallow_copy_time=tsum/Nreplicates*1000/(N*N)*1000000;
+        cout << "vector shallow copy time=" << vector_shallow_copy_time << "ms/Mbyte" << endl;
+        EXPECT_LT(vector_shallow_copy_time,expected_shallow_copy_time);
+    }
 }
 
 
@@ -177,9 +177,11 @@ template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>
     {
         typename Matrix<T>::Subscriptor s(C);
         index_t N=C.GetNumRows();
+//  OpenMP can't parse this range loop yet.
+//        for (index_t i : A.rows())
         #pragma omp parallel for collapse(2)
-        for (index_t i=1;i<=N;i++)
-            for (index_t j=1;j<=N;j++)
+          for (index_t i=A.GetLimits().Row.Low;i<=A.GetLimits().Row.High;i++)
+            for (index_t j=B.GetLimits().Col.Low;j<=B.GetLimits().Col.High;j++)
             {
                 double t=0.0;
                 for (index_t k=1;k<=N;k++)
@@ -209,7 +211,7 @@ TEST_F(BenchmarkRealTests,OpenMPParallel)
         #pragma omp single
         std::cout << "Number of available threads: " << omp_get_num_threads() << std::endl;
     }
-    double MFlops_nomp(0.0),MFlops_mp(0.0),t_start,t_stop;
+    double MFlops_nomp(0.0),MFlops_mp(0.0),MFlops_exp(0.0),t_start,t_stop;
     for (int i=1;i<=Nreplicates;i++)
     {
         t_start=omp_get_wtime();
@@ -221,10 +223,20 @@ TEST_F(BenchmarkRealTests,OpenMPParallel)
         mmul_mp(C,A,B);
         t_stop=omp_get_wtime();
         MFlops_mp+=1e-6*N*N*N*2/(t_stop-t_start);
+
+        t_start=omp_get_wtime();
+        C=A*B;
+        t_stop=omp_get_wtime();
+        MFlops_exp+=1e-6*N*N*N*2/(t_stop-t_start);
     }
-    std::cout << "No   MP " << MFlops_nomp/Nreplicates << " MFlops" << std::endl;
-    std::cout << "With MP " << MFlops_mp/Nreplicates << " MFlops" << std::endl;
-    std::cout << "Ratio   " << MFlops_mp/MFlops_nomp*100 << "%" << std::endl;
+    MFlops_nomp/=Nreplicates;MFlops_mp/=Nreplicates ;MFlops_exp/=Nreplicates;
+    std::cout << "Hand coded   No   MP " << MFlops_nomp << " MFlops" << std::endl;
+    std::cout << "Hand coded   With MP " << MFlops_mp << " MFlops" << std::endl;
+    std::cout << "Exp Template With MP " << MFlops_exp << " MFlops" << std::endl;
+    double mp_improvement=MFlops_mp/MFlops_nomp ;
+    std::cout << "Ratio   " << mp_improvement << std::endl;
+    EXPECT_GT(mp_improvement,3.0);
+    EXPECT_NEAR(MFlops_mp/MFlops_exp,1.0,.05);
 }
 
 TYPED_TEST_SUITE_P(BenchmarkTests);

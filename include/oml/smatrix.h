@@ -271,7 +271,11 @@ template <class T> class SMatrix
   static index_t size(index_t N) {return (N*(N+1))/2;}
 
   index_t      itsN   ;   //NxN matrix.
+#ifdef OML_USE_STDVEC
+  std::vector<T> itsData;
+#else
   cow_array<T> itsData;   //Copy-On-Write array for the data.
+#endif
 };
 
 template <class T, class A, Data D> inline
