@@ -46,13 +46,17 @@ public:
         return *this;
     }
 
-  template <class A>         DiagonalMatrix(const Indexable<T,A,Diagonal,Real,MatrixShape>&);
-  template <class A, Data D> DiagonalMatrix(const Indexable<T,A,Diagonal,D,MatrixShape>&);
+    template <class A>         DiagonalMatrix(const Indexable<T,A,Diagonal,Real,MatrixShape>&);
+    template <class A, Data D> DiagonalMatrix(const Indexable<T,A,Diagonal,D,MatrixShape>&);
 
-  template <class A>         DiagonalMatrix& operator=(const Indexable<T,A,Diagonal,Real,MatrixShape>&);
-  template <class A, Data D> DiagonalMatrix& operator=(const Indexable<T,A,Diagonal,D,MatrixShape>&);
+    template <class A>         DiagonalMatrix& operator=(const Indexable<T,A,Diagonal,Real,MatrixShape>&);
+    template <class A, Data D> DiagonalMatrix& operator=(const Indexable<T,A,Diagonal,D,MatrixShape>&);
 
-    //Matrix& operator*=(const Matrix&);
+#ifdef OML_MOVE_OPS
+  DiagonalMatrix(DiagonalMatrix&& m);
+  DiagonalMatrix& operator=(DiagonalMatrix&&);
+#endif
+
 
     std::ostream& Write(std::ostream&) const;
     std::istream& Read (std::istream&)      ;
@@ -203,28 +207,28 @@ DiagonalMatrix<T>::DiagonalMatrix(const DiagonalMatrix& dm)
     , itsData   (dm.itsData) //Shallow copy
 {}
 
-template <class T> template <class A>         DiagonalMatrix<T>::
+template <class T> template <class A>    inline      DiagonalMatrix<T>::
 DiagonalMatrix(const Indexable<T,A,Diagonal,Real,MatrixShape>& dm)
     : DiagonalMatrix<T>(dm.GetLimits())
 {
     ArrayAssign(*this,dm); //Use op[].
 }
 
-template <class T> template <class A, Data D> DiagonalMatrix<T>::
+template <class T> template <class A, Data D> inline DiagonalMatrix<T>::
 DiagonalMatrix(const Indexable<T,A,Diagonal,D,MatrixShape>& dm)
     : DiagonalMatrix<T>(dm.GetLimits())
 {
     DiagonalAssign(*this,dm); //Use op(i,j).
 }
 
-template <class T> template <class A> DiagonalMatrix<T>& DiagonalMatrix<T>::
+template <class T> template <class A> inline DiagonalMatrix<T>& DiagonalMatrix<T>::
 operator=(const Indexable<T,A,Diagonal,Real,MatrixShape>& dm)
 {
     SetLimits(dm.GetLimits());
     ArrayAssign(*this,dm); //Use op[].
     return *this;
 }
-template <class T> template <class A, Data D> DiagonalMatrix<T>& DiagonalMatrix<T>::
+template <class T> template <class A, Data D> inline DiagonalMatrix<T>& DiagonalMatrix<T>::
 operator=(const Indexable<T,A,Diagonal,D,MatrixShape>& dm)
 {
     SetLimits(dm.GetLimits());
@@ -232,12 +236,31 @@ operator=(const Indexable<T,A,Diagonal,D,MatrixShape>& dm)
     return *this;
 }
 
-template <class T> DiagonalMatrix<T>& operator*=(DiagonalMatrix<T>& a,const DiagonalMatrix<T>& b)
+#ifdef OML_MOVE_OPS
+
+template <class T> inline DiagonalMatrix<T>::DiagonalMatrix(DiagonalMatrix<T>&& m)
+  : MatrixBase(m)
+  , itsData   (std::move(m.itsData))
+  {
+//    std::cout << "DiagonalMatrix<T> move constructor m.itsData.size()=" << m.itsData.size() << std::endl;
+  }
+
+template <class T> inline DiagonalMatrix<T>& DiagonalMatrix<T>::operator=(DiagonalMatrix<T>&& m)
 {
-    assert(a.GetLimits()==b.GetLimits());
-    a.itsData*=b;
-    return a;
+  MatrixBase::operator=(m);
+  itsData=std::move(m.itsData);
+//  std::cout << "DiagonalMatrix<T> move op=" << std::endl;
+  return *this;
 }
+#endif
+
+
+//template <class T> DiagonalMatrix<T>& operator*=(DiagonalMatrix<T>& a,const DiagonalMatrix<T>& b)
+//{
+//    assert(a.GetLimits()==b.GetLimits());
+//    a.itsData*=b;
+//    return a;
+//}
 
 template <class T> inline index_t DiagonalMatrix<T>::size() const
 {
