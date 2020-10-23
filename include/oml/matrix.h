@@ -253,12 +253,12 @@ template <class T> inline Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
 #endif
 
 
-template <class T> Matrix<T>& operator*=(Matrix<T>& a,const Matrix<T>& b)
+template <class T, class B,Store M, Data D> Matrix<T>& operator*=(Matrix<T>& a,const Indexable<T,B,M,D,MatrixShape>& b)
 {
     assert(a.GetLimits().Col==b.GetLimits().Row);
     Matrix<T> temp=a*b;
     a.SetLimits(temp.GetLimits());
-    a=temp;
+    a=std::move(temp);
     return a;
 }
 

@@ -443,6 +443,10 @@ TEST_F(MatrixComplexTests,MixedTypes)
     EXPECT_EQ((Ar-1)(1,1),-0.5);
     EXPECT_EQ((1+Ar)(1,1), 1.5);
     EXPECT_EQ((1-Ar)(1,1), 0.5);
+
+    Ar*=Ar*Ar; //make sure it compiles.
+    EXPECT_EQ((Ar)(1,1), 12.5);
+
 }
 
 inline double conj(const double& d) {return d;}
