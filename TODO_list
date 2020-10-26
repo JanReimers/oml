@@ -8,18 +8,20 @@ Disconnect HEAD in git
     git checkout -B master temp
 
 Work list:
+    Organize header include order for indexable, and matalg headers
+    Done: Default constructors should create zero size Vectors and Matrices.
     Done: Git rid of Matrix
     Done: Rename DMatrix to Matrix
     Done: Fix up unit tests for double (forget int float for now)
         Done: Vector
         Matrix
             Need more mix types
-        DiangonalMatrix
+        DiagonalMatrix
         SymmetricMatrix
     Round out LAPack and Arpack wrappers and move everything to oml
     Done: Is it possible to simplify expression templates with C++17? (yes!)
     Beef up Diagonal and Sparse matrices.
-    Done: add fabs for complex matrices amd stop using abs
+    Done: add fabs for complex matrices and stop using abs
     Done: use int_64 throughout
     F(A-B) for work where F(const Matrix<T>&)
     Initialize value as third argument, Loose to FIll routines
@@ -32,6 +34,7 @@ Work list:
     Use constructor delegation
         Done: Vector
         Matrix
-        DiangonalMatrix
+        DiagonalMatrix
         SymmetricMatrix
     Create vector T*, set num owners=2
+        Not possible with std::vector instead of cow_array

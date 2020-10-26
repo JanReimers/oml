@@ -51,7 +51,7 @@ template <class T> class Vector
   */
   //@{
   //!< Vector with size=0;
-           Vector() : Vector<T>(VecLimits(1,1)) {};
+           Vector() : Vector<T>(VecLimits(1,0)) {};
   //!<  All elements are un-initiated, low index is 1.
   explicit Vector(index_t  size) : Vector<T>(VecLimits(1,size)) {};
   explicit Vector(index_t  size, FillType ft) : Vector<T>(VecLimits(1,size),ft) {};

@@ -42,7 +42,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++17" />
 			<Add option="-pg" />
 			<Add option="-fPIC" />
 			<Add directory="./include" />

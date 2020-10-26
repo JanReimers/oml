@@ -75,6 +75,12 @@ TYPED_TEST_P(MatrixTests,Constructors)
     A5=A2;
     EXPECT_EQ(A4.GetLimits(),A2.GetLimits());
     EXPECT_EQ(A5.GetLimits(),A2.GetLimits());
+
+    typedef Matrix<TypeParam> VectorT;
+    VectorT V0;
+    EXPECT_EQ(V0.size(),0);
+    VectorT V1=VectorT();
+    EXPECT_EQ(V1.size(),0);
 }
 
 TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)

@@ -368,3 +368,4 @@ REGISTER_TYPED_TEST_SUITE_P(BenchmarkTests,
 //using MyTypes = ::testing::Types<double>;
 using MyTypes = ::testing::Types<double,std::complex<double>>;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, BenchmarkTests, MyTypes);
+

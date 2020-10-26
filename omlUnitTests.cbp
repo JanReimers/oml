@@ -29,7 +29,6 @@
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
-					<Add option="-fopenmp" />
 				</Compiler>
 				<Linker>
 					<Add option="-O2" />
@@ -55,7 +54,9 @@
 			<Add directory="../googletest/lib" />
 		</Linker>
 		<Unit filename="TODO_list" />
-		<Unit filename="UnitTests/Benchmarks.cpp" />
+		<Unit filename="UnitTests/Benchmarks.cpp">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
