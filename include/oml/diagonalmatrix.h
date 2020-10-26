@@ -117,7 +117,7 @@ public:
   public:
     Subscriptor(Indexable<T,DiagonalMatrix,Diagonal,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits().Row)
-      , itsPtr(static_cast<DiagonalMatrix&>(m).Get())
+      , itsPtr(static_cast<DiagonalMatrix&>(m).priv_begin())
       {};
 
     T& operator()(index_t i)
@@ -136,11 +136,11 @@ private:
     friend class Indexable<T,DiagonalMatrix,Diagonal,Real,MatrixShape>;
     friend class Iterable<T,DiagonalMatrix>;
 
-    T  operator[](index_t i) const {return Get()[i];}
-    T& operator[](index_t i)       {return Get()[i];}
+    T  operator[](index_t i) const {return priv_begin()[i];}
+    T& operator[](index_t i)       {return priv_begin()[i];}
 
-    const T* Get() const {return itsData.Get();}
-          T* Get()       {return itsData.Get();}
+    const T* priv_begin() const {return itsData.priv_begin();}
+          T* priv_begin()       {return itsData.priv_begin();}
 
     Vector<T> itsData;   //Copy-On-Write array for the data.
 };

@@ -147,7 +147,7 @@ template <class T> class Vector
    public:
     Subscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a)
       : itsLimits(a.GetLimits())
-      , itsPtr(static_cast<Vector*>(&a)->Get()-itsLimits.Low)
+      , itsPtr(static_cast<Vector*>(&a)->priv_begin()-itsLimits.Low)
       {assert(itsPtr);}
 
     T& operator()(index_t i) {CHECK(i);return itsPtr[i];}
@@ -167,7 +167,7 @@ template <class T> class Vector
   {
    public:
     ArraySubscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a)
-      : itsPtr(static_cast<Vector*>(&a)->Get())
+      : itsPtr(static_cast<Vector*>(&a)->priv_begin())
       , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
@@ -185,11 +185,11 @@ template <class T> class Vector
   friend class ArraySubscriptor;
   friend class DiagonalMatrix<T>;
 
-  T  operator[](index_t) const;
+  T  operator[](index_t) const ;
   T& operator[](index_t)      ;
 
-  const T* Get() const; //Required by iterable.
-        T* Get()      ; //Required by iterable.
+  const T* priv_begin() const {return &*itsData.begin();} //Required by iterable.
+        T* priv_begin()       {return &*itsData.begin();} //Required by iterable.
   void  Check () const; //Check internal consistency between limits and cow.
 
   VecLimits    itsLimits; //Manages the upper and lower vector limits.
@@ -371,15 +371,7 @@ template <class T> inline index_t Vector<T>::size() const
   return GetLimits().size();
 }
 
-template <class T> inline const T* Vector<T>::Get() const
-{
-  return &*itsData.begin();
-}
 
-template <class T> inline T* Vector<T>::Get()
-{
-  return &*itsData.begin();
-}
 
 template <class T> template <class B,Data D> inline
 Vector<T>::Vector(const Indexable<T,B,Full,D,VectorShape>& v)

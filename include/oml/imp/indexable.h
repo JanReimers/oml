@@ -180,32 +180,6 @@ inline auto func  (const TB& a,const Indexable<TB,B,M,DB,S>& b)\
 
 
 
-template <class T, class A, class B, class L>
-inline bool LogicalII(const Iterable<T,A>& a, const Iterable<T,B>& b,const L& lambda)
-{
-  assert(a.size()==b.size());
-  bool ret(true);
-  for (index_t i:a.all())
-  {
-    ret = ret && lambda(a[i],b[i]);
-    if (!ret) break;
-  }
-  return ret;
-}
-template <class T, class A, class L>
-inline bool Logical(const Iterable<T,A>& a, const T& b,const L& lambda)
-{
-  bool ret(true);
-  for (const T& i:a) ret = ret && lambda(i,b);
-  return ret;
-}
-template <class T, class A, class L>
-inline bool Logical(const T & a, const Iterable<T,A>& b,const L& lambda)
-{
-  bool ret(true);
-  for (const T& i:b) ret = ret && lambda(a,i);
-  return ret;
-}
 template <class T, class A, class B,Store MA,Store MB, Data DA, Data DB, class L>
 inline bool Logical(const Indexable<T,A,MA,DA,MatrixShape>& a, const Indexable<T,B,MB,DB,MatrixShape>& b,const L& lambda)
 {

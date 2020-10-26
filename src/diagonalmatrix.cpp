@@ -4,7 +4,6 @@
 
 #include "oml/diagonalmatrix.h"
 #include "oml/imp/minmax.h"
-#include "oml/imp/iterable_io.h"
 #include <iostream>
 #include <iomanip>
 #include <cassert>

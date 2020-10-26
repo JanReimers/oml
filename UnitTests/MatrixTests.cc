@@ -457,6 +457,21 @@ TEST_F(MatrixComplexTests,MixedTypes)
 
 inline double conj(const double& d) {return d;}
 
+template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
+{
+//    cout << __PRETTY_FUNCTION__ << endl;
+    double eps=1e-13;
+    typedef Matrix<T> MatrixT;
+    typedef Vector <T> VectorT;
+    index_t M=10,N=5;
+    MatrixT A(M,N);
+    T s(0.5),sM(M),sN(N);
+    VectorT Vr(N,s),Vl(M,s);
+    Fill(A,s);
+    EXPECT_EQ(f(A),f(s));
+    EXPECT_EQ(f(Vl),f(s));
+}
+
 template <class T, typename Tf> void TestUnop(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
@@ -495,6 +510,10 @@ TYPED_TEST_P(MatrixTests,UnaryOps)
     TestUnop(TypeParam(0),[](const auto &x) { return fabs(x); });
     TestUnop(TypeParam(0),[](const auto &x) { return -x; });
     TestUnop(TypeParam(0),[](const auto &x) { return +x; });
+
+    TestUnopLight(TypeParam(0),[](const auto &x) { return isnan(x); });
+    TestUnopLight(TypeParam(0),[](const auto &x) { return isinf(x); });
+
 }
 
 TEST_F(MatrixComplexTests,UnaryOps)

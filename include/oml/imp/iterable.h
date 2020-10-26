@@ -5,8 +5,12 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/imp/index_t.h"
+#include "oml/imp/stream.h"
+#include "oml/imp/binio.h"
 #include <iosfwd>
+#include <iomanip>
 #include <cmath>
+#include <complex>
 
 //-----------------------------------------------------------------------------
 //
@@ -14,47 +18,49 @@
 //
 #if DEBUG
   #include <cassert>
-  #define CHECK\
-  assert(cur);\
-  assert(cur>=start);\
-  assert(cur<=end);\
-  assert(end>=start);
+  #define CHECK(i)\
+  assert(i>=0);\
+  assert(i<size());
 #else
-  #define CHECK
+  #define CHECK(i)
 #endif
 
 template <class T, class Derived> class Iterable
 {
- protected: //Can only copy and costruct the derived class.
-   Iterable() {};
-  ~Iterable() {};
-  Iterable(const Iterable&) {};
-  Iterable& operator=(const Iterable&) {return *this;}
+protected: //Can only copy and construct the derived class.
+    Iterable() {};
+    ~Iterable() {};
+    Iterable(const Iterable&) {};
+    Iterable& operator=(const Iterable&) {return *this;}
 
- public:
-  typedef       T*       iterator;
-  typedef const T* const_iterator;
+public:
+    typedef       T*       iterator;
+    typedef const T* const_iterator;
 
-  T operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
+    T operator[](index_t i) const {CHECK(i);return begin()[i];}
 
-  const_iterator begin() const {return static_cast<const Derived*>(this)->Get();}
-        iterator begin()       {return static_cast<      Derived*>(this)->Get();}
-  const_iterator end  () const {return static_cast<const Derived*>(this)->Get()+size();}
-        iterator end  ()       {return static_cast<      Derived*>(this)->Get()+size();}
+    const_iterator begin() const {return static_cast<const Derived*>(this)->priv_begin();}
+          iterator begin()       {return static_cast<      Derived*>(this)->priv_begin();}
+    const_iterator end  () const {return static_cast<const Derived*>(this)->priv_begin()+size();}
+          iterator end  ()       {return static_cast<      Derived*>(this)->priv_begin()+size();}
 
-  index_t size() const {return static_cast<const Derived*>(this)->size();}
+    index_t size() const {return static_cast<const Derived*>(this)->size();}
 
-  class index_iterator
-  {
+    //
+    //  All for (index_t i:a.indices()) range loops over indices
+    //  This is useful when you want to iterate over two containers.
+    //
+    class index_iterator
+    {
     public:
         index_iterator(index_t i) : current{i} {};
         index_iterator operator++(){current++;return (*this);}
         const index_t operator*() const {return current;}
-        index_t operator*() {return current;}
-        friend bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
+              index_t operator*() {return current;}
+        bool operator!=(const index_iterator& b) {return current!=b.current;}
     private:
         index_t current;
-  };
+    };
 
     class iterator_proxy
     {
@@ -67,7 +73,7 @@ template <class T, class Derived> class Iterable
         index_t high;
     };
 
-  iterator_proxy all () const {return iterator_proxy(0,size()-1);}
+    iterator_proxy indices() const {return iterator_proxy(0,size()-1);}
 
 };
 
@@ -82,34 +88,107 @@ template <class T,class A> inline void Fill(Iterable<T,A>& arr,T value)
 template <class T,class A> inline void FillLinear(Iterable<T,A>& arr,T start, T stop)
 {
   T del = (stop-start)/(double)(static_cast<A&>(arr).size()-1);
-  typename A::iterator i=arr.begin();
-  for (index_t n=0;i!=arr.end();i++,n++) *i = start + static_cast<double>(n)*del;
+  T val=start;
+  for (T& a:arr)
+  {
+      a = val;
+      val+=del;
+  }
 }
 
-template <class A> inline void FillLinear(Iterable<int,A>& arr,int start, int stop)
+//------------------------------------------------------------------------------
+//
+//  IO stuff.  Just dumps the data to the stream, ... thats it.
+//
+template <class T, class A> inline std::ostream& Write(std::ostream& os,const Iterable<T,A>& arr)
 {
-  index_t del = (stop-start)/(static_cast<A&>(arr).size()-1);
-  typename A::iterator i=arr.begin();
-  for (index_t n=0;i!=arr.end();i++,n++) *i = start + n*del;
+  assert(os);
+  if (StreamableObject::Binary()) for(T b:arr) BinaryWrite(b,os);
+  if (StreamableObject::Ascii ()) for(T b:arr) os << b << " ";
+  if (StreamableObject::Pretty())
+  {
+    std::streamsize prec=os.precision();
+    std::streamsize wid =os.width();
+    os << "{ ";
+    for(T b:arr) os << std::setw(wid) << std::setprecision(prec) << b << " ";
+    os << "}";
+  }
+  assert(os);
+  return os;
 }
 
-template <class T,class A> inline void FillPower(Iterable<T,A>& arr,T start, T stop)
+template <class T, class A> inline std::istream& Read(std::istream& is,Iterable<T,A>& arr)
 {
-  double del=(std::log(stop/start))/(double)(static_cast<A&>(arr).size()-1);
-  typename A::iterator i=arr.begin();
-  for (index_t n=0;i!=arr.end();i++,n++) *i=T(start*std::exp(n*del));
+  assert(is);
+  if(StreamableObject::Binary())
+    for(T& i:arr) BinaryRead(i,is);
+  else
+    for(T& i:arr) is >> i;
+
+  assert(is);
+  return is;
 }
 
-/*template <class T1,class T2, template <class T> class A>
-void OML_static_cast(Iterable<T1*,A<T1> >& dest,const Iterable<T2*,A<T2> >& source)
+
+//
+//  Logical operators mapped over iterable arrays
+//
+template <class T, class A, class B, class L>
+inline bool LogicalII(const Iterable<T,A>& a, const Iterable<T,B>& b,const L& lambda)
 {
-  typename Iterable<T1*,A<T1> >::iterator        i=dest.begin();
-  typename Iterable<T2*,A<T2> >::const_iterator  b=source.begin();
-  for (;i!=dest.end()&&b!=source.end();i++,b++)  *i = static_cast<T1*>(*b);
+  assert(a.size()==b.size());
+  bool ret(true);
+  for (index_t i:a.indices())
+  {
+    ret = ret && lambda(a[i],b[i]);
+    if (!ret) break;
+  }
+  return ret;
 }
-*/
-template <class T,class A> std::ostream& Write  (std::ostream&,const Iterable<T,A>&);
-template <class T,class A> std::istream& Read   (std::istream&,      Iterable<T,A>&);
+
+template <class T, class A, class L>
+inline bool Logical(const Iterable<T,A>& a, const T& b,const L& lambda)
+{
+  bool ret(true);
+  for (const T& i:a) ret = ret && lambda(i,b);
+  return ret;
+}
+
+template <class T, class A, class L>
+inline bool Logical(const T & a, const Iterable<T,A>& b,const L& lambda)
+{
+  bool ret(true);
+  for (const T& i:b) ret = ret && lambda(a,i);
+  return ret;
+}
+
+//inline constexpr bool isnan(const std::complex<double>& c)
+//{
+//    return std::isnan(c.real()) || std::isnan(c.imag());
+//}
+inline constexpr bool isnan(const std::complex<double>& c)
+{
+    return std::isnan(c.real()) || std::isnan(c.imag());
+}
+inline bool isinf(const std::complex<double>& c)
+{
+    return std::isinf(c.real()) || std::isinf(c.imag());
+}
+
+template <class T, class D> inline bool isnan(const Iterable<T,D>& arr)
+{
+    bool ret=false;
+    for (const T& a : arr) if (isnan(a)) {ret=true;break;}
+    return ret;
+}
+
+template <class T, class D> inline bool isinf(const Iterable<T,D>& arr)
+{
+    bool ret=false;
+    for (const T& a : arr) if (isinf(a)) {ret=true;break;}
+    return ret;
+}
+
 
 
 

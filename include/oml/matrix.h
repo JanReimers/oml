@@ -104,7 +104,7 @@ template <class T> class Matrix
   public:
     Subscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits())
-      , itsPtr(static_cast<Matrix&>(m).Get())
+      , itsPtr(static_cast<Matrix&>(m).priv_begin())
       {};
 
     T& operator()(index_t i,index_t j) {CHECK(i,j);return itsPtr[itsLimits.Offset(i,j)];}
@@ -124,7 +124,7 @@ template <class T> class Matrix
   {
    public:
     ArraySubscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& a)
-      : itsPtr(static_cast<Matrix*>(&a)->Get())
+      : itsPtr(static_cast<Matrix*>(&a)->priv_begin())
       , itsSize(a.size())
       {assert(itsPtr);}
     T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
@@ -144,8 +144,8 @@ template <class T> class Matrix
   T  operator[](index_t i) const;
   T& operator[](index_t i)      ;
 
-  const T* Get() const; //Required by iterable.
-        T* Get()      ; //Required by iterable.
+  const T* priv_begin() const {return &*itsData.begin();} //Required by iterable.
+        T* priv_begin()       {return &*itsData.begin();} //Required by iterable.
   void  Check () const; //Check internal consistency between limits and cow.
 
 #ifdef OML_USE_STDVEC
@@ -267,15 +267,6 @@ template <class T> inline index_t Matrix<T>::size() const
   return GetLimits().size();
 }
 
-template <class T> inline const T* Matrix<T>::Get() const
-{
-  return &*itsData.begin();
-}
-
-template <class T> inline T* Matrix<T>::Get()
-{
-  return &*itsData.begin();
-}
 
 
 

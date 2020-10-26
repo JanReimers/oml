@@ -3,7 +3,6 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/matrix.h"
-#include "oml/imp/iterable_io.h"
 #include <vector>
 #include <iostream>
 #include <iomanip>
