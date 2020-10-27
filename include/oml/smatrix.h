@@ -8,9 +8,7 @@
 #include "oml/imp/arrindex.h"
 #include "oml/imp/smatindex.h"
 #include "oml/imp/tstream.h"
-#include "oml/imp/matrixalg.h"
 #include "oml/imp/cow.h"
-//#include "oml/imp/rowcol.h"
 
 #if DEBUG
   #define CHECK(i,j) lim.CheckIndex(i,j)

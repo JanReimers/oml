@@ -8,9 +8,8 @@
 #include "oml/imp/arrindex.h"
 #include "oml/imp/matindex.h"
 #include "oml/imp/tstream.h"
-#include "oml/imp/matrixalg.h"
 #include "oml/imp/cow.h"
-
+#include "oml/vector.h"
 //----------------------------------------------------------------------------
 //
 //  Diagonal matrix class.  For now this is restricted to square matrix shape.
@@ -280,5 +279,149 @@ template <class T> inline MatLimits DiagonalMatrix<T>::GetLimits() const
 {
     return MatrixBase::GetLimits();
 }
+
+//--------------------------------------------------------------------------
+//
+//  Matrix algebra functions  D*D, D*M M*D
+//
+//  All of these operators return a proxy for the operation.  So for example a transpose
+//  proxy just stores a Matrix reference and op(i,j) just return ref(j,i). The multiplication
+//  proxies are little more complicated, but essentially just return a Row(i)*Col(j) dot
+//  product.
+//----------------------------------------------------------------------
+//
+//  Multiplication, Matrix * Diagonal Proxy.
+//
+template <class T, class A, class D> class MatrixMDOp
+: public Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape>
+{
+ public:
+  typedef Indexable<T,MatrixMDOp<T,A,D>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
+  MatrixMDOp(const A& a, const D& d)
+    : itsA(a)
+    , itsD(d)
+  {
+    assert(itsA.GetLimits().Col==itsD.GetLimits().Row);
+  };
+  MatrixMDOp(const MatrixMDOp& m)
+    : itsA(m.itsA)
+    , itsD(m.itsD)
+    {};
+  T operator()(index_t i,index_t j) const
+  {
+    return itsA(i,j)*itsD(j,j);
+  }
+  MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsD.GetLimits().Col);}
+  index_t   size  () const {return GetLimits().size();}
+
+ private:
+  const A itsA;
+  const D itsD;
+};
+
+//----------------------------------------------------------------------
+//
+//  Multiplication, Diagonal * Matrix Proxy.
+//
+template <class T, class D, class B> class MatrixDMOp
+: public Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape>
+{
+ public:
+  typedef Indexable<T,MatrixDMOp<T,D,B>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
+  MatrixDMOp(const D& d, const B& b)
+    : itsD(d)
+    , itsB(b)
+  {
+    assert(itsD.GetLimits().Col==itsB.GetLimits().Row);
+  };
+  MatrixDMOp(const MatrixDMOp& m)
+    : itsD(m.itsD)
+    , itsB(m.itsB)
+    {};
+  T operator()(index_t i,index_t j) const
+  {
+    return itsD(i,i)*itsB(i,j);
+  }
+  MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
+  index_t   size  () const {return GetLimits().size();}
+
+ private:
+  const D itsD;
+  const B itsB;
+};
+
+//----------------------------------------------------------------------
+//
+//  Multiplication, Diagonal * Diagonal Proxy.
+//
+
+template <class T, class D, class B> class MatrixDDOp
+: public Indexable<T,MatrixDDOp<T,D,B>,Diagonal,Abstract,MatrixShape>
+{
+ public:
+  typedef Indexable<T,MatrixDDOp<T,D,B>,Diagonal,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
+  MatrixDDOp(const D& d, const B& b)
+    : itsD(d)
+    , itsB(b)
+  {
+    assert(itsD.GetLimits().Col==itsB.GetLimits().Row);
+  };
+  MatrixDDOp(const MatrixDDOp& m)
+    : itsD(m.itsD)
+    , itsB(m.itsB)
+    {};
+  T operator()(index_t i,index_t j) const
+  {
+    return j==i ? itsD(i,i)*itsB(i,i) : T(0);
+  }
+  MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
+  index_t   size  () const {return GetLimits().size();}
+
+ private:
+  const D itsD;
+  const B itsB;
+};
+
+//---------------------------------------------------------------------
+//
+//  Matrix * DiagonalMatrix, returns a proxy.
+//
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixMDOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+
+//------------------------------------------------------------
+//
+//  DiagonalMatrix * Matrix, returns a proxy.
+//
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixDMOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+
+//------------------------------------------------------------
+//
+//  DiagonalMatrix * DiagonalMatrix, returns a proxy.
+//
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto
+operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixDDOp<TR,typename A::RefT,typename B::RefT>(a,b);
+
+}
+
 
 #endif //_DiagonalMatrix_H_
