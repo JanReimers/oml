@@ -57,8 +57,14 @@
 		<Unit filename="UnitTests/Benchmarks.cpp">
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
-		<Unit filename="UnitTests/MatrixTests.cc" />
+		<Unit filename="UnitTests/DiagonalMatrixTests.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="UnitTests/MatrixTests.cc">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="UnitTests/VectorTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>

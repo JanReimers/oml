@@ -58,14 +58,11 @@
 		<Unit filename="include/oml/imp/cow.h" />
 		<Unit filename="include/oml/imp/index_t.h" />
 		<Unit filename="include/oml/imp/indexable.h" />
-		<Unit filename="include/oml/imp/indexable_base.h" />
 		<Unit filename="include/oml/imp/indexsort.h" />
 		<Unit filename="include/oml/imp/matindex.h" />
 		<Unit filename="include/oml/imp/matlimit.h" />
 		<Unit filename="include/oml/imp/matrixalg.h" />
 		<Unit filename="include/oml/imp/matrixbase.h" />
-		<Unit filename="include/oml/imp/matsub.h" />
-		<Unit filename="include/oml/imp/memops.h" />
 		<Unit filename="include/oml/imp/minmax.h" />
 		<Unit filename="include/oml/imp/mixtypes.h" />
 		<Unit filename="include/oml/imp/ran250.h" />
@@ -118,8 +115,14 @@
 		</Unit>
 		<Unit filename="src/instance_complex.cpp" />
 		<Unit filename="src/instance_double.cpp" />
-		<Unit filename="src/linear_algebra_complex.cpp" />
-		<Unit filename="src/linear_algebra_double.cpp" />
+		<Unit filename="src/linear_algebra_complex.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/linear_algebra_double.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="src/matlimit.cpp" />
 		<Unit filename="src/matrix.cpp">
 			<Option compile="0" />
