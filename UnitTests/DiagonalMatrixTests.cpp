@@ -167,11 +167,19 @@ TYPED_TEST_P(DiagonalMatrixTests,MatrixAlgebra)
     MatrixT C=A*B*B*A*A*A*A*B;
     EXPECT_EQ(C(1,1), 0.0625);
 
-    Matrix<TypeParam> F(A.GetLimits());
+    Matrix<TypeParam> F(A.GetLimits()),F2;
     Fill(F,TypeParam(2));
     EXPECT_EQ((A*F)(1,1), 0.5);
     EXPECT_EQ((F*A)(1,1), 0.5);
     EXPECT_EQ((F*A*A*F*F*F*A*F*A)(1,1), 58752.);
+    EXPECT_EQ((A+F)(1,1), 2.25);
+    EXPECT_EQ((F+A)(1,1), 2.25);
+    EXPECT_EQ((A-F)(1,1),-1.75);
+    EXPECT_EQ((F-A)(1,1), 1.75);
+    F2=F+A;
+    //B=F+A; This should not compile Diagonal = Full + Diagonal, no way store the result in diagonal.
+    F2=F*A;
+    F2*=A;
 
 }
 

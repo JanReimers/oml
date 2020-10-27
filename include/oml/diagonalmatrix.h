@@ -4,23 +4,21 @@
 
 // Copyright (2020), Jan N. Reimers
 
-#include "oml/imp/iterable.h"
-#include "oml/imp/tstream.h"
 #include "oml/imp/matrixbase.h"
-#include "oml/imp/matsub.h"
+#include "oml/imp/arrindex.h"
+#include "oml/imp/matindex.h"
+#include "oml/imp/tstream.h"
 #include "oml/imp/matrixalg.h"
 #include "oml/imp/cow.h"
-#include "oml/imp/matindex.h"
-//#include "oml/rowcol.h"
-#include "oml/vector.h"
+
 //----------------------------------------------------------------------------
 //
 //  Diagonal matrix class.  For now this is restricted to square matrix shape.
 //
 template <class T> class DiagonalMatrix
-    : public Indexable<T,DiagonalMatrix<T>,Diagonal,Real,MatrixShape>
-    , public MatrixBase
-    , public Iterable<T,DiagonalMatrix<T> >
+    : public MatrixBase
+    , public ArrayIndexable<T,DiagonalMatrix<T>,Diagonal,MatrixShape  >
+    , public Indexable<T,DiagonalMatrix<T>,Diagonal,Real,MatrixShape>
     , public TStreamableObject<DiagonalMatrix<T> >
 {
 public:
@@ -134,13 +132,13 @@ public:
 
 private:
     friend class Indexable<T,DiagonalMatrix,Diagonal,Real,MatrixShape>;
-    friend class Iterable<T,DiagonalMatrix>;
+    friend class ArrayIndexable <T,DiagonalMatrix,Diagonal     ,MatrixShape>;
 
-    T  operator[](index_t i) const {return priv_begin()[i];}
-    T& operator[](index_t i)       {return priv_begin()[i];}
+//    T  operator[](index_t i) const {return priv_begin()[i];}
+//    T& operator[](index_t i)       {return priv_begin()[i];}
 
-    const T* priv_begin() const {return itsData.priv_begin();}
-          T* priv_begin()       {return itsData.priv_begin();}
+    const T* priv_begin() const {return itsData.begin();}
+          T* priv_begin()       {return itsData.begin();}
 
     Vector<T> itsData;   //Copy-On-Write array for the data.
 };
@@ -254,6 +252,17 @@ template <class T> inline DiagonalMatrix<T>& DiagonalMatrix<T>::operator=(Diagon
 }
 #endif
 
+template <class T, class Derived, Data D, class B, Data DB> inline
+void DiagonalAssign(Indexable<T,Derived,Diagonal,D,MatrixShape>& a,const Indexable<T,B,Diagonal,DB,MatrixShape>& b)
+{
+#ifdef WARN_DEEP_COPY
+  std::cerr << "Doing abstract MatrixAssign n=" << a.size() << std::endl;
+#endif
+  assert(a.GetLimits()==b.GetLimits());
+  typename Derived::Subscriptor s(a);
+  for (index_t i:a.rows())
+      s(i)=b(i,i);
+}
 
 //template <class T> DiagonalMatrix<T>& operator*=(DiagonalMatrix<T>& a,const DiagonalMatrix<T>& b)
 //{

@@ -161,34 +161,34 @@ template <class T> void Matrix<T>::SetLimits(const MatLimits& theLimits, bool pr
   }
 }
 
-template <class T,class A, Store M> void ReIndexRows(Indexable<T,A,M,Real,MatrixShape>& m,const std::vector<index_t>& index)
+template <class T> void Matrix<T>::ReIndexRows(const std::vector<index_t>& index)
 {
-  assert(m.GetLimits().GetNumRows()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumRows()==static_cast<index_t>(index.size()));
 
   typename std::vector<index_t>::const_iterator i=index.begin();
-  A dest(m.GetLimits());
-  typename A::Subscriptor sdest(dest);
+  Matrix<T> dest(GetLimits());
+  Subscriptor sdest(dest);
 
-  for (int row=m.GetLimits().Row.Low;row<=m.GetLimits().Row.High;row++,i++)
-  for (int col=m.GetLimits().Col.Low;col<=m.GetLimits().Col.High;col++)
-  sdest(row,col)=m(*i+m.GetLimits().Row.Low,col);
+  for (int row=GetLimits().Row.Low;row<=GetLimits().Row.High;row++,i++)
+  for (int col=GetLimits().Col.Low;col<=GetLimits().Col.High;col++)
+  sdest(row,col)=(*this)(*i+GetLimits().Row.Low,col);
 
-  static_cast<A&>(m)=dest;
+  *this=dest;
 }
 
-template <class T,class A, Store M> void ReIndexColumns(Indexable<T,A,M,Real,MatrixShape>& m,const std::vector<index_t>& index)
+template <class T> void Matrix<T>::ReIndexColumns(const std::vector<index_t>& index)
 {
-  assert(m.GetLimits().GetNumCols()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumCols()==static_cast<index_t>(index.size()));
 
   typename std::vector<index_t>::const_iterator i=index.begin();
-  A dest(m.GetLimits());
-  typename A::Subscriptor sdest(dest);
+  Matrix<T> dest(GetLimits());
+  Subscriptor sdest(dest);
 
-  for (int col=m.GetLimits().Col.Low;col<=m.GetLimits().Col.High;col++,i++)
-    for (int row=m.GetLimits().Row.Low;row<=m.GetLimits().Row.High;row++)
-      sdest(row,col)=m(row,*i+m.GetLimits().Col.Low);
+  for (int col=GetLimits().Col.Low;col<=GetLimits().Col.High;col++,i++)
+    for (int row=GetLimits().Row.Low;row<=GetLimits().Row.High;row++)
+      sdest(row,col)=(*this)(row,*i+GetLimits().Col.Low);
 
-  static_cast<A&>(m)=dest;
+  *this=dest;
 }
 
 //-----------------------------------------------------------------------------

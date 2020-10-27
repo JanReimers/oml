@@ -6,7 +6,7 @@
 
 #include "oml/imp/matindex.h"
 #include "oml/vector.h"
-#include "oml/imp/rowcol.h"
+//#include "oml/imp/rowcol.h"
 
 //-----------------------------------------------------------------------------------
 //  All of these operators return a proxy for the operation.  So for example a transpose
@@ -465,40 +465,6 @@ double MakeSymmetric(Indexable<T,A,Full,Real,MatrixShape>& m)
   double del=Max(fabs(m-temp));
   static_cast<A&>(m)=(m+temp)/T(2);
   return del;
-}
-
-// Normalize from supplied normalization std::vector.
-template <class T, class A, class B, Store MB, Data DB> inline
-void Normalize(Indexable<T,A,Full,Real,MatrixShape>& m, const Indexable<T,B,MB,DB,VectorShape>& n)
-{
-  static_cast<A&>(m)=DirectMultiply(m,OuterProduct(n,n));
-}
-
-// Normalize from supplied normalization std::vector. Complex version.
-template <class T, class A, class B, Store MB, Data DB> inline
-void Normalize(Indexable<std::complex<T>,A,Full,Real,MatrixShape>& m, const Indexable<T,B,MB,DB,VectorShape>& n)
-{
-  static_cast<A&>(m)=DirectMultiply(m,OuterProduct(n,n));
-}
-
-template <class T, class A, class B, Store MB, Data DB> inline
-void Normalize(Indexable<T,A,Symmetric,Real,MatrixShape>& m, const Indexable<T,B,MB,DB,VectorShape>& n)
-{
-  static_cast<A&>(m)=DirectMultiply(m,OuterProduct(n));
-}
-
-template <class T, class A, class B, Store MB, Data DB> inline
-void Normalize(Indexable<std::complex<T>,A,Symmetric,Real,MatrixShape>& m, const Indexable<T,B,MB,DB,VectorShape>& n)
-{
-  static_cast<A&>(m)=DirectMultiply(m,OuterProduct(n));
-}
-
-// Self normalixation using sqrt(GetDiagonal()) for normalization std::vector.
-template <class T, class A, Store M> inline Vector<T> Normalize(Indexable<T,A,M,Real,MatrixShape>& m)
-{
-  Vector<T> ret=T(1)/sqrt(MatrixDiagonal<T,A,M,Real>(m));
-  Normalize(m,ret);
-  return ret;
 }
 
 

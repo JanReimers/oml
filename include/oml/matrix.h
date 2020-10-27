@@ -4,12 +4,11 @@
 
 // Copyright (1994-2005), Jan N. Reimers
 
-#include "oml/imp/cow.h"
-#include "oml/imp/iterable.h"
-#include "oml/imp/tstream.h"
 #include "oml/imp/matrixbase.h"
-#include "oml/imp/matsub.h"
+#include "oml/imp/arrindex.h"
 #include "oml/imp/matindex.h"
+#include "oml/imp/tstream.h"
+#include "oml/imp/cow.h"
 #include "oml/imp/rowcol.h"
 #include "oml/imp/matrixalg.h"
 #include <vector>
@@ -20,13 +19,14 @@
 //  column pointers is maintained.
 //
 template <class T> class Matrix
-  : public Indexable<T,Matrix<T>,Full,Real,MatrixShape>
-  , public MatrixBase
-  , public Iterable<T,Matrix<T> >
+  : public MatrixBase
+  , public ArrayIndexable<T,Matrix<T>,Full     ,MatrixShape>
+  , public Indexable     <T,Matrix<T>,Full,Real,MatrixShape>
   , public TStreamableObject<Matrix<T> >
 {
  public:
-  typedef Indexable<T,Matrix<T>,Full,Real,MatrixShape> IndexableT;
+  typedef ArrayIndexable<T,Matrix<T>,Full     ,MatrixShape> IterableT;
+  typedef      Indexable<T,Matrix<T>,Full,Real,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   explicit Matrix(                );
@@ -36,12 +36,12 @@ template <class T> class Matrix
   explicit Matrix(const MatLimits&);
   Matrix(const Matrix& m);
   Matrix(Matrix& m) : Matrix<T>(const_cast<const Matrix&>(m)) {};
-  template <class A>                 Matrix(const Indexable<T,A,Full,Real,MatrixShape>&);
-  template <class A,Store M, Data D> Matrix(const Indexable<T,A,M,D,MatrixShape>&);
+  template <class A>         Matrix(const ArrayIndexable<T,A,Full,MatrixShape>&);
+  template <class A,Store M> Matrix(const Indexable<T,A,M,Abstract,MatrixShape>&);
 
   Matrix& operator=(const Matrix&);
-  template <class A>                 Matrix& operator=(const Indexable<T,A,Full,Real,MatrixShape>&);
-  template <class A,Store M, Data D> Matrix& operator=(const Indexable<T,A,M,D,MatrixShape>&);
+  template <class A>         Matrix& operator=(const ArrayIndexable<T,A,Full,MatrixShape>&);
+  template <class A,Store M> Matrix& operator=(const Indexable<T,A,M,Abstract,MatrixShape>&);
 
 #ifdef OML_MOVE_OPS
   Matrix(Matrix&& m);
@@ -68,8 +68,8 @@ template <class T> class Matrix
   void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false);
   void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
 
-  void ReIndexRows   (const std::vector<index_t>& index) {::ReIndexRows   (*this,index);}
-  void ReIndexColumns(const std::vector<index_t>& index) {::ReIndexColumns(*this,index);}
+  void ReIndexRows   (const std::vector<index_t>& index);
+  void ReIndexColumns(const std::vector<index_t>& index);
   void SwapRows   (index_t i,index_t j);
   void SwapColumns(index_t i,index_t j);
   Matrix SubMatrix(const MatLimits& lim) const;
@@ -86,8 +86,13 @@ template <class T> class Matrix
   const ColType  GetColumn  (index_t col) const {return ColType (*this,col);}
   const DiagType GetDiagonal(           ) const {return DiagType(*this    );}
 
-  typedef typename Iterable <T,Matrix>::const_iterator  const_iterator ;
-  typedef typename Iterable <T,Matrix>::iterator iterator;
+  typedef typename IterableT::const_iterator  const_iterator ;
+  typedef typename IterableT::iterator iterator;
+
+  Matrix& operator+=(const ArrayIndexable<T,Matrix,Full,MatrixShape>& b) {return ArrayAdd(*this,b);}
+  Matrix& operator-=(const ArrayIndexable<T,Matrix,Full,MatrixShape>& b) {return ArraySub(*this,b);}
+  template <class B> Matrix& operator+=(const Indexable<T,B,Full,Abstract,MatrixShape>& b) {return MatrixAdd(*this,b);}
+  template <class B> Matrix& operator-=(const Indexable<T,B,Full,Abstract,MatrixShape>& b) {return MatrixSub(*this,b);}
 
 
 #if DEBUG
@@ -113,39 +118,15 @@ template <class T> class Matrix
     MatLimits itsLimits;
     T*        itsPtr;
   };
-
-#undef CHECK
-#if DEBUG
-  #define CHECK(i) assert(i>=0&&i<itsSize)
-#else
-  #define CHECK(i)
-#endif
-  class ArraySubscriptor
-  {
-   public:
-    ArraySubscriptor(Indexable<T,Matrix,Full,Real,MatrixShape>& a)
-      : itsPtr(static_cast<Matrix*>(&a)->priv_begin())
-      , itsSize(a.size())
-      {assert(itsPtr);}
-    T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
-   private:
-    T*      itsPtr;
-    index_t itsSize;
-  };
-
 #undef CHECK
 
  private:
   friend class Indexable<T,Matrix,Full,Real,MatrixShape>;
-  friend class Iterable<T,Matrix>;
+  friend class ArrayIndexable <T,Matrix,Full     ,MatrixShape>;
   friend class Subscriptor;
-  friend class ArraySubscriptor;
 
-  T  operator[](index_t i) const;
-  T& operator[](index_t i)      ;
-
-  const T* priv_begin() const {return &*itsData.begin();} //Required by iterable.
-        T* priv_begin()       {return &*itsData.begin();} //Required by iterable.
+  const T* priv_begin() const {return &*itsData.begin();} //Required by ArrayIndexable.
+        T* priv_begin()       {return &*itsData.begin();} //Required by ArrayIndexable.
   void  Check () const; //Check internal consistency between limits and cow.
 
 #ifdef OML_USE_STDVEC
@@ -181,35 +162,16 @@ template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 
 #undef CHECK
 
-#if DEBUG
-  #define CHECK(i) assert(i>=0 && i<static_cast<index_t>(itsData.size()))
-#else
-  #define CHECK(i)
-#endif
-
-template <class T> inline  T Matrix<T>::operator[](index_t i) const
-{
-  CHECK(i);
-  return itsData[i];
-}
-
-template <class T> inline T& Matrix<T>::operator[](index_t i)
-{
-  CHECK(i);
-  return itsData[i];
-}
-#undef CHECK
-
 template <class T> template <class A> inline
-Matrix<T>::Matrix(const Indexable<T,A,Full,Real,MatrixShape>& m)
+Matrix<T>::Matrix(const ArrayIndexable<T,A,Full,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
     ArrayAssign(*this,m); //Use op[].
   }
 
-template <class T> template <class A,Store M, Data D> inline
-Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
+template <class T> template <class A,Store M> inline
+Matrix<T>::Matrix(const Indexable<T,A,M,Abstract,MatrixShape>& m)
   : MatrixBase(m.GetLimits        ())
   , itsData   (GetLimits().size())
   {
@@ -219,15 +181,15 @@ Matrix<T>::Matrix(const Indexable<T,A,M,D,MatrixShape>& m)
 
 
 template <class T> template <class A> inline
-Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,Full,Real,MatrixShape>& m)
+Matrix<T>& Matrix<T>::operator=(const ArrayIndexable<T,A,Full,MatrixShape>& m)
 {
   SetLimits(m.GetLimits());
   ArrayAssign(*this,m); //Use op[].
   return *this;
 }
 
-template <class T> template <class A,Store M, Data D> inline
-Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,D,MatrixShape>& m)
+template <class T> template <class A,Store M> inline
+Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,Abstract,MatrixShape>& m)
 {
   SetLimits(m.GetLimits());
   MatrixAssign(*this,m); //Use op(,).

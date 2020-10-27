@@ -20,7 +20,7 @@
 //
 
 enum Shape {ArrayShape,VectorShape,MatrixShape};
-enum Store {Full,Symmetric,Diagonal};
+enum Store {Full,Symmetric,Diagonal,Sparse};
 enum Data  {Real,Abstract};
 
 // Define how different storage layouts and Data type interact

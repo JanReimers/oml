@@ -52,6 +52,7 @@
 		</Linker>
 		<Unit filename="include/oml/cnumeric.h" />
 		<Unit filename="include/oml/diagonalmatrix.h" />
+		<Unit filename="include/oml/imp/arrindex.h" />
 		<Unit filename="include/oml/imp/binio.h" />
 		<Unit filename="include/oml/imp/binop.h" />
 		<Unit filename="include/oml/imp/cow.h" />
@@ -59,9 +60,6 @@
 		<Unit filename="include/oml/imp/indexable.h" />
 		<Unit filename="include/oml/imp/indexable_base.h" />
 		<Unit filename="include/oml/imp/indexsort.h" />
-		<Unit filename="include/oml/imp/isnan.h" />
-		<Unit filename="include/oml/imp/iterable.h" />
-		<Unit filename="include/oml/imp/iterable_io.h" />
 		<Unit filename="include/oml/imp/matindex.h" />
 		<Unit filename="include/oml/imp/matlimit.h" />
 		<Unit filename="include/oml/imp/matrixalg.h" />

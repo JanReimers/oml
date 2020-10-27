@@ -79,10 +79,10 @@ std::vector<index_t> HeapIndex(const Ind& arrin)
 //  < and > operators are defined.
 //
 //! Uses heap sort algorithm to calculate a descending index.
-template <class T, class A, Store M, Data D, Shape S> inline
-std::vector<index_t> MakeDescendingIndex(const Indexable<T,A,M,D,S>& arr)
+template <class T, class A, Store M, Shape S> inline
+std::vector<index_t> MakeDescendingIndex(const ArrayIndexable<T,A,M,S>& arr)
 {
-  return HeapIndex<T,Indexable<T,A,M,D,S>,OpGT<T> >(arr);
+  return HeapIndex<T,ArrayIndexable<T,A,M,S>,OpGT<T> >(arr);
 }
 
 //! Uses heap sort algorithm to calculate an ascending index.

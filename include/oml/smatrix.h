@@ -4,14 +4,13 @@
 
 // Copyright (1994-2005), Jan N. Reimers
 
-#include "oml/imp/iterable.h"
-#include "oml/imp/tstream.h"
 #include "oml/imp/matrixbase.h"
-#include "oml/imp/matsub.h"
+#include "oml/imp/arrindex.h"
+#include "oml/imp/smatindex.h"
+#include "oml/imp/tstream.h"
 #include "oml/imp/matrixalg.h"
 #include "oml/imp/cow.h"
-#include "oml/imp/smatindex.h"
-#include "oml/imp/rowcol.h"
+//#include "oml/imp/rowcol.h"
 
 #if DEBUG
   #define CHECK(i,j) lim.CheckIndex(i,j)
@@ -88,13 +87,14 @@ template<class T> class SymmetricSubscriptor<std::complex<T> >
   \nosubgrouping
 */
 template <class T> class SMatrix
-  : public Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape>
-  , public MatrixBase
-  , public Iterable<T,SMatrix<T> >
+  : public MatrixBase
+  , public ArrayIndexable<T,SMatrix<T>,Symmetric     ,MatrixShape>
+  , public      Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape>
   , public TStreamableObject<SMatrix<T> >
 {
  public:
-  typedef Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape> IndexableT;
+  typedef ArrayIndexable<T,SMatrix<T>,Symmetric     ,MatrixShape> ArrayIndexT;
+  typedef      Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape> IndexableT;
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   /*! \name Constructors/Assignment
@@ -118,7 +118,7 @@ template <class T> class SMatrix
   template <class B, Data D> SMatrix& operator= (const Indexable<T,B,Symmetric,D,MatrixShape>&);
   //@}
 
-  using Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape>::AssignFrom;
+//  using Indexable<T,SMatrix<T>,Symmetric,Real,MatrixShape>::AssignFrom;
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
@@ -136,9 +136,9 @@ template <class T> class SMatrix
   */
   //@{
   //! const element acces operator, fast and \e cannot trigger a COW operation.
-  T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),Get());}
+  T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),priv_begin());}
   //! non-const version can trigger a COW operation, and checks for this with every access.
-  T& operator()(index_t i,index_t j)       {return SymmetricSubscriptor<T>::apply(i,j,GetLimits(),Get());}
+  T& operator()(index_t i,index_t j)       {return SymmetricSubscriptor<T>::apply(i,j,GetLimits(),priv_begin());}
   //@}
 
   index_t   size     () const; //!<Returns number elements in the Matrix.
@@ -157,15 +157,15 @@ template <class T> class SMatrix
   //@}
 
   //! Does M(i,j)=M(index[i],j) for i=low...high.  Used for sorting.
-  void ReIndexRows   (const std::vector<index_t>& index) {::ReIndexRows   (*this,index);}
+  void ReIndexRows   (const std::vector<index_t>& index);
   //! Does M(i,j)=M(i,index[j]) for i=low...high.  Used for sorting.
-  void ReIndexColumns(const std::vector<index_t>& index) {::ReIndexColumns(*this,index);}
+  void ReIndexColumns(const std::vector<index_t>& index);
   //! Does M(i,k)=M(j,k) for k=low...high.  Used for sorting.
-  void SwapRows   (index_t i,index_t j) {::SwapRows   (*this,i,j);}
+  void SwapRows   (index_t i,index_t j);
   //! Does M(k,i)=M(k,j) for k=low...high.  Used for sorting.
-  void SwapColumns(index_t i,index_t j) {::SwapColumns(*this,i,j);}
+  void SwapColumns(index_t i,index_t j);
   //! Exctract a portion of the matrix. Returns a new Matrix object.
-  SMatrix SubMatrix(const MatLimits& lim) const {SMatrix ret(lim);::SubMatrix(ret,*this);return ret;}
+  SMatrix SubMatrix(const MatLimits& lim) const;
 
   typedef MatrixRow     <T,SMatrix,Symmetric,Real> RowType;
   typedef MatrixColumn  <T,SMatrix,Symmetric,Real> ColType;
@@ -190,9 +190,9 @@ template <class T> class SMatrix
    */
   //@{
   //! Read only iterator.
-  typedef typename Iterable <T,SMatrix>::const_iterator  const_iterator ;
+  typedef typename ArrayIndexT::const_iterator  const_iterator ;
   //! Read/write iterator.
-  typedef typename Iterable <T,SMatrix>::iterator iterator;
+  typedef typename ArrayIndexT::iterator iterator;
   //@}
 
   static index_t GetSymOffset(index_t i, index_t j, index_t n)
@@ -221,7 +221,7 @@ template <class T> class SMatrix
     Subscriptor(Indexable<T,SMatrix,Symmetric,Real,MatrixShape>& m)
       : itsLimits(m.GetLimits())
       , itsN(itsLimits.Row.size())
-      , itsPtr(static_cast<SMatrix&>(m).Get())
+      , itsPtr(static_cast<SMatrix&>(m).priv_begin())
       {};
 
     T& operator()(index_t i,index_t j) {return SymmetricSubscriptor<T>::apply(i,j,itsLimits,itsPtr);}
@@ -240,33 +240,33 @@ template <class T> class SMatrix
   #define CHECK(i)
 #endif
 
-  class ArraySubscriptor
-  {
-   public:
-    ArraySubscriptor(Indexable<T,SMatrix,Symmetric,Real,MatrixShape>& a)
-      : itsPtr(static_cast<SMatrix*>(&a)->Get())
-      , itsSize(a.size())
-      {assert(itsPtr);}
-    T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
-   private:
-    T*      itsPtr;
-    index_t itsSize;
-  };
+//  class ArraySubscriptor
+//  {
+//   public:
+//    ArraySubscriptor(Indexable<T,SMatrix,Symmetric,Real,MatrixShape>& a)
+//      : itsPtr(static_cast<SMatrix*>(&a)->Get())
+//      , itsSize(a.size())
+//      {assert(itsPtr);}
+//    T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
+//   private:
+//    T*      itsPtr;
+//    index_t itsSize;
+//  };
 
 #undef CHECK
 
 
  private:
-  friend class Indexable<T,SMatrix,Symmetric,Real,MatrixShape>;
-  friend class Iterable<T,SMatrix>;
+  friend class      Indexable<T,SMatrix,Symmetric,Real,MatrixShape>;
+  friend class ArrayIndexable<T,SMatrix,Symmetric     ,MatrixShape>;
   friend class Subscriptor;
-  friend class ArraySubscriptor;
+//  friend class ArraySubscriptor;
 
-  T  operator[](index_t i) const;
-  T& operator[](index_t i)      ;
+//  T  operator[](index_t i) const;
+//  T& operator[](index_t i)      ;
 
-  const T* Get() const;
-        T* Get()      ;
+  const T* priv_begin() const;
+        T* priv_begin()      ;
   void  Check () const; //Check internal consistency between limits and cow.
   static index_t size(index_t N) {return (N*(N+1))/2;}
 
@@ -290,17 +290,17 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,Symmetric,D,Matrix
   #define CHECK(i)
 #endif
 
-template <class T> inline  T SMatrix<T>::operator[](index_t i) const
-{
-  CHECK(i);
-  return itsData[i];
-}
-
-template <class T> inline T& SMatrix<T>::operator[](index_t i)
-{
-  CHECK(i);
-  return itsData[i];
-}
+//template <class T> inline  T SMatrix<T>::operator[](index_t i) const
+//{
+//  CHECK(i);
+//  return itsData[i];
+//}
+//
+//template <class T> inline T& SMatrix<T>::operator[](index_t i)
+//{
+//  CHECK(i);
+//  return itsData[i];
+//}
 #undef CHECK
 
 //----------------------------------------------------------------------
@@ -313,14 +313,14 @@ SMatrix<T>::SMatrix(const Indexable<T,B,Symmetric,D,MatrixShape>& m)
   , itsN      (GetLimits().GetNumRows())
   , itsData   (size(itsN)           )
   {
-    AssignFrom(m); //Use op[] or op(i,j) depending on D.
+    MatrixAssign(*this,m); //Use op[] or op(i,j) depending on D.
   }
 
 template <class T> template <class B, Data D> inline
 SMatrix<T>& SMatrix<T>::operator=(const Indexable<T,B,Symmetric,D,MatrixShape>& m)
 {
 	if (itsN==0) SetLimits(m.GetLimits());
-  AssignFrom(m); //Use op[] or op(i,j) depending on D.
+  MatrixAssign(*this,m); //Use op[] or op(i,j) depending on D.
   return *this;
 }
 
@@ -329,19 +329,14 @@ template <class T> inline index_t SMatrix<T>::size() const
   return itsData.size();
 }
 
-template <class T> inline const T* SMatrix<T>::Get() const
+template <class T> inline const T* SMatrix<T>::priv_begin() const
 {
   return &*itsData.begin();
 }
 
-template <class T> inline T* SMatrix<T>::Get()
+template <class T> inline T* SMatrix<T>::priv_begin()
 {
   return &*itsData.begin();
-}
-
-template <class T> inline void SMatrix<T>::SetLimits(const MatLimits& lim,bool preserve)
-{
-  ::SetLimits(*this,lim,preserve);
 }
 
 template <class T> inline void SMatrix<T>::SetLimits(index_t r, index_t c , bool preserve)

@@ -8,7 +8,7 @@
 
 template <class T> class RefSubMatrix
   : public Indexable<T,RefSubMatrix<T>,Full,Abstract,MatrixShape>
-  , public Iterable<T,RefSubMatrix<T> >
+  , public ArrayIndexable<T,RefSubMatrix<T> >
   , public MatrixBase
 {
  public:
@@ -112,7 +112,7 @@ template <class T> class RefSubMatrix
 
 
  private:
-  friend class Iterable <T,RefSubMatrix>;
+  friend class ArrayIndexable <T,RefSubMatrix>;
   friend class Indexable<T,RefSubMatrix,Full,Abstract,MatrixShape>;
   friend class MatrixSubscriptor;
 

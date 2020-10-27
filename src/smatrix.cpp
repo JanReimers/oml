@@ -5,7 +5,6 @@
 #include "oml/smatrix.h"
 #include "oml/imp/minmax.h"
 #include "oml/imp/binio.h"
-#include "oml/imp/iterable_io.h"
 #include <iostream>
 #include <iomanip>
 #include <cassert>
@@ -81,6 +80,7 @@ template <class T> SMatrix<T>& SMatrix<T>::operator=(const SMatrix<T>& m)
 
 #undef CHECK
 
+
 //-----------------------------------------------------------------------------
 //
 //  Internal consistency check.
@@ -153,6 +153,115 @@ template <class T> std::istream& SMatrix<T>::Read(std::istream& is)
 #endif
   assert(is);
   return is;
+}
+
+//-----------------------------------------------------------------------------
+//
+//  Changing size and/or limits.
+//
+template <class T> void SMatrix<T>::SetLimits(const MatLimits& theLimits, bool preserve)
+{
+#ifdef DEBUG
+  theLimits.Check();
+#endif
+  if (GetLimits()!=theLimits)
+  {
+    if (preserve)
+    {
+      SMatrix<T> dest(theLimits);
+
+      index_t newrowlow=theLimits.Row.Low, newrowhigh=theLimits.Row.High;
+      index_t newcollow=theLimits.Col.Low, newcolhigh=theLimits.Col.High;
+      index_t rowlow =Max(newrowlow ,GetLimits().Row.Low );   //Limits of old and new
+      index_t rowhigh=Min(newrowhigh,GetLimits().Row.High);   //data overlap.
+      index_t collow =Max(newcollow ,GetLimits().Col.Low );   //Limits of old and new
+      index_t colhigh=Min(newcolhigh,GetLimits().Col.High);   //data overlap.
+
+      Subscriptor sdest (dest);         //Destination subscriptor.
+
+      for (index_t i=rowlow;i<=rowhigh;i++)
+        for (index_t j=collow;j<=colhigh;j++)
+          sdest(i,j)=(*this)(i,j); //Transfer any overlaping data.
+
+			(*this)=dest;
+		}
+     else
+    {
+			(*this)=SMatrix<T>(theLimits);
+    }
+  }
+}
+
+
+template <class T> void SMatrix<T>::ReIndexRows(const std::vector<index_t>& index)
+{
+  assert(GetLimits().GetNumRows()==static_cast<index_t>(index.size()));
+
+  typename std::vector<index_t>::const_iterator i=index.begin();
+  SMatrix<T> dest(GetLimits());
+  Subscriptor sdest(dest);
+
+  for (int row=GetLimits().Row.Low;row<=GetLimits().Row.High;row++,i++)
+  for (int col=GetLimits().Col.Low;col<=GetLimits().Col.High;col++)
+  sdest(row,col)=(*this)(*i+GetLimits().Row.Low,col);
+
+  *this=dest;
+}
+
+template <class T> void SMatrix<T>::ReIndexColumns(const std::vector<index_t>& index)
+{
+  assert(GetLimits().GetNumCols()==static_cast<index_t>(index.size()));
+
+  typename std::vector<index_t>::const_iterator i=index.begin();
+  SMatrix<T> dest(GetLimits());
+  Subscriptor sdest(dest);
+
+  for (int col=GetLimits().Col.Low;col<=GetLimits().Col.High;col++,i++)
+    for (int row=GetLimits().Row.Low;row<=GetLimits().Row.High;row++)
+      sdest(row,col)=(*this)(row,*i+GetLimits().Col.Low);
+
+  *this=dest;
+}
+//-----------------------------------------------------------------------------
+//
+//  Swapping
+//
+
+template <class T> void SMatrix<T>::SwapRows(index_t i,index_t j)
+{
+  Subscriptor s(*this);
+  for (index_t c : this->cols())
+  {
+     T temp=s(i,c);
+     s(i,c)=s(j,c);
+     s(j,c)=temp;
+  }
+}
+
+template <class T> void SMatrix<T>::SwapColumns(index_t i,index_t j)
+{
+  Subscriptor s(*this);
+  for (index_t r : this->rows())
+  {
+     T temp=s(r,i);
+     s(r,i)=s(r,j);
+     s(r,j)=temp;
+  }
+}
+template <class T> SMatrix<T> SMatrix<T>::SubMatrix(const MatLimits& lim) const
+{
+    SMatrix<T> dest(lim);
+	assert(dest.GetLimits().Row.Low >=GetLimits().Row.Low );
+	assert(dest.GetLimits().Col.Low >=GetLimits().Col.Low );
+	assert(dest.GetLimits().Row.High<=GetLimits().Row.High);
+	assert(dest.GetLimits().Col.High<=GetLimits().Col.High);
+	Subscriptor s(dest);
+	index_t rh=dest.GetLimits().Row.High;
+	index_t ch=dest.GetLimits().Col.High;
+	for (index_t i=dest.GetLimits().Row.Low;i<=rh;i++)
+		for (index_t j=dest.GetLimits().Col.Low;j<=ch;j++)
+			s(i,j)=(*this)(i,j);
+    return dest;
 }
 
 //---------------------------------------------------------------------------------

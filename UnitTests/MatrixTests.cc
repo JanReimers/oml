@@ -210,7 +210,12 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 
     EXPECT_EQ((V1+V2-V1*2+V2*V1)(1),5.0);
 
+    B=A;
+    B=A+A;
+
 }
+inline double conj(const double& d) {return d;}
+
 
 TYPED_TEST_P(MatrixTests,MatrixAlgebra)
 {
@@ -226,6 +231,14 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebra)
     EXPECT_EQ(Sum( A*-B),-25.25);
     EXPECT_EQ(Sum(-A*-B), 25.25);
     EXPECT_EQ(Sum(A*B-B*A),22.);
+
+    MatrixT C((A*B).GetLimits());
+    Fill(C,TypeParam(1.0));
+    TypeParam sAB=(A*B)(1,1);
+    C+=A*B;
+    EXPECT_EQ(C(1,1),sAB+1.0);
+    C-=A*B;
+    EXPECT_EQ(C(1,1),1.0);
 
     VectorT VL(M),VR(N);
     Fill<TypeParam>(VL, 0.5);
@@ -386,6 +399,27 @@ TEST_F(MatrixComplexTests,fabsHermitianConj)
     VR=conj(VL);
     dcmplx s=VL*B*VR;
     EXPECT_NEAR(imag(s),0.0,1e-14);
+
+
+    MatrixCT C((A*B).GetLimits());
+    Fill(C,dcmplx(1.0));
+    dcmplx sAB=(A*B)(1,1);
+    C+=A*B;
+    EXPECT_EQ(C(1,1),sAB+1.0);
+    C-=A*B;
+    EXPECT_NEAR(fabs(C(1,1)-dcmplx(1.0)),0.0,1e-14);
+
+    Fill(A,dcmplx(0.5,1.0));
+    Fill(B,dcmplx(2.0,-1.0));
+    sAB=(Transpose(conj(A))*B)(1,1);
+    dcmplx sC=dcmplx(1.0,-0.5);
+    Fill(C,sC);
+    C+=Transpose(conj(A)*B);
+    EXPECT_EQ(C(1,1),sAB+sC);
+    C-=Transpose(conj(A)*B);
+    EXPECT_EQ(C(1,1),sC);
+
+
 }
 
 TEST_F(MatrixComplexTests,MixedTypes)
@@ -453,9 +487,12 @@ TEST_F(MatrixComplexTests,MixedTypes)
     Ar*=Ar*Ar; //make sure it compiles.
     EXPECT_EQ((Ar)(1,1), 12.5);
 
+    MatrixRT A1=-0.5*imag(Ac-Ac);
+    EXPECT_EQ(A1(1,1),0.0);
+
+
 }
 
-inline double conj(const double& d) {return d;}
 
 template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 {

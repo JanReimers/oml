@@ -53,9 +53,9 @@ template <class T> Matrix <T> InvertSymmetric(const Matrix <T>&);
 template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>&);
 
 //! Solve symmtric tri diagonal system Tu=r where T is a symmetric tridiagonal matrix. Last element of OffDiagonal is not used.
-Array<double> SolveTriDiag(const Array<double> & OffDiagonal,
-			   const Array<double> & Diagonal,
-			   const Array<double> & r);
+//Array<double> SolveTriDiag(const Array<double> & OffDiagonal,
+//			   const Array<double> & Diagonal,
+//			   const Array<double> & r);
 
 //! Solve symmtric tri diagonal system Tu=r where T is a tridiagonal matrix. Last element of OffDiagonal is not used.
 Vector<double> SolveTriDiag(const Vector<double> & OffDiagonal,

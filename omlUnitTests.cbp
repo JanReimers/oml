@@ -59,6 +59,7 @@
 		</Unit>
 		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
+		<Unit filename="UnitTests/VectorTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

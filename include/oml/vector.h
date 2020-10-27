@@ -5,6 +5,7 @@
 // Copyright (1994-2005), Jan N. Reimers
 
 #include "oml/imp/veclimit.h"
+#include "oml/imp/arrindex.h"
 #include "oml/imp/vecindex.h"
 #include "oml/imp/minmax.h"
 #include "oml/imp/tstream.h"
@@ -39,12 +40,14 @@ enum class FillType {Zero,Random,Unit};
 
 template <class T> class Vector
   : public Indexable<T,Vector<T>,Full,Real,VectorShape>
-  , public Iterable<T,Vector<T> >
+  , public ArrayIndexable<T,Vector<T>,Full,VectorShape>
   , public TStreamableObject<Vector<T> >
 {
  public:
   typedef Indexable<T,Vector<T>,Full,Real,VectorShape> IndexableT;
+  typedef ArrayIndexable <T,Vector<T>,Full     ,VectorShape> IterableT;
   typedef Ref<T,IndexableT,VectorShape> RefT;
+  typedef Ref<T,IterableT ,VectorShape> RefAT;
 
   /*! \name Constructors/Assignment
   Copy constructor and op=(Vector) are automaically supplied by the compiler.
@@ -57,7 +60,7 @@ template <class T> class Vector
   explicit Vector(index_t  size, FillType ft) : Vector<T>(VecLimits(1,size),ft) {};
   explicit Vector(index_t  size, const T&  fillValue) : Vector<T>(VecLimits(1,size),fillValue) {};
   //!<  Specify lower and upper index.
-  explicit Vector(index_t l,index_t h) : Vector<T>(VecLimits(l,h)) {};
+//  explicit Vector(index_t l,index_t h) : Vector<T>(VecLimits(l,h)) {};
   explicit Vector(index_t l,index_t h, FillType ft) : Vector<T>(VecLimits(l,h),ft) {};
   explicit Vector(index_t l,index_t h, const T&  fillValue) : Vector<T>(VecLimits(l,h),fillValue) {};
   Vector(const VecLimits&); //!<  Specify lower and upper index.
@@ -132,9 +135,9 @@ template <class T> class Vector
    */
   //@{
   //! Read only iterator.
-  typedef typename Iterable <T,Vector>::const_iterator  const_iterator;
+  typedef typename IterableT::const_iterator  const_iterator;
   //! Read/write iterator.
-  typedef typename Iterable <T,Vector>::iterator iterator;
+  typedef typename IterableT::iterator iterator;
   //@}
 
 #if DEBUG
@@ -158,35 +161,10 @@ template <class T> class Vector
   };
 #undef CHECK
 
-#if DEBUG
-  #define CHECK(i) assert(i>=0&&i<itsSize)
-#else
-  #define CHECK(i)
-#endif
-  class ArraySubscriptor
-  {
-   public:
-    ArraySubscriptor(Indexable<T,Vector,Full,Real,VectorShape>& a)
-      : itsPtr(static_cast<Vector*>(&a)->priv_begin())
-      , itsSize(a.size())
-      {assert(itsPtr);}
-    T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
-   private:
-    T*      itsPtr;
-    index_t itsSize;
-  };
-
-#undef CHECK
-
  private:
-  friend class Indexable<T,Vector,Full,Real,VectorShape>;
-  friend class Iterable <T,Vector>;
+  friend class      Indexable<T,Vector,Full,Real,VectorShape>;
+  friend class ArrayIndexable<T,Vector,Full     ,VectorShape>;
   friend class Subscriptor;
-  friend class ArraySubscriptor;
-  friend class DiagonalMatrix<T>;
-
-  T  operator[](index_t) const ;
-  T& operator[](index_t)      ;
 
   const T* priv_begin() const {return &*itsData.begin();} //Required by iterable.
         T* priv_begin()       {return &*itsData.begin();} //Required by iterable.
@@ -263,26 +241,6 @@ template <class T> inline T& Vector<T>::operator()(index_t i)
 {
   CHECK(i);
   return itsData[itsLimits.Offset(i)];
-}
-
-#undef CHECK
-
-#if DEBUG
-  #define CHECK(i) assert(i>=0 && i<static_cast<index_t>(itsData.size()))
-#else
-  #define CHECK(i)
-#endif
-
-template <class T> inline  T Vector<T>::operator[](index_t i) const
-{
-  CHECK(i);
-  return itsData[i];
-}
-
-template <class T> inline T& Vector<T>::operator[](index_t i)
-{
-  CHECK(i);
-  return itsData[i];
 }
 
 #undef CHECK

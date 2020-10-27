@@ -5,7 +5,46 @@
 // Copyright (1994-2003), Jan N. Reimers
 
 #include "oml/imp/indexable.h"
-#include "oml/imp/memops.h"
+
+//
+// Template specialization provides index iterators for vector shape
+//
+template <class Derived> class IndexableBase<Derived,VectorShape>
+{
+    public:
+    //
+//  Support range based iteration for rows and columns so client code and do
+//     for (index_t i:V)
+//          {do something with V(i)
+//     for (index_t i:V.all())
+//          {do something with V[i]
+//
+  class index_iterator
+  {
+    public:
+        index_iterator(index_t i) : current{i} {};
+        index_iterator operator++(){current++;return (*this);}
+        const index_t operator*() const {return current;}
+        index_t operator*() {return current;}
+        friend bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
+    private:
+        index_t current;
+  };
+
+    class iterator_proxy
+    {
+    public:
+        iterator_proxy(const VecLimits& lim) : low(lim.Low), high(lim.High) {};
+        iterator_proxy(index_t l, index_t h) : low(l), high(h) {};
+        index_iterator begin() const {return low;}
+        index_iterator end  () const {return high+1;}
+    private:
+        index_t low;
+        index_t high;
+    };
+
+  iterator_proxy indices() const {return iterator_proxy(static_cast<const Derived*>(this)->GetLimits());}
+};
 
 //-------------------------------------------------
 //
@@ -16,37 +55,13 @@ template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D
 {
  public:
 
-  T  operator[](index_t n) const {return static_cast<const Derived*>(this)->operator[](n);}
-  T& operator[](index_t n)       {return static_cast<      Derived*>(this)->operator[](n);}
   T  operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
   T& operator()(index_t n)       {return static_cast<      Derived*>(this)->operator()(n);}
 
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
-  Derived& operator+=(const T& scalar) {return ArrayAdd(*this,scalar);}
-  Derived& operator-=(const T& scalar) {return ArraySub(*this,scalar);}
-  Derived& operator*=(const T& scalar) {return ArrayMul(*this,scalar);}
-  Derived& operator/=(const T& scalar) {return ArrayDiv(*this,scalar);}
-
-  template <class B> Derived& operator+=(const Indexable<T,B,M,Real,VectorShape>& b) {return ArrayAdd(*this,b);}
-  template <class B> Derived& operator-=(const Indexable<T,B,M,Real,VectorShape>& b) {return ArraySub(*this,b);}
-  template <class B> Derived& operator*=(const Indexable<T,B,M,Real,VectorShape>& b) {return ArrayMul(*this,b);}
-  template <class B> Derived& operator/=(const Indexable<T,B,M,Real,VectorShape>& b) {return ArrayDiv(*this,b);}
-
-  template <class B> Derived& operator+=(const Indexable<T,B,M,Abstract,VectorShape>& b) {return VectorAdd(*this,b);}
-  template <class B> Derived& operator-=(const Indexable<T,B,M,Abstract,VectorShape>& b) {return VectorSub(*this,b);}
-  template <class B> Derived& operator*=(const Indexable<T,B,M,Abstract,VectorShape>& b) {return VectorMul(*this,b);}
-  template <class B> Derived& operator/=(const Indexable<T,B,M,Abstract,VectorShape>& b) {return VectorDiv(*this,b);}
-
-  class Subscriptor : public Derived::ArraySubscriptor
-  {
-  public:
-    Subscriptor(Indexable& v) : Derived::ArraySubscriptor(v) {};
-  };
-
  protected:
-  template <class B> void AssignFrom(const Indexable<T,B,Full,Real    ,VectorShape>& b) { ArrayAssign(*this,b);}
   template <class B> void AssignFrom(const Indexable<T,B,Full,Abstract,VectorShape>& b) {VectorAssign(*this,b);}
 
   explicit Indexable() {};
@@ -71,30 +86,58 @@ template <class T, class Derived, Store M> class Indexable<T,Derived,M,Abstract,
   index_t   size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
-  Derived& operator+=(T scalar) {return VectorAdd(*this,scalar);}
-  Derived& operator-=(T scalar) {return VectorSub(*this,scalar);}
-  Derived& operator*=(T scalar) {return VectorMul(*this,scalar);}
-  Derived& operator/=(T scalar) {return VectorDiv(*this,scalar);}
-
-  template <class B, Data D> Derived& operator+=(const Indexable<T,B,M,D,VectorShape>& b) {return VectorAdd(*this,b);}
-  template <class B, Data D> Derived& operator-=(const Indexable<T,B,M,D,VectorShape>& b) {return VectorSub(*this,b);}
-  template <class B, Data D> Derived& operator*=(const Indexable<T,B,M,D,VectorShape>& b) {return VectorMul(*this,b);}
-  template <class B, Data D> Derived& operator/=(const Indexable<T,B,M,D,VectorShape>& b) {return VectorDiv(*this,b);}
-
-  class Subscriptor : public Derived::ArraySubscriptor
-  {
-  public:
-    Subscriptor(Indexable& v) : Derived::ArraySubscriptor(v) {};
-  };
-
- protected:
-  template <class B,Data DB> void AssignFrom(const Indexable<T,B,M,DB,VectorShape>& b) {VectorAssign(*this,b);}
-
  private:
   Indexable& operator=(const Indexable&);
   Indexable(const Indexable&);
 };
 
+//
+//  Create assign functions
+//
+template <class T, class Derived,Store M,Data D,class B,Data DB> inline
+void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,const Indexable<T,B,M,DB,VectorShape>& b)
+{
+#ifdef WARN_DEEP_COPY
+  std::cerr << "Doing abstract VectorAssign n=" << a.size() << std::endl;
+#endif
+  assert(a.GetLimits()==b.GetLimits());
+  typename Derived::Subscriptor s(a);
+  for (index_t i:a.indices()) s(i)=b(i);
+}
+
+template <class T, class Derived,Store M,Data D> inline
+void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,T scalar)
+{
+#ifdef WARN_DEEP_COPY
+  std::cerr << "Doing abstract VectorAssign n=" << a.size() << std::endl;
+#endif
+  typename Derived::Subscriptor s(a);
+  for (index_t i:a.indices()) s(i)=scalar;
+}
+
+#define OP(NAME,OP) \
+template <class T, class Derived,Store M,Data D> inline \
+Derived& Vector##NAME (Indexable<T,Derived,M,D,VectorShape>& a,const T& scalar)\
+{\
+  typename Derived::Subscriptor s(a); \
+  for (index_t i:a) s(i) OP##=scalar;\
+  return static_cast<Derived&>(a);\
+}\
+template <class T,class Derived,Store M,Data D,class B,Data DB> inline \
+Derived& Vector##NAME (Indexable<T,Derived,M,D,VectorShape>& a,\
+                  const Indexable<T,B,M,DB,VectorShape>& b)\
+{\
+    typename Derived::Subscriptor s(a); \
+    for (index_t i:a) s(i) OP##=b(i);\
+	return static_cast<Derived&>(a);\
+}\
+
+OP(Add,+)
+OP(Sub,-)
+OP(Mul,*)
+OP(Div,/)
+
+#undef OP
 
 
 //----------------------------------------------------------------
@@ -110,17 +153,6 @@ T Sum(const Indexable<T,A,M,Abstract,VectorShape>& a)
   return ret;
 }
 
-/*
-template <class A, Store M> inline
-bool True(const Indexable<bool,A,M,Abstract,VectorShape>& a)
-{
-  bool ret(true);
-  index_t hi=a.GetLimits().High;
-  for (index_t i=a.GetLimits().Low;i<=hi;i++) ret=ret&&a(i);
-  return ret;
-}
-
-*/
 template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,VectorShape>
 {
  public:
@@ -137,5 +169,17 @@ template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,Ve
     return ret;
   }
 };
+
+template <class T, class A, Store M> inline T Min(const Indexable<T,A,M,Abstract,VectorShape>& a)
+{
+	return MinMax<T,A,OpLT<T>,M,Abstract,VectorShape>::apply(a);
+}
+
+template <class T, class A, Store M> inline T Max(const Indexable<T,A,M,Abstract,VectorShape>& a)
+{
+	return MinMax<T,A,OpGT<T>,M,Abstract,VectorShape>::apply(a);
+}
+
+
 
 #endif // _vecindex_h_
