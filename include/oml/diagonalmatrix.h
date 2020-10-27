@@ -388,6 +388,73 @@ template <class T, class D, class B> class MatrixDDOp
   const B itsB;
 };
 
+//----------------------------------------------------------------------
+//
+//  Multiplication, Diagonal * Vector Proxy.
+//
+
+template <class T, class D, class V> class MatrixDVOp
+: public Indexable<T,MatrixDVOp<T,D,V>,Diagonal,Abstract,VectorShape>
+{
+ public:
+  typedef Indexable<T,MatrixDVOp<T,D,V>,Diagonal,Abstract,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
+  MatrixDVOp(const D& d, const V& v)
+    : itsD(d)
+    , itsV(v)
+  {
+    assert(itsD.GetLimits().Col==itsV.GetLimits());
+  };
+  MatrixDVOp(const MatrixDVOp& m)
+    : itsD(m.itsD)
+    , itsV(m.itsV)
+    {};
+  T operator()(index_t i) const
+  {
+    return itsD(i,i)*itsV(i);
+  }
+  VecLimits GetLimits() const {return itsD.GetLimits().Row;}
+  index_t   size  () const {return itsD.size();}
+
+ private:
+  const D itsD;
+  const V itsV;
+};
+
+//----------------------------------------------------------------------
+//
+//  Multiplication, Vector * Diagonal Proxy.
+//
+template <class T, class V, class D> class MatrixVDOp
+: public Indexable<T,MatrixVDOp<T,V,D>,Full,Abstract,VectorShape>
+{
+ public:
+  typedef Indexable<T,MatrixVDOp<T,V,D>,Full,Abstract,VectorShape> IndexableT;
+  typedef Ref<T,IndexableT,VectorShape> RefT;
+
+  MatrixVDOp(const V& v, const D& d)
+    : itsV(v)
+    , itsD(d)
+  {
+    assert(itsV.GetLimits()==itsD.GetLimits().Row);
+  };
+  MatrixVDOp(const MatrixVDOp& m)
+    : itsV(m.itsV)
+    , itsD(m.itsD)
+    {};
+  T operator()(index_t i) const
+  {
+    return itsV(i)*itsD(i,i);
+  }
+  VecLimits GetLimits() const {return itsD.GetLimits().Col;}
+  index_t   size  () const {return itsD.size();}
+
+ private:
+  const V itsV;
+  const D itsD;
+};
+
 //---------------------------------------------------------------------
 //
 //  Matrix * DiagonalMatrix, returns a proxy.
@@ -415,13 +482,24 @@ auto operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<
 //  DiagonalMatrix * DiagonalMatrix, returns a proxy.
 //
 template <class TA,class TB, class A, class B, Data DA, Data DB> inline
-auto
-operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
+auto operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
 {
   typedef typename ReturnType<TA,TB>::RetType TR;
   return MatrixDDOp<TR,typename A::RefT,typename B::RefT>(a,b);
-
 }
 
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Diagonal,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,VectorShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixDVOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+
+template <class TA,class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Full,DA,VectorShape>& a,const Indexable<TB,B,Diagonal,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixVDOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
 
 #endif //_DiagonalMatrix_H_
