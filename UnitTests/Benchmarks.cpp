@@ -196,7 +196,7 @@ TEST_F(BenchmarkRealTests,OpenMPParallel)
 #ifdef DEBUG
     index_t N=20,Nreplicates=10;
 #else
-    index_t N=400,Nreplicates=10;
+    index_t N=500,Nreplicates=10;
 #endif
 
     Matrix<double> A(N,N),B(N,N),C(N,N);

@@ -8,57 +8,11 @@
 #include "oml/imp/arrindex.h"
 #include "oml/imp/smatindex.h"
 #include "oml/imp/tstream.h"
+#include "oml/imp/rowcol.h"
 #include "oml/imp/cow.h"
+#include <vector>
 
-#if DEBUG
-  #define CHECK(i,j) lim.CheckIndex(i,j)
-#else
-  #define CHECK(i,j)
-#endif
-
-template <class T> class SMatrix;
-
-//---------------------------------------------------------
-//
-//  Seems to be the only way the specialized subscripting for
-//  for complex variables.
-//
-template <class T> class SymmetricSubscriptor
-{
- public:
-  static T const_apply(index_t i, index_t j,const MatLimits& lim,const T* ptr)
-  {
-    CHECK(i,j);
-    return ptr[SMatrix<T>::GetSymOffset(i-lim.Row.Low,j-lim.Col.Low,lim.GetNumRows())];
-  }
-  static T& apply(index_t i, index_t j,const MatLimits& lim,T* ptr)
-  {
-    CHECK(i,j);
-    return ptr[SMatrix<T>::GetSymOffset(i-lim.Row.Low,j-lim.Col.Low,lim.GetNumRows())];
-  }
-};
-
-template <class T> class complex;
-
-template<class T> class SymmetricSubscriptor<std::complex<T> >
-{
- public:
-  static std::complex<T> const_apply(index_t i, index_t j,const MatLimits& lim,const std::complex<T>* ptr)
-  {
-    CHECK(i,j);
-    std::complex<T> ret=ptr[SMatrix<std::complex<T> >::GetSymOffset(i-lim.Row.Low,j-lim.Col.Low,lim.GetNumRows())];
-    return i<=j ? ret : conj(ret);
-  }
-  static std::complex<T>& apply(index_t i, index_t j,const MatLimits& lim, std::complex<T>* ptr)
-  {
-    assert(i<=j); //Can't get a reference to the conjugate lower half.
-    CHECK(i,j);
-    return ptr[SMatrix<std::complex<T> >::GetSymOffset(i-lim.Row.Low,j-lim.Col.Low,lim.GetNumRows())];
-  }
-};
-
-#undef CHECK
-
+inline const double& conj(const double& d) {return d;}
 //----------------------------------------------------------------------------
 /*! \class SMatrix smatrix.h oml/smatrix.h
   \brief Numerical container symmetric matrix storage symmantics.
@@ -100,9 +54,7 @@ template <class T> class SMatrix
   */
   //@{
   explicit SMatrix(                    ); //!< Matrix with size=0;
-  explicit SMatrix(index_t r, index_t c); //!< Construct from row and (redundant) column size, use default lower bound.
-
-  explicit SMatrix(index_t rl,index_t rh,index_t cl,index_t ch); //!< For compatability with Matrix.
+  explicit SMatrix(index_t); //!< Construct from row and same column size, use default lower bound.
   explicit SMatrix(const VecLimits& r,const VecLimits& c); //!< For compatability with Matrix.
   explicit SMatrix(const MatLimits&); //!< For compatability with Matrix.
   //! Copy constructor.
@@ -134,9 +86,19 @@ template <class T> class SMatrix
   */
   //@{
   //! const element acces operator, fast and \e cannot trigger a COW operation.
-  T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),priv_begin());}
+  //T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),priv_begin());}
   //! non-const version can trigger a COW operation, and checks for this with every access.
-  T& operator()(index_t i,index_t j)       {return SymmetricSubscriptor<T>::apply(i,j,GetLimits(),priv_begin());}
+  T operator()(index_t i,index_t j) const
+  {
+      index_t index=GetSymOffset(i,j,GetLimits());
+      return i<=j ? itsData[index] : conj(itsData[index]);
+  }
+  T& operator()(index_t i,index_t j)
+  {
+      assert(i<=j);
+      index_t index=GetSymOffset(i,j,GetLimits());
+      return itsData[index];
+  }
   //@}
 
   index_t   size     () const; //!<Returns number elements in the Matrix.
@@ -148,10 +110,9 @@ template <class T> class SMatrix
   */
   //@{
   //! Resize and optionally preserve as much data as possible.
-  void SetLimits(const MatLimits&                           , bool preserve=false);
-  void SetLimits(index_t r, index_t c                       , bool preserve=false);
-  void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false);
-  void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
+  void SetLimits(index_t N       , bool preserve=false);
+  void SetLimits(const VecLimits&, bool preserve=false);
+  void SetLimits(const MatLimits&, bool preserve=false);
   //@}
 
   //! Does M(i,j)=M(index[i],j) for i=low...high.  Used for sorting.
@@ -193,6 +154,12 @@ template <class T> class SMatrix
   typedef typename ArrayIndexT::iterator iterator;
   //@}
 
+  static index_t GetSymOffset(index_t i, index_t j, const MatLimits& lim)
+  {
+      return i<j ? GetSymOffset(i-lim.Row.Low,j-lim.Col.Low,lim.GetNumRows())
+      : GetSymOffset(j-lim.Row.Low,i-lim.Col.Low,lim.GetNumRows());
+  }
+
   static index_t GetSymOffset(index_t i, index_t j, index_t n)
   {
 #ifdef UPPER_ONLY
@@ -222,7 +189,7 @@ template <class T> class SMatrix
       , itsPtr(static_cast<SMatrix&>(m).priv_begin())
       {};
 
-    T& operator()(index_t i,index_t j) {return SymmetricSubscriptor<T>::apply(i,j,itsLimits,itsPtr);}
+    T& operator()(index_t i,index_t j) {return itsPtr[GetSymOffset(i,j,itsLimits)];}
   private:
     const MatLimits  itsLimits;
     const index_t    itsN;
@@ -232,36 +199,10 @@ template <class T> class SMatrix
 
 #undef CHECK
 
-#if DEBUG
-  #define CHECK(i) assert(i>=0&&i<itsSize)
-#else
-  #define CHECK(i)
-#endif
-
-//  class ArraySubscriptor
-//  {
-//   public:
-//    ArraySubscriptor(Indexable<T,SMatrix,Symmetric,Real,MatrixShape>& a)
-//      : itsPtr(static_cast<SMatrix*>(&a)->Get())
-//      , itsSize(a.size())
-//      {assert(itsPtr);}
-//    T& operator[](index_t i) {CHECK(i);return itsPtr[i];}
-//   private:
-//    T*      itsPtr;
-//    index_t itsSize;
-//  };
-
-#undef CHECK
-
-
  private:
   friend class      Indexable<T,SMatrix,Symmetric,Real,MatrixShape>;
   friend class ArrayIndexable<T,SMatrix,Symmetric     ,MatrixShape>;
   friend class Subscriptor;
-//  friend class ArraySubscriptor;
-
-//  T  operator[](index_t i) const;
-//  T& operator[](index_t i)      ;
 
   const T* priv_begin() const;
         T* priv_begin()      ;
@@ -282,24 +223,6 @@ std::ostream& operator<<(std::ostream& os,const Indexable<T,A,Symmetric,D,Matrix
   return os << SMatrix<T>(a);
 }
 
-#if DEBUG
-  #define CHECK(i) assert(i>=0 && i<itsData.size())
-#else
-  #define CHECK(i)
-#endif
-
-//template <class T> inline  T SMatrix<T>::operator[](index_t i) const
-//{
-//  CHECK(i);
-//  return itsData[i];
-//}
-//
-//template <class T> inline T& SMatrix<T>::operator[](index_t i)
-//{
-//  CHECK(i);
-//  return itsData[i];
-//}
-#undef CHECK
 
 //----------------------------------------------------------------------
 //
@@ -317,7 +240,7 @@ SMatrix<T>::SMatrix(const Indexable<T,B,Symmetric,D,MatrixShape>& m)
 template <class T> template <class B, Data D> inline
 SMatrix<T>& SMatrix<T>::operator=(const Indexable<T,B,Symmetric,D,MatrixShape>& m)
 {
-	if (itsN==0) SetLimits(m.GetLimits());
+  SetLimits(m.GetLimits());
   MatrixAssign(*this,m); //Use op[] or op(i,j) depending on D.
   return *this;
 }
@@ -337,24 +260,101 @@ template <class T> inline T* SMatrix<T>::priv_begin()
   return &*itsData.begin();
 }
 
-template <class T> inline void SMatrix<T>::SetLimits(index_t r, index_t c , bool preserve)
+template <class T> inline void SMatrix<T>::SetLimits(index_t N, bool preserve)
 {
-  SetLimits(MatLimits(r,c),preserve);
+  SetLimits(MatLimits(N,N),preserve);
 }
 
-template <class T> inline void SMatrix<T>::SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve)
+template <class T> inline void SMatrix<T>::SetLimits(const VecLimits& lim, bool preserve)
 {
-  SetLimits(MatLimits(rl,rh,cl,ch),preserve);
-}
-
-template <class T> inline void SMatrix<T>::SetLimits(const VecLimits& r,const VecLimits& c , bool preserve)
-{
-  SetLimits(MatLimits(r,c),preserve);
+  SetLimits(MatLimits(lim,lim),preserve);
 }
 
 template <class T> inline MatLimits SMatrix<T>::GetLimits() const
 {
   return MatrixBase::GetLimits();
 }
+//namespace std {
+//template <class T> class complex;
+//};
+typedef std::complex<double> dcmplx;
+
+inline void Fill(SMatrix<dcmplx>& a, const dcmplx& val)
+{
+    for (index_t i:a.rows())
+    {
+        a(i,i)=real(val);
+        for (index_t j:a.cols(i+1))
+            a(i,j)=val;
+    }
+}
+
+template <class T> inline void Unit(SMatrix<T>& a)
+{
+    for (index_t i:a.rows())
+    {
+        a(i,i)=T(1);
+        for (index_t j:a.cols(i+1))
+            a(i,j)=T(0);
+    }
+}
+
+
+//---------------------------------------------------------------------
+//
+//  SMatrix * SMatrix, returns a proxy.
+//
+template <class T, class A, class B> class MatrixSSOp
+: public Indexable<T,MatrixSSOp<T,A,B>,Full,Abstract,MatrixShape>
+{
+ public:
+  typedef Indexable<T,MatrixSSOp<T,A,B>,Full,Abstract,MatrixShape> IndexableT;
+  typedef Ref<T,IndexableT,MatrixShape> RefT;
+
+  MatrixSSOp(const A& a, const B& b)
+    : itsA(a)
+    , itsB(b)
+  {
+    //std::cout << "Alim="<< itsA.GetLimits() << " Blim=" << itsB.GetLimits()<< std::endl;
+    assert(itsA.GetLimits().Col==itsB.GetLimits().Row);
+  };
+  MatrixSSOp(const MatrixSSOp& m)
+    : itsA(m.itsA)
+    , itsB(m.itsB)
+  {}
+  T operator()(index_t i, index_t j) const
+  {
+    T ret(0);
+    for (index_t k:itsA.cols())
+        ret+=itsA(i,k)*itsB(k,j);
+    return ret;
+  }
+  index_t size() const {return MatLimits().size();}
+  MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
+
+ private:
+  const A itsA;
+  const B itsB;
+};
+
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Symmetric,DA,MatrixShape>& a,const Indexable<TB,B,Symmetric,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixSSOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Indexable<TB,B,Symmetric,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixSSOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+auto operator*(const Indexable<TA,A,Symmetric,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return MatrixSSOp<TR,typename A::RefT,typename B::RefT>(a,b);
+}
+
 
 #endif //_SMatrix_H_

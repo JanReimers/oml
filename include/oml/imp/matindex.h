@@ -157,17 +157,17 @@ void MatrixAssign(Indexable<T,Derived,Full,D,MatrixShape>& a,const Indexable<T,B
       s(i,j)=b(i,j);
 }
 
-template <class T, class Derived, Data D, class B, Store MB, Data DB> inline
-void MatrixAssign(Indexable<T,Derived,Symmetric,D,MatrixShape>& a,const Indexable<T,B,MB,DB,MatrixShape>& b)
+template <class T, class Derived, Data D, class B, Data DB> inline
+void MatrixAssign(Indexable<T,Derived,Symmetric,D,MatrixShape>& a,const Indexable<T,B,Symmetric,DB,MatrixShape>& b)
 {
 #ifdef WARN_DEEP_COPY
   std::cerr << "Doing abstract MatrixAssign n=" << a.size() << std::endl;
 #endif
   assert(a.GetLimits()==b.GetLimits());
   typename Derived::Subscriptor s(a);
-  #pragma omp parallel for collapse(2)
+  #pragma omp parallel for collapse(1)
   for (index_t i=a.GetLimits().Row.Low;i<=a.GetLimits().Row.High;i++)
-    for (index_t j=1;j<=a.GetLimits().Col.High;j++)
+    for (index_t j=i;j<=a.GetLimits().Col.High;j++)
       s(i,j)=b(i,j);
 }
 

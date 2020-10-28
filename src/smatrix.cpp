@@ -9,10 +9,6 @@
 #include <iomanip>
 #include <cassert>
 
-#ifndef TYPE
-#error "SMatrix.cc TYPE was not defined"
-#endif
-
 #ifdef DEBUG
 #define CHECK Check()
 #else
@@ -28,17 +24,9 @@ template <class T> SMatrix<T>::SMatrix()
   , itsData(0)
   {}
 
-template <class T> SMatrix<T>::SMatrix(index_t r, index_t c)
-  : MatrixBase(MatLimits(r,c))
-  , itsN      (GetLimits().GetNumRows() )
-  , itsData   (size(itsN))
-  {
-    CHECK;
-  }
-
-template <class T> SMatrix<T>::SMatrix(index_t rl,index_t rh,index_t cl,index_t ch)
-  : MatrixBase(MatLimits(rl,rh,cl,ch))
-  , itsN      (GetLimits().GetNumRows() )
+template <class T> SMatrix<T>::SMatrix(index_t N)
+  : MatrixBase(MatLimits(N,N))
+  , itsN      (N)
   , itsData   (size(itsN))
   {
     CHECK;
@@ -120,10 +108,10 @@ template <class T> std::ostream& SMatrix<T>::Write(std::ostream& os) const
       os << "[ ";
       for (index_t j=GetColLow();j<=GetColHigh();j++)
       {
-        if (i<=j)
+//        if (i<=j)
 	  os << std::setw(wid) << std::setprecision(prec) << (*this)(i,j) << " ";
-	else
-	  for (int n=0;n<=wid;n++) os << " ";
+//	else
+//	  for (int n=0;n<=wid;n++) os << " ";
       }
       os << "]" << std::endl;
     }
@@ -171,16 +159,17 @@ template <class T> void SMatrix<T>::SetLimits(const MatLimits& theLimits, bool p
       SMatrix<T> dest(theLimits);
 
       index_t newrowlow=theLimits.Row.Low, newrowhigh=theLimits.Row.High;
-      index_t newcollow=theLimits.Col.Low, newcolhigh=theLimits.Col.High;
+      //index_t newcollow=theLimits.Col.Low;
+      index_t newcolhigh=theLimits.Col.High;
       index_t rowlow =Max(newrowlow ,GetLimits().Row.Low );   //Limits of old and new
       index_t rowhigh=Min(newrowhigh,GetLimits().Row.High);   //data overlap.
-      index_t collow =Max(newcollow ,GetLimits().Col.Low );   //Limits of old and new
+//      index_t collow =Max(newcollow ,GetLimits().Col.Low );   //Limits of old and new
       index_t colhigh=Min(newcolhigh,GetLimits().Col.High);   //data overlap.
 
       Subscriptor sdest (dest);         //Destination subscriptor.
 
       for (index_t i=rowlow;i<=rowhigh;i++)
-        for (index_t j=collow;j<=colhigh;j++)
+        for (index_t j=i;j<=colhigh;j++)
           sdest(i,j)=(*this)(i,j); //Transfer any overlaping data.
 
 			(*this)=dest;
@@ -259,19 +248,8 @@ template <class T> SMatrix<T> SMatrix<T>::SubMatrix(const MatLimits& lim) const
 	index_t rh=dest.GetLimits().Row.High;
 	index_t ch=dest.GetLimits().Col.High;
 	for (index_t i=dest.GetLimits().Row.Low;i<=rh;i++)
-		for (index_t j=dest.GetLimits().Col.Low;j<=ch;j++)
+		for (index_t j=i;j<=ch;j++)
 			s(i,j)=(*this)(i,j);
     return dest;
 }
 
-//---------------------------------------------------------------------------------
-//
-//  Make template instance
-//
-typedef TYPE Type;
-typedef SMatrix<Type> Mat;
-const Store MatStore=Symmetric;
-
-template class SMatrix<Type>;
-
-#include "oml/imp/matsub.ci"

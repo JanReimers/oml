@@ -92,7 +92,7 @@ public:
 
 #undef CHECK
 
-template <class T, class A, Store M, Shape S> inline T Sum(const ArrayIndexable<T,A,M,S>& a)
+template <class T, class A, Shape S> inline T Sum(const ArrayIndexable<T,A,Full,S>& a)
 {
   T ret(0);
   for (const T& ai:a) ret+=ai;

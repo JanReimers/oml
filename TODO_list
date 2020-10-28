@@ -18,12 +18,12 @@ Work list:
         Done Matrix
             Done Need more mix types
         Done DiagonalMatrix
-        SymmetricMatrix
+        Done SymmetricMatrix
         SparseMatrix
     Move SparseMatrix into OML
     Round out LAPack and Arpack wrappers and move everything to oml
     Done: Is it possible to simplify expression templates with C++17? (yes!)
-    Beef up Diagonal matrices.
+    Done Beef up Diagonal matrices.
     Done: add fabs for complex matrices and stop using abs
     Done: use int_64 throughout
     F(A-B) for work where F(const Matrix<T>&)

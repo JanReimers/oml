@@ -263,13 +263,6 @@ void DiagonalAssign(Indexable<T,Derived,Diagonal,D,MatrixShape>& a,const Indexab
       s(i)=b(i,i);
 }
 
-//template <class T> DiagonalMatrix<T>& operator*=(DiagonalMatrix<T>& a,const DiagonalMatrix<T>& b)
-//{
-//    assert(a.GetLimits()==b.GetLimits());
-//    a.itsData*=b;
-//    return a;
-//}
-
 template <class T> inline index_t DiagonalMatrix<T>::size() const
 {
     return itsData.size();
@@ -279,6 +272,14 @@ template <class T> inline MatLimits DiagonalMatrix<T>::GetLimits() const
 {
     return MatrixBase::GetLimits();
 }
+
+template <class T, class A, Shape S> inline T Sum(const ArrayIndexable<T,A,Diagonal,S>& a)
+{
+  T ret(0);
+  for (const T& ai:a) ret+=ai;
+  return ret;
+}
+
 
 //--------------------------------------------------------------------------
 //

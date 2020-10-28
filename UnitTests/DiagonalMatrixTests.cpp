@@ -279,8 +279,6 @@ TEST_F(DiagonalMatrixComplexTests,MixedTypes)
 
     Fill(Ac1,dcmplx(1.0));
     Matrix<dcmplx> R=U*Ar*Vdagger; //Make sure this compiles
-//    Matrix<dcmplx> R=U*Ar; //Make sure this compiles
-    cout << R << endl;
 }
 
 

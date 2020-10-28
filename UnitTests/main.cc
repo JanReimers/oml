@@ -11,6 +11,8 @@ int main(int argc, char **argv)
 //    testing::GTEST_FLAG(filter) = "BenchmarkRealTests.*";
 //    testing::GTEST_FLAG(filter) = "My/DiagonalMatrixTests/*.MatrixAlgebra";
 //    testing::GTEST_FLAG(filter) = "DiagonalMatrixComplexTests.MixedTypes";
+//    testing::GTEST_FLAG(filter) = "My/SMatrixTests/*.SumDotMaxMinDirectMultiply";
+//    testing::GTEST_FLAG(filter) = "My/SMatrixTests/*.Fill_SetLimits_SubMatrix";
     return RUN_ALL_TESTS();
 }
 

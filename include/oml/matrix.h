@@ -37,10 +37,12 @@ template <class T> class Matrix
   Matrix(Matrix& m) : Matrix<T>(const_cast<const Matrix&>(m)) {};
   template <class A>         Matrix(const ArrayIndexable<T,A,Full,MatrixShape>&);
   template <class A,Store M> Matrix(const Indexable<T,A,M,Abstract,MatrixShape>&);
+  template <class A,Store M> Matrix(const Indexable<T,A,M,Real    ,MatrixShape>&);
 
   Matrix& operator=(const Matrix&);
   template <class A>         Matrix& operator=(const ArrayIndexable<T,A,Full,MatrixShape>&);
   template <class A,Store M> Matrix& operator=(const Indexable<T,A,M,Abstract,MatrixShape>&);
+  template <class A,Store M> Matrix& operator=(const Indexable<T,A,M,Real    ,MatrixShape>&);
 
 #ifdef OML_MOVE_OPS
   Matrix(Matrix&& m);
@@ -177,6 +179,14 @@ Matrix<T>::Matrix(const Indexable<T,A,M,Abstract,MatrixShape>& m)
     //m.GetLimits();
     MatrixAssign(*this,m); //Use op(i,j).
   }
+template <class T> template <class A,Store M> inline
+Matrix<T>::Matrix(const Indexable<T,A,M,Real,MatrixShape>& m)
+  : MatrixBase(m.GetLimits        ())
+  , itsData   (GetLimits().size())
+  {
+    //m.GetLimits();
+    MatrixAssign(*this,m); //Use op(i,j).
+  }
 
 
 template <class T> template <class A> inline
@@ -189,6 +199,14 @@ Matrix<T>& Matrix<T>::operator=(const ArrayIndexable<T,A,Full,MatrixShape>& m)
 
 template <class T> template <class A,Store M> inline
 Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,Abstract,MatrixShape>& m)
+{
+  SetLimits(m.GetLimits());
+  MatrixAssign(*this,m); //Use op(,).
+  return *this;
+}
+
+template <class T> template <class A,Store M> inline
+Matrix<T>& Matrix<T>::operator=(const Indexable<T,A,M,Real,MatrixShape>& m)
 {
   SetLimits(m.GetLimits());
   MatrixAssign(*this,m); //Use op(,).

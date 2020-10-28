@@ -4,7 +4,7 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/imp/indexable.h"
+#include "oml/imp/matindex.h" //We need to specialization of IndexableBase<D,MatrixShape>
 
 //-------------------------------------------------
 //
@@ -35,20 +35,6 @@ template <class T, class A, Data D> inline T Sum(const Indexable<T,A,Symmetric,D
 		ret+=a(i,i);
     for (index_t j:a.cols(i+1))
       ret+=T(2)*a(i,j);
-	}
-	return ret;
-}
-
-template <class T, class A, Data D> inline
-	std::complex<T> Sum(const Indexable<std::complex<T>,A,Symmetric,D,MatrixShape>& a)
-{
-	std::complex<T> ret(0);
-  index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
-  for (index_t i:a.rows())
-	{
-		ret+=a(i,i);
-    for (index_t j:a.cols(i+1))
-      ret+=T(2)*real(a(i,j));
 	}
 	return ret;
 }
