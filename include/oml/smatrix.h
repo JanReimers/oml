@@ -12,7 +12,6 @@
 #include "oml/imp/cow.h"
 #include <vector>
 
-inline const double& conj(const double& d) {return d;}
 //----------------------------------------------------------------------------
 /*! \class SMatrix smatrix.h oml/smatrix.h
   \brief Numerical container symmetric matrix storage symmantics.
@@ -88,17 +87,17 @@ template <class T> class SMatrix
   //! const element acces operator, fast and \e cannot trigger a COW operation.
   //T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),priv_begin());}
   //! non-const version can trigger a COW operation, and checks for this with every access.
-  T operator()(index_t i,index_t j) const
-  {
-      index_t index=GetSymOffset(i,j,GetLimits());
-      return i<=j ? itsData[index] : conj(itsData[index]);
-  }
-  T& operator()(index_t i,index_t j)
-  {
-      assert(i<=j);
-      index_t index=GetSymOffset(i,j,GetLimits());
-      return itsData[index];
-  }
+  T operator()(index_t i,index_t j) const;
+//  {
+//      index_t index=GetSymOffset(i,j,GetLimits());
+//      return i<=j ? itsData[index] : conj(itsData[index]);
+//  }
+  T& operator()(index_t i,index_t j);
+//  {
+//      assert(i<=j);
+//      index_t index=GetSymOffset(i,j,GetLimits());
+//      return itsData[index];
+//  }
   //@}
 
   index_t   size     () const; //!<Returns number elements in the Matrix.
@@ -278,6 +277,31 @@ template <class T> inline MatLimits SMatrix<T>::GetLimits() const
 //template <class T> class complex;
 //};
 typedef std::complex<double> dcmplx;
+
+template <class T> inline  T SMatrix<T>::operator()(index_t i,index_t j) const
+{
+    index_t index=GetSymOffset(i,j,GetLimits());
+    return itsData[index];
+}
+template <class T> inline  T& SMatrix<T>::operator()(index_t i,index_t j)
+{
+    assert(i<=j);
+    index_t index=GetSymOffset(i,j,GetLimits());
+    return itsData[index];
+}
+
+template <> inline  dcmplx SMatrix<dcmplx>::operator()(index_t i,index_t j) const
+{
+    index_t index=GetSymOffset(i,j,GetLimits());
+    return i<=j ? itsData[index] : conj(itsData[index]);
+}
+template <> inline  dcmplx& SMatrix<dcmplx>::operator()(index_t i,index_t j)
+{
+    assert(i<=j);
+    index_t index=GetSymOffset(i,j,GetLimits());
+    return itsData[index];
+}
+
 
 inline void Fill(SMatrix<dcmplx>& a, const dcmplx& val)
 {
