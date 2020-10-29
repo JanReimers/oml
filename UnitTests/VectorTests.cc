@@ -188,7 +188,6 @@ TEST_F(VectorComplexTests,MixedTypes)
     EXPECT_EQ(V1(1),0.0);
 }
 
-inline double conj(const double& d) {return d;}
 
 template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 {

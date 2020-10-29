@@ -5,7 +5,8 @@
 #include "oml/matrix.h"
 #include "oml/vector.h"
 #include "oml/random.h"
-#include "stopw.h"
+#include "oml/fakedouble.h"
+//#include "stopw.h"
 #include "gtest/gtest.h"
 #include <omp.h>
 #include <iostream>
@@ -214,7 +215,6 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
     B=A+A;
 
 }
-inline double conj(const double& d) {return d;}
 
 
 TYPED_TEST_P(MatrixTests,MatrixAlgebra)

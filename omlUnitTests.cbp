@@ -59,6 +59,7 @@
 		</Unit>
 		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
+		<Unit filename="UnitTests/SymmetricMatrixTests.cpp" />
 		<Unit filename="UnitTests/VectorTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>

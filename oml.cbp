@@ -52,6 +52,7 @@
 		</Linker>
 		<Unit filename="include/oml/cnumeric.h" />
 		<Unit filename="include/oml/diagonalmatrix.h" />
+		<Unit filename="include/oml/fakedouble.h" />
 		<Unit filename="include/oml/imp/arrindex.h" />
 		<Unit filename="include/oml/imp/binio.h" />
 		<Unit filename="include/oml/imp/binop.h" />
