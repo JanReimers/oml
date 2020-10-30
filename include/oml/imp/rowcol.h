@@ -14,6 +14,9 @@ template <class T, class A, Store M, Data D> class MatrixRow
     : public Indexable<T,MatrixRow<T,A,M,D>,Full,Abstract,VectorShape>
 {
 public:
+    typedef Indexable<T,MatrixRow<T,A,M,D>,Full,Abstract,VectorShape> IndexableT;
+    typedef Ref<T,IndexableT,VectorShape> RefT;
+
     MatrixRow(Indexable<T,A,M,D,MatrixShape>& m,index_t row)
         : itsMatrix(static_cast<A&>(m))
         , itsRow   (row)
@@ -87,90 +90,6 @@ private:
     const index_t itsRow;
 };
 
-//---------------------------------------------------------------------
-//
-//  Matrix row proxy class as an array.
-//
-template <class T, class A, Store M, Data D> class MatrixRowAsArray
-    : public Indexable<T,MatrixRowAsArray<T,A,M,D>,Full,Abstract,ArrayShape>
-{
-public:
-    MatrixRowAsArray(Indexable<T,A,M,D,MatrixShape>& m,index_t row)
-        : itsMatrix(static_cast<A&>(m))
-        , itsRow   (row)
-    {
-        assert(itsMatrix.GetLimits().Row.CheckIndex(itsRow));
-    };
-    MatrixRowAsArray(const Indexable<T,A,M,D,MatrixShape>& m,index_t row)
-        : itsMatrix(static_cast<A&>(const_cast<Indexable<T,A,M,D,MatrixShape>&>(m)))
-        , itsRow   (row)
-    {
-        assert(itsMatrix.GetLimits().Row.CheckIndex(itsRow));
-    };
-    MatrixRowAsArray(const MatrixRowAsArray& r)
-        : itsMatrix(r.itsMatrix)
-        , itsRow   (r.itsRow)
-    {
-        assert(itsMatrix.GetLimits().Row.CheckIndex(itsRow));
-    };
-    ~MatrixRowAsArray() {};
-    MatrixRowAsArray& operator=(const MatrixRowAsArray& r)
-    {
-        ArrayAssign(*this,r);
-        return *this;
-    }
-    MatrixRowAsArray& operator=(T t)
-    {
-        ArrayAssign(*this,t);
-        return *this;
-    }
-    template <class A1,Store M1, Data D1> MatrixRowAsArray& operator=(const Indexable<T,A1,M1,D1,ArrayShape>& v)
-    {
-        ArrayAssign(*this,v);
-        return *this;
-    }
-
-    index_t   size  () const
-    {
-        return itsMatrix.GetLimits().Col.size();
-    }
-
-    T  operator[](index_t i) const
-    {
-        return itsMatrix(itsRow,i+itsMatrix.GetLimits().Col.Low);
-    }
-    T& operator[](index_t i)
-    {
-        return itsMatrix(itsRow,i+itsMatrix.GetLimits().Col.Low);
-    }
-
-    class ArraySubscriptor
-    {
-    public:
-        ArraySubscriptor(Indexable<T,MatrixRowAsArray<T,A,M,D>,Full,Abstract,ArrayShape>& a)
-            : itsRow(static_cast<MatrixRowAsArray<T,A,M,D>&>(a).itsRow)
-            , itsColLow(static_cast<MatrixRowAsArray<T,A,M,D>&>(a).itsMatrix.GetLimits().Col.Low)
-            , itsS(static_cast<MatrixRowAsArray<T,A,M,D>&>(a).itsMatrix)
-        {};
-
-        T& operator[](index_t i)
-        {
-            return itsS(itsRow,i+itsColLow);    //Let matrix do bounds check.
-        }
-
-    private:
-        const index_t itsRow;
-        const index_t itsColLow;
-        typename A::Subscriptor itsS;
-    };
-
-private:
-    friend class Indexable<T,MatrixRowAsArray,Full,Abstract,ArrayShape>;
-    friend class ArraySubscriptor;
-
-    A&    itsMatrix;
-    const index_t itsRow;
-};
 
 
 //---------------------------------------------------------------------
@@ -181,6 +100,8 @@ template <class T, class A, Store M, Data D> class MatrixColumn
     : public Indexable<T,MatrixColumn<T,A,M,D>,Full,Abstract,VectorShape>
 {
 public:
+    typedef Indexable<T,MatrixColumn<T,A,M,D>,Full,Abstract,VectorShape> IndexableT;
+    typedef Ref<T,IndexableT,VectorShape> RefT;
     MatrixColumn(Indexable<T,A,M,D,MatrixShape>& m,index_t col)
         : itsMatrix(static_cast<A&>(m))
         , itsColumn(col)
@@ -254,91 +175,6 @@ private:
     const index_t itsColumn;
 };
 
-//---------------------------------------------------------------------
-//
-//  Matrix column proxy class with Array format.
-//
-template <class T, class A, Store M, Data D> class MatrixColumnAsArray
-    : public Indexable<T,MatrixColumnAsArray<T,A,M,D>,Full,Abstract,ArrayShape>
-{
-public:
-    MatrixColumnAsArray(Indexable<T,A,M,D,MatrixShape>& m,index_t col)
-        : itsMatrix(static_cast<A&>(m))
-        , itsColumn(col)
-    {
-        assert(itsMatrix.GetLimits().Col.CheckIndex(itsColumn));
-    };
-    MatrixColumnAsArray(const Indexable<T,A,M,D,MatrixShape>& m,index_t col)
-        : itsMatrix(static_cast<A&>(const_cast<Indexable<T,A,M,D,MatrixShape>&>(m)))
-        , itsColumn(col)
-    {
-        assert(itsMatrix.GetLimits().Col.CheckIndex(itsColumn));
-    };
-    MatrixColumnAsArray(const MatrixColumnAsArray& r)
-        : itsMatrix(r.itsMatrix)
-        , itsColumn(r.itsColumn)
-    {
-        assert(itsMatrix.GetLimits().Col.CheckIndex(itsColumn));
-
-    };
-    ~MatrixColumnAsArray() {};
-    MatrixColumnAsArray& operator=(const MatrixColumnAsArray& r)
-    {
-        ArrayAssign(*this,r);
-        return *this;
-    }
-    MatrixColumnAsArray& operator=(T t)
-    {
-        ArrayAssign(*this,t);
-        return *this;
-    }
-    template <class A1,Store M1, Data D1> MatrixColumnAsArray& operator=(const Indexable<T,A1,M1,D1,ArrayShape>& v)
-    {
-        ArrayAssign(*this,v);
-        return *this;
-    }
-
-    index_t   size  () const
-    {
-        return itsMatrix.GetLimits().Row.size();
-    }
-
-    T  operator[](index_t i) const
-    {
-        return itsMatrix(i+itsMatrix.GetLimits().Row.Low,itsColumn);
-    }
-    T& operator[](index_t i)
-    {
-        return itsMatrix(i+itsMatrix.GetLimits().Row.Low,itsColumn);
-    }
-
-    class ArraySubscriptor
-    {
-    public:
-        ArraySubscriptor(Indexable<T,MatrixColumnAsArray<T,A,M,D>,Full,Abstract,ArrayShape>& a)
-            : itsColumn(static_cast<MatrixColumnAsArray<T,A,M,D>&>(a).itsColumn)
-            , itsRowLow(static_cast<MatrixColumnAsArray<T,A,M,D>&>(a).itsMatrix.GetLimits().Row.Low)
-            , itsS(static_cast<MatrixColumnAsArray<T,A,M,D>&>(a).itsMatrix)
-        {};
-
-        T& operator[](index_t i)
-        {
-            return itsS(i+itsRowLow,itsColumn);    //Let matrix do bounds check.
-        }
-
-    private:
-        const index_t itsColumn;
-        const index_t itsRowLow;
-        typename A::Subscriptor itsS;
-    };
-
-private:
-    friend class Indexable<T,MatrixColumnAsArray,Full,Abstract,ArrayShape>;
-    friend class ArraySubscriptor;
-
-    A&    itsMatrix;
-    const index_t itsColumn;
-};
 
 //---------------------------------------------------------------------
 //
@@ -421,81 +257,6 @@ private:
 
     A&    itsMatrix;
 };
-
-//---------------------------------------------------------------------
-//
-//  Matrix diagonal as Array proxy class.
-//
-template <class T, class A, Store M, Data D> class MatrixDiagonalAsArray
-    : public Indexable<T,MatrixDiagonalAsArray<T,A,M,D>,Full,Abstract,ArrayShape>
-{
-public:
-    MatrixDiagonalAsArray(Indexable<T,A,M,D,MatrixShape>& m)
-        : itsMatrix(static_cast<A&>(m))
-    {
-        assert(m.GetLimits().Row==m.GetLimits().Col);
-    };
-    MatrixDiagonalAsArray(const Indexable<T,A,M,D,MatrixShape>& m)
-        : itsMatrix(static_cast<A&>(const_cast<Indexable<T,A,M,D,MatrixShape>&>(m)))
-    {
-        assert(m.GetLimits().Row==m.GetLimits().Col);
-    };
-    MatrixDiagonalAsArray(const MatrixDiagonalAsArray& m)
-        : itsMatrix(m.itsMatrix)
-    {};
-    ~MatrixDiagonalAsArray() {};
-    MatrixDiagonalAsArray& operator=(const MatrixDiagonalAsArray& r)
-    {
-        ArrayAssign(*this,r);
-        return *this;
-    }
-    MatrixDiagonalAsArray& operator=(T t)
-    {
-        ArrayAssign(*this,t);
-        return *this;
-    }
-    template <class A1,Store M1, Data D1> MatrixDiagonalAsArray& operator=(const Indexable<T,A1,M1,D1,ArrayShape>& v)
-    {
-        ArrayAssign(*this,v);
-        return *this;
-    }
-
-    index_t   size  () const
-    {
-        return itsMatrix.GetLimits().Row.size();
-    }
-
-    T  operator[](index_t i) const
-    {
-        return itsMatrix(i,i);
-    }
-    T& operator[](index_t i)
-    {
-        return itsMatrix(i,i);
-    }
-
-     class ArraySubscriptor
-    {
-    public:
-        ArraySubscriptor(Indexable<T,MatrixDiagonalAsArray<T,A,M,D>,Full,Abstract,ArrayShape>& a)
-            : itsS(static_cast<MatrixDiagonalAsArray<T,A,M,D>&>(a).itsMatrix)
-        {};
-
-        T& operator[](index_t i)
-        {
-            return itsS(i,i);    //Let matrix do bounds check.
-        }
-    private:
-        typename A::Subscriptor itsS;
-    };
-
-private:
-    friend class Indexable<T,MatrixDiagonalAsArray,Full,Abstract,ArrayShape>;
-    friend class ArraySubscriptor;
-
-    A&    itsMatrix;
-};
-
 
 
 #endif //_RowCol_H_

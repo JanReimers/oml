@@ -519,6 +519,15 @@ bool IsHermitian(const Indexable<std::complex<T>,A,Full,D,MatrixShape>& m, doubl
   return Max(fabs(m-conj(Transpose(m))))<=eps;
 }
 
+// Check if complex matrix  is normal to within a specified precision eps.
+template <class T, class A, Data D> inline
+bool IsNormal(const Indexable<T,A,Full,D,MatrixShape>& m, double eps)
+{
+  Matrix<T> mdagger=~m;
+  return Max(fabs(m*mdagger-mdagger*m))<=eps;
+}
+
+
 // Dummy check for real matrices.
 template <class T, class A, Data D> inline
 bool IsHermitian(const Indexable<T,A,Full,D,MatrixShape>& m, double eps)

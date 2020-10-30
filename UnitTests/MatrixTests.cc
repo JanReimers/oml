@@ -213,7 +213,13 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 
     B=A;
     B=A+A;
-
+    // Try overloaded ops on slices
+    A.GetColumn(1)=sin(A.GetColumn(1));
+    A.GetColumn(2)=A.GetColumn(1)-A.GetColumn(2);
+    A.GetRow(1)=sin(A.GetRow(1));
+    A.GetRow(2)=A.GetRow(1)-A.GetRow(2);
+    A.SetLimits(N,N);
+    auto t=sin(A.GetDiagonal());
 }
 
 

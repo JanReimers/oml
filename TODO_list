@@ -41,4 +41,10 @@ Work list:
         SymmetricMatrix
     Create vector T*, set num owners=2
         Not possible with std::vector instead of cow_array
-
+    Failed idea:  I was hoping that Rvalue Ref-qualified overloaded operator like
+        operator()(int i, int j) && and could get picked when a non-const matrix is being used as
+        an R-value like
+            Matrix<double> A(5,5);
+            double a12=A(1,2); //should pick out operator()(int i, int j) && instead of operator()(int i, int j) &
+        but g++ at least is not cooperating, it always picks up the lvalue version operator()()&
+        Maybe its worth posting a minimal sample on stack exchange.
