@@ -147,6 +147,8 @@ TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
 
     A.SetLimits(N,N);
     Unit(A);
+    EXPECT_TRUE(IsUnit(A));
+    EXPECT_TRUE(IsUnit(A,1e-10));
     EXPECT_EQ(A,~A);
     EXPECT_EQ(A(2,2),1.0);
     EXPECT_EQ(A(2,1),0.0);
