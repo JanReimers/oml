@@ -545,6 +545,33 @@ double MakeSymmetric(Indexable<T,A,Full,Real,MatrixShape>& m)
   return del;
 }
 
+template <class T, class A, Data D> inline
+double FrobeniusNorm(const Indexable<T,A,Full,D,MatrixShape>& m)
+{
+    double fnorm=0.0;
+    for (index_t i: m.rows())
+        for (index_t j: m.cols())
+            fnorm+=real(m(i,j)*conj(m(i,j)));
+    return sqrt(fnorm);
+}
+
+template <class T, class A, Data D> inline
+bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m)
+{
+    assert(m.GetLimits().Row==m.GetLimits().Col);
+    Matrix<T> U(m.GetLimits());
+    Unit(U);
+    return Max(fabs(m-U))==0.0;
+}
+
+template <class T, class A, Data D> inline
+bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+    assert(m.GetLimits().Row==m.GetLimits().Col);
+    Matrix<T> U(m.GetLimits());
+    Unit(U);
+    return Max(fabs(m-U))<=eps;
+}
 //----------------------------------------------------------------------
 //
 //  Vector outer product Proxy.
