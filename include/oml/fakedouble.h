@@ -10,6 +10,9 @@ inline const double& real(const double& d) { return d;}
 inline       double  imag(const double& d) { return 0.0;}
 //using std::real;
 
+template <class T> class Matrix;
+template <class T> class Vector;
+
 inline const Matrix<double>& conj(const Matrix<double>& m) {return m;}
 inline const Vector<double>& conj(const Vector<double>& v) {return v;}
 
