@@ -8,6 +8,7 @@
 #include "oml/imp/xpr.h"
 #include "oml/imp/binop.h"
 #include "oml/imp/unop.h"
+#include "oml/fakedouble.h"
 #include <cassert>
 #include <complex>
 
