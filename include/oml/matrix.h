@@ -10,6 +10,7 @@
 #include "oml/imp/tstream.h"
 #include "oml/imp/cow.h"
 #include "oml/imp/rowcol.h"
+#include "oml/imp/minmax.h"
 #include <vector>
 
 //----------------------------------------------------------------------------
@@ -571,6 +572,22 @@ bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
     Matrix<T> U(m.GetLimits());
     Unit(U);
     return Max(fabs(m-U))<=eps;
+}
+
+template <class T, class A, Data D> inline
+bool IsDiagonal(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+    double off(0.0);
+    for (index_t i:m.rows())
+        for (index_t j:m.cols())
+            if (i!=j) off=Max(off,fabs(m(i,j)));
+    return off<=eps;
+}
+
+template <class T, class A, Data D> inline
+bool IsDiagonal(const Indexable<T,A,Full,D,MatrixShape>& m)
+{
+    return IsDiagonal(m,0.0);
 }
 //----------------------------------------------------------------------
 //
