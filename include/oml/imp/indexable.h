@@ -91,6 +91,12 @@ auto BinaryFunction1(const Indexable<TA,A,MA,DA,S>& a,
                      const Indexable<TB,B,MB,DB,S>& b,
                      typename ReturnType<TA,TB>::RetType (*f)(const TA&, const TB&))
 {
+  if (a.size()!=b.size())
+  {
+    std::cout << "a=" << a.size() << std::endl;
+    std::cout << "b=" << b.size() << std::endl;
+  }
+  assert(a.size()==b.size());
   typedef typename A::RefT RefA;
   typedef typename B::RefT RefB;
   constexpr Data  DR=ReturnData <DA,DB>::RetType ;
