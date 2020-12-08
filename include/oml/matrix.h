@@ -285,6 +285,7 @@ template <class T, class Mat> class MatrixTranspose
   MatrixTranspose(const MatrixTranspose<T,Mat>& mt) : itsMatrix(mt.itsMatrix) {};
 
   T operator()(index_t i, index_t j) const {return itsMatrix(j,i);}
+  index_t size() const {return GetLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsMatrix.GetLimits().Col,itsMatrix.GetLimits().Row);}
 
  private:
@@ -353,7 +354,7 @@ template <class T, class A, class B> class MatrixMMOp
     for (index_t k:itsA.cols()) ret+=itsA(i,k)*itsB(k,j);
     return ret;
   }
-  index_t size() const {return MatLimits().size();}
+  index_t size() const {return GetLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
 
  private:
