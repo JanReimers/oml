@@ -89,7 +89,7 @@ template <class T, class A> class Val<T,A, VectorShape>
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsLimits(a.GetLimits()) {};
   T         operator()(index_t) const {return itsVal;}
-  index_t   size      (       ) const {return itsA.size();}
+  index_t   size      (       ) const {return itsLimits.size();} //Apparently itsA is gone so why store it?
   VecLimits GetLimits (       ) const {return itsLimits;} //Apparently itsA.GetLimits() fails at runtime
  private:
   T        itsVal;
@@ -102,7 +102,7 @@ template <class T, class A> class Val<T,A,MatrixShape>
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a),itsLimits(itsA.GetLimits()) {};
   T         operator()(index_t,index_t) const {return itsVal;}
-  index_t   size      (               ) const {return itsA.size();}
+  index_t   size      (               ) const {return itsLimits.size();} //itsA may be gone
   MatLimits GetLimits (               ) const {return itsLimits;} //Apparently itsA.GetLimits() fails at runtime
  private:
   T         itsVal;
