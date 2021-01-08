@@ -590,6 +590,32 @@ bool IsDiagonal(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     return IsDiagonal(m,0.0);
 }
+
+template <class T, class A, Data D> inline
+bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
+{
+    bool ret=true;
+    for (index_t i: m.rows())
+        for (index_t j: m.cols(i+1))
+        {
+            ret = ret && (m(i,j)==0.0);
+            if (!ret) break;
+        }
+    return ret;
+}
+
+template <class T, class A, Data D> inline
+bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
+{
+    bool ret=true;
+    for (index_t j: m.cols())
+        for (index_t i: m.rows(j+1))
+        {
+            ret = ret && (m(i,j)==0.0);
+            if (!ret) break;
+        }
+    return ret;
+}
 //----------------------------------------------------------------------
 //
 //  Vector outer product Proxy.
