@@ -477,7 +477,7 @@ void Unit(Indexable<T,A,M,Real,MatrixShape>& m)
 {
   A& a(static_cast<A&>(m));
   Fill(a,T(0.0));
-  a.GetDiagonal()=1;
+  a.GetDiagonal()=T(1);
 }
 
 template <class T, class A, Store M, Data D> inline
@@ -596,7 +596,7 @@ bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
     for (index_t i: m.rows())
-        for (index_t j: m.cols(i+1))
+        for (index_t j=i+1;j<=m.GetLimits().GetNumCols();j++)
         {
             ret = ret && (m(i,j)==0.0);
             if (!ret) break;
@@ -608,12 +608,13 @@ template <class T, class A, Data D> inline
 bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
-    for (index_t j: m.cols())
-        for (index_t i: m.rows(j+1))
-        {
-            ret = ret && (m(i,j)==0.0);
-            if (!ret) break;
-        }
+    if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
+        for (index_t j: m.cols())
+            for (index_t i: m.rows(j+1))
+            {
+                ret = ret && (m(i,j)==0.0);
+                if (!ret) break;
+            }
     return ret;
 }
 //----------------------------------------------------------------------

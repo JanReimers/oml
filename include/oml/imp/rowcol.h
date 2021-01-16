@@ -190,12 +190,12 @@ public:
     MatrixDiagonal(Indexable<T,A,M,D,MatrixShape>& m)
         : itsMatrix(static_cast<A&>(m))
     {
-        assert(m.GetLimits().Row==m.GetLimits().Col);
+//        assert(m.GetLimits().Row==m.GetLimits().Col);
     };
     MatrixDiagonal(const Indexable<T,A,M,D,MatrixShape>& m)
         : itsMatrix(static_cast<A&>(const_cast<Indexable<T,A,M,D,MatrixShape>&>(m)))
     {
-        assert(m.GetLimits().Row==m.GetLimits().Col);
+//        assert(m.GetLimits().Row==m.GetLimits().Col);
     };
     MatrixDiagonal(const MatrixDiagonal& m)
         : itsMatrix(m.itsMatrix)
@@ -219,11 +219,13 @@ public:
 
     index_t   size  () const
     {
-        return itsMatrix.GetLimits().Row.size();
+        return Min(itsMatrix.GetLimits().Row.size(),itsMatrix.GetLimits().Col.size());
     }
     VecLimits GetLimits() const
     {
-        return itsMatrix.GetLimits().Row;
+        return itsMatrix.GetLimits().Row.size() >= itsMatrix.GetLimits().Col.size()
+            ? itsMatrix.GetLimits().Col
+            : itsMatrix.GetLimits().Row;
     };
 
     T  operator()(index_t i) const
