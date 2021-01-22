@@ -632,6 +632,50 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
         for (index_t j:Ar.cols())
             Ar(i,j)=i*10+j;
 
+    for (index_t i:Ar.rows())
+        for (index_t j:Ar.cols(i+1))
+            Ar(i,j)=i*10-j;
+
+    // These loops should be no-ops
+    Ar.SetLimits(N,1);
+    int n=0;
+    for (index_t i:Ar.rows())
+        for (index_t j:Ar.cols(i+1))
+            n++;
+    EXPECT_EQ(n,0);
+
+    Ar.SetLimits(1,N);
+    for (index_t j:Ar.cols())
+        for (index_t i:Ar.rows(j+1))
+            n++;
+    EXPECT_EQ(n,0);
+
+    Ar.SetLimits(N,N);
+    Fill(Ar,0.0);
+    for (index_t i:Ar.rows())
+        for (index_t j:Ar.cols(i+1))
+            Ar(i,j)=i*10+j;
+    EXPECT_TRUE(IsUpperTriangular(Ar));
+
+    Fill(Ar,0.0);
+    for (index_t j:Ar.cols())
+        for (index_t i:Ar.rows(j+1))
+            Ar(i,j)=i*10+j;
+    EXPECT_TRUE(IsLowerTriangular(Ar));
+
+    Ar.SetLimits(N,1);
+    EXPECT_TRUE(IsUpperTriangular(Ar));
+    EXPECT_TRUE(IsLowerTriangular(Ar));
+    Ar.SetLimits(N,0);
+    EXPECT_TRUE(IsUpperTriangular(Ar));
+    EXPECT_TRUE(IsLowerTriangular(Ar));
+    Ar.SetLimits(1,N);
+    EXPECT_TRUE(IsUpperTriangular(Ar));
+    EXPECT_TRUE(IsLowerTriangular(Ar));
+    Ar.SetLimits(0,N);
+    EXPECT_TRUE(IsUpperTriangular(Ar));
+    EXPECT_TRUE(IsLowerTriangular(Ar));
+
 }
 
 

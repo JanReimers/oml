@@ -28,10 +28,18 @@ template <class Derived> class IndexableBase<Derived,MatrixShape>
   {
     public:
         index_iterator(index_t i) : current{i} {};
-        index_iterator operator++(){current++;return (*this);}
+        index_iterator operator++()
+        {
+            index_iterator ret(*this);
+            current++;
+            return ret;
+        }
         const index_t operator*() const {return current;}
-        index_t operator*() {return current;}
-        friend bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
+              index_t operator*()       {return current;}
+        friend bool operator!=(const index_iterator& a, const index_iterator& b)
+        {
+            return a.current!=b.current;
+        }
     private:
         index_t current;
   };
@@ -39,8 +47,14 @@ template <class Derived> class IndexableBase<Derived,MatrixShape>
     class iterator_proxy
     {
     public:
-        iterator_proxy(const VecLimits& lim) : low(lim.Low), high(lim.High) {};
-        iterator_proxy(index_t l, index_t h) : low(l), high(h) {};
+        iterator_proxy(const VecLimits& lim) : low(lim.Low) , high(lim.High)
+        {
+            if (high<low) high=low-1; //Set to terminate with no iterations
+        };
+        iterator_proxy(index_t l, index_t h) : low(l), high(h)
+        {
+            if (high<low) high=low-1; //Set to terminate with no iterations
+        };
         index_iterator begin() const {return low;}
         index_iterator end  () const {return high+1;}
     private:

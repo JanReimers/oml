@@ -596,7 +596,7 @@ bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
     for (index_t i: m.rows())
-        for (index_t j=i+1;j<=m.GetLimits().GetNumCols();j++)
+        for (index_t j:m.cols(i+1))
         {
             ret = ret && (m(i,j)==0.0);
             if (!ret) break;
@@ -610,7 +610,7 @@ bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
     bool ret=true;
     if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
         for (index_t j: m.cols())
-            for (index_t i=j+1;i<=m.GetLimits().GetNumRows();i++)
+            for (index_t i:m.rows(j+1))
             {
                 ret = ret && (m(i,j)==0.0);
                 if (!ret) break;

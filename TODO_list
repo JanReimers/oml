@@ -8,6 +8,10 @@ Disconnect HEAD in git
     git checkout -B master temp
 
 Work list:
+    A*B return Matrix instead of proxy.  Then A*B*C*D*E*F will work efficiently.
+    Bug: A+B where A if diagonal matrix, and B is full matrix
+        In this case we can't use array add.
+    Done: Bug: for (index_t i:m.cols(i+1)) is broken if GetNumCols()==0
     Done: Organize header include order for indexable, and matalg headers
         Done: Move chunks of matalg into Matrix and Diag matrix headers.
     Done: Default constructors should create zero size Vectors and Matrices.
