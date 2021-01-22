@@ -664,15 +664,19 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
     EXPECT_TRUE(IsLowerTriangular(Ar));
 
     Ar.SetLimits(N,1);
-    EXPECT_TRUE(IsUpperTriangular(Ar));
+    Fill(Ar,1.0);
+    EXPECT_FALSE(IsUpperTriangular(Ar));
     EXPECT_TRUE(IsLowerTriangular(Ar));
     Ar.SetLimits(N,0);
+    Fill(Ar,1.0);
     EXPECT_TRUE(IsUpperTriangular(Ar));
     EXPECT_TRUE(IsLowerTriangular(Ar));
     Ar.SetLimits(1,N);
+    Fill(Ar,1.0);
     EXPECT_TRUE(IsUpperTriangular(Ar));
-    EXPECT_TRUE(IsLowerTriangular(Ar));
+    EXPECT_FALSE(IsLowerTriangular(Ar));
     Ar.SetLimits(0,N);
+    Fill(Ar,1.0);
     EXPECT_TRUE(IsUpperTriangular(Ar));
     EXPECT_TRUE(IsLowerTriangular(Ar));
 

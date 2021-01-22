@@ -72,7 +72,7 @@ template <class Derived> class IndexableBase<Derived,MatrixShape>
 template <class T, class A, class B> class MatrixMMOp;
 //-------------------------------------------------
 //
-//  template specialization for Matricies's.
+//  template specialization for Matrices's.
 //
 template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,MatrixShape>
  : public IndexableBase<Derived,MatrixShape>
@@ -92,7 +92,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
 };
 //-------------------------------------------------
 //
-//  template specialization for abstract Matricies's.
+//  template specialization for abstract Matrices's.
 //
 template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,MatrixShape>
  : public IndexableBase<Derived,MatrixShape>
@@ -113,7 +113,7 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
 
 //-------------------------------------------------
 //
-//  template specialization for diagonal Matricies's.
+//  template specialization for diagonal Matrices's.
 //
 template <class T, class Derived> class Indexable<T,Derived,Diagonal,Real,MatrixShape>
  : public IndexableBase<Derived,MatrixShape>
@@ -135,7 +135,7 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Real,Matrix
 
 //-------------------------------------------------
 //
-//  template specialization for abstract Diagonal Matricies's.
+//  template specialization for abstract Diagonal Matrices's.
 //
 template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,MatrixShape>
  : public IndexableBase<Derived,MatrixShape>

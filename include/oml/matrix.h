@@ -434,6 +434,17 @@ template <class T, class V, class B> class MatrixVMOp
 
 //---------------------------------------------------------------------
 //
+//  Matrix * Matrix, returns a matrix instead of a proxy.
+//
+template <class TA, class TB, class A, class B, Data DA, Data DB> inline
+Matrix<TA> operator*(const Matrix<TA>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return Matrix<TA>(MatrixMMOp<TR,typename A::RefT,typename B::RefT>(a,b));
+}
+
+//---------------------------------------------------------------------
+//
 //  Matrix * Matrix, returns a proxy.
 //
 template <class TA, class TB, class A, class B, Data DA, Data DB> inline
