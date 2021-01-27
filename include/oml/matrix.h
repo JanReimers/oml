@@ -616,6 +616,19 @@ bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 }
 
 template <class T, class A, Data D> inline
+bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+    bool ret=true;
+    for (index_t i: m.rows())
+        for (index_t j:m.cols(i+1))
+        {
+            ret = ret && (fabs(m(i,j))<=eps);
+            if (!ret) break;
+        }
+    return ret;
+}
+
+template <class T, class A, Data D> inline
 bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
@@ -624,6 +637,20 @@ bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
             for (index_t i:m.rows(j+1))
             {
                 ret = ret && (m(i,j)==0.0);
+                if (!ret) break;
+            }
+    return ret;
+}
+
+template <class T, class A, Data D> inline
+bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+    bool ret=true;
+    if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
+        for (index_t j: m.cols())
+            for (index_t i:m.rows(j+1))
+            {
+                ret = ret && (fabs(m(i,j))<=eps);
                 if (!ret) break;
             }
     return ret;
