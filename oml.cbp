@@ -115,6 +115,8 @@
 		</Unit>
 		<Unit filename="src/instance_complex.cpp" />
 		<Unit filename="src/instance_double.cpp" />
+		<Unit filename="src/instance_int.cpp" />
+		<Unit filename="src/instance_matrix_double.cpp" />
 		<Unit filename="src/linear_algebra_complex.cpp" />
 		<Unit filename="src/linear_algebra_double.cpp" />
 		<Unit filename="src/matlimit.cpp" />
