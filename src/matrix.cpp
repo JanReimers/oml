@@ -162,6 +162,47 @@ template <class T> void Matrix<T>::SetLimits(const MatLimits& theLimits, bool pr
   }
 }
 
+//-----------------------------------------------------------------------------
+//
+//  Remove a row or a column
+//
+template <class T> void Matrix<T>::RemoveRow(index_t r)
+{
+    assert(r>=GetLimits().Row.Low);
+    assert(r<=GetLimits().Row.High);
+    MatLimits lim(GetLimits().Row.Low,GetLimits().Row.High-1,GetLimits().Col.Low,GetLimits().Col.High);
+
+    Matrix<T> dest(lim);
+    Subscriptor sdest (dest);         //Destination subscriptor.
+    for (index_t j:dest.cols())
+    {
+        for (index_t i=lim.Row.Low; i<r; i++)
+            sdest(i,j)=(*this)(i,j); //Copy low rows
+        for (index_t i=r; i<=lim.Row.High; i++)
+            sdest(i,j)=(*this)(i+1,j); //Shift high rows down by one
+    }
+
+    (*this)=dest;
+}
+template <class T> void Matrix<T>::RemoveColumn(index_t c)
+{
+    assert(c>=GetLimits().Col.Low);
+    assert(c<=GetLimits().Col.High);
+    MatLimits lim(GetLimits().Row.Low,GetLimits().Row.High,GetLimits().Col.Low,GetLimits().Col.High-1);
+
+    Matrix<T> dest(lim);
+    Subscriptor sdest (dest);         //Destination subscriptor.
+    for (index_t i:dest.rows())
+    {
+        for (index_t j=lim.Col.Low; j<c; j++)
+            sdest(i,j)=(*this)(i,j); //Copy low cols
+        for (index_t j=c; j<=lim.Col.High; j++)
+            sdest(i,j)=(*this)(i,j+1); //Shift high cols down by one
+    }
+
+    (*this)=dest;
+}
+
 template <class T> void Matrix<T>::ReIndexRows(const std::vector<index_t>& index)
 {
   assert(GetLimits().GetNumRows()==static_cast<index_t>(index.size()));

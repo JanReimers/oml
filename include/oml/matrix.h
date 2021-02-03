@@ -69,6 +69,8 @@ template <class T> class Matrix
   void SetLimits(index_t r, index_t c                       , bool preserve=false);
   void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false);
   void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
+  void RemoveRow   (index_t r);
+  void RemoveColumn(index_t r);
 
   void ReIndexRows   (const std::vector<index_t>& index);
   void ReIndexColumns(const std::vector<index_t>& index);

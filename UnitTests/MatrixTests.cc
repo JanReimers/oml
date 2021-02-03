@@ -93,6 +93,24 @@ TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
     A1.SetLimits(5,4,true);
     EXPECT_EQ(A1,A2);
 
+    A1.RemoveRow(2);
+    EXPECT_EQ(A1.GetNumRows(),4);
+    EXPECT_EQ(A1.GetNumCols(),4);
+    EXPECT_EQ(A1.GetRow(1),A2.GetRow(1));
+    EXPECT_EQ(A1.GetRow(2),A2.GetRow(3));
+    EXPECT_EQ(A1.GetRow(3),A2.GetRow(4));
+    EXPECT_EQ(A1.GetRow(4),A2.GetRow(5));
+    A2.RemoveRow(2);
+    EXPECT_EQ(A1,A2);
+    A1.RemoveColumn(3);
+    EXPECT_EQ(A1.GetNumRows(),4);
+    EXPECT_EQ(A1.GetNumCols(),3);
+    EXPECT_EQ(A1.GetColumn(1),A2.GetColumn(1));
+    EXPECT_EQ(A1.GetColumn(2),A2.GetColumn(2));
+    EXPECT_EQ(A1.GetColumn(3),A2.GetColumn(4));
+    A2.RemoveColumn(3);
+    EXPECT_EQ(A1,A2);
+
     typedef Vector <TypeParam> VectorT;
     VectorT V1(10,TypeParam(0.5));
  //   VectorT V1(10,0.5); for T=complex this fails since the compiler promotes 0.5 to int rather than complex.
@@ -108,6 +126,8 @@ TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
     V5.Fill(2.0);
     EXPECT_EQ(V5(10),2.0);
     V5.FillRandom();
+
+
 }
 
 TYPED_TEST_P(MatrixTests,Transpose_Slices)

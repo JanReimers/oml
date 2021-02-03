@@ -5,8 +5,8 @@ int main(int argc, char **argv)
     testing::InitGoogleTest(&argc, argv);
 
 
-//    testing::GTEST_FLAG(filter) = "My/MatrixTests/*.AsciiAndBinaryIO";
-//    testing::GTEST_FLAG(filter) = "My/MatrixTests/*.BinaryOps";
+//    testing::GTEST_FLAG(filter) = "My/MatrixTests/*.Fill_SetLimits_SubMatrix";
+//    testing::GTEST_FLAG(filter) = "MatrixComplexTests.RangeBasedLoops";
 //    testing::GTEST_FLAG(filter) = "My/BenchmarkTests/*.*:BenchmarkRealTests.*";
 //    testing::GTEST_FLAG(filter) = "BenchmarkRealTests.*";
 //    testing::GTEST_FLAG(filter) = "My/DiagonalMatrixTests/*.MatrixAlgebra";
