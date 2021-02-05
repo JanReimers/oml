@@ -85,7 +85,7 @@ public:
         index_t high;
     };
 
-    iterator_proxy indices() const {return iterator_proxy(0,size()-1);}
+    iterator_proxy arr_indices() const {return iterator_proxy(0,size()-1);}
 
 
 };
@@ -284,7 +284,7 @@ public:
     static T apply(const ArrayIndexable<T,A,M,S>& a)
     {
         T ret=a.size()>0 ? a[0] : T(0); // Don't try and read a[0] if there is no data in a!
-        for (index_t i:a.indices())
+        for (index_t i:a.arr_indices())
         {
             T ai=a[i];
             if (Op::apply(ai,ret)) ret=ai;

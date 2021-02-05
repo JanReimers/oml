@@ -43,7 +43,7 @@ template <class Derived> class IndexableBase<Derived,VectorShape>
         index_t high;
     };
 
-  iterator_proxy indices() const {return iterator_proxy(static_cast<const Derived*>(this)->GetLimits());}
+    iterator_proxy indices() const {return iterator_proxy(static_cast<const Derived*>(this)->GetLimits());}
 };
 
 //-------------------------------------------------
