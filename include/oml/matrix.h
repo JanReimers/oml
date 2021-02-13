@@ -95,8 +95,24 @@ template <class T> class Matrix
 
   Matrix& operator+=(const ArrayIndexable<T,Matrix,Full,MatrixShape>& b) {return ArrayAdd(*this,b);}
   Matrix& operator-=(const ArrayIndexable<T,Matrix,Full,MatrixShape>& b) {return ArraySub(*this,b);}
-  template <class B> Matrix& operator+=(const Indexable<T,B,Full,Abstract,MatrixShape>& b) {return MatrixAdd(*this,b);}
-  template <class B> Matrix& operator-=(const Indexable<T,B,Full,Abstract,MatrixShape>& b) {return MatrixSub(*this,b);}
+  template <class B> Matrix& operator+=(const Indexable<T,B,Full,Abstract,MatrixShape>& b)
+  {
+      if (size()==0)
+      {
+        SetLimits(b.GetLimits(),false);
+        Fill(*this,T(0));
+      }
+      return MatrixAdd(*this,b);
+  }
+  template <class B> Matrix& operator-=(const Indexable<T,B,Full,Abstract,MatrixShape>& b)
+  {
+      if (size()==0)
+      {
+        SetLimits(b.GetLimits(),false);
+        Fill(*this,T(0));
+      }
+      return MatrixSub(*this,b);
+  }
 
 
 #if DEBUG
