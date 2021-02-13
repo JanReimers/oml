@@ -33,6 +33,8 @@ class VecLimits
   //@}
  ~VecLimits();
 
+  void ReBase(int low);
+
   static index_t size(index_t,index_t)      ;
   //! Returns number of elements.
          index_t size(               ) const;
@@ -90,6 +92,12 @@ inline VecLimits::VecLimits(index_t low, index_t high) : //COnstruct from lower 
   }
 
 inline VecLimits::~VecLimits() {}
+
+inline void VecLimits::ReBase(int low)
+{
+    High=High-Low+low;
+    Low=low;
+}
 #undef  CHECK
 
 //-----------------------------------------------------------------------------

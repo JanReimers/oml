@@ -27,6 +27,8 @@ class MatLimits
   //@}
  ~MatLimits();
 
+  void ReBase(int rowLow,int colLow);
+
   static index_t size(index_t,index_t                  );
   static index_t size(index_t,index_t,index_t,index_t  );
   static index_t size(const VecLimits&,const VecLimits&);
@@ -86,6 +88,12 @@ inline MatLimits::MatLimits(const VecLimits& rowLimits, const VecLimits& colLimi
   {}
 
 inline MatLimits::~MatLimits() {}
+
+inline void MatLimits::ReBase(int rowLow,int colLow)
+{
+    Row.ReBase(rowLow);
+    Col.ReBase(colLow);
+}
 
 //------------------------------------------------------------------------
 //

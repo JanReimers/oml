@@ -5,6 +5,7 @@
 // Copyright (1994-2003), Jan N. Reimers
 
 #include "oml/imp/matlimit.h"
+#include <cassert>
 
 //----------------------------------------------------------------------------
 /*! \class MatrixBase matrixbase.h oml/matrixbase.h
@@ -32,6 +33,8 @@ class MatrixBase
   index_t   GetColHigh  () const;
   //@}
   void SetLimits(const MatLimits&, bool preserve=false);
+  MatLimits ReBase(int rowLow,int colLow);
+  MatLimits ReBase(const MatLimits&);
 
  private:
   MatLimits    itsLimits; //Manages the upper and lower std::vector limits.
@@ -44,6 +47,20 @@ inline void MatrixBase::SetLimits(const MatLimits& lim,bool /*preserve*/)
 {
   itsLimits=lim;
 }
+inline MatLimits MatrixBase::ReBase(int rowLow,int colLow)
+{
+    MatLimits oldLimits=itsLimits;
+    itsLimits.ReBase(rowLow,colLow);
+    return oldLimits;
+}
+inline MatLimits MatrixBase::ReBase(const MatLimits& newLimits)
+{
+    assert(itsLimits.size()==newLimits.size());
+    MatLimits oldLimits=itsLimits;
+    itsLimits=newLimits;
+    return oldLimits;
+}
+
 
 inline  MatLimits MatrixBase::GetLimits() const
 {
