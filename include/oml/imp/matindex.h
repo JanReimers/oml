@@ -266,7 +266,9 @@ template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,Ma
 public:
     static T apply(const Indexable<T,A,M,Abstract,MatrixShape>& a)
     {
-        T ret=a.size()>0 ? a(1,1) : T(0); // Don't try and read a[0] if there is no data in a!
+        int rl=a.GetLimits().Row.Low;
+        int cl=a.GetLimits().Col.Low;
+        T ret=a.size()>0 ? a(rl,cl) : T(0); // Don't try and read a[0] if there is no data in a!
         for (index_t i:a.rows())
         for (index_t j:a.cols())
         {
