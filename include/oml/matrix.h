@@ -622,8 +622,10 @@ template <class T, class A, Data D> inline
 bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
+    MatLimits l=m.GetLimits();
+    int delta=Max(1L,l.GetNumCols()-l.GetNumRows()+1);
     for (index_t i: m.rows())
-        for (index_t j:m.cols(i+1))
+        for (index_t j:m.cols(i+delta))
         {
             ret = ret && (m(i,j)==0.0);
             if (!ret) break;
@@ -635,8 +637,10 @@ template <class T, class A, Data D> inline
 bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
     bool ret=true;
+    MatLimits l=m.GetLimits();
+    int delta=Max(1L,l.GetNumCols()-l.GetNumRows()+1);
     for (index_t i: m.rows())
-        for (index_t j:m.cols(i+1))
+        for (index_t j:m.cols(i+delta))
         {
             ret = ret && (fabs(m(i,j))<=eps);
             if (!ret) break;
@@ -648,9 +652,11 @@ template <class T, class A, Data D> inline
 bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
+    MatLimits l=m.GetLimits();
+    int delta=Max(1L,l.GetNumRows()-l.GetNumCols()+1);
     if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
         for (index_t j: m.cols())
-            for (index_t i:m.rows(j+1))
+            for (index_t i:m.rows(j+delta))
             {
                 ret = ret && (m(i,j)==0.0);
                 if (!ret) break;
@@ -662,9 +668,11 @@ template <class T, class A, Data D> inline
 bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
     bool ret=true;
+    MatLimits l=m.GetLimits();
+    int delta=Max(1L,l.GetNumRows()-l.GetNumCols()+1);
     if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
         for (index_t j: m.cols())
-            for (index_t i:m.rows(j+1))
+            for (index_t i:m.rows(j+delta))
             {
                 ret = ret && (fabs(m(i,j))<=eps);
                 if (!ret) break;
