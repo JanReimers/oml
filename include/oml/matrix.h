@@ -589,7 +589,6 @@ double FrobeniusNorm(const Indexable<T,A,Full,D,MatrixShape>& m)
 template <class T, class A, Data D> inline
 bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
-    assert(m.GetLimits().Row==m.GetLimits().Col);
     Matrix<T> U(m.GetLimits());
     Unit(U);
     return Max(fabs(m-U))==0.0;
@@ -598,7 +597,6 @@ bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m)
 template <class T, class A, Data D> inline
 bool IsUnit(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
-    assert(m.GetLimits().Row==m.GetLimits().Col);
     Matrix<T> U(m.GetLimits());
     Unit(U);
     return Max(fabs(m-U))<=eps;
