@@ -55,9 +55,8 @@ inline MatLimits MatrixBase::ReBase(int rowLow,int colLow)
 }
 inline MatLimits MatrixBase::ReBase(const MatLimits& newLimits)
 {
-    assert(itsLimits.size()==newLimits.size());
     MatLimits oldLimits=itsLimits;
-    itsLimits=newLimits;
+    itsLimits.ReBase(newLimits.Row.Low,newLimits.Col.Low);
     return oldLimits;
 }
 
