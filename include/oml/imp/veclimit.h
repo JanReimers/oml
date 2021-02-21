@@ -143,4 +143,8 @@ inline std::istream& operator>>(std::istream& is,VecLimits& v)
   return v.Read (is);
 }
 
+// Use this to get limits of a tensor product
+VecLimits operator*(const VecLimits& a, const VecLimits& b);
+
+
 #endif //_veclimit_H_

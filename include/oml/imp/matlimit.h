@@ -166,4 +166,11 @@ inline std::istream& operator>>(std::istream& is, MatLimits& lim)
   return lim.Read (is);
 }
 
+// Use this to get limits of a tensor product
+inline MatLimits operator*(const MatLimits& a, const MatLimits& b)
+{
+    return MatLimits(a.Row*b.Row,a.Col*b.Col);
+}
+
+
 #endif //_matlimits_H_

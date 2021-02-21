@@ -495,6 +495,28 @@ auto operator*(const Indexable<TA,A,MA,DA,VectorShape>& a,const Indexable<TB,B,M
   return MatrixVMOp<TR,typename A::RefT,typename B::RefT>(a,b);
 }
 
+template <class T> Matrix<T> TensorProduct(const Matrix<T>& a, const Matrix<T>& b)
+{
+    Matrix<T> r(a.GetLimits()*b.GetLimits());
+    //
+    //  These loops need to run in the same order as SiteOperatorImp::Product
+    //
+    int i=r.GetRowLimits().Low;
+    for (index_t ib:b.rows())
+    for (index_t ia:a.rows())
+    {
+        int j=r.GetColLimits().Low;
+        for (index_t jb:b.cols())
+        for (index_t ja:a.cols())
+        {
+            r(i,j)=a(ia,ja)*b(ib,jb);
+            j++;
+        }
+        i++;
+    }
+    return r;
+}
+
 //--------------------------------------------------------------
 //
 //  Other assorted matrix functions.
@@ -677,6 +699,26 @@ bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
                 ret = ret && (fabs(m(i,j))<=eps);
                 if (!ret) break;
             }
+    return ret;
+}
+
+template <class T, class A, Data D> bool IsTriangular(Store ul,const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
+{
+    bool ret=true;
+    if (m.GetLimits().GetNumCols()>1 && m.GetLimits().GetNumRows()>1)
+    {
+        switch (ul)
+        {
+        case Upper:
+            ret=IsUpperTriangular(m,eps);
+            break;
+        case Lower:
+            ret=IsLowerTriangular(m,eps);
+            break;
+        default:
+            ret=false;
+        }
+    }
     return ret;
 }
 //----------------------------------------------------------------------

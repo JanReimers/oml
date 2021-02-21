@@ -62,4 +62,12 @@ bool VecLimits::CheckIndex(index_t i) const
   return ok;
 }
 
+VecLimits operator*(const VecLimits& a, const VecLimits& b)
+{
+    assert(a.Low==b.Low);
+    int size=a.size()*b.size();
+    return VecLimits(a.Low,a.Low+size-1);
+}
+
+
 #undef CHECK

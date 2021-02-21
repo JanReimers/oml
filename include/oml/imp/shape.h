@@ -19,9 +19,11 @@
 //  OuterProduct(V1,V2) MatrixShape   Sym     Abstract.
 //
 
-enum Shape {ArrayShape,VectorShape,MatrixShape};
-enum Store {Full,Symmetric,Diagonal,Sparse};
-enum Data  {Real,Abstract};
+enum Shape   {ArrayShape,VectorShape,MatrixShape};
+enum Store   {Full,Symmetric,Diagonal,Sparse,Upper,Lower};
+enum Data    {Real,Abstract};
+//enum TriType {Full,Upper,Lower};
+
 
 // Define how different storage layouts and Data type interact
 template <Store S1, Store S2> class ReturnStore{};
