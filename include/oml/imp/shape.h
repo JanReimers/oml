@@ -20,7 +20,7 @@
 //
 
 enum Shape   {ArrayShape,VectorShape,MatrixShape};
-enum Store   {Full,Symmetric,Diagonal,Sparse,Upper,Lower};
+enum Store   {Full,Symmetric,Diagonal,Sparse,Upper,Lower,Row,Column};
 enum Data    {Real,Abstract};
 //enum TriType {Full,Upper,Lower};
 
