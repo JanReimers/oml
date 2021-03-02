@@ -79,6 +79,8 @@ template <class T> class Vector
   Vector& operator=(Vector&&);
 #endif
 
+  VecLimits ReBase(int low);
+  VecLimits ReBase(const VecLimits& lim);
   //@}
   void Fill(FillType);
   void Fill(const T& fillValue);
@@ -303,7 +305,22 @@ template <class T> inline Vector<T>& Vector<T>::operator=(Vector<T>&& v)
 }
 #endif
 
- template <class T> inline void Vector<T>::Fill(FillType ft)
+template <class T> inline VecLimits Vector<T>::ReBase(int low)
+{
+    VecLimits oldLimits=itsLimits;
+    itsLimits.ReBase(low);
+    return oldLimits;
+}
+
+template <class T> inline VecLimits Vector<T>::ReBase(const VecLimits& lim)
+{
+    VecLimits oldLimits=itsLimits;
+    itsLimits.ReBase(lim.Low);
+    return oldLimits;
+
+}
+
+template <class T> inline void Vector<T>::Fill(FillType ft)
 {
     switch (ft)
     {

@@ -54,6 +54,17 @@ public:
   DiagonalMatrix& operator=(DiagonalMatrix&&);
 #endif
 
+    MatLimits ReBase(const MatLimits& newLimits)
+    {
+        assert(newLimits.Row.Low==newLimits.Col.Low);
+        itsData.ReBase(newLimits.Row);
+        return MatrixBase::ReBase(newLimits);
+    }
+    MatLimits ReBase(int low)
+    {
+        itsData.ReBase(low);
+        return MatrixBase::ReBase(low,low);
+    }
 
     std::ostream& Write(std::ostream&) const;
     std::istream& Read (std::istream&)      ;
