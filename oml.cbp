@@ -16,6 +16,7 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="-Wno-unknown-pragmas" />
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
