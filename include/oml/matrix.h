@@ -454,16 +454,37 @@ template <class T, class V, class B> class MatrixVMOp
 //
 //  Matrix * Matrix, returns a matrix instead of a proxy.
 //
-template <class TA, class TB, class A, class B, Data DA, Data DB> inline
-Matrix<TA> operator*(const Matrix<TA>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
+template <class TA, class TB> inline
+auto operator*(const Matrix<TA>& a,const Matrix<TB>& b)
 {
   typedef typename ReturnType<TA,TB>::RetType TR;
-  return Matrix<TA>(MatrixMMOp<TR,typename A::RefT,typename B::RefT>(a,b));
+  return Matrix<TR>(MatrixMMOp<TR,typename Matrix<TA>::RefT,typename Matrix<TB>::RefT>(a,b));
+}
+//---------------------------------------------------------------------
+//
+//  Matrix * Indexable<MatrixShape>, returns a matrix instead of a proxy.
+//
+template <class TA, class TB, class B, Data DB> inline
+auto operator*(const Matrix<TA>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return Matrix<TR>(MatrixMMOp<TR,typename Matrix<TA>::RefT,typename B::RefT>(a,b));
 }
 
 //---------------------------------------------------------------------
 //
-//  Matrix * Matrix, returns a proxy.
+//  Indexable<MatrixShape> * Matrix, returns a matrix.
+//
+template <class TA, class TB, class A, Data DA> inline
+auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Matrix<TB>& b)
+{
+  typedef typename ReturnType<TA,TB>::RetType TR;
+  return Matrix<TR>(MatrixMMOp<TR,typename A::RefT,typename Matrix<TB>::RefT>(a,b));
+}
+
+//---------------------------------------------------------------------
+//
+//  Indexable<MatrixShape> * Indexable<MatrixShape>, returns a proxy.
 //
 template <class TA, class TB, class A, class B, Data DA, Data DB> inline
 auto operator*(const Indexable<TA,A,Full,DA,MatrixShape>& a,const Indexable<TB,B,Full,DB,MatrixShape>& b)
