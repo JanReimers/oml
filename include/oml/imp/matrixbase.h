@@ -31,6 +31,7 @@ class MatrixBase
   index_t   GetRowHigh  () const;
   index_t   GetColLow   () const;
   index_t   GetColHigh  () const;
+  bool      IsSquare    () const;
   //@}
   void SetLimits(const MatLimits&, bool preserve=false);
   MatLimits ReBase(int rowLow,int colLow);
@@ -80,6 +81,12 @@ inline index_t MatrixBase::size() const
 {
   return itsLimits.size();
 }
+
+inline bool MatrixBase::IsSquare() const
+{
+    return GetNumRows()==GetNumCols();
+}
+
 
 inline VecLimits MatrixBase::GetRowLimits() const
 {
