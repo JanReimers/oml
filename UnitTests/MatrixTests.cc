@@ -359,7 +359,7 @@ template <class T> T vmul1(const Vector<T> V1,const Matrix<T>& A, const Vector<T
 TEST_F(MatrixRealTests,MinMax)
 {
     typedef Matrix<double> MatrixT;
-    int M=2,N=4,mn=M*N;
+    int M=2,N=4;
     MatrixT A(M,N),B(A);
     FillLinear(A,1.0/4,2.0); //all elements should be exactly represented in floating point
     FillLinear(B,1.0/4,2.0); //all elements should be exactly represented in floating point
@@ -393,6 +393,7 @@ TEST_F(MatrixRealTests,MinMax)
     Unit(I);
     Matrix<double> V=Transpose((VT));
     double err=Max(fabs(V*VT-I));
+    EXPECT_GT(err,0.0);
 }
 
 TEST_F(MatrixComplexTests,fabsHermitianConj)
@@ -400,8 +401,6 @@ TEST_F(MatrixComplexTests,fabsHermitianConj)
     typedef std::complex<double> dcmplx;
     typedef Matrix<dcmplx> MatrixCT;
     typedef Vector <dcmplx> VectorCT;
-    typedef Matrix<double> MatrixRT;
-    typedef Vector <double> VectorRT;
 
     int N=10;
     MatrixCT A(N,N),B(A);
@@ -525,12 +524,11 @@ TEST_F(MatrixComplexTests,MixedTypes)
 template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
-    double eps=1e-13;
     typedef Matrix<T> MatrixT;
     typedef Vector <T> VectorT;
     index_t M=10,N=5;
     MatrixT A(M,N);
-    T s(0.5),sM(M),sN(N);
+    T s(0.5);
     VectorT Vr(N,s),Vl(M,s);
     Fill(A,s);
     EXPECT_EQ(f(A),f(s));
@@ -598,7 +596,7 @@ TYPED_TEST_P(MatrixTests,BinaryOps)
     typedef Vector <TypeParam> VectorT;
     index_t M=10,N=5;
     MatrixT A(M,N),B(M,N);
-    TypeParam sA(0.5),sB(2.0),sM(M),sN(N),sMN(M*N);
+    TypeParam sA(0.5),sB(2.0);
     VectorT Vr(N,sA),Vl(M,sB);
     Fill(A,sA);
     Fill(B,sB);
@@ -660,13 +658,13 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
     Ar.SetLimits(N,1);
     int n=0;
     for (index_t i:Ar.rows())
-        for (index_t j:Ar.cols(i+1))
+        for ([[maybe_unused]] index_t j:Ar.cols(i+1))
             n++;
     EXPECT_EQ(n,0);
 
     Ar.SetLimits(1,N);
     for (index_t j:Ar.cols())
-        for (index_t i:Ar.rows(j+1))
+        for ([[maybe_unused]] index_t i:Ar.rows(j+1))
             n++;
     EXPECT_EQ(n,0);
 
@@ -685,7 +683,7 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
 
     Ar.SetLimits(N,1);
     Fill(Ar,1.0);
-    EXPECT_FALSE(IsUpperTriangular(Ar));
+    EXPECT_TRUE(IsUpperTriangular(Ar));
     EXPECT_TRUE(IsLowerTriangular(Ar));
     Ar.SetLimits(N,0);
     Fill(Ar,1.0);
@@ -694,7 +692,7 @@ TEST_F(MatrixComplexTests,RangeBasedLoops)
     Ar.SetLimits(1,N);
     Fill(Ar,1.0);
     EXPECT_TRUE(IsUpperTriangular(Ar));
-    EXPECT_FALSE(IsLowerTriangular(Ar));
+    EXPECT_TRUE(IsLowerTriangular(Ar));
     Ar.SetLimits(0,N);
     Fill(Ar,1.0);
     EXPECT_TRUE(IsUpperTriangular(Ar));

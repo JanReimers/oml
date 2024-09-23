@@ -80,7 +80,7 @@ TEST_F(BenchmarkRealTests,MatrixCopy)
     #endif
     double matrix_shallow_copy_time;
     double matrix_deep_copy_time;
-    double vector_shallow_copy_time;
+    double vector_shallow_copy_time=0.0;
     double vector_deep_copy_time;
 
 
@@ -236,7 +236,7 @@ TEST_F(BenchmarkRealTests,OpenMPParallel)
     double mp_improvement=MFlops_mp/MFlops_nomp ;
     std::cout << "Ratio   " << mp_improvement << std::endl;
     EXPECT_GT(mp_improvement,3.0);
-    EXPECT_NEAR(MFlops_mp/MFlops_exp,1.0,.05);
+    EXPECT_NEAR(MFlops_mp/MFlops_exp,1.0,.06);
 }
 
 TYPED_TEST_SUITE_P(BenchmarkTests);

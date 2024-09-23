@@ -14,7 +14,6 @@
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add option="-Wno-unknown-pragmas" />
 					<Add option="-DDEBUG" />
@@ -32,8 +31,8 @@
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add option="-Wall" />
 					<Add option="-pg" />
+					<Add option="-fopenmp" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
@@ -43,8 +42,11 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++17" />
 			<Add option="-pg" />
 			<Add option="-fPIC" />
+			<Add option="-DHAVE_STDINT_H" />
 			<Add directory="./include" />
 			<Add directory="./" />
 		</Compiler>

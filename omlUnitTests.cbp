@@ -29,6 +29,7 @@
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
+					<Add option="-fopenmp" />
 				</Compiler>
 				<Linker>
 					<Add option="-O2" />
@@ -43,9 +44,9 @@
 			<Add alias="all" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add directory="include" />
-			<Add directory="../googletest/googletest/include" />
 		</Compiler>
 		<Linker>
 			<Add library="oml" />

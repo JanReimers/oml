@@ -25,13 +25,13 @@ template <class T> union Int2RealUnion;
 template <> union Int2RealUnion<float>
 {		   	// used to access floats as unsigneds
   float rep;
-  ::uint32_t u;
+  uint32_t u;
 };
 
 template <> union Int2RealUnion<double>
 {		   	// used to access doubles as unsigneds
   double rep;
-  ::uint32_t u[2];
+  uint32_t u[2];
 };
 
 template <class T> class Int2Real;

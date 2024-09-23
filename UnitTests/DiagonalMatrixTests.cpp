@@ -187,9 +187,6 @@ TEST_F(DiagonalMatrixComplexTests,fabsHermitianConj)
 {
     typedef std::complex<double> dcmplx;
     typedef DiagonalMatrix<dcmplx> MatrixCT;
-    typedef Vector        <dcmplx> VectorCT;
-    typedef DiagonalMatrix<double> MatrixRT;
-    typedef Vector        <double> VectorRT;
 
     int N=10;
     MatrixCT A(N),B(A);

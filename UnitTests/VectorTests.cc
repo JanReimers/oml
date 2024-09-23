@@ -149,7 +149,6 @@ TEST_F(VectorComplexTests,fabsConj)
 {
     typedef std::complex<double> dcmplx;
     typedef Vector <dcmplx> VectorCT;
-    typedef Vector <double> VectorRT;
 
     int N=10;
     VectorCT A(N),B(A);
@@ -192,7 +191,6 @@ TEST_F(VectorComplexTests,MixedTypes)
 template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
-    double eps=1e-13;
     typedef Vector <T> VectorT;
     index_t N=10;
     T s(0.5);
@@ -204,10 +202,9 @@ template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 template <class T, typename Tf> void TestUnop(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
-    double eps=1e-13;
     typedef Vector <T> VectorT;
     index_t N=10;
-    T s(0.5),sN(N);
+    T s(0.5);
     VectorT V(VecLimits(N),s);
     EXPECT_EQ(f(V)(1  ),f(s));
 //    EXPECT_NEAR(fabs(f(V+V)(1)-f(2.*s)),0.0,eps);
@@ -253,7 +250,7 @@ TYPED_TEST_P(VectorTests,BinaryOps)
 {
     typedef Vector <TypeParam> VectorT;
     index_t N=10;
-    TypeParam sA(0.5),sB(2.0),sN(N);
+    TypeParam sA(0.5),sB(2.0);
     VectorT A(VecLimits(N),sA),B(VecLimits(N),sB);
     EXPECT_EQ((A+B)(1),sA+sB);
     EXPECT_EQ((A-B)(1),sA-sB);

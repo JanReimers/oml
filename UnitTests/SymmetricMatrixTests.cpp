@@ -34,7 +34,6 @@ TYPED_TEST_SUITE_P(SMatrixTests);
 TYPED_TEST_P(SMatrixTests,Constructors)
 {
     typedef SMatrix<TypeParam> MatrixT;
-    typedef Vector<TypeParam> VectorT;
 
     MatrixT A0;
     EXPECT_EQ(A0.GetNumRows(),0);
@@ -106,7 +105,7 @@ TYPED_TEST_P(SMatrixTests,SumDotMaxMinDirectMultiply)
 
     Unit(A);
     TypeParam a12=A(1,2);
-//    A(1,2)=0.0;
+    EXPECT_EQ(A(1,2),a12);
     EXPECT_EQ(A(2,2),1.0);
     EXPECT_EQ(A(1,2),0.0);
     EXPECT_EQ(Sum(A),TypeParam(N));
@@ -191,10 +190,6 @@ TEST_F(SMatrixComplexTests,fabsHermitianConj)
     typedef std::complex<double> dcmplx;
     typedef SMatrix<dcmplx> MatrixCT;
     typedef  Matrix<dcmplx> MatrixFCT;
-    typedef Vector        <dcmplx> VectorCT;
-    typedef SMatrix<double> MatrixRT;
-    typedef  Matrix<double> MatrixFRT;
-    typedef Vector        <double> VectorRT;
 
     int N=3;
     MatrixCT A(N),B(A);
