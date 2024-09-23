@@ -35,7 +35,7 @@
 template <class T, class Ind, class CompOp>
 std::vector<index_t> HeapIndex(const Ind& arrin)
 {
-  index_t n=arrin.size();
+  index_t  n=arrin.size();
   std::vector<index_t> index(n);
 
   index_t l,j,ir,indxt,i;

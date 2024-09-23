@@ -25,7 +25,7 @@ template <class T, class TR, class A> class XprUnary<T,TR,A,VectorShape>
   ~XprUnary() {};
 
   TR        operator()(index_t n) const {return itsF(itsA(n));}
-  index_t   size      (         ) const {return itsA.size();}
+  size_t    size      (         ) const {return itsA.size();}
   VecLimits GetLimits (         ) const {return itsA.GetLimits();}
  private:
    A itsA;
@@ -40,7 +40,7 @@ template <class T, class TR, class A> class XprUnary<T,TR,A,MatrixShape>
   ~XprUnary() {};
 
   TR        operator()(index_t i,index_t j) const {return itsF(itsA(i,j));}
-  index_t   size      (                   ) const {return itsA.size();}
+  size_t    size      (                   ) const {return itsA.size();}
   MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
  private:
    A itsA;
@@ -59,7 +59,7 @@ template <class T, class R> class Ref<T,R,VectorShape>
  public:
   Ref(const R& r) : itsRef(r) {};
   T         operator()(index_t n) const {return itsRef(n);}
-  index_t   size      (         ) const {return itsRef.size();}
+  size_t    size      (         ) const {return itsRef.size();}
   VecLimits GetLimits (         ) const {return itsRef.GetLimits();}
  private:
   const R& itsRef;
@@ -72,7 +72,7 @@ template <class T, class R> class Ref<T,R,MatrixShape>
  public:
   Ref(const R& r) : itsRef(r) {};
   T         operator()(index_t i,index_t j) const {return itsRef(i,j);}
-  index_t   size      (                   ) const {return itsRef.size();}
+  size_t    size      (                   ) const {return itsRef.size();}
   MatLimits GetLimits (                   ) const {return itsRef.GetLimits();}
  private:
   const R& itsRef;
@@ -89,7 +89,7 @@ template <class T, class A> class Val<T,A, VectorShape>
  public:
   explicit Val(const T& v, const A& a) : itsVal(v), itsA(a), itsLimits(a.GetLimits()) {};
   T         operator()(index_t) const {return itsVal;}
-  index_t   size      (       ) const {return itsLimits.size();} //Apparently itsA is gone so why store it?
+  size_t    size      (       ) const {return itsLimits.size();} //Apparently itsA is gone so why store it?
   VecLimits GetLimits (       ) const {return itsLimits;} //Apparently itsA.GetLimits() fails at runtime
  private:
   T        itsVal;
@@ -148,7 +148,7 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,M
   ~Xpr() {};
 
   T         operator()(index_t i,index_t j) const {return itsExp(i,j);}
-  index_t   size      (                   ) const {return itsExp.size();}
+  size_t    size      (                   ) const {return itsExp.size();}
   MatLimits GetLimits (                   ) const {return itsExp.GetLimits();}
 
  private:

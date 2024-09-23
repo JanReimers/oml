@@ -25,7 +25,7 @@ template <class T> Matrix<T>::Matrix()
     CHECK;
   }
 
-template <class T> Matrix<T>::Matrix(index_t r, index_t c)
+template <class T> Matrix<T>::Matrix(size_t r, size_t c)
   : MatrixBase(MatLimits(r,c))
   , itsData   (GetLimits().size()   )
   {
@@ -78,7 +78,7 @@ template <class T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 template <class T> void Matrix<T>::Check() const
 {
   assert(GetLimits().Check());
-  assert(GetLimits().size()==static_cast<index_t>(itsData.size()));
+  assert(GetLimits().size()==itsData.size());
 }
 
 
@@ -205,7 +205,7 @@ template <class T> void Matrix<T>::RemoveColumn(index_t c)
 
 template <class T> void Matrix<T>::ReIndexRows(const std::vector<index_t>& index)
 {
-  assert(GetLimits().GetNumRows()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumRows()==index.size());
 
   typename std::vector<index_t>::const_iterator i=index.begin();
   Matrix<T> dest(GetLimits());
@@ -220,7 +220,7 @@ template <class T> void Matrix<T>::ReIndexRows(const std::vector<index_t>& index
 
 template <class T> void Matrix<T>::ReIndexColumns(const std::vector<index_t>& index)
 {
-  assert(GetLimits().GetNumCols()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumCols()==index.size());
 
   typename std::vector<index_t>::const_iterator i=index.begin();
   Matrix<T> dest(GetLimits());

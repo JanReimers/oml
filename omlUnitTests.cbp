@@ -17,7 +17,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-fopenmp" />
-					<Add directory="../Debug" />
+					<Add directory="./Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,14 +29,13 @@
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
-					<Add option="-fopenmp" />
 				</Compiler>
 				<Linker>
 					<Add option="-O2" />
 					<Add option="-pg" />
 					<Add option="-m64" />
 					<Add option="-fopenmp" />
-					<Add directory="../Release" />
+					<Add directory="./Release" />
 				</Linker>
 			</Target>
 		</Build>
@@ -46,6 +45,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-std=c++17" />
+			<Add option="-fopenmp" />
 			<Add directory="include" />
 		</Compiler>
 		<Linker>

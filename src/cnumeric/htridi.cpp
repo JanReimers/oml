@@ -26,12 +26,11 @@
 template <class T, class M> void htridi(M& A, Vector<T>& d ,Vector<T>& evals,
 	    Vector<T>& e2,Vector<std::complex<T> >& tau)
 {
-  int n=d.size();
-  assert(n==evals .size());
-  assert(n==e2.size());
-  assert(n==A.GetNumRows());
-  assert(n==A.GetNumCols());
-  assert(n==tau.size());
+  assert(d.size()==evals .size());
+  assert(d.size()==e2.size());
+  assert(d.size()==A.GetNumRows());
+  assert(d.size()==A.GetNumCols());
+  assert(d.size()==tau.size());
 
   Vector<std::complex<T> > ee(tau.GetLimits());
 
@@ -39,9 +38,9 @@ template <class T, class M> void htridi(M& A, Vector<T>& d ,Vector<T>& evals,
   typename Vector<T                >::Subscriptor sd(d);
   typename Vector<std::complex<T > >::Subscriptor se(ee);
   typename Vector<std::complex<T > >::Subscriptor stau(tau);
-  int i,j,k,l,ii,jp1;
-  double f,g,h,hh,scale;
-
+  index_t i,j,k,l,ii,jp1;
+  double  f,g,h,hh,scale;
+  index_t n=d.size();
 
   stau(n) = se(n) = std::complex<T>(1.0,0.0);
   d=real(A.GetDiagonal());

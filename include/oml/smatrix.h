@@ -100,7 +100,7 @@ template <class T> class SMatrix
 //  }
   //@}
 
-  index_t   size     () const; //!<Returns number elements in the Matrix.
+  size_t    size     () const; //!<Returns number elements in the Matrix.
   MatLimits GetLimits() const; //!<Returns row/column lower and upper limits a structure.
 
   /*! \name Resize functions
@@ -109,7 +109,7 @@ template <class T> class SMatrix
   */
   //@{
   //! Resize and optionally preserve as much data as possible.
-  void SetLimits(index_t N       , bool preserve=false);
+  void SetLimits(size_t N       , bool preserve=false);
   void SetLimits(const VecLimits&, bool preserve=false);
   void SetLimits(const MatLimits&, bool preserve=false);
   //@}
@@ -206,9 +206,9 @@ template <class T> class SMatrix
   const T* priv_begin() const;
         T* priv_begin()      ;
   void  Check () const; //Check internal consistency between limits and cow.
-  static index_t size(index_t N) {return (N*(N+1))/2;}
+  static size_t  size(size_t N) {return (N*(N+1))/2;}
 
-  index_t      itsN   ;   //NxN matrix.
+  size_t      itsN   ;   //NxN matrix.
 #ifdef OML_USE_STDVEC
   std::vector<T> itsData;
 #else
@@ -244,7 +244,7 @@ SMatrix<T>& SMatrix<T>::operator=(const Indexable<T,B,Symmetric,D,MatrixShape>& 
   return *this;
 }
 
-template <class T> inline index_t SMatrix<T>::size() const
+template <class T> inline size_t  SMatrix<T>::size() const
 {
   return itsData.size();
 }
@@ -259,7 +259,7 @@ template <class T> inline T* SMatrix<T>::priv_begin()
   return &*itsData.begin();
 }
 
-template <class T> inline void SMatrix<T>::SetLimits(index_t N, bool preserve)
+template <class T> inline void SMatrix<T>::SetLimits(size_t N, bool preserve)
 {
   SetLimits(MatLimits(N,N),preserve);
 }
@@ -353,7 +353,7 @@ template <class T, class A, class B> class MatrixSSOp
         ret+=itsA(i,k)*itsB(k,j);
     return ret;
   }
-  index_t size() const {return MatLimits().size();}
+  size_t  size() const {return MatLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
 
  private:

@@ -56,9 +56,9 @@ template <class T> class Vector
   //!< Vector with size=0;
            Vector() : Vector<T>(VecLimits(1,0)) {};
   //!<  All elements are un-initiated, low index is 1.
-  explicit Vector(index_t  size) : Vector<T>(VecLimits(1,size)) {};
-  explicit Vector(index_t  size, FillType ft) : Vector<T>(VecLimits(1,size),ft) {};
-  explicit Vector(index_t  size, const T&  fillValue) : Vector<T>(VecLimits(1,size),fillValue) {};
+  explicit Vector(size_t  size) : Vector<T>(VecLimits(1,size)) {};
+  explicit Vector(size_t  size, FillType ft) : Vector<T>(VecLimits(1,size),ft) {};
+  explicit Vector(size_t  size, const T&  fillValue) : Vector<T>(VecLimits(1,size),fillValue) {};
   //!<  Specify lower and upper index.
 //  explicit Vector(index_t l,index_t h) : Vector<T>(VecLimits(l,h)) {};
   explicit Vector(index_t l,index_t h, FillType ft) : Vector<T>(VecLimits(l,h),ft) {};
@@ -108,7 +108,7 @@ template <class T> class Vector
   T& operator()(index_t)      ;
   //@}
 
-  index_t   size     () const; //!<Returns number elements in the Vector.
+  size_t    size     () const; //!<Returns number elements in the Vector.
   VecLimits GetLimits() const; //!<Returns lower and upper limits in a structure.
   index_t   GetLow   () const; //!<Returns lower index.
   index_t   GetHigh  () const; //!<Returns upper index.
@@ -118,7 +118,7 @@ template <class T> class Vector
   */
   //@{
   void SetLimits(const VecLimits&, bool preserve=false); //!<Resize from new limits.
-  void SetLimits(index_t         , bool preserve=false); //!<Resize from new size.
+  void SetLimits(size_t          , bool preserve=false); //!<Resize from new size.
   void SetLimits(index_t,index_t , bool preserve=false); //!<Resize from new limits.
   //@}
 
@@ -128,7 +128,7 @@ template <class T> class Vector
   /*! \name Sub-vector functions  */
   //@{
   Vector SubVector(const VecLimits&) const; //!< From limits.
-  Vector SubVector(index_t         ) const; //!< First n elements.
+  Vector SubVector(size_t          ) const; //!< First n elements.
   Vector SubVector(index_t,index_t ) const; //!< From limits.
   //@}
 
@@ -341,7 +341,7 @@ template <class T> inline void Vector<T>::FillRandom()
 }
 
 
-template <class T> inline index_t Vector<T>::size() const
+template <class T> inline size_t  Vector<T>::size() const
 {
   return GetLimits().size();
 }
@@ -374,7 +374,7 @@ template <class T> inline index_t Vector<T>::GetHigh() const
   return itsLimits.High;
 }
 
-template <class T> inline void Vector<T>::SetLimits(index_t size,bool preserve)
+template <class T> inline void Vector<T>::SetLimits(size_t size,bool preserve)
 {
   SetLimits(VecLimits(size),preserve);
 }
@@ -384,7 +384,7 @@ template <class T> inline void Vector<T>::SetLimits(index_t l,index_t h,bool pre
   SetLimits(VecLimits(l,h),preserve);
 }
 
-template <class T> inline Vector<T> Vector<T>::SubVector(index_t size) const
+template <class T> inline Vector<T> Vector<T>::SubVector(size_t size) const
 {
   return SubVector(VecLimits(size));
 }
@@ -453,7 +453,7 @@ template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T>& b)
 
 template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
 {
-  assert(size()==static_cast<index_t>(index.size()));
+  assert(size()==index.size());
 
   std::vector<index_t>::const_iterator b=index.begin();
   Vector<T>                      dest(GetLimits());
@@ -481,7 +481,7 @@ template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
 template <class T> void Vector<T>::Check() const
 {
   assert(itsLimits.Check());
-  assert(itsLimits.size()==static_cast<index_t>(itsData.size()));
+  assert(itsLimits.size()==itsData.size());
 }
 #endif //DEBUG
 

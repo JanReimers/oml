@@ -58,7 +58,7 @@ template <class T, class Derived, Store M, Data D> class Indexable<T,Derived,M,D
   T  operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
   T& operator()(index_t n)       {return static_cast<      Derived*>(this)->operator()(n);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  protected:
@@ -83,7 +83,7 @@ template <class T, class Derived, Store M> class Indexable<T,Derived,M,Abstract,
 
   T operator()(index_t n) const {return static_cast<const Derived*>(this)->operator()(n);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   VecLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:

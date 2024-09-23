@@ -282,7 +282,7 @@ template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
     //
     if (m < n)
     {
-        W.SetLimits(m,true);
+        W.SetLimits(static_cast<size_t>(m),true);
         A.SetLimits(m,m,true);
         V.SetLimits(m,n,true);
     }

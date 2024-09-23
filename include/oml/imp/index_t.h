@@ -5,6 +5,7 @@
 #include <cstdint>
 // Copyright (1994-2003), Jan N. Reimers
 
-typedef int64_t index_t;
+typedef int64_t        index_t;
+typedef std::size_t    size_t;
 
 #endif //_IndexType_H_

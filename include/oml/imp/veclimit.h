@@ -28,16 +28,16 @@ class VecLimits
   /*! \name Constructors*/
   //@{
   VecLimits(               ); //!<Limits for a null Vector.
-  VecLimits(index_t        ); //!<Construct from size, use default lower bound.
+  VecLimits(size_t         ); //!<Construct from size, use default lower bound.
   VecLimits(index_t,index_t); //!<Construct from lower and upper bounds.
   //@}
  ~VecLimits();
 
   void ReBase(int low);
 
-  static index_t size(index_t,index_t)      ;
+  static size_t  size(index_t,index_t)      ;
   //! Returns number of elements.
-         index_t size(               ) const;
+  size_t  size(               ) const;
 
   index_t Offset         (index_t) const;
   bool    Check          (       ) const;
@@ -77,7 +77,7 @@ inline VecLimits::VecLimits() :                 //Limits for a null std::vector.
     CHECK;
   }
 
-inline VecLimits::VecLimits(index_t size) :     //Construct from size, use default lower bound.
+inline VecLimits::VecLimits(size_t size) :     //Construct from size, use default lower bound.
   Low(LOW),
   High(LOW+size-1)
   {
@@ -104,12 +104,12 @@ inline void VecLimits::ReBase(int low)
 //
 //  Static size calculator
 //
-inline index_t VecLimits::size(index_t low, index_t high)
+inline size_t  VecLimits::size(index_t low, index_t high)
 {
   return (index_t)(high-low+1);
 }
 
-inline index_t VecLimits::size() const
+inline size_t  VecLimits::size() const
 {
   return size(Low,High);
 }

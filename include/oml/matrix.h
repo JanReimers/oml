@@ -30,7 +30,7 @@ template <class T> class Matrix
   typedef Ref<T,IndexableT,MatrixShape> RefT;
 
   explicit Matrix(                );
-  explicit Matrix(index_t r, index_t c);
+  explicit Matrix( size_t  r, size_t c);
   explicit Matrix(index_t rl,index_t rh,index_t cl,index_t ch);
   explicit Matrix(const VecLimits& r,const VecLimits& c);
   explicit Matrix(const MatLimits&);
@@ -62,11 +62,11 @@ template <class T> class Matrix
   const T& operator()(index_t,index_t) const;
         T& operator()(index_t,index_t)      ;
 
-  index_t   size  () const; //Required by iterable.
+  size_t    size  () const; //Required by iterable.
   MatLimits GetLimits() const;
 
   void SetLimits(const MatLimits&                           , bool preserve=false);
-  void SetLimits(index_t r, index_t c                       , bool preserve=false);
+  void SetLimits(size_t  r , size_t c                       , bool preserve=false);
   void SetLimits(index_t rl,index_t rh,index_t cl,index_t ch, bool preserve=false);
   void SetLimits(const VecLimits& r,const VecLimits& c      , bool preserve=false);
   void RemoveRow   (index_t r);
@@ -260,7 +260,7 @@ template <class T, class B,Store M, Data D> Matrix<T>& operator*=(Matrix<T>& a,c
     return a;
 }
 
-template <class T> inline index_t Matrix<T>::size() const
+template <class T> inline size_t  Matrix<T>::size() const
 {
   return GetLimits().size();
 }
@@ -268,7 +268,7 @@ template <class T> inline index_t Matrix<T>::size() const
 
 
 
-template <class T> inline void Matrix<T>::SetLimits(index_t r, index_t c , bool preserve)
+template <class T> inline void Matrix<T>::SetLimits(size_t r, size_t c , bool preserve)
 {
   SetLimits(MatLimits(r,c),preserve);
 }
@@ -303,7 +303,7 @@ template <class T, class Mat> class MatrixTranspose
   MatrixTranspose(const MatrixTranspose<T,Mat>& mt) : itsMatrix(mt.itsMatrix) {};
 
   T operator()(index_t i, index_t j) const {return itsMatrix(j,i);}
-  index_t size() const {return GetLimits().size();}
+  size_t  size() const {return GetLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsMatrix.GetLimits().Col,itsMatrix.GetLimits().Row);}
 
  private:
@@ -372,7 +372,7 @@ template <class T, class A, class B> class MatrixMMOp
     for (index_t k:itsA.cols()) ret+=itsA(i,k)*itsB(k,j);
     return ret;
   }
-  index_t size() const {return GetLimits().size();}
+  size_t  size() const {return GetLimits().size();}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsB.GetLimits().Col);}
 
  private:
@@ -408,7 +408,7 @@ template <class T, class A, class V> class MatrixMVOp
     return ret;
   }
   VecLimits GetLimits() const {return itsA.GetLimits().Row;}
-  index_t   size  () const {return GetLimits().size();}
+  size_t    size  () const {return GetLimits().size();}
 
  private:
   const A itsA;
@@ -443,7 +443,7 @@ template <class T, class V, class B> class MatrixVMOp
     return ret;
   }
   VecLimits GetLimits() const {return itsB.GetLimits().Col;}
-  index_t   size  () const {return GetLimits().size();}
+  size_t    size  () const {return GetLimits().size();}
 
  private:
   const V itsV;
@@ -666,9 +666,10 @@ bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
     MatLimits l=m.GetLimits();
-    int delta=Max(1L,l.GetNumCols()-l.GetNumRows()+1);
+    size_t Nr=l.GetNumRows(),Nc=l.GetNumCols();
+    int delta=Nc>Nr ? Nc-Nr : 0;
     for (index_t i: m.rows())
-        for (index_t j:m.cols(i+delta))
+        for (index_t j:m.cols(i+delta+1))
         {
             ret = ret && (m(i,j)==0.0);
             if (!ret) break;
@@ -681,9 +682,10 @@ bool IsLowerTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
     bool ret=true;
     MatLimits l=m.GetLimits();
-    int delta=Max(1L,l.GetNumCols()-l.GetNumRows()+1);
+    size_t Nr=l.GetNumRows(),Nc=l.GetNumCols();
+    int delta=Nc>Nr ? Nc-Nr : 0;
     for (index_t i: m.rows())
-        for (index_t j:m.cols(i+delta))
+        for (index_t j:m.cols(i+delta+1))
         {
             ret = ret && (fabs(m(i,j))<=eps);
             if (!ret) break;
@@ -696,10 +698,11 @@ bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m)
 {
     bool ret=true;
     MatLimits l=m.GetLimits();
-    int delta=Max(1L,l.GetNumRows()-l.GetNumCols()+1);
+    size_t Nr=l.GetNumRows(),Nc=l.GetNumCols();
+    int delta=Nr>Nc ? Nr-Nc : 0;
     if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
         for (index_t j: m.cols())
-            for (index_t i:m.rows(j+delta))
+            for (index_t i:m.rows(j+delta+1))
             {
                 ret = ret && (m(i,j)==0.0);
                 if (!ret) break;
@@ -712,10 +715,11 @@ bool IsUpperTriangular(const Indexable<T,A,Full,D,MatrixShape>& m,double eps)
 {
     bool ret=true;
     MatLimits l=m.GetLimits();
-    int delta=Max(1L,l.GetNumRows()-l.GetNumCols()+1);
+    size_t Nr=l.GetNumRows(),Nc=l.GetNumCols();
+    int delta=Nr>Nc ? Nr-Nc : 0;
     if (m.GetLimits().GetNumRows()!=0 && m.GetLimits().GetNumCols()!=0)
         for (index_t j: m.cols())
-            for (index_t i:m.rows(j+delta))
+            for (index_t i:m.rows(j+delta+1))
             {
                 ret = ret && (fabs(m(i,j))<=eps);
                 if (!ret) break;
@@ -758,7 +762,7 @@ template <class T,class V1,class V2> class MatrixOuterProduct
 
   T operator()(index_t i, index_t j) const {return itsA(i)*itsB(j);}
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits(),itsB.GetLimits());}
-  index_t size() const {return MatLimits().size();}
+  size_t  size() const {return MatLimits().size();}
 
  private:
   const V1  itsA;
@@ -777,7 +781,7 @@ template <class T,class V> class SymMatrixOuterProduct
 
   T operator()(index_t i, index_t j) const {return itsV(i)*itsV(j);}
   MatLimits GetLimits() const {return MatLimits(itsV.GetLimits(),itsV.GetLimits());}
-  index_t size() const {return MatLimits().size();}
+  size_t  size() const {return MatLimits().size();}
 
  private:
   const V itsV;

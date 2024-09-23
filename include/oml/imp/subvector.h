@@ -58,7 +58,7 @@ template <class T> class SubVector
       return itsRep(itsOffset+i);
     }
 
-  index_t size() const {return itsSize;}
+  size_t  size() const {return itsSize;}
 
  private:
   const T* Get() const {return itsRep.Get()+itsOffset;} //Required by iterable.
