@@ -194,9 +194,11 @@ template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>
 TEST_F(BenchmarkRealTests,OpenMPParallel)
 {
 #ifdef DEBUG
-    index_t N=20,Nreplicates=10;
+    size_t N=20;
+    index_t Nreplicates=10;
 #else
-    index_t N=500,Nreplicates=10;
+    size_t N=500;
+    index_t Nreplicates=10;
 #endif
 
     Matrix<double> A(N,N),B(N,N),C(N,N);

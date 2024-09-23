@@ -24,7 +24,7 @@
   #include <cassert>
   #define CHECK(i)\
   assert(i>=0);\
-  assert(i<size());
+  assert(static_cast<size_t>(i)<size());
 #else
   #define CHECK(i)
 #endif
@@ -48,7 +48,7 @@ public:
     const_iterator end  () const {return static_cast<const Derived*>(this)->priv_begin()+size();}
           iterator end  ()       {return static_cast<      Derived*>(this)->priv_begin()+size();}
 
-    index_t size() const {return static_cast<const Derived*>(this)->size();}
+    size_t  size() const {return static_cast<const Derived*>(this)->size();}
 
     //  Some overloaded operators
     Derived& operator+=(const T& scalar) {return ArrayAdd(*this,scalar);}
@@ -120,7 +120,7 @@ template <class T,class A, Store M, Shape S> inline void FillLinear(ArrayIndexab
 //
 template <class T,class A, Store M, Shape S> inline A Integrate(const ArrayIndexable<T,A,M,S>& arr,T y0=0)
 {
-  index_t n=arr.size();
+  size_t  n=arr.size();
   A ret(n);
   for (index_t i:arr.indices())
   {

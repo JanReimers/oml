@@ -16,3 +16,7 @@ UTRelease
 gmon.out
 
 gprof.out
+
+Debug/
+
+Release/

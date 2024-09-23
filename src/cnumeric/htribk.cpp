@@ -27,15 +27,14 @@ using std::real;
 //
 template <class T, class M> void htribk(const M& A,const Vector<std::complex<T> >& tau, M& Z)
 {
-  int i,j,k,l,m,n;
+  index_t i,j,k,l,m,n;
   T h;
 
-  m=A.GetNumRows();
-  n=m;
+  n=m=A.GetNumRows();
   assert(A.GetNumRows()==A.GetNumCols());
-  assert(m==Z.GetNumRows());
-  assert(m==Z.GetNumCols());
-  assert(m==tau.size());
+  assert(A.GetNumRows()==Z.GetNumRows());
+  assert(A.GetNumRows()==Z.GetNumCols());
+  assert(A.GetNumRows()==tau.size());
 
   typename M::Subscriptor sZ(Z);
 

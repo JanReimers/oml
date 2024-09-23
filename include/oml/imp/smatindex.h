@@ -19,7 +19,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Symmetric,D,
 
   T  operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:

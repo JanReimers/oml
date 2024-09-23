@@ -22,7 +22,7 @@ template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,
 
   TR        operator[](index_t n) const {return itsF(itsA[n],itsB[n]);}
   TR        operator()(index_t n) const {return itsF(itsA(n),itsB(n));}
-  index_t   size      (         ) const {return itsA.size();}
+  size_t    size      (         ) const {return itsA.size();}
   VecLimits GetLimits (         ) const {return itsA.GetLimits();}
  private:
    A itsA;
@@ -38,8 +38,8 @@ template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,
 
   TR         operator[](index_t n          ) const {return itsF(itsA[n],itsB[n]);}
   TR         operator()(index_t i,index_t j) const {return itsF(itsA(i,j),itsB(i,j));}
-  index_t   size      (                   ) const {return itsA.size();}
-  MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
+  size_t     size      (                   ) const {return itsA.size();}
+  MatLimits  GetLimits (                   ) const {return itsA.GetLimits();}
  private:
    A itsA;
    B itsB;

@@ -83,7 +83,7 @@ template <class T, class Derived, Data D> class Indexable<T,Derived,Full,D,Matri
 
   T  operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:
@@ -103,7 +103,7 @@ template <class T, class Derived> class Indexable<T,Derived,Full,Abstract,Matrix
 
   T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:
@@ -125,7 +125,7 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Real,Matrix
   T  operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
   T& operator()(index_t i          )       {return static_cast<      Derived*>(this)->operator()(i);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:
@@ -146,7 +146,7 @@ template <class T, class Derived> class Indexable<T,Derived,Diagonal,Abstract,Ma
 
   T operator()(index_t i,index_t j) const {return static_cast<const Derived*>(this)->operator()(i,j);}
 
-  index_t   size  () const {return static_cast<const Derived*>(this)->size();}
+  size_t    size  () const {return static_cast<const Derived*>(this)->size();}
   MatLimits GetLimits() const {return static_cast<const Derived*>(this)->GetLimits();}
 
  private:

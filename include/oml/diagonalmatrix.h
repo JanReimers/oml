@@ -25,7 +25,7 @@ public:
     typedef Ref<T,IndexableT,MatrixShape> RefT;
 
     explicit DiagonalMatrix();
-    explicit DiagonalMatrix(index_t n);
+    explicit DiagonalMatrix(size_t n);
     explicit DiagonalMatrix(const VecLimits&);
     explicit DiagonalMatrix(const MatLimits&);
     explicit DiagonalMatrix(const Vector<T>&);
@@ -82,7 +82,7 @@ public:
 //        return itsData[n];
 //    }
 
-    index_t   size  () const; //Required by iterable.
+    size_t    size  () const; //Required by iterable.
     MatLimits GetLimits() const;
 
     const Vector<T>& GetDiagonal() const {return itsData;}
@@ -105,7 +105,7 @@ public:
     void SwapColumns(index_t i,index_t j);
 
     DiagonalMatrix SubMatrix(const MatLimits& lim) const;
-    DiagonalMatrix SubMatrix(index_t N) const
+    DiagonalMatrix SubMatrix(size_t N) const
     {
         return SubMatrix(MatLimits(N,N));
     }
@@ -186,7 +186,7 @@ DiagonalMatrix<T>::DiagonalMatrix()
 {}
 
 template <class T> inline
-DiagonalMatrix<T>::DiagonalMatrix(index_t N)
+DiagonalMatrix<T>::DiagonalMatrix(size_t N)
     : DiagonalMatrix<T>(VecLimits(N))
 {}
 
@@ -274,7 +274,7 @@ void DiagonalAssign(Indexable<T,Derived,Diagonal,D,MatrixShape>& a,const Indexab
       s(i)=b(i,i);
 }
 
-template <class T> inline index_t DiagonalMatrix<T>::size() const
+template <class T> inline size_t DiagonalMatrix<T>::size() const
 {
     return itsData.size();
 }
@@ -326,7 +326,7 @@ template <class T, class A, class D> class MatrixMDOp
     return itsA(i,j)*itsD(j,j);
   }
   MatLimits GetLimits() const {return MatLimits(itsA.GetLimits().Row,itsD.GetLimits().Col);}
-  index_t   size  () const {return GetLimits().size();}
+  size_t    size  () const {return GetLimits().size();}
 
  private:
   const A itsA;
@@ -359,7 +359,7 @@ template <class T, class D, class B> class MatrixDMOp
     return itsD(i,i)*itsB(i,j);
   }
   MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
-  index_t   size  () const {return GetLimits().size();}
+  size_t    size  () const {return GetLimits().size();}
 
  private:
   const D itsD;
@@ -393,7 +393,7 @@ template <class T, class D, class B> class MatrixDDOp
     return j==i ? itsD(i,i)*itsB(i,i) : T(0);
   }
   MatLimits GetLimits() const {return MatLimits(itsD.GetLimits().Row,itsB.GetLimits().Col);}
-  index_t   size  () const {return GetLimits().size();}
+  size_t    size  () const {return GetLimits().size();}
 
  private:
   const D itsD;
@@ -427,7 +427,7 @@ template <class T, class D, class V> class MatrixDVOp
     return itsD(i,i)*itsV(i);
   }
   VecLimits GetLimits() const {return itsD.GetLimits().Row;}
-  index_t   size  () const {return itsD.size();}
+  size_t    size  () const {return itsD.size();}
 
  private:
   const D itsD;
@@ -460,7 +460,7 @@ template <class T, class V, class D> class MatrixVDOp
     return itsV(i)*itsD(i,i);
   }
   VecLimits GetLimits() const {return itsD.GetLimits().Col;}
-  index_t   size  () const {return itsD.size();}
+  size_t    size  () const {return itsD.size();}
 
  private:
   const V itsV;

@@ -78,7 +78,7 @@ template <class T> void SMatrix<T>::Check() const
   assert(GetLimits().Check());
   assert(GetRowLimits()==GetColLimits());
   assert(itsN==GetNumRows());
-  assert(size(itsN)==static_cast<index_t>(itsData.size()));
+  assert(size(itsN)==itsData.size());
 }
 
 
@@ -184,7 +184,7 @@ template <class T> void SMatrix<T>::SetLimits(const MatLimits& theLimits, bool p
 
 template <class T> void SMatrix<T>::ReIndexRows(const std::vector<index_t>& index)
 {
-  assert(GetLimits().GetNumRows()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumRows()==index.size());
 
   typename std::vector<index_t>::const_iterator i=index.begin();
   SMatrix<T> dest(GetLimits());
@@ -199,7 +199,7 @@ template <class T> void SMatrix<T>::ReIndexRows(const std::vector<index_t>& inde
 
 template <class T> void SMatrix<T>::ReIndexColumns(const std::vector<index_t>& index)
 {
-  assert(GetLimits().GetNumCols()==static_cast<index_t>(index.size()));
+  assert(GetLimits().GetNumCols()==index.size());
 
   typename std::vector<index_t>::const_iterator i=index.begin();
   SMatrix<T> dest(GetLimits());

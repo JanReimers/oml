@@ -22,23 +22,23 @@ class MatLimits
   //@{
   MatLimits(                                 );//!<Limits for a null Matrix.
   MatLimits(index_t,index_t,index_t,index_t  );//!<Construct from lower and upper bounds.
-  MatLimits(index_t,index_t                  );//!<Construct from row and column size, use default lower bound.
+  MatLimits(size_t,size_t                    );//!<Construct from row and column size, use default lower bound.
   MatLimits(const VecLimits&,const VecLimits&);//!<Construct from lower and upper bounds.
   //@}
  ~MatLimits();
 
   void ReBase(int rowLow,int colLow);
 
-  static index_t size(index_t,index_t                  );
-  static index_t size(index_t,index_t,index_t,index_t  );
-  static index_t size(const VecLimits&,const VecLimits&);
+  static size_t  size(size_t,size_t                  );
+  static size_t  size(index_t,index_t,index_t,index_t  );
+  static size_t  size(const VecLimits&,const VecLimits&);
 
   //! Returns number of rows.
-  index_t GetNumRows        (       ) const;
+  size_t  GetNumRows        (       ) const;
   //! Returns number of columns.
-  index_t GetNumCols        (       ) const;
+  size_t  GetNumCols        (       ) const;
   //! Returns number of elements.
-  index_t size           (       ) const;
+  size_t  size              (       ) const;
 
   index_t Offset    (index_t,index_t) const;
   bool    Check     (               ) const;
@@ -77,7 +77,7 @@ inline MatLimits::MatLimits(index_t rowLow, index_t rowHigh,index_t colLow, inde
   , Col(colLow,colHigh)
   {}
 
-inline MatLimits::MatLimits(index_t rowSize, index_t colSize)
+inline MatLimits::MatLimits(size_t rowSize, size_t colSize)
   : Row(rowSize)
   , Col(colSize)
   {}
@@ -99,31 +99,31 @@ inline void MatLimits::ReBase(int rowLow,int colLow)
 //
 //  Get size static functions.
 //
-inline index_t MatLimits::size(index_t numRows, index_t numCols)
+inline size_t  MatLimits::size(size_t numRows, size_t numCols)
 {
   return numRows*numCols;
 }
-inline index_t MatLimits::size(const VecLimits& row, const VecLimits& col)
+inline size_t  MatLimits::size(const VecLimits& row, const VecLimits& col)
 {
   return row.size()*col.size();
 }
 
-inline index_t MatLimits::size(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
+inline size_t  MatLimits::size(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
 {
   return size(VecLimits(rowLow,rowHigh),VecLimits(colLow,colHigh) );
 }
 
-inline index_t MatLimits::GetNumRows() const
+inline size_t  MatLimits::GetNumRows() const
 {
   return Row.size();
 }
 
-inline index_t MatLimits::GetNumCols() const
+inline size_t  MatLimits::GetNumCols() const
 {
   return Col.size();
 }
 
-inline index_t MatLimits::size() const
+inline size_t  MatLimits::size() const
 {
   return size(GetNumRows(),GetNumCols());
 }
