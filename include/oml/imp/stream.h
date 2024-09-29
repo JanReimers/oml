@@ -54,7 +54,4 @@ class StreamableObject
   static  bool theCheckArrayTypes;
 };
 
-void OMLArrayIndexError(index_t i, index_t n);
-void OMLListIndexError(index_t i, index_t n);
-
 #endif //_StreamabelObject_H_
