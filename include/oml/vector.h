@@ -11,6 +11,7 @@
 #include "oml/imp/tstream.h"
 #include "oml/imp/cow.h"
 #include "oml/random.h"
+#include "oml/vector3d.h"
 #include <vector>
 
 template <class T> class DiagonalMatrix;
@@ -327,6 +328,21 @@ template <class T> inline void Vector<T>::Fill(FillType ft)
         case (FillType::Zero)   : Fill(T(0));break;
         case (FillType::Random) : ::FillRandom(*this);break;
         case (FillType::Unit)   : Fill(T(1));break;
+    }
+}
+
+template <> inline Vector3D<double> OMLRand<Vector3D<double> >()
+{
+  return Vector3D<double>(OMLRand<double>(),OMLRand<double>(),OMLRand<double>());
+}
+
+template <>  inline void Vector<Vector3D<double> >::Fill(FillType ft)
+{
+    switch (ft)
+    {
+        case (FillType::Zero)   : Fill(Vector3D<double>(double(0),double(0),double(0)));break;
+        case (FillType::Random) : ::FillRandom(*this);break;
+        case (FillType::Unit)   : Fill(Vector3D<double>(double(1),double(1),double(1)));break;
     }
 }
 

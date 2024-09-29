@@ -132,10 +132,10 @@ template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(index_t c) const
 //  Algebra
 //
 template <class T1, class T2> inline
-Matrix3D<typename BinaryRetType<T1,T2>::RetType>
-operator+(const Matrix3D<T1>& a,const Matrix3D<T2>& b)
+auto operator+(const Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
-  return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
+  typedef typename ReturnType<T1,T2>::RetType RT;
+  return Matrix3D<RT>
   (
     a.M11+b.M11, a.M12+b.M12, a.M13+b.M13,
     a.M21+b.M21, a.M22+b.M22, a.M23+b.M23,
@@ -153,10 +153,10 @@ Matrix3D<T1>& operator+=(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 }
 
 template <class T1, class T2> inline
-Matrix3D<typename BinaryRetType<T1,T2>::RetType>
-operator-(Matrix3D<T1>& a,const Matrix3D<T2>& b)
+auto operator-(Matrix3D<T1>& a,const Matrix3D<T2>& b)
 {
-  return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
+  typedef typename ReturnType<T1,T2>::RetType RT;
+  return Matrix3D<RT>
   (
     a.M11-b.M11, a.M12-b.M12, a.M13-b.M13,
     a.M21-b.M21, a.M22-b.M22, a.M23-b.M23,
@@ -226,10 +226,9 @@ template <class T> inline Matrix3D<T> operator-(const Matrix3D<T>& m)
 //  Matrix Algebra
 //
 template <class T1, class T2> inline
-Matrix3D<typename BinaryRetType<T1,T2>::RetType>
-operator*(const Matrix3D<T1>& a, const Matrix3D<T2>& b)
+auto operator*(const Matrix3D<T1>& a, const Matrix3D<T2>& b)
 {
-  return Matrix3D<typename BinaryRetType<T1,T2>::RetType>
+  return Matrix3D<typename ReturnType<T1,T2>::RetType>
   (
     a.M11*b.M11 + a.M12*b.M21 + a.M13*b.M31,
     a.M11*b.M12 + a.M12*b.M22 + a.M13*b.M32,
@@ -246,10 +245,9 @@ operator*(const Matrix3D<T1>& a, const Matrix3D<T2>& b)
 
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType>
-operator*(const Matrix3D<T2>& m, const Vector3D<T1>& v)
+auto operator*(const Matrix3D<T2>& m, const Vector3D<T1>& v)
 {
-   return Vector3D<typename BinaryRetType<T1,T2>::RetType>
+   return Vector3D<typename ReturnType<T1,T2>::RetType>
    (
 	m.M11*v.x + m.M12*v.y + m.M13*v.z,
 	m.M21*v.x + m.M22*v.y + m.M23*v.z,
@@ -258,10 +256,9 @@ operator*(const Matrix3D<T2>& m, const Vector3D<T1>& v)
 }
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType>
-operator*(const Vector3D<T1>& v, const Matrix3D<T2>& m)
+auto operator*(const Vector3D<T1>& v, const Matrix3D<T2>& m)
 {
-   return Vector3D<typename BinaryRetType<T1,T2>::RetType>
+   return Vector3D<typename ReturnType<T1,T2>::RetType>
    (
       m.M11*v.x + m.M21*v.y + m.M31*v.z,
       m.M12*v.x + m.M22*v.y + m.M32*v.z,

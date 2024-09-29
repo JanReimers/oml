@@ -79,13 +79,16 @@
 		<Unit filename="include/oml/imp/vecindex.h" />
 		<Unit filename="include/oml/imp/veclimit.h" />
 		<Unit filename="include/oml/imp/xpr.h" />
+		<Unit filename="include/oml/io3d.h" />
 		<Unit filename="include/oml/matrix.h" />
+		<Unit filename="include/oml/matrix3d.h" />
 		<Unit filename="include/oml/numeric.h" />
 		<Unit filename="include/oml/numeric/lusolver.h" />
 		<Unit filename="include/oml/numeric/svsolver.h" />
 		<Unit filename="include/oml/random.h" />
 		<Unit filename="include/oml/smatrix.h" />
 		<Unit filename="include/oml/vector.h" />
+		<Unit filename="include/oml/vector3d.h" />
 		<Unit filename="src/cnumeric/SVD.f" />
 		<Unit filename="src/cnumeric/ch.cpp">
 			<Option compile="0" />

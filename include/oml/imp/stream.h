@@ -31,6 +31,7 @@ class StreamableObject
   static  c_str PeekAtName(std::istream&);
   static  void  CheckName (std::istream&,c_str);
 
+  static  Mode GetOutputMode() {return theMode;}
   //! Set the output mode.  Returns current mode incase you need to restore it later.
   static  Mode SetOutputMode(Mode);
   //! Is mode set to binary?

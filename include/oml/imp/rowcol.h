@@ -233,7 +233,7 @@ public:
 
     index_t   size  () const
     {
-        return Min(itsMatrix.GetLimits().Row.size(),itsMatrix.GetLimits().Col.size());
+        return std::min(itsMatrix.GetLimits().Row.size(),itsMatrix.GetLimits().Col.size());
     }
     VecLimits GetLimits() const
     {

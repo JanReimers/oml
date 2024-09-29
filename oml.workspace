@@ -5,5 +5,7 @@
 		<Project filename="omlUnitTests.cbp">
 			<Depends filename="oml.cbp" />
 		</Project>
+		<Project filename="../DFT/_notused/oml/oml_old.cbp" />
+		<Project filename="../DFT/_notused/oml/omlUnitTests.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

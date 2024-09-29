@@ -1,12 +1,15 @@
+#include "oml/vector3d.h"
 #include "oml/smatrix.h"
 #include "oml/matrix.h"
 #include "oml/vector.h"
 #include "oml/random.h"
+#include "oml/numeric.h"
 #include "stopw.h"
 #include "gtest/gtest.h"
 #include <iostream>
 #include <fstream>
 #include <complex>
+
 
 using std::cout;
 using std::endl;
@@ -15,6 +18,15 @@ template <class T> class SMatrixTests : public ::testing::Test
 {
 public:
     SMatrixTests()
+    {
+        StreamableObject::SetToPretty();
+    }
+};
+
+class SMatrixDoubleTests : public ::testing::Test
+{
+public:
+    SMatrixDoubleTests()
     {
         StreamableObject::SetToPretty();
     }
@@ -182,7 +194,6 @@ TYPED_TEST_P(SMatrixTests,MatrixAlgebra)
     //B=F+A; This should not compile Symmetric = Full + Symmetric, no way store the result in Symmetric.
     F2=F*A;
     F2*=A;
-
 }
 
 TEST_F(SMatrixComplexTests,fabsHermitianConj)
@@ -204,12 +215,44 @@ TEST_F(SMatrixComplexTests,fabsHermitianConj)
     EXPECT_EQ(real(Sum(A+B)),real(Sum(Af+Bf)));
     EXPECT_EQ(Sum(real(A+B)),Sum(real(Af+Bf)));
     EXPECT_EQ(imag(Sum(A+B)),imag(Sum(Af+Bf)));
+
     EXPECT_EQ(Sum(imag(A+B)),Sum(imag(Af+Bf)));
     EXPECT_EQ(real(Sum(A*B)),real(Sum(Af*Bf)));
     EXPECT_EQ(Sum(real(A*B)),Sum(real(Af*Bf)));
     EXPECT_EQ(imag(Sum(A*B)),imag(Sum(Af*Bf)));
     EXPECT_EQ(Sum(imag(A*B)),Sum(imag(Af*Bf)));
 
+}
+
+template <class T, class A, Store M, Data D> void
+FillPos(Indexable<T,A,M,D,MatrixShape>& m)
+{
+    typename A::Subscriptor s(m);
+    for (int i=m.GetLimits().Row.Low; i<=m.GetLimits().Row.High; i++)
+        for (int j=m.GetLimits().Col.Low; j<=m.GetLimits().Col.High; j++)
+        {
+            double del=(i-j)/2.0;
+            s(i,j)=exp(-del*del);
+        }
+}
+
+TEST_F(SMatrixDoubleTests,LinearAlgebra)
+{
+    typedef Matrix<double>  MatrixFT;
+    typedef SMatrix<double> MatrixT;
+    typedef Vector <double> VectorT;
+    index_t N=10;
+    MatrixT A(N);
+    VectorT ones(N);
+    FillPos(A);
+    Fill(ones,1.0);
+        
+    MatrixT Ai=InvertSymmetric(A);
+    MatrixFT I1=A*Ai,I2=Ai*A;
+    I1.GetDiagonal()=I1.GetDiagonal()-ones;
+    I2.GetDiagonal()=I2.GetDiagonal()-ones;
+    EXPECT_NEAR(Max(fabs(I1)),0,1e-12);
+    EXPECT_NEAR(Max(fabs(I2)),0,1e-12);
 }
 
 TEST_F(SMatrixComplexTests,MixedTypes)

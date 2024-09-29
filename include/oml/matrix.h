@@ -800,13 +800,13 @@ OuterProduct(const Indexable<T,A,MA,DA,VectorShape>& v1,const Indexable<T,B,MB,D
   return MatrixOuterProduct<T,refa,refb>(refa(v1),refb(v2));
 }
 
-//template <class T, class A, Store M, Data D> inline
-//SymMatrixOuterProduct<T,Ref<T,Indexable<T,A,M,D,VectorShape>,VectorShape> >
-//OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
-//{
-//  typedef Ref<T,Indexable<T,A,M,D,VectorShape>,VectorShape> ref;
-//  return SymMatrixOuterProduct<T,ref>(ref(v));
-//}
+template <class T, class A, Store M, Data D> inline
+SymMatrixOuterProduct<T,Ref<T,Indexable<T,A,M,D,VectorShape>,VectorShape> >
+OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
+{
+  typedef Ref<T,Indexable<T,A,M,D,VectorShape>,VectorShape> ref;
+  return SymMatrixOuterProduct<T,ref>(ref(v));
+}
 
 
 #endif //_Matrix_H_

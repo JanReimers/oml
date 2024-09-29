@@ -73,7 +73,7 @@ template <class T> bool LUDecomp(Matrix<T>& A, std::vector<index_t>& ipiv ,T& d)
             d = -d;
             vv(imax)=vv(j);
         }
-        indx[j-1]=imax;
+        ipiv[j-1]=imax;
         if (a(j,j) == 0.0) a(j,j)=TINY;
         if (j != n)
         {
@@ -85,5 +85,5 @@ template <class T> bool LUDecomp(Matrix<T>& A, std::vector<index_t>& ipiv ,T& d)
 }
 
 typedef TYPE Type;
-template bool LUDecomp(Matrix<Type>&,Array<index_t>&,Type&);
+template bool LUDecomp(Matrix<Type>&,std::vector<index_t>&,Type&);
 

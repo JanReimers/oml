@@ -17,7 +17,7 @@
 template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
 {
   Matrix<T> temp(m);
-  Array<index_t> SwapIndex(temp.GetNumRows());
+  std::vector<index_t> SwapIndex(temp.GetNumRows());
   Matrix<T> inv(temp.GetLimits());
   Unit(inv);
   T sign;
@@ -30,11 +30,14 @@ template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
 template <class T> Matrix<T> InvertSymmetric(const Matrix<T>& m)
 {
   Matrix<T> ret(m);
-  Vector<T> normal=Normalize(ret); //Normalize.
+  Vector<T> normal=T(1)/sqrt(m.GetDiagonal());
+  //m=DirectMultiply(m,OuterProduct(normal));
+//  Vector<T> normal=Normalize(ret); //Normalize.
   Cholsky(ret);             //Decompose.
   InvertTriangular(ret);    //Invert upper triangular matrix.
   ret=Matrix<T>(~ret*ret);             //Recompose.
-  Normalize(ret,normal);      //Unormalize.
+  ret=DirectMultiply(ret,OuterProduct(normal)); //Unormalize.
+  //Normalize(ret,normal);      
   return ret;
 }
 
@@ -46,7 +49,10 @@ template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
   Fill(ret,0.0);
 
   SMatrix<T> temp(m);
-  Vector<T> norm=Normalize(temp); //Normalize.
+  //Vector<T> norm=Normalize(temp); //Normalize.
+  Vector<T> norm=T(1)/sqrt(temp.GetDiagonal());
+  temp=DirectMultiply(temp,OuterProduct(norm));
+  
   Cholsky(temp);             //Decompose.
   InvertTriangular(temp);    //Invert upper triangular matrix.
   typename SMatrix<T>::Subscriptor      sr(ret);
@@ -55,12 +61,14 @@ template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
     for (int j=i;j<=n;j++)
       for (int k=1;k<=i;k++) sr(i,j)+=temp(k,i)*temp(k,j);
 
-  Normalize(ret,norm);      //Unormalize.
+  //Normalize(ret,norm);      //Unormalize.
+  ret=DirectMultiply(ret,OuterProduct(norm)); //Unormalize.
+  
   return ret;
 }
 #undef _UPPER_ONLY
 
 typedef TYPE Type;
-template Matrix   <Type> InvertSquare   (const Matrix   <Type>&);
-template Matrix   <Type> InvertSymmetric(const Matrix   <Type>&);
+template  Matrix<Type> InvertSquare   (const  Matrix<Type>&);
+template  Matrix<Type> InvertSymmetric(const  Matrix<Type>&);
 template SMatrix<Type> InvertSymmetric(const SMatrix<Type>&);

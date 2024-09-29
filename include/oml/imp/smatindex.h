@@ -45,7 +45,7 @@ template <class T, class A, class Op> class MinMax<T,A,Op,Symmetric,Abstract,Mat
   static T apply(const Indexable<T,A,Symmetric,Abstract,MatrixShape>& a)
 	{
 		index_t rl=a.GetLimits().Row.Low ,cl=a.GetLimits().Col.Low ;
-		index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
+//		index_t rh=a.GetLimits().Row.High,ch=a.GetLimits().Col.High;
 		T ret=a(rl,cl);
 		for (index_t i:a.rows())
 			for (index_t j:a.cols(i))

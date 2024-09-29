@@ -4,6 +4,7 @@
 
 // Copyright (1994-2005), Jan N. Reimers
 
+#include "oml/matrix.h" //Need some operator definitions.
 #include "oml/imp/matrixbase.h"
 #include "oml/imp/arrindex.h"
 #include "oml/imp/smatindex.h"

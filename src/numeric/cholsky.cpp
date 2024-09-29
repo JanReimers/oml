@@ -59,7 +59,7 @@ template <class T> void Cholsky(Matrix<T>& A)
 //  upper and lower triangular parts.  A -> U * ~U
 //  Symmetric version, works on upper part, lower part will not be 0.0's.
 //
-#include "oml/imp/isnan.h"
+//#include "oml/imp/isnan.h"
 #define UPPER_ONLY
 template <class T> void Cholsky(SMatrix<T>& A)
 {
