@@ -13,6 +13,8 @@ int main(int argc, char **argv)
 //    testing::GTEST_FLAG(filter) = "DiagonalMatrixComplexTests.MixedTypes";
 //    testing::GTEST_FLAG(filter) = "My/SMatrixTests/*.SumDotMaxMinDirectMultiply";
 //    testing::GTEST_FLAG(filter) = "My/SMatrixTests/*.Fill_SetLimits_SubMatrix";
+//    testing::GTEST_FLAG(filter) = "SMatrixDoubleTests.*";
+//    testing::GTEST_FLAG(filter) = "Vector3DTests.*";
     return RUN_ALL_TESTS();
 }
 

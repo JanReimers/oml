@@ -6,9 +6,9 @@
 
 #include "oml/vector3d.h"
 #include "oml/matrix3d.h"
-#include "oml/stream.h"
-#include "oml/binio.h"
-#include "oml/mixtypes.h"
+#include "oml/imp/stream.h"
+#include "oml/imp/binio.h"
+#include "oml/imp/mixtypes.h"
 #include <iomanip>
 #include <cassert>
 

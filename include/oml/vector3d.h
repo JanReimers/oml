@@ -4,8 +4,8 @@
 
 // Copyright (1994-2003), Jan N. Reimers
 
-#include "oml/indext.h"
-#include "oml/mixtypes.h"
+#include "oml/imp/index_t.h"
+#include "oml/imp/mixtypes.h"
 #include <cmath>
 namespace std {template <class T> class complex;}
 const double pi=acos(-1.0);
@@ -63,6 +63,8 @@ template <class T> class Vector3D
   //! Element access
   T& operator()(index_t i)       {return (&x)[i-1];}
 
+ 
+
 
   /*! \name Coordinates*/
   //@{
@@ -80,20 +82,23 @@ template <class T> class Vector3D
 
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> operator +(const Vector3D<T1>& a,const Vector3D<T2>& b)
+auto operator +(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
-  return Vector3D<typename BinaryRetType<T1,T2>::RetType>(a.x+b.x,a.y+b.y,a.z+b.z);
+  typedef typename ReturnType<T1,T2>::RetType TR;
+  return Vector3D<TR>(a.x+b.x,a.y+b.y,a.z+b.z);
 }
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> operator -(const Vector3D<T1>& a,const Vector3D<T2>& b)
+auto operator -(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
-  return Vector3D<typename BinaryRetType<T1,T2>::RetType>(a.x-b.x,a.y-b.y,a.z-b.z);
+  typedef typename ReturnType<T1,T2>::RetType TR;
+  return Vector3D<TR>(a.x-b.x,a.y-b.y,a.z-b.z);
 }
 
 template <class T1, class T2> inline
-typename BinaryRetType<T1,T2>::RetType operator *(const Vector3D<T1>& a,const Vector3D<T2>& b)
+auto operator *(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
+  //typedef typename ReturnType<T1,T2>::RetType TR;
   return (a.x*b.x+a.y*b.y+a.z*b.z);
 }
 
@@ -116,15 +121,17 @@ Vector3D<T> operator /(const Vector3D<T>& a,const T F)
 }
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> operator %(const Vector3D<T1>& a,const Vector3D<T2>& b)
+auto operator %(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
-  return Vector3D<typename BinaryRetType<T1,T2>::RetType>( a.x%b.x, a.y%b.y, a.z%b.z );
+  typedef typename ReturnType<T1,T2>::RetType TR;
+  return Vector3D<TR>( a.x%b.x, a.y%b.y, a.z%b.z );
 }
 
 template <class T1, class T2> inline
-Vector3D<typename BinaryRetType<T1,T2>::RetType> Cross(const Vector3D<T1>& a,const Vector3D<T2>& b)
+auto Cross(const Vector3D<T1>& a,const Vector3D<T2>& b)
 {
-  return Vector3D<typename BinaryRetType<T1,T2>::RetType>( a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x );
+  typedef typename ReturnType<T1,T2>::RetType TR;
+  return Vector3D<TR>( a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x );
 }
 
 //
@@ -178,25 +185,25 @@ bool operator !=(const Vector3D<T>& a,const Vector3D<T>& b)
 template <class T> inline
 bool operator > (const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return (!a > !b);
+  return (norm(a) > norm(b));
 }
 
 template <class T> inline
 bool operator < (const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return (!a < !b);
+  return (norm(a) < norm(b));
 }
 
 template <class T> inline
 bool operator >=(const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return (!a >= !b);
+  return (norm(a) >= norm(b));
 }
 
 template <class T> inline
 bool operator <=(const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return (!a <= !b);
+  return (norm(a) <= norm(b));
 }
 
 //-----------------------------------------------------------------------------
@@ -220,9 +227,9 @@ Vector3D<T>  operator +(const Vector3D<T>& a)
 //  Angle between two vectors (Radians).
 //
 template <class T> inline
-T operator |(const Vector3D<T>& a,const Vector3D<T>& b)
+T angle(const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return (T)acos( (~a) * (~b) );
+  return (T)acos( normalize(a) * normalize(b) );
 }
 
 //-----------------------------------------------------------------------------
@@ -230,9 +237,9 @@ T operator |(const Vector3D<T>& a,const Vector3D<T>& b)
 //  Angle between two vectors (Degrees).
 //
 template <class T> inline
-T operator||(const Vector3D<T>& a,const Vector3D<T>& b)
+T angle_degrees(const Vector3D<T>& a,const Vector3D<T>& b)
 {
-  return static_cast<T>(acos( (~a) * (~b) )/pi*180.0);
+  return static_cast<T>(acos( normalize(a) * normalize(b) )/pi*180.0);
 }
 
 //-----------------------------------------------------------------------------
@@ -240,15 +247,15 @@ T operator||(const Vector3D<T>& a,const Vector3D<T>& b)
 //  Magnitude and normalize.
 //
 template <class T> inline
-T operator !(const Vector3D<T>& a)
+T norm(const Vector3D<T>& a)
 {
   return (T)sqrt(a*a);
 }
 
 template <class T> inline
-Vector3D<T>  operator ~(const Vector3D<T>& a)  //normalize.
+Vector3D<T>  normalize(const Vector3D<T>& a)  //normalize.
 {
-  return a/!a;
+  return a/norm(a);
 }
 
 //--------------------------------------------------------------------
@@ -271,10 +278,7 @@ template <class T> inline Vector3D<T> imag(const Vector3D<std::complex<T> >& v)
   return Vector3D<T>(imag(v.x),imag(v.y),imag(v.z));
 }
 
-template <class T> inline T norm(const Vector3D<std::complex<T> >& v)
-{
-  return norm(v.x) + norm(v.y) + norm(v.z);
-}
+
 
 
 #endif
