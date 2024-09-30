@@ -70,6 +70,12 @@ public:
             (*this)(c)*=t;
         return *this;
     }
+    MatrixRow& operator/=(const T& t)
+    {
+        for (index_t c:itsMatrix.cols())
+            (*this)(c)/=t;
+        return *this;
+    }
 
     class Subscriptor
     {
@@ -162,6 +168,13 @@ public:
             (*this)(r)*=t;
         return *this;
     }
+    MatrixColumn& operator/=(const T& t)
+    {
+        for (index_t r:itsMatrix.rows())
+            (*this)(r)/=t;
+        return *this;
+    }
+
 
     class Subscriptor
     {

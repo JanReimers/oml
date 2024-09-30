@@ -242,6 +242,11 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
     A.GetRow(2)=A.GetRow(1)-A.GetRow(2);
     A.SetLimits(N,N);
     auto t=sin(A.GetDiagonal());
+    A.GetColumn(1)*=2.0;
+    A.GetColumn(1)/=2.0;
+    A.GetRow(1)*=2.0;
+    A.GetRow(1)/=2.0;
+    
 }
 
 

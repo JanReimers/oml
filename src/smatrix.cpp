@@ -54,7 +54,21 @@ template <class T> SMatrix<T>::SMatrix(const SMatrix<T>& m)
   , itsData   (m.itsData)
   {
     CHECK;
-	}
+  }
+	
+template <class T> SMatrix<T>::SMatrix(const Matrix<T>& m, double tol)
+  : MatrixBase(m.GetLimits())
+  , itsN      (GetLimits().GetNumRows() )
+  , itsData   (size(itsN))
+  {
+    CHECK;
+    for (index_t i:this->rows())
+        for (index_t j:this->cols(i))
+        {
+            assert(fabs(m(i,j)-conj(m(j,i)))<=tol);
+            (*this)(i,j)=m(i,j);
+        }
+  }
 
 
 template <class T> SMatrix<T>& SMatrix<T>::operator=(const SMatrix<T>& m)

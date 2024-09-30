@@ -45,18 +45,19 @@ TYPED_TEST_SUITE_P(SMatrixTests);
 
 TYPED_TEST_P(SMatrixTests,Constructors)
 {
-    typedef SMatrix<TypeParam> MatrixT;
+    typedef SMatrix<TypeParam> SMat;
+    typedef Matrix<TypeParam> Mat;
 
-    MatrixT A0;
+    SMat A0;
     EXPECT_EQ(A0.GetNumRows(),0);
     EXPECT_EQ(A0.GetNumCols(),0);
 
-    MatrixT A1(10);
+    SMat A1(10);
     EXPECT_EQ(A1.GetNumRows(),10);
     EXPECT_EQ(A1.GetNumCols(),10);
 
     MatLimits lim(0,5,0,5);
-    MatrixT A2(lim);
+    SMat A2(lim);
     EXPECT_EQ(A2.GetNumRows(),6);
     EXPECT_EQ(A2.GetNumCols(),6);
     EXPECT_EQ(A2.GetLimits(),lim);
@@ -64,7 +65,7 @@ TYPED_TEST_P(SMatrixTests,Constructors)
     EXPECT_EQ(A2.GetColLow(),0);
     EXPECT_EQ(A2.size(),6*7/2);
 
-    MatrixT A3(A2),A4,A5(4);
+    SMat A3(A2),A4,A5(4);
     EXPECT_EQ(A3.GetLimits(),A2.GetLimits());
     EXPECT_NE(A4.GetLimits(),A2.GetLimits());
     EXPECT_NE(A5.GetLimits(),A2.GetLimits());
@@ -72,7 +73,14 @@ TYPED_TEST_P(SMatrixTests,Constructors)
     A5=A2;
     EXPECT_EQ(A4.GetLimits(),A2.GetLimits());
     EXPECT_EQ(A5.GetLimits(),A2.GetLimits());
-
+    //
+    //  Cross contruction
+    //
+    FillRandom(A1);
+    A1.GetDiagonal()=A1.GetDiagonal()+conj(A1.GetDiagonal()); //Hermitian.
+    Mat B(A1); //Easy
+    SMat C(B); //B check for symmetry.
+    EXPECT_EQ(A1,C);
 }
 
 TYPED_TEST_P(SMatrixTests,Fill_SetLimits_SubMatrix)

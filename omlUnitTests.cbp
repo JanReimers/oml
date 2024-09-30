@@ -51,6 +51,7 @@
 		<Linker>
 			<Add library="oml" />
 			<Add library="gtest" />
+			<Add library="lapack" />
 			<Add library="pthread" />
 			<Add directory="../googletest/lib" />
 		</Linker>
@@ -59,8 +60,16 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="UnitTests/DiagonalMatrixTests.cpp" />
+		<Unit filename="UnitTests/Epsilons.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="UnitTests/LinearAlgebraTests.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="UnitTests/LinearAlgebraTests.H" />
 		<Unit filename="UnitTests/MatrixTests.cc" />
 		<Unit filename="UnitTests/SymmetricMatrixTests.cpp" />
+		<Unit filename="UnitTests/UT-Vector3D.cc" />
 		<Unit filename="UnitTests/VectorTests.cc" />
 		<Unit filename="UnitTests/main.cc" />
 		<Extensions>

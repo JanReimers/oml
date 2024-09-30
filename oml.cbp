@@ -83,6 +83,8 @@
 		<Unit filename="include/oml/matrix.h" />
 		<Unit filename="include/oml/matrix3d.h" />
 		<Unit filename="include/oml/numeric.h" />
+		<Unit filename="include/oml/numeric/EigenSolver.H" />
+		<Unit filename="include/oml/numeric/LapackEigenSolver.H" />
 		<Unit filename="include/oml/numeric/lusolver.h" />
 		<Unit filename="include/oml/numeric/svsolver.h" />
 		<Unit filename="include/oml/random.h" />
@@ -122,6 +124,13 @@
 		<Unit filename="src/instance_double.cpp" />
 		<Unit filename="src/instance_int.cpp" />
 		<Unit filename="src/instance_matrix_double.cpp" />
+		<Unit filename="src/linear_algebra/EigenSolver.cpp" />
+		<Unit filename="src/linear_algebra/LapackEigenSolver.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/linear_algebra/Solvers.C">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/linear_algebra_complex.cpp" />
 		<Unit filename="src/linear_algebra_double.cpp" />
 		<Unit filename="src/matlimit.cpp" />

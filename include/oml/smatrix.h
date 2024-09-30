@@ -59,6 +59,8 @@ template <class T> class SMatrix
   explicit SMatrix(const MatLimits&); //!< For compatability with Matrix.
   //! Copy constructor.
   explicit SMatrix(const SMatrix& m);
+  //! Allows construction from an approximately sym matrix stored as a full matrix.
+  SMatrix(const Matrix<T>&,double tol=0.0);
   //! Allows construction from an expression template.
   template <class B, Data D> SMatrix(const Indexable<T,B,Symmetric,D,MatrixShape>&);
 
