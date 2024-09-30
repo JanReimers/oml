@@ -14,12 +14,12 @@
 //##########################################################################
 //
 //  QL algorithm
-//  Calculates Eigenvalues and Eigenstd::vectors of a tridiagonal matrix
+//  Calculates Eigenvalues and Eigenvectors of a tridiagonal matrix
 //
-//  Diagonal     - Input std::vector of diagonal elements
-//               - Output std::vector of eigen values
+//  Diagonal    - Input std::vector of diagonal elements
+//              - Output std::vector of eigen values
 //  OffDiagonal - Input std::vector of Off diagonal elements
-//  *this        - Output matrix containing eigen std::vectors as columns.
+//  M           - Output matrix containing eigen std::vectors as columns.
 //
 #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
 

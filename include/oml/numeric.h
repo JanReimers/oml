@@ -77,4 +77,24 @@ template <class T> Vector<T> Diagonalize(Matrix<T>& m)
   return EigenValues;
 }
 
+template <class T> std::tuple<Matrix<T>,Vector<T> > Diagonalize(const SMatrix<T>& s)
+{
+  Vector<T> EigenValues(s.GetRowLimits());
+  Vector<T> OffDiagonal(s.GetRowLimits());
+
+  Matrix<T>  m(s);
+  TriDiagonal(m,EigenValues,OffDiagonal);
+  QLDecomp   (m,EigenValues,OffDiagonal);
+  EigenSort  (m,EigenValues);
+  return std::make_tuple(m,EigenValues);
+}
+
+template <class T> std::tuple<Matrix<T>,Vector<T>,Matrix<T> > SVD(const SMatrix<T>& A)
+{
+    Matrix<T> U(A),V(A.GetLimits());
+    Vector<T> s(A.GetRowLimits());
+    SVDecomp (U,s,V);
+    return std::make_tuple(U,s,V);
+}
+
 #endif // _Numerical_H_

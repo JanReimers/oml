@@ -22,5 +22,5 @@
 #include "src/numeric/svsolver.cpp"
 #include "src/numeric/tridiag.cpp"
 
-
+template void TriDiagonal(SMatrix<double>&,Vector<Type>&,Vector<Type>&);
 

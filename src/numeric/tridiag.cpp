@@ -17,9 +17,9 @@
 //
 //  Housholder reduction of a real symmetric matrix, to tri-diagonal form.
 //
-//  *this	- Input matrix
-//  Diagonal	- Output std::vector of diagonal elements
-//  OffDiagonal- Output std::vector of off diagonal elements
+//  M	        - Input matrix
+//  Diagonal	- Output vector of diagonal elements
+//  OffDiagonal - Output vector of off diagonal elements
 //
 
 template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
