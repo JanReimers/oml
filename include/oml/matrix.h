@@ -50,6 +50,9 @@ template <class T> class Matrix
   Matrix& operator=(Matrix&&);
 #endif
 
+  MatLimits ReBase(index_t rlow,index_t clow);
+  MatLimits ReBase(const MatLimits& lim);
+
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
@@ -250,6 +253,19 @@ template <class T> inline Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
 }
 #endif
 
+template <class T> inline MatLimits Matrix<T>::ReBase(index_t rlow,index_t clow)
+{
+    MatLimits oldLimits=GetLimits();
+    MatrixBase::ReBase(rlow,clow);
+    return oldLimits;
+}
+
+template <class T> inline MatLimits Matrix<T>::ReBase(const MatLimits& lim)
+{
+    MatLimits oldLimits=GetLimits();
+    MatrixBase::ReBase(lim);
+    return oldLimits;
+}
 
 template <class T, class B,Store M, Data D> Matrix<T>& operator*=(Matrix<T>& a,const Indexable<T,B,M,D,MatrixShape>& b)
 {
