@@ -4,7 +4,7 @@
 #include "LinearAlgebraTests.H"
 //#include "NumericalMethods/PrimeSVDSolver.H"
 //#include "NumericalMethods/PrimeEigenSolver.H"
-//#include "NumericalMethods/LapackSVDSolver.H"
+#include "oml/numeric/LapackSVDSolver.H"
 #include "oml/numeric/LapackEigenSolver.H"
 //#include "NumericalMethods/ArpackEigenSolver.H"
 //#include "NumericalMethods/LapackQRSolver.H"
@@ -112,18 +112,18 @@ public:
 //    SparseSVDTester<dcmplx>(new PrimeSVDSolver<dcmplx>(),Nsvd  ,Nsvd/2,svdDensity).RunTests();
 //}
 //
-//TEST_F(LinearAlgebraTests,Lapack_SVDSolverDenseReal)
-//{
-//    SVDTester<double>(new LapackSVDSolver<double>(),Nsvd  ,Nsvd  ).RunTests();
-//    SVDTester<double>(new LapackSVDSolver<double>(),Nsvd/2,Nsvd  ).RunTests();
-//    SVDTester<double>(new LapackSVDSolver<double>(),Nsvd  ,Nsvd/2).RunTests();
-//}
-//TEST_F(LinearAlgebraTests,Lapack_SVDSolverDenseComplex)
-//{
-//    SVDTester<dcmplx>(new LapackSVDSolver<dcmplx>(),Nsvd  ,Nsvd  ).RunTests();
-//    SVDTester<dcmplx>(new LapackSVDSolver<dcmplx>(),Nsvd/2,Nsvd  ).RunTests();
-//    SVDTester<dcmplx>(new LapackSVDSolver<dcmplx>(),Nsvd  ,Nsvd/2).RunTests();
-//}
+TEST_F(LinearAlgebraTests,Lapack_SVDSolverDenseReal)
+{
+    SVDTester<double>(new oml::LapackSVDSolver<double>(),Nsvd  ,Nsvd  ).RunTests();
+    SVDTester<double>(new oml::LapackSVDSolver<double>(),Nsvd/2,Nsvd  ).RunTests();
+    SVDTester<double>(new oml::LapackSVDSolver<double>(),Nsvd  ,Nsvd/2).RunTests();
+}
+TEST_F(LinearAlgebraTests,Lapack_SVDSolverDenseComplex)
+{
+    SVDTester<dcmplx>(new oml::LapackSVDSolver<dcmplx>(),Nsvd  ,Nsvd  ).RunTests();
+    SVDTester<dcmplx>(new oml::LapackSVDSolver<dcmplx>(),Nsvd/2,Nsvd  ).RunTests();
+    SVDTester<dcmplx>(new oml::LapackSVDSolver<dcmplx>(),Nsvd  ,Nsvd/2).RunTests();
+}
 
 
 //TEST_F(LinearAlgebraTests,Primme_EigenSolverDenseReal)
@@ -149,11 +149,11 @@ public:
 
 TEST_F(LinearAlgebraTests,Lapack_EigenSolverDenseReal)
 {
-    EigenTester<double>(new LapackEigenSolver<double>(),Neigen).RunTests();
+    EigenTester<double>(new oml::LapackEigenSolver<double>(),Neigen).RunTests();
 }
 TEST_F(LinearAlgebraTests,Lapack_EigenSolverDenseComplex)
 {
-    EigenTester<dcmplx>(new LapackEigenSolver<dcmplx>(),Neigen).RunTests();
+    EigenTester<dcmplx>(new oml::LapackEigenSolver<dcmplx>(),Neigen).RunTests();
 }
 
 

@@ -10,6 +10,7 @@ namespace std
 template <class T> class complex;
 }
 
+namespace oml {
 //
 //  Abstract interface for eigen solvers
 //
@@ -34,5 +35,7 @@ public:
     virtual UdTypeN SolveAllRightNonSym(const MatrixT&,double eps                    )=0;
 
 };
+
+}
 
 #endif // EIGENSOLVER_H

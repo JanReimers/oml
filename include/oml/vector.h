@@ -318,7 +318,6 @@ template <class T> inline VecLimits Vector<T>::ReBase(const VecLimits& lim)
     VecLimits oldLimits=itsLimits;
     itsLimits.ReBase(lim.Low);
     return oldLimits;
-
 }
 
 template <class T> inline void Vector<T>::Fill(FillType ft)

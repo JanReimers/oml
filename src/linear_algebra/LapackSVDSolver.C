@@ -1,4 +1,4 @@
-#include "LapackSVDSolver.H"
+#include "oml/numeric/LapackSVDSolver.H"
 #include "oml/matrix.h"
 #include "oml/diagonalmatrix.h"
 #include "oml/vector.h"
@@ -32,6 +32,7 @@ int* LDU,dcmplx* VT,int* LDVT,dcmplx* WORK,int* LWORK,int* INFO)
     zgesvd_(JOBU,JOBV,M,N,A,LDA,S,U,LDU,VT,LDVT,WORK,LWORK,&rwork(1),INFO); //complex<double>
 }
 
+namespace oml {
 template <class T> typename LapackSVDSolver<T>::UsVType
 LapackSVDSolver<T>::SolveAll(const MatrixT& A,double eps)
 {
@@ -91,3 +92,5 @@ LapackSVDSolver<T>::Solve(const MatrixT& A,double eps, int NumSingularValues)
 
 template class LapackSVDSolver<double>;
 template class LapackSVDSolver<dcmplx>;
+
+} //namespace oml

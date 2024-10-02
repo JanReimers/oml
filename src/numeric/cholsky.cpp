@@ -37,7 +37,7 @@ template <class T> void Cholsky(Matrix<T>& A)
         if (temp>a(j,j))
         {
             std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
-            exit(-1);
+            assert(false);
         }
          a(j,j)=sqrt(a(j,j)-temp);
         for(index_t i=1; i<=j-1; i++)
@@ -77,7 +77,7 @@ template <class T> void Cholsky(SMatrix<T>& A)
         if (temp>a(j,j))
         {
             std::cerr << "Cholsky(SMatrix<T>& A): Matrix was not positive definite" << std::endl;
-            exit(-1);
+            assert(false);
         }
         a(j,j)=sqrt(a(j,j)-temp);
         for(index_t i=1; i<=j-1; i++)

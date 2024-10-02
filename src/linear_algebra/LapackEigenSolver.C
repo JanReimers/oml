@@ -41,6 +41,7 @@ template <> void ev<dcmplx>(char* JOBVL,char* JOBVR,int* N,dcmplx* A,int* LDA,dc
     zgeev_ (JOBVL,JOBVR,N,A,LDA,W    ,VL,LDVL,VR,LDVR,WORK,LWORK,&rwork(1),INFO);
 }
 
+namespace oml {
 
 template <class T> typename LapackEigenSolver<T>::UdType
 LapackEigenSolver<T>::SolveAll(const MatrixT& A,double eps)
@@ -211,3 +212,4 @@ LapackEigenSolver<dcmplx>::SolveRightNonSym(const MatrixT& A,double eps, int Num
 template class LapackEigenSolver<std::complex<double> >;
 template class LapackEigenSolver<double>;
 
+} //namespace oml

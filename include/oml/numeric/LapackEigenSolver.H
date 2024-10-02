@@ -1,7 +1,10 @@
 #ifndef LAPACKEIGENSOLVER_H
 #define LAPACKEIGENSOLVER_H
 
-#include "EigenSolver.H"
+#include "oml/numeric/EigenSolver.H"
+
+namespace oml
+{
 
 template <class T> class LapackEigenSolver : public virtual EigenSolver<T>
 {
@@ -17,4 +20,6 @@ public:
     virtual UdTypeN SolveRightNonSym   (const MatrixT&,double eps, int NumEigenValues);
     virtual UdTypeN SolveAllRightNonSym(const MatrixT&,double eps                    );
 };
+
+}
 #endif // LAPACKEIGENSOLVER_H

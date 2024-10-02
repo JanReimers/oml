@@ -1,11 +1,12 @@
 #ifndef LINEARALGEBRATESTS_H_INCLUDED
 #define LINEARALGEBRATESTS_H_INCLUDED
 
-//#include "NumericalMethods/SVDSolver.H"
 //#include "NumericalMethods/SparseSVDSolver.H"
 #include "oml/numeric/EigenSolver.H"
+#include "oml/numeric/SVDSolver.H"
 //#include "NumericalMethods/SparseEigenSolver.H"
 #include "oml/numeric/LapackEigenSolver.H"
+#include "oml/numeric/LapackSVDSolver.H"
 //#include "NumericalMethods/QRSolver.H"
 //#include "NumericalMethods/LinearSolver.H"
 #include "oml/random.h"
@@ -93,7 +94,7 @@ template <>  Matrix<double> EigenBase<double>::MakeNormalMatrix()
 {
 //    return MakeSymMatrix();
     Matrix<double> A=MakeSymMatrix();
-    auto [U,d]=LapackEigenSolver<double>().SolveAll(A,eps);
+    auto [U,d]=oml::LapackEigenSolver<double>().SolveAll(A,eps);
     return U;
 //    DiagonalMatrix<dcmplx> e(d.size());
 //    e(1)=d(1);
@@ -114,7 +115,7 @@ template <>  Matrix<double> EigenBase<double>::MakeNormalMatrix()
 template <>  Matrix<dcmplx> EigenBase<dcmplx>::MakeNormalMatrix()
 {
     Matrix<dcmplx> A=MakeSymMatrix();
-    auto [U,d]=LapackEigenSolver<dcmplx>().SolveAll(A,eps);
+    auto [U,d]=oml::LapackEigenSolver<dcmplx>().SolveAll(A,eps);
     DiagonalMatrix<dcmplx> e(d.size());
     for (index_t i=1;i<=d.size();i++)
     {
@@ -135,12 +136,12 @@ class EigenTester : public EigenBase<T>
     using Base::eps;
     using Base::I;
 public:
-    EigenTester(EigenSolver<T>* s, int n,double density=1.0)
+    EigenTester(oml::EigenSolver<T>* s, int n,double density=1.0)
         : Base(n,density)
         , itsSolver(s)
         , A(n,n)
     {}
-    EigenTester(EigenSolver<T>* s, int n,int Nev,double density=1.0)
+    EigenTester(oml::EigenSolver<T>* s, int n,int Nev,double density=1.0)
         : Base(n,Nev,density)
         , itsSolver(s)
         , A(n,n)
@@ -245,7 +246,7 @@ public:
         }
     }
 
-    EigenSolver<T>* itsSolver;
+    oml::EigenSolver<T>* itsSolver;
     Matrix     <T>  A;
 };
 
@@ -399,92 +400,93 @@ public:
 //
 //   SVD Tester classes
 //
-//template <typename T> class SVDBase
-//{
-//public:
-//    using DMatRT=DiagonalMatrix<double>;
-//
-//    SVDBase(int m, int n,double density=1.0)
-//        : M(m), N(n), Density(density),eps(1e-13)
-//        , I(Min(M,N),Min(M,N))
-//    {
-//        Unit(I);
-//    }
-//    Matrix<T> MakeMatrix()
-//    {
-//        Matrix<T> ret(M,N);
-//        FillRandom(ret);
-//        MakeSparse(ret,Density);
-//        return ret;
-//    }
-//
-//    virtual void Validate(const Matrix<T>& U, const DMatRT& s,const Matrix<T>& VT)
-//    {
-//        if (N<=M)
-//        {
-//            Matrix<T> V=Transpose(conj(VT));
-//            EXPECT_NEAR(Max(fabs(V*VT-I)),0.0,2*sqrt(N*M)*eps);
-//        }
-//        if (N>=M)
-//        {
-//            Matrix<T> UT=Transpose(conj(U));
-//            //cout << "U*UT=" << UT*U << endl;
-//            EXPECT_NEAR(Max(fabs(UT*U-I)),0.0,2*sqrt(N*M)*eps);
-//        }
-//    }
-//
-//
-//protected:
-//    int M,N;
-//    double Density;
-//    double eps;
-//    Matrix<T> I;
-//};
-//
-//template <typename T>
-//class SVDTester : public SVDBase<T>
-//{
-//    using Base=SVDBase<T>;
-//    using DMatRT=typename Base::DMatRT;
-//    using Base::M;
-//    using Base::N;
-//    using Base::eps;
-//    using Base::I;
-//public:
-//    SVDTester(SVDSolver<T>* s, int m, int n,double density=1.0)
-//        : Base(m,n,density)
-//        , itsSolver(s)
-//        , A(m,n)
-//    {}
-//    ~SVDTester()
-//    {
-//        delete itsSolver;
-//    }
-//
-//    virtual void RunTests()
-//    {
-//        A=Base::MakeMatrix();
-//        {
-//            auto [U,s,VT]=itsSolver->Solve(A,eps,Min(M,N));
-//            Validate(U,s,VT);
-//        }
-//        {
-//            auto [U,s,VT]=itsSolver->SolveAll(A,eps);
-//            Validate(U,s,VT);
-//        }
-//    }
-//    virtual void Validate(const Matrix<T>& U, const DMatRT& s,const Matrix<T>& VT)
-//    {
-//        Base::Validate(U,s,VT); //Check U,V orthonormality
-//        Matrix<T> A1=U*s*VT;
-//        Matrix<T> dA=A-A1;
-//        EXPECT_NEAR(Max(fabs(dA)),0.0,2*sqrt(N*M)*eps);
-//    }
-//
-//    SVDSolver<T>* itsSolver;
-//    Matrix   <T>  A;
-//};
-//
+template <typename T> class SVDBase
+{
+public:
+    using DMatRT=DiagonalMatrix<double>;
+
+    SVDBase(int m, int n,double density=1.0)
+        : M(m), N(n), Density(density),eps(1e-13)
+        , I(Min(M,N),Min(M,N))
+    {
+        Unit(I);
+    }
+    Matrix<T> MakeMatrix()
+    {
+        Matrix<T> ret(M,N);
+        FillRandom(ret);
+        MakeSparse(ret,Density);
+        return ret;
+    }
+
+    virtual void Validate(const Matrix<T>& U, const DMatRT& s,const Matrix<T>& VT)
+    {
+        if (N<=M)
+        {
+            Matrix<T> V=Transpose(conj(VT));
+            EXPECT_NEAR(Max(fabs(V*VT-I)),0.0,2*sqrt(N*M)*eps);
+        }
+        if (N>=M)
+        {
+            Matrix<T> UT=Transpose(conj(U));
+            //cout << "U*UT=" << UT*U << endl;
+            EXPECT_NEAR(Max(fabs(UT*U-I)),0.0,2*sqrt(N*M)*eps);
+        }
+    }
+
+
+protected:
+    int M,N;
+    double Density;
+    double eps;
+    Matrix<T> I;
+};
+
+
+template <typename T>
+class SVDTester : public SVDBase<T>
+{
+    using Base=SVDBase<T>;
+    using DMatRT=typename Base::DMatRT;
+    using Base::M;
+    using Base::N;
+    using Base::eps;
+    using Base::I;
+public:
+    SVDTester(typename oml::SVDSolver<T>* s, int m, int n,double density=1.0)
+        : Base(m,n,density)
+        , itsSolver(s)
+        , A(m,n)
+    {}
+    ~SVDTester()
+    {
+        delete itsSolver;
+    }
+
+    virtual void RunTests()
+    {
+        A=Base::MakeMatrix();
+        {
+            auto [U,s,VT]=itsSolver->Solve(A,eps,Min(M,N));
+            Validate(U,s,VT);
+        }
+        {
+            auto [U,s,VT]=itsSolver->SolveAll(A,eps);
+            Validate(U,s,VT);
+        }
+    }
+    virtual void Validate(const Matrix<T>& U, const DMatRT& s,const Matrix<T>& VT)
+    {
+        Base::Validate(U,s,VT); //Check U,V orthonormality
+        Matrix<T> A1=U*s*VT;
+        Matrix<T> dA=A-A1;
+        EXPECT_NEAR(Max(fabs(dA)),0.0,2*sqrt(N*M)*eps);
+    }
+
+    oml::SVDSolver<T>* itsSolver;
+    Matrix   <T>  A;
+};
+
 //template <typename T>
 //class SparseSVDTester
 //    : public SVDBase<T>
