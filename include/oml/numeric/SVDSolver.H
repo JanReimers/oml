@@ -19,8 +19,8 @@ protected:
 public:
     virtual ~SVDSolver() {};
 
-    virtual UsVType  Solve   (const MatrixT&,double eps, int NumSingluarValues)=0;
-    virtual UsVType  SolveAll(const MatrixT&,double eps                       )=0;
+    virtual UsVType  Solve   (const MatrixT&, int NumSingluarValues)=0;
+    virtual UsVType  SolveAll(const MatrixT&                       )=0;
 
 };
 

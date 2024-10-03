@@ -467,11 +467,11 @@ public:
     {
         A=Base::MakeMatrix();
         {
-            auto [U,s,VT]=itsSolver->Solve(A,eps,Min(M,N));
+            auto [U,s,VT]=itsSolver->Solve(A,Min(M,N));
             Validate(U,s,VT);
         }
         {
-            auto [U,s,VT]=itsSolver->SolveAll(A,eps);
+            auto [U,s,VT]=itsSolver->SolveAll(A);
             Validate(U,s,VT);
         }
     }

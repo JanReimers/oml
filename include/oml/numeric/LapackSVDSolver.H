@@ -15,8 +15,8 @@ template <class T> class LapackSVDSolver
     LapackSVDSolver() {};
     ~LapackSVDSolver() {};
 
-    virtual UsVType  Solve   (const MatrixT&,double eps, int NumSingluarValues);
-    virtual UsVType  SolveAll(const MatrixT&,double eps                       );
+    virtual UsVType  Solve   (const MatrixT&, int NumSingluarValues);
+    virtual UsVType  SolveAll(const MatrixT&                       );
 };
 
 }

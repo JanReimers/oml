@@ -34,16 +34,15 @@ int* LDU,dcmplx* VT,int* LDVT,dcmplx* WORK,int* LWORK,int* INFO)
 
 namespace oml {
 template <class T> typename LapackSVDSolver<T>::UsVType
-LapackSVDSolver<T>::SolveAll(const MatrixT& A,double eps)
+LapackSVDSolver<T>::SolveAll(const MatrixT& A)
 {
     int mn=Min(A.GetNumRows(),A.GetNumCols());
-    return Solve(A,eps,mn);
+    return Solve(A,mn);
 }
 
 template <class T> typename LapackSVDSolver<T>::UsVType
-LapackSVDSolver<T>::Solve(const MatrixT& A,double eps, int NumSingularValues)
+LapackSVDSolver<T>::Solve(const MatrixT& A,int NumSingularValues)
 {
-    assert(eps<1.0);
     assert(NumSingularValues>0);
     assert(NumSingularValues<=Min(A.GetNumRows(),A.GetNumCols()));
     assert(A.GetLimits().Row.Low==1);
