@@ -20,4 +20,5 @@ template class         Vector<Type>;
 //template class         Matrix<Matrix3D<Type> >;
 template class         Vector<Vector3D<Type> >;
 template class         Matrix<Vector3D<Type> >;
+template class SMatrix<SMatrix<Type> >;
 

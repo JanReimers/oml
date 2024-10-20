@@ -65,7 +65,7 @@ template <class T> SMatrix<T>::SMatrix(const Matrix<T>& m, double tol)
     for (index_t i:this->rows())
         for (index_t j:this->cols(i))
         {
-            assert(fabs(m(i,j)-conj(m(j,i)))<=tol);
+            assert(Max(fabs(m(i,j)-conj(m(j,i))))<=tol);
             (*this)(i,j)=m(i,j);
         }
   }
