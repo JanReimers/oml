@@ -41,7 +41,7 @@ LapackSVDSolver<T>::SolveAll(const MatrixT& A)
 }
 
 template <class T> typename LapackSVDSolver<T>::UsVType
-LapackSVDSolver<T>::Solve(const MatrixT& A,int NumSingularValues)
+LapackSVDSolver<T>::Solve(const MatrixT& A,size_t NumSingularValues)
 {
     assert(NumSingularValues>0);
     assert(NumSingularValues<=Min(A.GetNumRows(),A.GetNumCols()));
@@ -78,7 +78,7 @@ LapackSVDSolver<T>::Solve(const MatrixT& A,int NumSingularValues)
     //
     //  Now fix up the matrix limits
     //
-    if (NumSingularValues<mn)
+    if (NumSingularValues < static_cast<unsigned>(mn))
     {
         s.SetLimits(NumSingularValues,true);
         mn=NumSingularValues;

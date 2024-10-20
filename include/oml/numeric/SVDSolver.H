@@ -1,6 +1,7 @@
 #ifndef SVDSOLVER_H
 #define SVDSOLVER_H
 
+#include "oml/imp/index_t.h"
 #include <tuple>
 
 template <class T> class Matrix;
@@ -19,7 +20,7 @@ protected:
 public:
     virtual ~SVDSolver() {};
 
-    virtual UsVType  Solve   (const MatrixT&, int NumSingluarValues)=0;
+    virtual UsVType  Solve   (const MatrixT&, size_t NumSingluarValues)=0;
     virtual UsVType  SolveAll(const MatrixT&                       )=0;
 
 };

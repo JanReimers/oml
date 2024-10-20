@@ -55,7 +55,7 @@ LapackEigenSolver<T>::SolveAll(const MatrixT& A,double eps)
         return std::make_tuple(U,real(e));
     }
     else
-        return std::move(Solve(A,eps,N));
+        return Solve(A,eps,N);
 }
 
 
@@ -66,7 +66,7 @@ LapackEigenSolver<T>::Solve(const MatrixT& A,double eps, int NumEigenValues)
     assert(A.GetLimits().Row.Low==1);
     assert(A.GetLimits().Col.Low==1);
     int N=A.GetNumRows();
-    assert(N==A.GetNumCols());
+    assert(static_cast<unsigned>(N)==A.GetNumCols());
     assert(NumEigenValues<=N);
     double epsH=eps == 0.0 ? 1e-13 : eps;
     if (!IsHermitian(A,epsH))
@@ -112,8 +112,8 @@ LapackEigenSolver<T>::Solve(const MatrixT& A,double eps, int NumEigenValues)
 template <class T> typename LapackEigenSolver<T>::UdTypeN
 LapackEigenSolver<T>::SolveAllRightNonSym(const MatrixT& A,double eps)
 {
-    int N=A.GetNumRows();
-    return std::move(SolveRightNonSym(A,eps,N));
+    size_t N=A.GetNumRows();
+    return SolveRightNonSym(A,eps,N);
 }
 
 template <> typename LapackEigenSolver<double>::UdTypeN
@@ -122,7 +122,7 @@ LapackEigenSolver<double>::SolveRightNonSym(const MatrixT& A,double eps, int Num
     assert(A.GetLimits().Row.Low==1);
     assert(A.GetLimits().Col.Low==1);
     int N=A.GetNumRows();
-    assert(N==A.GetNumCols());
+    assert(static_cast<unsigned>(N)==A.GetNumCols());
     if (NumEigenValues<N)
         std::cerr << "Warning: Lapack does not support subset of eigen values for non-symmtric matrcies" << std::endl;
     //
@@ -181,7 +181,7 @@ LapackEigenSolver<dcmplx>::SolveRightNonSym(const MatrixT& A,double eps, int Num
     assert(A.GetLimits().Row.Low==1);
     assert(A.GetLimits().Col.Low==1);
     int N=A.GetNumRows();
-    assert(N==A.GetNumCols());
+    assert(static_cast<unsigned>(N)==A.GetNumCols());
     if (NumEigenValues<N)
         std::cerr << "Warning: Lapack does not support subset of eigen values for non-symmtric matrcies" << std::endl;
     //
