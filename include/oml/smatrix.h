@@ -90,6 +90,7 @@ template <class T> class SMatrix
   //! const element acces operator, fast and \e cannot trigger a COW operation.
   //T  operator()(index_t i,index_t j) const {return SymmetricSubscriptor<T>::const_apply(i,j,GetLimits(),priv_begin());}
   //! non-const version can trigger a COW operation, and checks for this with every access.
+  const T& ref(index_t i,index_t j) const;
   T operator()(index_t i,index_t j) const;
 //  {
 //      index_t index=GetSymOffset(i,j,GetLimits());
@@ -280,6 +281,12 @@ template <class T> inline MatLimits SMatrix<T>::GetLimits() const
 //template <class T> class complex;
 //};
 typedef std::complex<double> dcmplx;
+
+template <class T> inline  const T& SMatrix<T>::ref(index_t i,index_t j) const
+{
+    index_t index=GetSymOffset(i,j,GetLimits());
+    return itsData[index];
+}
 
 template <class T> inline  T SMatrix<T>::operator()(index_t i,index_t j) const
 {
