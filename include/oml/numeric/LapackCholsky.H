@@ -11,7 +11,7 @@ namespace oml {
 
  Matrix<double> LapackCholsky(const SMatrix<double>&);
 SMatrix<double> LapackInvertSymmetric(const SMatrix<double>&); 
-
+ Matrix<double> LapackInvertTriangular(const Matrix<double>&); 
 
 };
 

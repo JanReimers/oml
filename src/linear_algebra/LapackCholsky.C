@@ -13,6 +13,8 @@
 extern"C" {
 void dpptrf_(char* uplo,int* N,double* A,int* INFO);
 void dpptri_(char* uplo,int* N,double* A,int* INFO);
+void dpotri_(char* uplo,int* N,double* A,int* LDA, int* INFO);
+void dtrtri_(char* uplo,char* diag, int* N,double* A,int* LDA, int* INFO);
 }
 
 namespace oml {
@@ -50,6 +52,21 @@ SMatrix<double> LapackInvertSymmetric(const SMatrix<double>& A)
         std::cerr << "Warning: LapackInvertSymmetric info=" << info << std::endl;
     assert(info==0);
     return V;
+}
+
+Matrix<double> LapackInvertTriangular(const Matrix<double>& A)
+{
+    assert(A.GetLimits().Row.Low==1);
+    assert(A.GetLimits().Col.Low==1);
+    assert(!isnan(A));
+    int N=A.GetNumRows(),info=0;
+    char ul='U', diag='N'; //Lapack considers the oml upper triangle as being lower.
+    Matrix<double> V(A);
+    dtrtri_(&ul,&diag,&N,&V(1,1),&N,&info);
+    if (info!=0)
+        std::cerr << "Warning: LapackInvertSymmetric info=" << info << std::endl;
+    assert(info==0);
+    return V;    
 }
 
 };

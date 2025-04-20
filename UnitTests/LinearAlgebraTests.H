@@ -513,45 +513,52 @@ public:
         return m;
     }
     
+    Matrix<double> MakeUpperTriMatrix()
+    {
+//        Matrix<double> m(M,M);
+//        FillRandom(m);
+//        for (int i=m.GetLimits().Row.Low; i<=m.GetLimits().Row.High; i++)
+//        for (int j=m.GetLimits().Col.Low; j<i; j++)
+//            m(i,j)=0.0;
+//        return m;
+        return oml::LapackCholsky(MakeMatrix());
+    }
+    
     virtual void RunTests()
     {
         A=MakeMatrix();
-//        cout << "A=" << A << endl;
         {
             auto V=oml::LapackCholsky(A);
-//            cout << "V=" << V << endl;
             Validate(V,A);
-            
-            Matrix<double> Voml(A);
-            Cholsky(Voml);
-//            cout << "Voml=" << Voml << endl;
-            Validate(Transpose(Voml),A);
         }
         {
             auto Ainv=oml::LapackInvertSymmetric(A);
-//            cout << "Ainv=" << Ainv << endl;
-//            auto Ainv_oml=InvertSymmetric(A);
-//            cout << "Ainv_oml=" << Ainv_oml << endl;
-            
             Validate(Ainv,A);
-//            Validate(Ainv_oml,A);
+        }
+        auto T=MakeUpperTriMatrix();
+        {
+            auto Tinv=oml::LapackInvertTriangular(T);
+            Validate(Tinv,T);
         }
     }
     virtual void Validate(const Matrix<double>& V, const SMatrix<double>& A1)
     {
-//        cout << Matrix<double>(V*Transpose(V)) << endl;
-//        cout << Matrix<double>(Transpose(V)*V) << endl;
         Matrix<double> dA=A1-Transpose(V)*V;
         EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
     }
     virtual void Validate(const SMatrix<double>& Ainv, const SMatrix<double>& A1)
     {
-//        cout << Matrix<double>(V*Transpose(V)) << endl;
-//        cout << Matrix<double>(Transpose(V)*V) << endl;
         Matrix<double> dA=A1*Ainv-I;
         EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
         dA=Ainv*A1-I;
         EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
+    }
+    virtual void Validate(const Matrix<double>& Tinv, const Matrix<double>& T)
+    {
+        Matrix<double> dT=T*Tinv-I;
+        EXPECT_NEAR(Max(fabs(dT)),0.0,2*M*eps);
+        dT=Tinv*T-I;
+        EXPECT_NEAR(Max(fabs(dT)),0.0,2*M*eps);
     }
 
     int M;
