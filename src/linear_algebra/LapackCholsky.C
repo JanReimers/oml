@@ -12,18 +12,18 @@
 
 extern"C" {
 void dpptrf_(char* uplo,int* N,double* A,int* INFO);
+void dpptri_(char* uplo,int* N,double* A,int* INFO);
 }
 
 namespace oml {
 
 Matrix<double> LapackCholsky(const SMatrix<double>& A)
 {
-    
     assert(A.GetLimits().Row.Low==1);
     assert(A.GetLimits().Col.Low==1);
     assert(!isnan(A));
     int N=A.GetNumRows(),info=0;
-    char ul='L';
+    char ul='L'; //Lapack considers the oml upper triangle as being lower.
     SMatrix<double> V(A);
     dpptrf_(&ul,&N,&V(1,1),&info);
     if (info!=0)
@@ -36,5 +36,20 @@ Matrix<double> LapackCholsky(const SMatrix<double>& A)
     return Vfull;
 }
 
+SMatrix<double> LapackInvertSymmetric(const SMatrix<double>& A)
+{
+    assert(A.GetLimits().Row.Low==1);
+    assert(A.GetLimits().Col.Low==1);
+    assert(!isnan(A));
+    int N=A.GetNumRows(),info=0;
+    char ul='L'; //Lapack considers the oml upper triangle as being lower.
+    SMatrix<double> V(A);
+    dpptrf_(&ul,&N,&V(1,1),&info);
+    dpptri_(&ul,&N,&V(1,1),&info);
+    if (info!=0)
+        std::cerr << "Warning: LapackInvertSymmetric info=" << info << std::endl;
+    assert(info==0);
+    return V;
+}
 
 };

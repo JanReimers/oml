@@ -496,8 +496,10 @@ class CholskyTester
 public:
     CholskyTester(int m)
         : M(m), eps(1e-13)
-        , A(m)
-    {}
+        , A(m), I(m)
+    {
+        Unit(I);
+    }
 
     SMatrix<double> MakeMatrix()
     {
@@ -525,6 +527,15 @@ public:
 //            cout << "Voml=" << Voml << endl;
             Validate(Transpose(Voml),A);
         }
+        {
+            auto Ainv=oml::LapackInvertSymmetric(A);
+//            cout << "Ainv=" << Ainv << endl;
+//            auto Ainv_oml=InvertSymmetric(A);
+//            cout << "Ainv_oml=" << Ainv_oml << endl;
+            
+            Validate(Ainv,A);
+//            Validate(Ainv_oml,A);
+        }
     }
     virtual void Validate(const Matrix<double>& V, const SMatrix<double>& A1)
     {
@@ -533,10 +544,19 @@ public:
         Matrix<double> dA=A1-Transpose(V)*V;
         EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
     }
+    virtual void Validate(const SMatrix<double>& Ainv, const SMatrix<double>& A1)
+    {
+//        cout << Matrix<double>(V*Transpose(V)) << endl;
+//        cout << Matrix<double>(Transpose(V)*V) << endl;
+        Matrix<double> dA=A1*Ainv-I;
+        EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
+        dA=Ainv*A1-I;
+        EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
+    }
 
     int M;
     double eps;
-    SMatrix<double>  A;
+    SMatrix<double>  A,I;
 };
 
 

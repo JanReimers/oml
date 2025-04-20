@@ -6,8 +6,12 @@ template <class T> class Matrix;
 
 namespace oml {
 
-// This should really return an upper triangular matrix, but we dont
-Matrix<double> LapackCholsky(const SMatrix<double>&);
+// This should really return an upper triangular matrix, but we don't support that storage type yet.
+// The input matrices must be positive definite.
+
+ Matrix<double> LapackCholsky(const SMatrix<double>&);
+SMatrix<double> LapackInvertSymmetric(const SMatrix<double>&); 
+
 
 };
 
