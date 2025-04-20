@@ -487,6 +487,60 @@ public:
     Matrix   <T>  A;
 };
 
+#include "oml/smatrix.h"
+#include "oml/numeric/LapackCholsky.H"
+#include "oml/numeric.h"
+
+class CholskyTester 
+{
+public:
+    CholskyTester(int m)
+        : M(m), eps(1e-13)
+        , A(m)
+    {}
+
+    SMatrix<double> MakeMatrix()
+    {
+        SMatrix<double> m(M);
+        for (int i=m.GetLimits().Row.Low; i<=m.GetLimits().Row.High; i++)
+        for (int j=i; j<=m.GetLimits().Col.High; j++)
+        {
+            double del=(i-j)/2.0;
+            m(i,j)=exp(-del*del);
+        }
+        return m;
+    }
+    
+    virtual void RunTests()
+    {
+        A=MakeMatrix();
+//        cout << "A=" << A << endl;
+        {
+            auto V=oml::LapackCholsky(A);
+//            cout << "V=" << V << endl;
+            Validate(V,A);
+            
+            Matrix<double> Voml(A);
+            Cholsky(Voml);
+//            cout << "Voml=" << Voml << endl;
+            Validate(Transpose(Voml),A);
+        }
+    }
+    virtual void Validate(const Matrix<double>& V, const SMatrix<double>& A1)
+    {
+//        cout << Matrix<double>(V*Transpose(V)) << endl;
+//        cout << Matrix<double>(Transpose(V)*V) << endl;
+        Matrix<double> dA=A1-Transpose(V)*V;
+        EXPECT_NEAR(Max(fabs(dA)),0.0,2*M*eps);
+    }
+
+    int M;
+    double eps;
+    SMatrix<double>  A;
+};
+
+
+
 //template <typename T>
 //class SparseSVDTester
 //    : public SVDBase<T>

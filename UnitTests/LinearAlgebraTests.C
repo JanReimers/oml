@@ -32,11 +32,13 @@ public:
     , Neigen (30)
     , Nqr    (30)
     , Nlinear(30)
+    , Ncholsky(30)
 #else
     , Nsvd   (100)
     , Neigen (100)
     , Nqr    (200)
     , Nlinear(200)
+    , Ncholsky(100)
 #endif
     , svdDensity(0.2)
     , eigenDensity(0.1)
@@ -69,7 +71,7 @@ public:
 
     TensorNetworks::Epsilons  itsEps;
     double eps;
-    int Nsvd,Neigen,Nqr,Nlinear;
+    int Nsvd,Neigen,Nqr,Nlinear,Ncholsky;
     double svdDensity;
     double eigenDensity;
 
@@ -326,3 +328,9 @@ TEST_F(LinearAlgebraTests,Lapack_EigenSolverDenseComplex)
 //    LinearTester<dcmplx>(new LapackLinearSolver<dcmplx>(),Nlinear).RunTests();
 //}
 //
+
+TEST_F(LinearAlgebraTests,Lapack_Cholsky)
+{
+    CholskyTester(Ncholsky).RunTests();
+}
+
