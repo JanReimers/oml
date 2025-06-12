@@ -8,6 +8,11 @@ Disconnect HEAD in git
     git checkout -B master temp
 
 Work list:
+    Lapack and oml symmetric storage is backwards.  Should make oml consistent with Lapack.
+        See https://netlib.org/lapack//explore-html/d0/de3/group__pptri_ga7429f5db00250f8e8dc56cd787f9cf8f.html#ga7429f5db00250f8e8dc56cd787f9cf8f
+            for definition of SymOffsets:
+            if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;
+            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n.
     Unit tests showing size miss-matches in BinaryFunction1
     Done: A*B return Matrix instead of proxy.  Then A*B*C*D*E*F will work efficiently.
     Symmetric A*B return Matrix instead of proxy.  Then A*B*C*D*E*F will work efficiently.
