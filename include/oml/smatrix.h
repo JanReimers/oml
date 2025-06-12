@@ -179,6 +179,17 @@ template <class T> class SMatrix
 #else
   #define CHECK(i,j)
 #endif
+
+  SMatrix& operator+=(const ArrayIndexable<T,SMatrix,Symmetric,MatrixShape>& b) {return ArrayAdd(*this,b);}
+  template <class B> SMatrix& operator+=(const Indexable<T,B,Symmetric,Abstract,MatrixShape>& b)
+  {
+      if (size()==0)
+      {
+        SetLimits(b.GetLimits(),false);
+        Fill(*this,T(0));
+      }
+      return MatrixAdd(*this,b);
+  }
 //-----------------------------------------------------------------------------
 //
 //  Allows fast L-value access.  Does COW check during construction.
@@ -333,6 +344,18 @@ template <class T> inline void Unit(SMatrix<T>& a)
     }
 }
 
+template <class T, class A, Data D> inline
+double FrobeniusNorm(const Indexable<T,A,Symmetric,D,MatrixShape>& m)
+{
+    double fnorm=0.0;
+    for (index_t i: m.rows())
+    {
+        fnorm+=real(m(i,i)*conj(m(i,i)));
+        for (index_t j: m.cols(i+1))
+            fnorm+=real(m(i,j)*conj(m(i,j)));
+    }
+    return sqrt(fnorm);
+}
 
 //---------------------------------------------------------------------
 //
