@@ -5,6 +5,5 @@
 #include "oml/vector3d.h"
 #include "oml/io3d.h"
 #define TYPE Vector3D<double>
-#include "oml/src/matrix.cc"
 
 

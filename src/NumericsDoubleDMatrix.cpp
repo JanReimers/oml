@@ -17,7 +17,7 @@
 //#include "oml/numeric/qldecomp.cc"
 //#include "oml/numeric/solvetri.cc"
 //#include "oml/numeric/svbksb.cc"
-#include "src/numeric/svdcmp.cc"
+#include "src/numeric/svdcmp.cpp"
 //#include "oml/numeric/svsolver.cc"
 //#include "oml/numeric/tridiag.cc"
 
