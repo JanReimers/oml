@@ -61,7 +61,7 @@ template <class T> class Matrix
     return os << static_cast<const TStreamableObject<Matrix<T> >& >(a);
   }
 
-
+  const T& ref(index_t i,index_t j) const;
   const T& operator()(index_t,index_t) const;
         T& operator()(index_t,index_t)      ;
 
@@ -181,6 +181,13 @@ template <class T> inline T& Matrix<T>::operator()(index_t i,index_t j)
 {
   CHECK(i,j);
   return itsData[GetLimits().Offset(i,j)];
+}
+
+template <class T> inline  const T& Matrix<T>::ref(index_t i,index_t j) const
+{
+  CHECK(i,j);
+  index_t index=GetLimits().Offset(i,j);
+  return itsData[index];
 }
 
 #undef CHECK
