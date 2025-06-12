@@ -1,4 +1,4 @@
-#include "LapackLinearSolver.H"
+#include "oml/numeric/LapackLinearSolver.H"
 #include "oml/matrix.h"
 #include "oml/vector.h"
 #include <complex>
@@ -55,7 +55,7 @@ template <class T> typename LapackLinearSolver<T>::VectorT LapackLinearSolver<T>
     return x;
 }
 
-
+ 
 template <class T> typename LapackLinearSolver<T>::VectorT LapackLinearSolver<T>::SolveUpperTri(const MatrixT& A,const VectorT& b)
 {
     assert(IsUpperTriangular(A));

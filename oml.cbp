@@ -44,7 +44,6 @@
 			<Add option="-std=c++17" />
 			<Add option="-pg" />
 			<Add option="-fPIC" />
-			<Add option="-fopenmp" />
 			<Add option="-DHAVE_STDINT_H" />
 			<Add directory="./include" />
 			<Add directory="./" />
@@ -84,7 +83,9 @@
 		<Unit filename="include/oml/matrix3d.h" />
 		<Unit filename="include/oml/numeric.h" />
 		<Unit filename="include/oml/numeric/EigenSolver.H" />
+		<Unit filename="include/oml/numeric/LapackCholsky.H" />
 		<Unit filename="include/oml/numeric/LapackEigenSolver.H" />
+		<Unit filename="include/oml/numeric/LapackLinearSolver.H" />
 		<Unit filename="include/oml/numeric/LapackSVDSolver.H" />
 		<Unit filename="include/oml/numeric/SVDSolver.H" />
 		<Unit filename="include/oml/numeric/lusolver.h" />
@@ -127,7 +128,13 @@
 		<Unit filename="src/instance_int.cpp" />
 		<Unit filename="src/instance_matrix_double.cpp" />
 		<Unit filename="src/linear_algebra/EigenSolver.cpp" />
+		<Unit filename="src/linear_algebra/LapackCholsky.C">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/linear_algebra/LapackEigenSolver.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/linear_algebra/LapackLinearSolver.C">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/linear_algebra/LapackSVDSolver.C">
