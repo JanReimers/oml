@@ -6,6 +6,8 @@ enable_language (Fortran)
 # file (GLOB_RECURSE oml_HEADERS CONFIGURE_DEPENDS "include/*.h")
  
 add_library(oml "") 
+set_property(TARGET oml PROPERTY CXX_STANDARD 20)
+
 add_subdirectory(src)
 # target_sources(oml PUBLIC )
 
