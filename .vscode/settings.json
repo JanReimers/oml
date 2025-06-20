@@ -66,6 +66,7 @@
         "memory_resource": "cpp",
         "numeric": "cpp",
         "random": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "generator": "cpp"
     }
 }

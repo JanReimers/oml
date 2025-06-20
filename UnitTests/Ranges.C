@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <generator>
 #include <valarray>
+#include <cassert>
 
 using std::cout;
 using std::endl;
@@ -99,7 +100,7 @@ TEST_F(RangesTests, ScaledVectorAddition)
 }
 
 // std::ranges::range is a concept (not a type).
-template <std::ranges::range Range> auto inner_product(const Range& a, const Range& b, double init)
+template <std::ranges::range Range> double my_inner_product(const Range& a, const Range& b, double init)
 {
     for (auto&& [ai, bi] : std::views::zip(a, b)) {
         init += ai * bi;
@@ -115,7 +116,7 @@ TEST_F(RangesTests, MV_Mutiply1)
     Matrix A = {{1, 2, 3}, {4, 5, 6}};
     Vector x = {7,8, 9};
     auto product = A | std::views::transform([&x](const auto& row){
-                            return inner_product(row, x, 0.0);
+                            return my_inner_product(row, x, 0.0);
                         });
 
     EXPECT_EQ(product[0],50);
@@ -131,7 +132,7 @@ TEST_F(RangesTests, MV_Mutiply2)
     Matrix A = {{1, 2, 3}, {4, 5, 6}};
     Vector x = {7,8, 9};
     auto product = A | std::views::transform([&x](const auto& row){
-                            return inner_product(row, x, 0.0);
+                            return my_inner_product(row, x, 0.0);
                         });
 
     EXPECT_EQ(product[0],50);
@@ -147,7 +148,7 @@ auto operator*(const Matrix& A, const Vector& x)
     return A | std::views::transform
     ( [&x](const auto& row)
         {
-            return inner_product(row, x, 0.0);
+            return my_inner_product(row, x, 0.0);
         }
     );
 }
@@ -209,33 +210,63 @@ TEST_F(RangesTests, GeneratorDemo)
     EXPECT_EQ(result[1], 19); // 2*2 + 3*5
     EXPECT_EQ(result[2], 24); // 2*3 + 3*6
 }
-// // x*A = B
-// auto operator*(const Vector& x,const Matrix& A)
+
+// Got stuck here.  We something like a 2D generator std::generator<std::generator<double>> does not work.
+// std::ranges::view<std::generator<double>> transposed(const Matrix& mat)
 // {
-//     return A | std::views::transform
-//     ( [&x](const auto& row)
-//         {
-//             return inner_product(row, x, 0.0);
-//         }
-//     );
+//     assert(mat.size()!=0);
+//     size_t nrows=mat.size(), ncols = mat[0].size();
+//     for(size_t j = 0; j < ncols; ++j)
+//         for(size_t i = 0; i < nrows; ++i)
+//             co_yield mat[i][j];
 // }
 
-// auto operator*(const Matrix& A, const Matrix& B)
-// {
-//     auto product = A | std::views::transform([&B](const auto& row){
-//                           return row* B;
-//                        });
-//     return product;
-// }
 
-// TEST_F(RangesTests, MM_Mutiply1)
+// TEST_F(RangesTests, TransposeDemo)
 // {
 //     Matrix A = {{1, 2, 3}, {4, 5, 6}};
-//     Matrix B = {{7, 8}, {9, 10}, {11, 12}};
-//     auto AB = A * B;
-//     print(AB[0]);
-//     // EXPECT_EQ(AB[0][0],58);
-//     // EXPECT_EQ(AB[0][1],64);
-//     // EXPECT_EQ(AB[1][0],139);
-//     // EXPECT_EQ(AB[1][1],154);
+//     auto At = transposed(A);
+//     EXPECT_EQ(At[0][1],5); // 2 rows * 3 cols
 // }
+
+// // x*A = B
+
+// Now look at https://mmore500.com/cse-491/blog/2020/04/20/ranges-transpose.html
+#include <numeric>
+auto print2D=[](auto rng){for(auto r:rng)print(r);};
+
+TEST_F(RangesTests, ViewsDemo)
+{
+    namespace rs = std::ranges;
+    namespace vs = std::ranges::views;
+    std::vector x = {1,2,3,4,5};  // [1,2,3,4,5]
+    print(x | vs::drop(2));    // [3,4,5] drop the first two elements of x
+    print(x | vs::stride(2));  // [1,3,5] take every other element of x
+    print2D(x | vs::chunk(2)); // [[1,2], group elements of x into chunks of length two
+                            //  [3,4],
+                            //  [5]]
+    print(x | vs::chunk(2) | vs::join); // [1,2,3,4,5] join concatenates a range of ranges
+    print(x | vs::transform([](auto xi){ return 2*xi; })); // transform maps a lambda over a range [2,4,6,8,10]
+    
+}
+
+//  a is not a range it is a viewable_range for some reason.  Consequence of chunking?
+template <std::ranges::viewable_range V, std::ranges::range R> double my_inner_product(  V&& a,   R&& b, double init)
+{
+    for (auto&& [ai, bi] : std::views::zip(a, b)) 
+        init += ai * bi;   
+    return init;
+}
+
+TEST_F(RangesTests, Wx)
+{
+    namespace rs = std::ranges;
+    namespace vs = std::ranges::views;
+    auto x= vs::iota(1,3+1);
+    auto W= vs::iota(1,6+1) | vs::chunk(3); // [1,2,3],[4,5,6]
+    auto Wx=W | vs::transform([&](auto row){ return my_inner_product(row, x, 0); });
+    print(Wx);
+    EXPECT_EQ(Wx[0], 14); // 1*1 + 2*2 + 3*3
+    EXPECT_EQ(Wx[1], 32); // 4*1 + 5
+   
+}
