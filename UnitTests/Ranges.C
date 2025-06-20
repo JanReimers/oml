@@ -270,3 +270,46 @@ TEST_F(RangesTests, Wx)
     EXPECT_EQ(Wx[1], 32); // 4*1 + 5
    
 }
+
+TEST_F(RangesTests, Transpose)
+{
+    namespace vs = std::ranges::views;
+    auto W = vs::iota(1,3*2+1) | vs::chunk(2); // [1,2]
+                                            // [3,4]
+                                            // [5,6]
+    print2D(vs::iota(0,2) | vs::transform([&](int i) { // for each column
+    return W | vs::join // concatenate all the rows into a single range
+            | vs::drop(i) // remove everything before the 1st element of the ith column
+            | vs::stride(2); // take every Nth item to provide a view of the ith column
+    })); // [1,3,5]
+        // [2,4,6]
+}
+
+auto transpose = [](auto rng) {
+    namespace rs = std::ranges;
+    namespace vs = std::ranges::views;
+    auto flat = rng | vs::join;
+    int height = rs::distance(rng);
+    int width = rs::distance(flat) / height;
+    auto inner = [=](int i) mutable {
+    return flat | vs::drop(i) | vs::stride(width);
+    };
+    return vs::iota(0,width) | vs::transform(inner);
+};
+
+TEST_F(RangesTests, MatrixMultiplication)
+{
+    namespace rs = std::ranges;
+    namespace vs = std::ranges::views;
+    auto X = vs::iota(1,2*3+1) | vs::chunk(3); // [1,2,3]
+                                           // [4,5,6]
+    auto W = vs::iota(1,3*2+1) | vs::chunk(2); // [1,2]
+                                            // [3,4]
+                                            // [5,6]
+    print2D(X | vs::transform([&](auto xrow) {
+    return transpose(W) | vs::transform([=](auto wcol) {
+        return my_inner_product(xrow, wcol, 0);
+    }); // [22,28]
+    }));  // [49,64]
+}
+

@@ -6,6 +6,30 @@ Disconnect HEAD in git
 
     git checkout -b temp
     git checkout -B master temp
+Ranges:
+    Based on https://gieseanw.wordpress.com/2019/10/20/we-dont-need-no-stinking-expression-templates/ 
+    maybe we can do lazy evaluation with ranges/views
+    -Use std::valarray, std::vector or oml::cow_array interchangably?
+    -A matrix row is just a chunk view of the data array.
+    -A matrix column is a strided view
+    -Transpose, M*V, V*M, M*M are all views
+    -As before we finalize a chain of views with assign_from(V&& view);
+    -Ideally we support full, symmetric (hermitian) , diagonal, triangular (upper and lower), banded, tridiangonl matrix packing.
+        Each would have specializatios of Transpose, M*V, V*M, M*M views
+        Use indexing formulas defined in the Lapack docs.
+        Use enums to idenitfy all the packings.
+        Symmetric is the only packing that must be square?
+        Somehow take a fill value/method in the constructors
+            enums: zero, one, random, linear, power, value?  The last four are parameterized.  zero = value,0.0
+        Still do 1 based like fortran?  Optional?
+    template <typename T, class Data<T>, packing P, symmetry S> class Matrix{};
+        enum class packing {full, upper_tri, lower_tri, diagonal, banded (Nb), tridiangonl}; 
+        enum class symmetry {none, symmetric};
+    Distinguish row and column vectors?
+        Then RowVector = Matrix(1,N), ColVector = Matrix(N,1)
+        Then we end up wasting time working with Matrix(1,1) = scaler. 
+
+
 
 Work list:
     Lapack and oml symmetric storage is backwards.  Should make oml consistent with Lapack.
