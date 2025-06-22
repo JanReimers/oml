@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "*.C": "cpp",
-        "*.H": "\"c++\"",
+        "*.H": "cpp",
         "any": "cpp",
         "array": "cpp",
         "atomic": "cpp",

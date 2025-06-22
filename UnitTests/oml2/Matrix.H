@@ -1,0 +1,106 @@
+// File: Matrix.H  Define a matrix class with subscriptor for dense packing.
+#ifndef _Matrix_H_
+#define _Matrix_H_
+
+#include <oml2/Vector.H>
+#include <valarray>
+#include <cassert>
+template <typename T, class S> class Matrix
+{
+    public:
+    Matrix(size_t nr, size_t nc) : subscriptor(nc,nr), data(subscriptor.size()) {};
+    Matrix(std::initializer_list<std::initializer_list<T>> init)
+        : subscriptor(init.size(), init.begin()->size()), data(subscriptor.size())
+    {
+        load(init);
+    }
+    void load(std::initializer_list<std::initializer_list<T>> init)
+    {
+        assert(init.size() == subscriptor.nr && "Initializer list size does not match subscriptor row count");
+        assert(init.begin()->size() == subscriptor.nc && "Initializer list row size does not match subscriptor column count");
+        size_t i = 0;
+        for (const auto& row : init)
+        {
+            size_t j = 0;
+            for (const auto& val : row)
+            {
+                if (subscriptor.is_stored(i, j))
+                    data[subscriptor.offset(i, j)] = val;
+                else
+                    assert(val==0.0);
+                ++j;
+            }
+            ++i;
+        }
+    }
+    Matrix(size_t nr, size_t nc, size_t k) : subscriptor(nc,nr,k), data(subscriptor.size()) {};
+    Matrix(std::initializer_list<std::initializer_list<T>> init, size_t k)
+    : subscriptor(init.size(), init.begin()->size(),k), data(subscriptor.size())
+    {
+        load(init);
+    }
+    T operator()(size_t i, size_t j) const
+    {
+        assert(subscriptor.is_stored(i,j));
+        return data[subscriptor.offset(i,j)];
+    }
+    T& operator()(size_t i, size_t j)
+    {
+        assert(subscriptor.is_stored(i,j));
+        return data[subscriptor.offset(i,j)];
+    }
+    size_t size() const
+    {
+        return subscriptor.size();
+    }
+    auto begin()       { return std::begin(data); }
+    auto end  ()       { return std::end  (data); }
+    auto begin() const { return std::begin(data); }
+    auto end  () const { return std::end  (data); }
+    auto view () 
+    {
+        return subscriptor.view(data);
+    }
+
+    auto row(size_t i)
+    {
+        assert(i < subscriptor.nr);
+        auto indices=subscriptor.nonzero_col_indexes(i);
+        auto v=  indices | std::views::transform([i,this](size_t j){return operator()(i,j);});
+        return VectorView<decltype(v)>(std::move(v),indices.size());
+    }
+    auto col(size_t j)
+    {
+        assert(j < subscriptor.nc);
+        auto indices=subscriptor.nonzero_row_indexes(j);
+        auto v= indices | std::views::transform([j,this](size_t i){return operator()(i,j);});
+        return VectorView<decltype(v)>(std::move(v),indices.size());
+    }
+    void print() const
+    {
+        for (size_t i = 0; i < subscriptor.nr; ++i)
+        {
+            for (size_t j = 0; j < subscriptor.nc; ++j)
+            {
+                if (subscriptor.is_stored(i, j))
+                    std::cout << (*this)(i, j) << " ";
+                else
+                    std::cout << "0 "; // Print 0 for non-stored elements
+            }
+            std::cout << std::endl;
+        }   
+    }
+private:
+    S subscriptor;
+    std::valarray<T> data;
+};
+
+#include "oml2/subscriptors.H"
+
+typedef Matrix<double,            FullSubsciptor>            FullMatrix;
+typedef Matrix<double, UpperTriangularSubsciptor> UpperTriangularMatrix;
+typedef Matrix<double,        DiagonalSubsciptor>        DiagonalMatrix;
+typedef Matrix<double,     TriDiagonalSubsciptor>     TriDiagonalMatrix;
+// typedef Matrix<double, BandedSubsciptor> BandedMatrix; // 
+
+#endif //_Matrix_H_

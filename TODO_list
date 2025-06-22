@@ -10,18 +10,27 @@ Ranges:
     Based on https://gieseanw.wordpress.com/2019/10/20/we-dont-need-no-stinking-expression-templates/ 
     maybe we can do lazy evaluation with ranges/views
     -Use std::valarray, std::vector or oml::cow_array interchangably?
-    -A matrix row is just a chunk view of the data array.
-    -A matrix column is a strided view
-    -Transpose, M*V, V*M, M*M are all views
-    -As before we finalize a chain of views with assign_from(V&& view);
+    Ranges/views: 
+        -A matrix row is just a chunk view of the data array.
+        -A matrix column is a strided view
+        -Transpose, M*V, V*M, M*M are all views
+        -As before we finalize a chain of views with assign_from(V&& view);
+        -We need MatrixView<V> and VectorView<V> in order gain some control over template matching for overladed ops.
+        -Matrix multiply:
+            Try full*full first
     -Ideally we support full, symmetric (hermitian) , diagonal, triangular (upper and lower), banded, tridiangonl matrix packing.
-        Each would have specializatios of Transpose, M*V, V*M, M*M views
-        Use indexing formulas defined in the Lapack docs.
-        Use enums to idenitfy all the packings.
+        Use subscriptor classes to handle all the packing, total size and indexing.
+        These can return views over the rows.
+            Getting views over columns is much more difficult for anything but a full matrix.
+            use trnasform()
+                auto col[j,this](size_t i){return operator()(i,j)}
+                return data | transform(col)
+        Use indexing formulas defined in the Lapack docs. ?
         Symmetric is the only packing that must be square?
         Somehow take a fill value/method in the constructors
             enums: zero, one, random, linear, power, value?  The last four are parameterized.  zero = value,0.0
         Still do 1 based like fortran?  Optional?
+            Do this last with MatLimitd and VecLimits.
     template <typename T, class Data<T>, packing P, symmetry S> class Matrix{};
         enum class packing {full, upper_tri, lower_tri, diagonal, banded (Nb), tridiangonl}; 
         enum class symmetry {none, symmetric};

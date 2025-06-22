@@ -1,7 +1,7 @@
 
 
 #add_executable(UToml main.cc Benchmarks.cpp DiagonalMatrixTests.cpp Epsilons.C LinearAlgebraTests.C MatrixTests.cc SymmetricMatrixTests.cpp UT-Vector3D.cc VectorTests.cc)
-add_executable(UToml main.cc Ranges.C Ranges2.C Subscriptors.C)
+add_executable(UToml main.cc MatrixTests.C)
 set_property(TARGET UToml PROPERTY CXX_STANDARD 23)
 target_compile_options(UToml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas
     $<$<CONFIG:Debug>:-g -O0>
@@ -9,5 +9,5 @@ target_compile_options(UToml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas
 )
 
 target_link_options(UToml PRIVATE -fopenmp)
-target_include_directories(UToml PRIVATE ../include )
+target_include_directories(UToml PRIVATE ./ )
 target_link_libraries(UToml oml lapack blas gtest)
