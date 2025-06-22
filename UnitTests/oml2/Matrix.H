@@ -67,14 +67,14 @@ template <typename T, class S> class Matrix
         assert(i < subscriptor.nr);
         auto indices=subscriptor.nonzero_col_indexes(i);
         auto v=  indices | std::views::transform([i,this](size_t j){return operator()(i,j);});
-        return VectorView<decltype(v)>(std::move(v),indices.size());
+        return VectorView<decltype(v)>(std::move(v),indices);
     }
     auto col(size_t j)
     {
         assert(j < subscriptor.nc);
         auto indices=subscriptor.nonzero_row_indexes(j);
         auto v= indices | std::views::transform([j,this](size_t i){return operator()(i,j);});
-        return VectorView<decltype(v)>(std::move(v),indices.size());
+        return VectorView<decltype(v)>(std::move(v),indices);
     }
     void print() const
     {

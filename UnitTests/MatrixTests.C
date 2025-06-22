@@ -41,7 +41,6 @@ TEST_F(MatrixTests, FullMatrix)
     EXPECT_TRUE((mat1.row(1)==il{4,5,6}));
     EXPECT_TRUE((mat1.col(2)==il{3,6,9,12}));
 }
-
 TEST_F(MatrixTests, UpperTriangularMatrix)
 {
     UpperTriangularMatrix mat(3, 4);
@@ -61,7 +60,6 @@ TEST_F(MatrixTests, UpperTriangularMatrix)
     EXPECT_TRUE((mat1.row(1)==il{5,6}));
     EXPECT_TRUE((mat1.col(2)==il{3,6,9}));
 }
-
 TEST_F(MatrixTests, DiagonalMatrix)
 {
     DiagonalMatrix mat(3, 4);
@@ -80,7 +78,6 @@ TEST_F(MatrixTests, DiagonalMatrix)
     EXPECT_TRUE((mat1.row(1)==il{5}));
     EXPECT_TRUE((mat1.col(2)==il{9}));
 }
-
 TEST_F(MatrixTests, TriDiagonalMatrix)
 {
     TriDiagonalMatrix mat(3, 3);
@@ -104,3 +101,17 @@ TEST_F(MatrixTests, TriDiagonalMatrix)
     EXPECT_TRUE((mat1.row(1)==il{5,6,7}));
     EXPECT_TRUE((mat1.col(2)==il{7,9}));
 }
+
+// template <class T, std::ranges::range Range> T Dot(R& indices, R& a, R& b)
+// {
+
+//     T dot=0.0;
+//     for (size_t i: indices) dot+=a[i]*b[i]
+// }
+
+// template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
+// {
+//     auto indices=subscriptor.nonzero_col_indexes(i);
+//     auto dot=[m,v](size_t col) {return m.row};
+//     auto v=indices : std::views::transform(dot);
+// }

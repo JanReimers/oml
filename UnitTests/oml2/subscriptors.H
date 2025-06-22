@@ -29,13 +29,14 @@ public:
     {
         return std::views::chunk(r,stored_row_size(0));
     }
-    auto nonzero_row_indexes(size_t col) const
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    iota_view nonzero_row_indexes(size_t col) const
     {
-        return std::views::iota(0,(int)nr);
+        return std::views::iota(size_t(0),nr);
     }
-    auto nonzero_col_indexes(size_t row) const
+    iota_view nonzero_col_indexes(size_t row) const
     {
-        return std::views::iota(0,(int)nc);
+        return std::views::iota(size_t(0),nc);
     }
     size_t nr,nc;
 };
@@ -72,13 +73,14 @@ public:
         };
         return std::views::iota(0,(int)nr) | std::views::transform(row);
     }
-    auto nonzero_row_indexes(size_t col) const
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    iota_view nonzero_row_indexes(size_t col) const
     {
-        return std::views::iota(0,(int)col+1);
+        return std::views::iota(size_t(0),col+1);
     }
-    auto nonzero_col_indexes(size_t row) const
+    iota_view nonzero_col_indexes(size_t row) const
     {
-        return std::views::iota((int)row,(int)nc);
+        return std::views::iota(row,nc);
     }
     size_t nr,nc;
 };
@@ -113,13 +115,14 @@ class DiagonalSubsciptor
         };
         return std::views::iota(0,(int)nr) | std::views::transform(row);
     }
-    auto nonzero_row_indexes(size_t col) const
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    iota_view nonzero_row_indexes(size_t col) const
     {
-        return std::views::iota((int)col,(int)col+1);
+        return std::views::iota(col,col+1);
     }
-    auto nonzero_col_indexes(size_t row) const
+    iota_view nonzero_col_indexes(size_t row) const
     {
-        return std::views::iota((int)row,(int)row+1);
+        return std::views::iota(row,row+1);
     }
     size_t nr,nc;
 };
@@ -157,13 +160,17 @@ class TriDiagonalSubsciptor
         };
         return std::views::iota(0,(int)nr) | std::views::transform(row);
     }
-    auto nonzero_row_indexes(int col) const
+    
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    iota_view nonzero_row_indexes(size_t col) const
     {
-        return std::views::iota(std::max(0,col-1),std::min((int)nr,col+2));
+        size_t c0=std::max(size_t(1),col)-1, c1=std::min(nr,col+2);
+        return std::views::iota(c0,c1);
     }
-    auto nonzero_col_indexes(int row) const
+    iota_view nonzero_col_indexes(size_t row) const
     {
-        return std::views::iota(std::max(0,row-1),std::min((int)nc,row+2));
+        size_t r0=std::max(size_t(1),row)-1,r1=std::min(nc,row+2);
+        return std::views::iota(r0,r1);
     }
     size_t nr,nc;
 };

@@ -9,16 +9,20 @@
 template <std::ranges::viewable_range R> class VectorView
 {
 public:
-    VectorView(R&& r, size_t _n)
-        : range(std::forward<R>(r)), n(_n)
-    {}
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+   
+    VectorView(R&& r, iota_view& indices)
+    : range(std::forward<R>(r)), indices(indices)
+    {
+        assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
+    }
 
     auto begin()       { return range.begin(); }
     auto end  ()       { return range.end  (); }
     auto begin() const { return range.begin(); }
     auto end  () const { return range.end  (); }
     // many ranges don't support random access with op[].
-    size_t size() const { return  n; }
+    size_t size() const { return  indices.size(); }
 
     bool operator==(const std::initializer_list<double>& b) const
     {
@@ -30,12 +34,13 @@ public:
         return true;
     }
 
-    R range; // The underlying range
-    size_t n;
+    R range; // only includes data for the non-zero portion of the vector.
+    iota_view indices;
+    
 };
 
 
-class Vector
+template <class T> class Vector
 {
 public:
     Vector() : data(0) {};
@@ -65,12 +70,12 @@ public:
         return *this;
     }
 
-    double operator()(size_t i) const
+    T operator()(size_t i) const
     {
         assert(i < size());
         return data[i];
     }
-    double& operator()(size_t i)
+    T& operator()(size_t i)
     {
         assert(i < size());
         return data[i];
@@ -87,7 +92,7 @@ private:
         for (auto& r:view.range) data[i++] = r; //This should be where the lazy evaluation of all the chained views happens.
     }
 
-    std::valarray<double> data;
+    std::valarray<T> data;
 };
 
 
