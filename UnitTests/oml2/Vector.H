@@ -11,7 +11,7 @@ template <std::ranges::viewable_range R> class VectorView
 public:
     typedef std::ranges::iota_view<size_t,size_t> iota_view;
    
-    VectorView(R&& r, iota_view& indices)
+    VectorView(R&& r, const iota_view& indices)
     : range(std::forward<R>(r)), indices(indices)
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
@@ -22,6 +22,7 @@ public:
     auto begin() const { return range.begin(); }
     auto end  () const { return range.end  (); }
     // many ranges don't support random access with op[].
+   
     size_t size() const { return  indices.size(); }
 
     bool operator==(const std::initializer_list<double>& b) const
@@ -48,18 +49,27 @@ public:
     Vector(size_t n)
         : data(n)
     {}
+    Vector(std::initializer_list<T> init)
+        : data(init.size())
+    {
+        size_t i = 0;
+        for (const auto& val : init) {
+            data[i++] = val;
+        }
+    }
 
-    template <std::ranges::view V> Vector(VectorView<V>& view) //const won't work for views.
+    template <std::ranges::view V> Vector(const VectorView<V>& view) //const won't work for views.
         : data(view.size())
     {
         assign_from(view);
     }
-    template <std::ranges::view V> Vector(VectorView<V>&& view) //const won't work for views.
-        : data(view.size())
-    {
-        assign_from(view);
-    }
-    template <std::ranges::view V> Vector& operator=(VectorView<V>&& view) //const won't work for views.
+    // template <std::ranges::view V> Vector(VectorView<V>&& view) //const won't work for views.
+    //     : data(view.size())
+    // {
+    //     assign_from(view);
+    // }
+
+    template <std::ranges::view V> Vector& operator=(const VectorView<V>&& view) //const won't work for views.
     {   
         if (data.size() == 0)
             data.resize(view.size());
@@ -85,11 +95,17 @@ public:
     auto  end  ()       { return std::end  (data); }
     auto  begin() const { return std::begin(data); }
     auto  end  () const { return std::end  (data); }
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    auto view(const iota_view& indices) const
+    {
+        auto v =indices | std::views::transform([this](size_t i){ return data[i]; });
+        return VectorView<decltype(v)>(std::move(v), indices);
+    }
 private:
-    template <std::ranges::view V> void assign_from(VectorView<V>& view)
+    template <std::ranges::view V> void assign_from(const VectorView<V>& view)
     {
         size_t i=0;
-        for (auto& r:view.range) data[i++] = r; //This should be where the lazy evaluation of all the chained views happens.
+        for (auto r:view.range) data[i++] = r; //This should be where the lazy evaluation of all the chained views happens.
     }
 
     std::valarray<T> data;

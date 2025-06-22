@@ -62,7 +62,7 @@ template <typename T, class S> class Matrix
         return subscriptor.view(data);
     }
 
-    auto row(size_t i)
+    auto row(size_t i) const
     {
         assert(i < subscriptor.nr);
         auto indices=subscriptor.nonzero_col_indexes(i);
@@ -90,7 +90,7 @@ template <typename T, class S> class Matrix
             std::cout << std::endl;
         }   
     }
-private:
+// private:
     S subscriptor;
     std::valarray<T> data;
 };

@@ -101,17 +101,79 @@ TEST_F(MatrixTests, TriDiagonalMatrix)
     EXPECT_TRUE((mat1.row(1)==il{5,6,7}));
     EXPECT_TRUE((mat1.col(2)==il{7,9}));
 }
+//,std::ranges::viewable_range V
+template <std::ranges::range Range1,std::ranges::range Range2> auto Dot(const Range1& a, const Range2& b)
+{
+    double dot = 0.0;
+    assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
+    for (auto [ia,ib]:std::views::zip(a,b)) {
+        dot += ia*ib;
+    }
+    return dot;
+}
+template <class T, std::ranges::range Range> T Dot(const VectorView<Range>& a, const Vector<T>& b)
+{
+    assert(a.size() <= b.size() && "VectorView size exceeds Vector size");
+    return Dot(a.range, b.view(a.indices).range);
+}
+template <class T, std::ranges::range Range> T Dot(const Vector<T>& a,const VectorView<Range>& b )
+{
+    assert(b.size() <= a.size() && "VectorView size exceeds Vector size");
+    return Dot(a.view(b.indices).range, b.range);
+}
 
-// template <class T, std::ranges::range Range> T Dot(R& indices, R& a, R& b)
-// {
+template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
+{
+    auto indices = std::views::iota(size_t(0), v.size());
+    auto dot=[m,v](size_t i) {return Dot(m.row(i),v);};
+    auto mv=indices | std::views::transform(dot);
+    return VectorView(std::move(mv), indices);
+}
 
-//     T dot=0.0;
-//     for (size_t i: indices) dot+=a[i]*b[i]
-// }
-
-// template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
-// {
-//     auto indices=subscriptor.nonzero_col_indexes(i);
-//     auto dot=[m,v](size_t col) {return m.row};
-//     auto v=indices : std::views::transform(dot);
-// }
+TEST_F(MatrixTests, DotProducts)
+{
+    TriDiagonalMatrix A{{1,2,0,0,0},
+                        {5,6,7,0,0},
+                        {0,8,9,10,0,0},
+                        {0,0,11,12,13},
+                        {0,0,0,14,15}};
+    Vector<double> v1{1,2,3,4,5};
+    EXPECT_EQ(Dot(A.row(0),v1), 1*1 + 2*2); 
+    EXPECT_EQ(Dot(A.row(1),v1), 5*1 + 6*2 + 7*3); 
+    EXPECT_EQ(Dot(A.row(2),v1), 8*2 + 9*3 + 10*4); 
+    EXPECT_EQ(Dot(A.row(3),v1), 11*3 + 12*4 + 13*5); 
+    EXPECT_EQ(Dot(A.row(4),v1), 14*4 + 15*5); 
+    EXPECT_EQ(Dot(A.col(0),v1), 1*1 + 5*2); 
+    EXPECT_EQ(Dot(A.col(1),v1), 2*1 + 6*2 + 8*3); 
+    EXPECT_EQ(Dot(A.col(2),v1), 7*2 + 9*3 + 11*4); 
+    EXPECT_EQ(Dot(A.col(3),v1), 10*3 + 12*4 + 14*5); 
+    EXPECT_EQ(Dot(A.col(4),v1), 13*4 + 15*5); 
+    
+    EXPECT_EQ(Dot(v1,A.row(0)), 1*1 + 2*2); 
+    EXPECT_EQ(Dot(v1,A.row(1)), 5*1 + 6*2 + 7*3); 
+    EXPECT_EQ(Dot(v1,A.row(2)), 8*2 + 9*3 + 10*4); 
+    EXPECT_EQ(Dot(v1,A.row(3)), 11*3 + 12*4 + 13*5); 
+    EXPECT_EQ(Dot(v1,A.row(4)), 14*4 + 15*5); 
+    EXPECT_EQ(Dot(v1,A.col(0)), 1*1 + 5*2); 
+    EXPECT_EQ(Dot(v1,A.col(1)), 2*1 + 6*2 + 8*3); 
+    EXPECT_EQ(Dot(v1,A.col(2)), 7*2 + 9*3 + 11*4); 
+    EXPECT_EQ(Dot(v1,A.col(3)), 10*3 + 12*4 + 14*5); 
+    EXPECT_EQ(Dot(v1,A.col(4)), 13*4 + 15*5);
+ 
+    {
+        Vector<double> Av(A * v1); // Matrix-vector multiplication
+        EXPECT_EQ(Av(0), 1*1 + 2*2);
+        EXPECT_EQ(Av(1), 5*1 + 6*2 + 7*3);
+        EXPECT_EQ(Av(2), 8*2 + 9*3 + 10*4);
+        EXPECT_EQ(Av(3), 11*3 + 12*4 + 13*5);
+        EXPECT_EQ(Av(4), 14*4 + 15*5);
+    }
+    {
+        Vector<double> Av=A * v1; // Matrix-vector multiplication
+        EXPECT_EQ(Av(0), 1*1 + 2*2);
+        EXPECT_EQ(Av(1), 5*1 + 6*2 + 7*3);
+        EXPECT_EQ(Av(2), 8*2 + 9*3 + 10*4);
+        EXPECT_EQ(Av(3), 11*3 + 12*4 + 13*5);
+        EXPECT_EQ(Av(4), 14*4 + 15*5);
+    }
+}
