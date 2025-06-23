@@ -11,16 +11,24 @@ Ranges:
     maybe we can do lazy evaluation with ranges/views
     -Use std::valarray, std::vector or oml::cow_array interchangably?
     Ranges/views: 
-        -A matrix row is just a chunk view of the data array.
-        -A matrix column is a strided view
+        -A full matrix row is just a chunk view of the data array.
+        -A full matrix column is a strided view
         -Transpose, M*V, V*M, M*M are all views
+            for M*M we need create range of rows and a range of columns.  Which one gets used depends on the next operator
+            operation.   so for A*B*C=(A*B)*C=AB*C we need to use the range of column for AB and the range of rows does not get used.
+            Do we take a performance for the unused ranges?  Hopefully just a minor O(1) hit that would be hard ot measure.
+            This raises the point that we should make (eager) BLAS versions for comparison.
         -As before we finalize a chain of views with assign_from(V&& view);
         -We need MatrixView<V> and VectorView<V> in order gain some control over template matching for overladed ops.
         -Matrix multiply:
             Try full*full first
+        -TO support various packings the VectorView returned by M.col(1) should only hold a range over the non-zero indices.
+            It also needs to know what those indices are.  this is an iota_view range.
+            Now how to do the innder product of two VectorViews while taking into the account indices.
+            
     -Ideally we support full, symmetric (hermitian) , diagonal, triangular (upper and lower), banded, tridiangonl matrix packing.
         Use subscriptor classes to handle all the packing, total size and indexing.
-        These can return views over the rows.
+        Done: These can return views over the rows.
             Getting views over columns is much more difficult for anything but a full matrix.
             use trnasform()
                 auto col[j,this](size_t i){return operator()(i,j)}

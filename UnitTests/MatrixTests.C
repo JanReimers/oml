@@ -101,34 +101,72 @@ TEST_F(MatrixTests, TriDiagonalMatrix)
     EXPECT_TRUE((mat1.row(1)==il{5,6,7}));
     EXPECT_TRUE((mat1.col(2)==il{7,9}));
 }
-//,std::ranges::viewable_range V
-template <std::ranges::range Range1,std::ranges::range Range2> auto Dot(const Range1& a, const Range2& b)
+template <std::ranges::range Range1,std::ranges::range Range2> auto inner_product(const Range1& a, const Range2& b)
 {
-    double dot = 0.0;
+    decltype(a.front()) dot(0); //
     assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
     for (auto [ia,ib]:std::views::zip(a,b)) {
         dot += ia*ib;
     }
     return dot;
 }
-template <class T, std::ranges::range Range> T Dot(const VectorView<Range>& a, const Vector<T>& b)
+template <std::ranges::range Range1,std::ranges::range Range2, typename T> auto inner_product(const Range1& a, const Range2& b, T init)
+{
+    // decltype(a.front()) dot(0); //
+    T dot(init);
+    assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
+    for (auto [ia,ib]:std::views::zip(a,b)) {
+        dot += ia*ib;
+    }
+    return dot;
+}
+// template <std::ranges::range Range1,std::ranges::range Range2> auto inner_product( Range1& a,  Range2& b)
+// {
+//     decltype(a.front()) dot(0); //
+//     assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
+//     for (auto [ia,ib]:std::views::zip(a,b)) {
+//         dot += ia*ib;
+//     }
+//     return dot;
+// }
+template <class T, std::ranges::range Range> T operator*(const VectorView<Range>& a, const Vector<T>& b)
 {
     assert(a.size() <= b.size() && "VectorView size exceeds Vector size");
-    return Dot(a.range, b.view(a.indices).range);
+    return inner_product(a.range, b.view(a.indices).range);
 }
-template <class T, std::ranges::range Range> T Dot(const Vector<T>& a,const VectorView<Range>& b )
+template <class T, std::ranges::range Range> T operator*(const Vector<T>& a,const VectorView<Range>& b )
 {
     assert(b.size() <= a.size() && "VectorView size exceeds Vector size");
-    return Dot(a.view(b.indices).range, b.range);
+    return inner_product(a.view(b.indices).range, b.range);
 }
 
 template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
 {
     auto indices = std::views::iota(size_t(0), v.size());
-    auto dot=[m,v](size_t i) {return Dot(m.row(i),v);};
-    auto mv=indices | std::views::transform(dot);
+    auto mv=indices | std::views::transform([m,v](size_t i) {return m.row(i) * v;});
     return VectorView(std::move(mv), indices);
 }
+template <typename T, class S> auto operator*(const Vector<T>& v,const Matrix<T,S>& m)
+{
+    auto indices = std::views::iota(size_t(0), v.size());
+    auto vm=indices | std::views::transform([m,v](size_t j) {return v * m.col(j);});
+    return VectorView(std::move(vm), indices);
+}
+template <typename T, class S,std::ranges::range R> auto operator*(const VectorView<R>& v,const Matrix<T,S>& m)
+{
+    auto indices = std::views::iota(size_t(0), v.size());
+    auto vm=indices | std::views::transform([m,v](size_t j) {return v * m.col(j);});
+    return VectorView(std::move(vm), indices);
+}
+// template <typename T, class S> auto operator*(const Matrix<T,S>& a,const Matrix<T,S>& b)
+// {
+//     assert(a.size() != 0 && b.size() != 0 && "Matrices must not be empty for multiplication");
+//     assert(a.subscriptor.nc == b.subscriptor.nr && "Matrix dimensions do not match for multiplication");
+//     auto indices = std::views::iota(size_t(0), a.subscriptor.nr);
+//     auto ab=indices | std::views::transform([a,b](size_t i) {return a.row(i) * b;}); //uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+//     return Matrix<T,S>(std::move(ab), a.subscriptor.nr, b.subscriptor.nc);
+// }
+
 
 TEST_F(MatrixTests, DotProducts)
 {
@@ -138,27 +176,27 @@ TEST_F(MatrixTests, DotProducts)
                         {0,0,11,12,13},
                         {0,0,0,14,15}};
     Vector<double> v1{1,2,3,4,5};
-    EXPECT_EQ(Dot(A.row(0),v1), 1*1 + 2*2); 
-    EXPECT_EQ(Dot(A.row(1),v1), 5*1 + 6*2 + 7*3); 
-    EXPECT_EQ(Dot(A.row(2),v1), 8*2 + 9*3 + 10*4); 
-    EXPECT_EQ(Dot(A.row(3),v1), 11*3 + 12*4 + 13*5); 
-    EXPECT_EQ(Dot(A.row(4),v1), 14*4 + 15*5); 
-    EXPECT_EQ(Dot(A.col(0),v1), 1*1 + 5*2); 
-    EXPECT_EQ(Dot(A.col(1),v1), 2*1 + 6*2 + 8*3); 
-    EXPECT_EQ(Dot(A.col(2),v1), 7*2 + 9*3 + 11*4); 
-    EXPECT_EQ(Dot(A.col(3),v1), 10*3 + 12*4 + 14*5); 
-    EXPECT_EQ(Dot(A.col(4),v1), 13*4 + 15*5); 
+    EXPECT_EQ(A.row(0)*v1, 1*1 + 2*2); 
+    EXPECT_EQ(A.row(1)*v1, 5*1 + 6*2 + 7*3); 
+    EXPECT_EQ(A.row(2)*v1, 8*2 + 9*3 + 10*4); 
+    EXPECT_EQ(A.row(3)*v1, 11*3 + 12*4 + 13*5); 
+    EXPECT_EQ(A.row(4)*v1, 14*4 + 15*5); 
+    EXPECT_EQ(A.col(0)*v1, 1*1 + 5*2); 
+    EXPECT_EQ(A.col(1)*v1, 2*1 + 6*2 + 8*3); 
+    EXPECT_EQ(A.col(2)*v1, 7*2 + 9*3 + 11*4); 
+    EXPECT_EQ(A.col(3)*v1, 10*3 + 12*4 + 14*5); 
+    EXPECT_EQ(A.col(4)*v1, 13*4 + 15*5); 
     
-    EXPECT_EQ(Dot(v1,A.row(0)), 1*1 + 2*2); 
-    EXPECT_EQ(Dot(v1,A.row(1)), 5*1 + 6*2 + 7*3); 
-    EXPECT_EQ(Dot(v1,A.row(2)), 8*2 + 9*3 + 10*4); 
-    EXPECT_EQ(Dot(v1,A.row(3)), 11*3 + 12*4 + 13*5); 
-    EXPECT_EQ(Dot(v1,A.row(4)), 14*4 + 15*5); 
-    EXPECT_EQ(Dot(v1,A.col(0)), 1*1 + 5*2); 
-    EXPECT_EQ(Dot(v1,A.col(1)), 2*1 + 6*2 + 8*3); 
-    EXPECT_EQ(Dot(v1,A.col(2)), 7*2 + 9*3 + 11*4); 
-    EXPECT_EQ(Dot(v1,A.col(3)), 10*3 + 12*4 + 14*5); 
-    EXPECT_EQ(Dot(v1,A.col(4)), 13*4 + 15*5);
+    EXPECT_EQ(v1*A.row(0), 1*1 + 2*2); 
+    EXPECT_EQ(v1*A.row(1), 5*1 + 6*2 + 7*3); 
+    EXPECT_EQ(v1*A.row(2), 8*2 + 9*3 + 10*4); 
+    EXPECT_EQ(v1*A.row(3), 11*3 + 12*4 + 13*5); 
+    EXPECT_EQ(v1*A.row(4), 14*4 + 15*5); 
+    EXPECT_EQ(v1*A.col(0), 1*1 + 5*2); 
+    EXPECT_EQ(v1*A.col(1), 2*1 + 6*2 + 8*3); 
+    EXPECT_EQ(v1*A.col(2), 7*2 + 9*3 + 11*4); 
+    EXPECT_EQ(v1*A.col(3), 10*3 + 12*4 + 14*5); 
+    EXPECT_EQ(v1*A.col(4), 13*4 + 15*5);
  
     {
         Vector<double> Av(A * v1); // Matrix-vector multiplication
@@ -176,4 +214,59 @@ TEST_F(MatrixTests, DotProducts)
         EXPECT_EQ(Av(3), 11*3 + 12*4 + 13*5);
         EXPECT_EQ(Av(4), 14*4 + 15*5);
     }
+    {
+        Vector<double> vA = v1 * A; // Vector-Matrix multiplication
+        EXPECT_EQ(vA(0), 1*1 + 5*2 + 0*3 + 0*4 + 0*5);
+        EXPECT_EQ(vA(1), 2*1 + 6*2 + 8*3 + 0*4 + 0*5);
+        EXPECT_EQ(vA(2), 0*1 + 7*2 + 9*3 + 11*4 + 0*5);
+        EXPECT_EQ(vA(3), 0*1 + 0*2 + 10*3 + 12*4 + 14*5);
+        EXPECT_EQ(vA(4), 0*1 + 0*2 + 0*3 + 13*4 + 15*5);
+        print(vA); // Should print: [11,38,85,148,127]
+    }
+    EXPECT_EQ(v1*A*v1,11+2*38+3*85+4*148+5*127);
+    
+    // v1.view()*A; need to figure out how to handle indices for inner product with views.
+}
+
+#include <ranges>
+#include <vector>
+// #include<algorithm>
+#include <numeric>
+TEST_F(MatrixTests, ViewDotView)
+{
+    std::valarray<int> v(15);
+    std::ranges::iota(v,0); // need to include <numeric> for iota!
+    auto i1=std::views::iota(size_t(3), size_t(8+1));
+    auto i2=std::views::iota(size_t(4), size_t(10+1));
+    auto v1v=v | std::views::drop(i1.front()) | std::views::take(i1.size());
+    auto v2v=v | std::views::drop(i2.front()) | std::views::take(i2.size());
+    auto v1=VectorView(v1v,i1); // Full view of the valarray
+    auto v2=VectorView(v2v,i2); // Full view of the valarray
+    print(v);
+    print(v1v);
+    print(v2v);
+    print(v1);
+    print(v2);
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    struct intersection
+    {
+        intersection(const iota_view& a, const iota_view& b)
+        {
+            size_t i0=std::max(a.front(), b.front());
+            size_t i1=std::min(a.back (), b.back ());
+            indices=std::ranges::iota_view(i0,i1+1); //new intersection range
+            drop1 = a.front() < i0 ? i0 - a.front() : 0; // how many to drop from a
+            drop2 = b.front() < i0 ? i0 - b.front() : 0; // how many to drop from b
+
+        }
+        iota_view indices;
+        size_t drop1,drop2;
+    };
+    intersection inter(i1,i2);
+    auto v1_intersection=v1.range | std::views::drop(inter.drop1) | std::views::take(inter.indices.size());
+    auto v2_intersection=v2.range | std::views::drop(inter.drop2) | std::views::take(inter.indices.size());
+    print(v1_intersection);
+    print(v2_intersection);
+    int dot=inner_product(v1_intersection,v2_intersection,0);
+    EXPECT_EQ(dot, 4*4 + 5*5 + 6*6 + 7*7 + 8*8); 
 }

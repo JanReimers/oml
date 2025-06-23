@@ -16,6 +16,11 @@ public:
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
+    VectorView(R& r, const iota_view& indices)
+    : range(std::forward<R>(r)), indices(indices)
+    {
+        assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
+    }
 
     auto begin()       { return range.begin(); }
     auto end  ()       { return range.end  (); }
@@ -96,10 +101,18 @@ public:
     auto  begin() const { return std::begin(data); }
     auto  end  () const { return std::end  (data); }
     typedef std::ranges::iota_view<size_t,size_t> iota_view;
-    auto view(const iota_view& indices) const
+    auto view() const
+    {
+        return VectorView<decltype(data)>(data,iota_view(size_t(0), size())); //Full view
+    }
+    auto view(const iota_view& indices) const //possibly a partial view
     {
         auto v =indices | std::views::transform([this](size_t i){ return data[i]; });
         return VectorView<decltype(v)>(std::move(v), indices);
+    }
+    template <std::ranges::viewable_range R> operator VectorView<R>() const
+    {
+        return VectorView<R>(data, iota_view(size_t(0), size()));
     }
 private:
     template <std::ranges::view V> void assign_from(const VectorView<V>& view)
