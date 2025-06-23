@@ -103,32 +103,12 @@ TEST_F(MatrixTests, TriDiagonalMatrix)
 }
 template <std::ranges::range Range1,std::ranges::range Range2> auto inner_product(const Range1& a, const Range2& b)
 {
-    decltype(a.front()) dot(0); //
     assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
-    for (auto [ia,ib]:std::views::zip(a,b)) {
-        dot += ia*ib;
-    }
+    std::ranges::range_value_t<Range1> dot(0); //
+    for (auto [ia,ib]:std::views::zip(a,b)) dot += ia*ib;
     return dot;
-}
-template <std::ranges::range Range1,std::ranges::range Range2, typename T> auto inner_product(const Range1& a, const Range2& b, T init)
-{
-    // decltype(a.front()) dot(0); //
-    T dot(init);
-    assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
-    for (auto [ia,ib]:std::views::zip(a,b)) {
-        dot += ia*ib;
-    }
-    return dot;
-}
-// template <std::ranges::range Range1,std::ranges::range Range2> auto inner_product( Range1& a,  Range2& b)
-// {
-//     decltype(a.front()) dot(0); //
-//     assert(a.size() == b.size() && "Ranges must be of the same size for dot product");
-//     for (auto [ia,ib]:std::views::zip(a,b)) {
-//         dot += ia*ib;
-//     }
-//     return dot;
-// }
+} 
+
 template <class T, std::ranges::range Range> T operator*(const VectorView<Range>& a, const Vector<T>& b)
 {
     assert(a.size() <= b.size() && "VectorView size exceeds Vector size");
@@ -267,6 +247,6 @@ TEST_F(MatrixTests, ViewDotView)
     auto v2_intersection=v2.range | std::views::drop(inter.drop2) | std::views::take(inter.indices.size());
     print(v1_intersection);
     print(v2_intersection);
-    int dot=inner_product(v1_intersection,v2_intersection,0);
+    int dot=inner_product(v1_intersection,v2_intersection);
     EXPECT_EQ(dot, 4*4 + 5*5 + 6*6 + 7*7 + 8*8); 
 }
