@@ -109,15 +109,49 @@ template <std::ranges::range Range1,std::ranges::range Range2> auto inner_produc
     return dot;
 } 
 
+struct intersection
+{
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    intersection(const iota_view& a, const iota_view& b)
+    {
+        size_t i0=std::max(a.front(), b.front());
+        size_t i1=std::min(a.back (), b.back ());
+        indices=std::ranges::iota_view(i0,i1+1); //new intersection range
+        drop1 = a.front() < i0 ? i0 - a.front() : 0; // how many to drop from a
+        drop2 = b.front() < i0 ? i0 - b.front() : 0; // how many to drop from b
+
+    }
+
+    iota_view indices;
+    size_t drop1,drop2;
+};
+
+template <std::ranges::range Range1, std::ranges::range Range2> auto operator*(const VectorView<Range1>& a, const VectorView<Range2>& b)
+{
+    intersection inter(a.indices,b.indices);
+    auto va=a.range | std::views::drop(inter.drop1) | std::views::take(inter.indices.size());
+    auto vb=b.range | std::views::drop(inter.drop2) | std::views::take(inter.indices.size());
+    return inner_product(va,vb);
+}
+
+
 template <class T, std::ranges::range Range> T operator*(const VectorView<Range>& a, const Vector<T>& b)
 {
     assert(a.size() <= b.size() && "VectorView size exceeds Vector size");
-    return inner_product(a.range, b.view(a.indices).range);
+    return a*b.view();
+    // return inner_product(a.range, b.view(a.indices).range);
 }
 template <class T, std::ranges::range Range> T operator*(const Vector<T>& a,const VectorView<Range>& b )
 {
     assert(b.size() <= a.size() && "VectorView size exceeds Vector size");
-    return inner_product(a.view(b.indices).range, b.range);
+    return a.view()*b;
+    // return inner_product(a.view(b.indices).range, b.range);
+}
+template <class T> T operator*(const Vector<T>& a,const Vector<T>& b )
+{
+    assert(b.size() == a.size() && "Vectors a and b size mismatch for dot product");
+    return a.view()*b.view();
+    // return inner_product(a.view(b.indices).range, b.range);
 }
 
 template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
@@ -150,12 +184,13 @@ template <typename T, class S,std::ranges::range R> auto operator*(const VectorV
 
 TEST_F(MatrixTests, DotProducts)
 {
+    Vector<double> v1{1,2,3,4,5};
+    EXPECT_EQ(v1*v1,1*1+2*2+3*3+4*4+5*5);
     TriDiagonalMatrix A{{1,2,0,0,0},
                         {5,6,7,0,0},
                         {0,8,9,10,0,0},
                         {0,0,11,12,13},
                         {0,0,0,14,15}};
-    Vector<double> v1{1,2,3,4,5};
     EXPECT_EQ(A.row(0)*v1, 1*1 + 2*2); 
     EXPECT_EQ(A.row(1)*v1, 5*1 + 6*2 + 7*3); 
     EXPECT_EQ(A.row(2)*v1, 8*2 + 9*3 + 10*4); 
@@ -212,6 +247,8 @@ TEST_F(MatrixTests, DotProducts)
 #include <vector>
 // #include<algorithm>
 #include <numeric>
+
+
 TEST_F(MatrixTests, ViewDotView)
 {
     std::valarray<int> v(15);
@@ -222,31 +259,22 @@ TEST_F(MatrixTests, ViewDotView)
     auto v2v=v | std::views::drop(i2.front()) | std::views::take(i2.size());
     auto v1=VectorView(v1v,i1); // Full view of the valarray
     auto v2=VectorView(v2v,i2); // Full view of the valarray
-    print(v);
-    print(v1v);
-    print(v2v);
-    print(v1);
-    print(v2);
-    typedef std::ranges::iota_view<size_t,size_t> iota_view;
-    struct intersection
-    {
-        intersection(const iota_view& a, const iota_view& b)
-        {
-            size_t i0=std::max(a.front(), b.front());
-            size_t i1=std::min(a.back (), b.back ());
-            indices=std::ranges::iota_view(i0,i1+1); //new intersection range
-            drop1 = a.front() < i0 ? i0 - a.front() : 0; // how many to drop from a
-            drop2 = b.front() < i0 ? i0 - b.front() : 0; // how many to drop from b
-
-        }
-        iota_view indices;
-        size_t drop1,drop2;
-    };
+  
     intersection inter(i1,i2);
     auto v1_intersection=v1.range | std::views::drop(inter.drop1) | std::views::take(inter.indices.size());
     auto v2_intersection=v2.range | std::views::drop(inter.drop2) | std::views::take(inter.indices.size());
-    print(v1_intersection);
-    print(v2_intersection);
     int dot=inner_product(v1_intersection,v2_intersection);
     EXPECT_EQ(dot, 4*4 + 5*5 + 6*6 + 7*7 + 8*8); 
+}
+
+TEST_F(MatrixTests, ViewDotView2)
+{
+    std::valarray<int> v1(15),v2(13);
+    std::ranges::iota(v1,0); // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+    std::ranges::iota(v2,4); // 4 5 6 7 8 9 10 11 12 13 14 15 16
+    auto i1=std::views::iota(3ul, 8ul+1ul); // these constant must be size_t = ul and not int which is the default.
+    auto i2=std::views::iota(size_t(1), size_t(10+1)); //another way to do it.
+    auto vv1=VectorView(v1 | std::views::drop(i1.front()) | std::views::take(i1.size()),i1); //     3 4 5 6 7 8 
+    auto vv2=VectorView(v2 | std::views::drop(i2.front()) | std::views::take(i2.size()),i2); // 5 6 7 8 9 10 11 12 13 14
+    EXPECT_EQ(vv1*vv2,3*7+4*8+5*9+6*10+7*11+8*12);
 }
