@@ -6,24 +6,24 @@
 #include <valarray>
 #include <cassert>  
 
-template <std::ranges::viewable_range R, std::ranges::viewable_range C> class MatrixView
-{
-public:
-    typedef std::ranges::iota_view<size_t,size_t> iota_view;
-    MatrixView(const R& _rows, const C& _cols)
-    : rows(_rows), cols(_cols)
-    {
+// template <std::ranges::viewable_range R, std::ranges::viewable_range C> class MatrixView
+// {
+// public:
+//     typedef std::ranges::iota_view<size_t,size_t> iota_view;
+//     MatrixView(const R& _rows, const C& _cols)
+//     : rows(_rows), cols(_cols)
+//     {
      
-    }
+//     }
   
-    size_t size() const { return  nr()*nc(); }
-    size_t nr  () const { return std::ranges::size(rows); }
-    size_t nc  () const { return std::ranges::size(cols); }
-// private:
-    //Maintin two set of ranges one for rows and one for columns.
-    R rows;
-    C cols; 
-};
+//     size_t size() const { return  nr()*nc(); }
+//     size_t nr  () const { return std::ranges::size(rows); }
+//     size_t nc  () const { return std::ranges::size(cols); }
+// // private:
+//     //Maintin two set of ranges one for rows and one for columns.
+//     R rows;
+//     C cols; 
+// };
 
 
 template <typename T, class S> class Matrix
