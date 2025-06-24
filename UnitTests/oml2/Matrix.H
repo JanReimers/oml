@@ -5,6 +5,27 @@
 #include <oml2/Vector.H>
 #include <valarray>
 #include <cassert>
+
+template <std::ranges::viewable_range R, std::ranges::viewable_range C> class MatrixView
+{
+public:
+    typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    MatrixView(const R& _rows, const C& _cols)
+    : rows(_rows), cols(_cols)
+    {
+     
+    }
+  
+    size_t size() const { return  nr()*nc(); }
+    size_t nr  () const { return std::ranges::size(rows); }
+    size_t nc  () const { return std::ranges::size(cols); }
+// private:
+    //Maintin two set of ranges one for rows and one for columns.
+    R rows;
+    C cols; 
+};
+
+
 template <typename T, class S> class Matrix
 {
     public:
@@ -57,11 +78,7 @@ template <typename T, class S> class Matrix
     auto end  ()       { return std::end  (data); }
     auto begin() const { return std::begin(data); }
     auto end  () const { return std::end  (data); }
-    auto view () 
-    {
-        return subscriptor.view(data);
-    }
-
+    
     auto row(size_t i) const
     {
         assert(i < subscriptor.nr);
@@ -76,6 +93,19 @@ template <typename T, class S> class Matrix
         auto v= indices | std::views::transform([j,this](size_t i){return operator()(i,j);});
         return VectorView<decltype(v)>(std::move(v),indices);
     }
+    auto rows() const //Assumes all rows are non-zero.
+    {
+        return std::views::iota(size_t(0), subscriptor.nr) | std::views::transform([this](size_t i){return row(i);});
+    }
+    auto cols() const //Assumes all cols are non-zero.
+    {
+        return std::views::iota(size_t(0), subscriptor.nc) | std::views::transform([this](size_t j){return col(j);});
+    }
+    auto view () 
+    {
+        return MatrixView(rows(),cols());
+    }
+
     void print() const
     {
         for (size_t i = 0; i < subscriptor.nr; ++i)

@@ -115,8 +115,9 @@ struct intersection
     intersection(const iota_view& a, const iota_view& b)
     {
         size_t i0=std::max(a.front(), b.front());
-        size_t i1=std::min(a.back (), b.back ());
-        indices=std::ranges::iota_view(i0,i1+1); //new intersection range
+        size_t i1=std::min(a.back (), b.back ())+1;
+        if (i0>i1) i1=i0;
+        indices=std::ranges::iota_view(i0,i1); //new intersection range
         drop1 = a.front() < i0 ? i0 - a.front() : 0; // how many to drop from a
         drop2 = b.front() < i0 ? i0 - b.front() : 0; // how many to drop from b
 
@@ -172,14 +173,28 @@ template <typename T, class S,std::ranges::range R> auto operator*(const VectorV
     auto vm=indices | std::views::transform([m,v](size_t j) {return v * m.col(j);});
     return VectorView(std::move(vm), indices);
 }
-// template <typename T, class S> auto operator*(const Matrix<T,S>& a,const Matrix<T,S>& b)
-// {
-//     assert(a.size() != 0 && b.size() != 0 && "Matrices must not be empty for multiplication");
-//     assert(a.subscriptor.nc == b.subscriptor.nr && "Matrix dimensions do not match for multiplication");
-//     auto indices = std::views::iota(size_t(0), a.subscriptor.nr);
-//     auto ab=indices | std::views::transform([a,b](size_t i) {return a.row(i) * b;}); //uses op*(const Vector<T>& v,const Matrix<T,S>& m)
-//     return Matrix<T,S>(std::move(ab), a.subscriptor.nr, b.subscriptor.nc);
-// }
+
+template <typename T, class S> auto operator*(const Matrix<T,S>& a,const Matrix<T,S>& b)
+{
+    assert(a.size() != 0 && b.size() != 0 && "Matrices must not be empty for multiplication");
+    assert(a.subscriptor.nc == b.subscriptor.nr && "Matrix dimensions do not match for multiplication");
+    auto indices = std::views::iota(size_t(0), a.subscriptor.nr);
+    auto ab=indices | std::views::transform([a,b](size_t i) {return a.row(i) * b;}); //uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+    return Matrix<T,S>(std::move(ab), a.subscriptor.nr, b.subscriptor.nc);
+}
+
+template <std::ranges::viewable_range R1, std::ranges::viewable_range C1, std::ranges::viewable_range R2, std::ranges::viewable_range C2> 
+auto operator*(const MatrixView<R1,C1>& a, const MatrixView<R2,C2>& b)
+{
+    assert(a.nc()==b.nr() && "Matrix dimension mismatch for op*(M,M)");
+    auto outerp=std::views::cartesian_product(a.rows,b.cols) | std::views::transform([](auto tuple) {return get<0>(tuple) * get<1>(tuple);}); // uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+    auto rows = outerp | std::views::chunk(b.nc()) | std::views::transform([](auto chunk) {return VectorView(chunk);});
+    auto cols = std::views::iota(size_t(0), b.nc()) | std::views::transform
+        ([outerp,b](size_t j) {return outerp | std::views::drop(j) | std::views::stride(b.nc());}
+    );
+    return MatrixView(rows, cols); // returns a MatrixView with the resulting rows and columns
+}
+
 
 
 TEST_F(MatrixTests, DotProducts)
@@ -277,4 +292,25 @@ TEST_F(MatrixTests, ViewDotView2)
     auto vv1=VectorView(v1 | std::views::drop(i1.front()) | std::views::take(i1.size()),i1); //     3 4 5 6 7 8 
     auto vv2=VectorView(v2 | std::views::drop(i2.front()) | std::views::take(i2.size()),i2); // 5 6 7 8 9 10 11 12 13 14
     EXPECT_EQ(vv1*vv2,3*7+4*8+5*9+6*10+7*11+8*12);
+}
+
+TEST_F(MatrixTests, MatriView)
+{
+    TriDiagonalMatrix A{{1,2,0,0,0},
+                        {5,6,7,0,0},
+                        {0,8,9,10,0,0},
+                        {0,0,11,12,13},
+                        {0,0,0,14,15}};
+    auto rows=A.rows();
+    auto cols=A.cols();
+    auto view=A.view();
+    EXPECT_EQ(view.nr(), A.subscriptor.nr);
+    EXPECT_EQ(view.nc(), A.subscriptor.nc);
+    print2D(rows);
+    print2D(cols);
+    std::cout << "------------------------------------------------" << std::endl;
+    auto AA=view*view;
+    print2D(AA.rows);
+    print2D(AA.cols);
+    
 }

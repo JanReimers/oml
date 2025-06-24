@@ -21,6 +21,11 @@ public:
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
+     VectorView(R& r)
+    : range(std::forward<R>(r)), indices(size_t(0),range.size())
+    {
+        assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
+    }
     VectorView(const R& r, const iota_view& indices)
     : range(r), indices(indices)
     {

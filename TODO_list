@@ -22,10 +22,13 @@ Ranges:
         -We need MatrixView<V> and VectorView<V> in order gain some control over template matching for overladed ops.
         -Matrix multiply:
             Try full*full first
-        -TO support various packings the VectorView returned by M.col(1) should only hold a range over the non-zero indices.
+        Done: -TO support various packings the VectorView returned by M.col(1) should only hold a range over the non-zero indices.
             It also needs to know what those indices are.  this is an iota_view range.
-            Now how to do the innder product of two VectorViews while taking into the account indices.
-            
+            Done: Now how to do the innder product of two VectorViews while taking into the account indices.
+        -Right now we have 4 version of the vector dot product: view*view view*vec vec*view vec*vec
+            view*view does the actuall work the rest just call view*vec.view();
+            this would go away of vec was derived from view.  But that would required passing data, before data is constructed.
+
     -Ideally we support full, symmetric (hermitian) , diagonal, triangular (upper and lower), banded, tridiangonl matrix packing.
         Use subscriptor classes to handle all the packing, total size and indexing.
         Done: These can return views over the rows.
