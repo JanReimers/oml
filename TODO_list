@@ -9,25 +9,23 @@ Disconnect HEAD in git
 Ranges:
     Based on https://gieseanw.wordpress.com/2019/10/20/we-dont-need-no-stinking-expression-templates/ 
     maybe we can do lazy evaluation with ranges/views
-    -Use std::valarray, std::vector or oml::cow_array interchangably?
-    Ranges/views: 
-        -A full matrix row is just a chunk view of the data array.
-        -A full matrix column is a strided view
-        -Transpose, M*V, V*M, M*M are all views
+    Yes: -Use std::valarray, std::vector or oml::cow_array interchangably?
+    Done: Ranges/views: 
+        Done: -A full matrix row is just a chunk view of the data array.
+        Done: -A full matrix column is a strided view
+        Done: - M*V, V*M, M*M are all views
             for M*M we need create range of rows and a range of columns.  Which one gets used depends on the next operator
             operation.   so for A*B*C=(A*B)*C=AB*C we need to use the range of column for AB and the range of rows does not get used.
             Do we take a performance for the unused ranges?  Hopefully just a minor O(1) hit that would be hard ot measure.
-            This raises the point that we should make (eager) BLAS versions for comparison.
-        -As before we finalize a chain of views with assign_from(V&& view);
-        -We need MatrixView<V> and VectorView<V> in order gain some control over template matching for overladed ops.
-        -Matrix multiply:
-            Try full*full first
+        -This raises the point that we should make (eager) BLAS versions for comparison.
+        Done: -As before we finalize a chain of views with assign_from(V&& view);
         Done: -TO support various packings the VectorView returned by M.col(1) should only hold a range over the non-zero indices.
             It also needs to know what those indices are.  this is an iota_view range.
             Done: Now how to do the innder product of two VectorViews while taking into the account indices.
-        -Right now we have 4 version of the vector dot product: view*view view*vec vec*view vec*vec
+        Done: -Right now we have 4 version of the vector dot product: view*view view*vec vec*view vec*vec
             view*view does the actuall work the rest just call view*vec.view();
             this would go away of vec was derived from view.  But that would required passing data, before data is constructed.
+            Fixed with concepts.
 
     -Ideally we support full, symmetric (hermitian) , diagonal, triangular (upper and lower), banded, tridiangonl matrix packing.
         Use subscriptor classes to handle all the packing, total size and indexing.
@@ -39,7 +37,7 @@ Ranges:
         Use indexing formulas defined in the Lapack docs. ?
         Symmetric is the only packing that must be square?
         Somehow take a fill value/method in the constructors
-            enums: zero, one, random, linear, power, value?  The last four are parameterized.  zero = value,0.0
+            
         Still do 1 based like fortran?  Optional?
             Do this last with MatLimitd and VecLimits.
     template <typename T, class Data<T>, packing P, symmetry S> class Matrix{};
@@ -48,6 +46,30 @@ Ranges:
     Distinguish row and column vectors?
         Then RowVector = Matrix(1,N), ColVector = Matrix(N,1)
         Then we end up wasting time working with Matrix(1,1) = scaler. 
+    OML2
+        Create empty repo
+        Load in range/concepts based Vector, VectorView, Matrix, Subscriptors, MatrixProductView
+        -decide on namespace and naming conventions
+            CamelBack or underscore_delimited?
+                
+        -TransposeView, DiagonalView
+        -Use print statments in op(i,j) to make sure evaluations really are lazy.
+        -Make eager BLAS version of M*m
+        -op+ op- op+= op-= M*s, M/s, s*M M*=s M/=s
+        -init options
+            enums: zero, one, random, linear, power, value, unit?  The last four are parameterized.  zero = value,0.0
+        -Get banded subscriptor working,  tri is banded with
+        -How to handle symmetric?  Use triangular subscriptor
+        -Get subscriptors hamronized with lapack/blas.
+        -deduce the correct subscrptor for a matrix product.
+            tridiagonal*tridiagonal = banded<k=2>
+            uppertri*uppertri = uppertri
+            uppertri*lowertri = full
+            diagonal*X = X*diagonal = X
+            full * X = X * full = full.
+        -handle complex.
+        -handle Matrix<Matrix<T>>
+            
 
 
 
