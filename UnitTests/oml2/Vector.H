@@ -12,33 +12,34 @@ public:
     typedef std::ranges::iota_view<size_t,size_t> iota_view;
    
     VectorView(R&& r, const iota_view& indices)
-    : range(std::forward<R>(r)), indices(indices)
+    : range(std::forward<R>(r)), itsIndices(indices)
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
     VectorView(R& r, const iota_view& indices)
-    : range(std::forward<R>(r)), indices(indices)
+    : range(std::forward<R>(r)), itsIndices(indices)
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
      VectorView(R& r)
-    : range(std::forward<R>(r)), indices(size_t(0),range.size())
+    : range(std::forward<R>(r)), itsIndices(size_t(0),range.size())
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
     VectorView(const R& r, const iota_view& indices)
-    : range(r), indices(indices)
+    : range(r), itsIndices(indices)
     {
         assert(size() == std::ranges::size(range) && "VectorView stop index out of range");
     }
 
-    auto begin()       { return range.begin(); }
-    auto end  ()       { return range.end  (); }
-    auto begin() const { return range.begin(); }
-    auto end  () const { return range.end  (); }
+    auto begin()       { return std::ranges::begin(range); }
+    auto end  ()       { return std::ranges::end  (range); }
+    auto begin() const { return std::ranges::begin(range); }
+    auto end  () const { return std::ranges::end  (range); }
     // many ranges don't support random access with op[].
    
-    size_t size() const { return  indices.size(); }
+    size_t size() const { return  itsIndices.size(); }
+    iota_view indices() const { return itsIndices; }
 
     bool operator==(const std::initializer_list<double>& b) const
     {
@@ -49,9 +50,9 @@ public:
         }
         return true;
     }
-
+private:
     R range; // only includes data for the non-zero portion of the vector.
-    iota_view indices;
+    iota_view itsIndices;
     
 };
 
@@ -111,6 +112,8 @@ public:
     auto  begin() const { return std::begin(data); }
     auto  end  () const { return std::end  (data); }
     typedef std::ranges::iota_view<size_t,size_t> iota_view;
+    iota_view indices() const { return iota_view(size_t(0), size()); } //Full view of indices
+
     auto view() const
     {
         return VectorView<decltype(data)>(data,iota_view(size_t(0), size())); //Full view
@@ -128,7 +131,7 @@ private:
     template <std::ranges::view V> void assign_from(const VectorView<V>& view)
     {
         size_t i=0;
-        for (auto r:view.range) data[i++] = r; //This should be where the lazy evaluation of all the chained views happens.
+        for (auto r:view) data[i++] = r; //This should be where the lazy evaluation of all the chained views happens.
     }
 
     std::valarray<T> data;
