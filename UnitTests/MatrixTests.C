@@ -174,14 +174,63 @@ template <typename T, class S,std::ranges::range R> auto operator*(const VectorV
     return VectorView(std::move(vm), indices);
 }
 
+// template <typename T, class S> auto operator*(const Matrix<T,S>& a,const Matrix<T,S>& b)
+// {
+//     // assert(a.size() != 0 && b.size() != 0 && "Matrices must not be empty for multiplication");
+//     assert(a.subscriptor.nc == b.subscriptor.nr && "Matrix dimensions do not match for multiplication");
+//     auto indices = std::views::iota(size_t(0), a.subscriptor.nr);
+//     auto ab=indices | std::views::transform([a,b](size_t i) {return a.row(i) * b;}); //uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+//     return Matrix<T,S>(std::move(ab), a.subscriptor.nr, b.subscriptor.nc);
+// }
+
+
+template <std::ranges::viewable_range R, std::ranges::viewable_range C, class S> class MatrixProductView
+{
+public:
+    typedef std::ranges::range_value_t<R> T;
+    MatrixProductView(const R& _rows, const C& _cols,S _subsciptor )
+    : a_rows(_rows), b_cols(_cols), subsciptor(_subsciptor)
+    {
+        assert(nr()==subsciptor.nr);
+        assert(nc()==subsciptor.nc);
+    }
+  
+    size_t size() const { return  nr()*nc(); }
+    size_t nr  () const { return std::ranges::size(a_rows); }
+    size_t nc  () const { return std::ranges::size(b_cols); }
+
+    auto operator()(size_t i, size_t j) const
+    {
+        // assert(subsciptor.is_stored(i,j) && "Index out of range for MatrixView");
+        return a_rows[i]*b_cols[j]; //VectorView*VectorView
+    }
+
+    auto rows() const
+    {
+        auto outerp=std::views::cartesian_product(a_rows,b_cols) | std::views::transform([](auto tuple) {return get<0>(tuple) * get<1>(tuple);}); // uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+        return outerp | std::views::chunk(nc()) | std::views::transform([](auto chunk) {return VectorView(chunk);});
+    }
+
+    auto cols() const
+    {
+        auto outerp=std::views::cartesian_product(rows,cols) | std::views::transform([](auto tuple) {return get<0>(tuple) * get<1>(tuple);}); // uses op*(const Vector<T>& v,const Matrix<T,S>& m)
+        return  std::views::iota(size_t(0), nc()) | std::views::transform
+            ([outerp,this](size_t j) {return outerp | std::views::drop(j) | std::views::stride(nc());});
+    }
+    
+private:
+    R a_rows; //a as a range fo rows.
+    C b_cols; //b as a range of cols.
+    S subsciptor; //packing for the product.
+};
+
+
 template <typename T, class S> auto operator*(const Matrix<T,S>& a,const Matrix<T,S>& b)
 {
-    assert(a.size() != 0 && b.size() != 0 && "Matrices must not be empty for multiplication");
     assert(a.subscriptor.nc == b.subscriptor.nr && "Matrix dimensions do not match for multiplication");
-    auto indices = std::views::iota(size_t(0), a.subscriptor.nr);
-    auto ab=indices | std::views::transform([a,b](size_t i) {return a.row(i) * b;}); //uses op*(const Vector<T>& v,const Matrix<T,S>& m)
-    return Matrix<T,S>(std::move(ab), a.subscriptor.nr, b.subscriptor.nc);
+    return MatrixProductView(a.rows(),b.cols(),a.subscriptor);
 }
+
 
 template <std::ranges::viewable_range R1, std::ranges::viewable_range C1, std::ranges::viewable_range R2, std::ranges::viewable_range C2> 
 auto operator*(const MatrixView<R1,C1>& a, const MatrixView<R2,C2>& b)
@@ -313,4 +362,33 @@ TEST_F(MatrixTests, MatriView)
     print2D(AA.rows);
     print2D(AA.cols);
     
+}
+
+TEST_F(MatrixTests, MatriProductView)
+{
+     TriDiagonalMatrix A{{1,2,0,0,0},
+                        {5,6,7,0,0},
+                        {0,8,9,10,0,0},
+                        {0,0,11,12,13},
+                        {0,0,0,14,15}};
+    auto mpv=A*A; //MatriProductView
+    EXPECT_EQ(mpv(0,0),11);
+    EXPECT_EQ(mpv(0,1),14);
+    EXPECT_EQ(mpv(0,2),14);
+    EXPECT_EQ(mpv(1,0),35);
+    EXPECT_EQ(mpv(1,1),102);
+    EXPECT_EQ(mpv(1,2),105);
+    EXPECT_EQ(mpv(1,3),70);
+    EXPECT_EQ(mpv(2,0),40);
+    EXPECT_EQ(mpv(2,1),120);
+    EXPECT_EQ(mpv(2,2),247);
+    EXPECT_EQ(mpv(2,3),210);
+    EXPECT_EQ(mpv(2,4),130);
+    EXPECT_EQ(mpv(3,1),88);
+    EXPECT_EQ(mpv(3,2),231);
+    EXPECT_EQ(mpv(3,3),436);
+    EXPECT_EQ(mpv(3,4),351);
+    EXPECT_EQ(mpv(4,2),154);
+    EXPECT_EQ(mpv(4,3),378);
+    EXPECT_EQ(mpv(4,4),407);
 }
