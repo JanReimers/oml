@@ -127,6 +127,16 @@ public:
     {
         return VectorView<R>(data, iota_view(size_t(0), size()));
     }
+
+    bool operator==(const std::initializer_list<double>& b) const
+    {
+        if (size() != b.size()) return false;
+        auto it = b.begin();
+        for (const auto& v : data) {
+            if (v != *it++) return false;
+        }
+        return true;
+    }
 private:
     template <std::ranges::view V> void assign_from(const VectorView<V>& view)
     {

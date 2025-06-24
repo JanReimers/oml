@@ -144,24 +144,29 @@ template <isVector A, isVector B> auto operator*(const A& a, const B& b)
     return inner_product(va,vb);
 }
 
+template <class M> 
+concept isMatrix = requires (M m,size_t i, size_t j)
+{
+    m.operator()(i, j);
+    m.rows();
+    m.cols();
+    m.subscriptor();
+    m.nr();
+    m.nc();
+};
 
-template <typename T, class S> auto operator*(const Matrix<T,S>& m, const Vector<T>& v)
+template <isMatrix M, isVector V> auto operator*(const M& m, const V& v)
 {
-    auto indices = std::views::iota(size_t(0), v.size());
-    auto mv=indices | std::views::transform([m,v](size_t i) {return m.row(i) * v;});
-    return VectorView(std::move(mv), indices);
+    auto rows=m.rows();
+    auto mv=v.indices() | std::views::transform([rows,v](size_t i) {return rows[i] * v;});
+    return VectorView(std::move(mv), v.indices());
 }
-template <typename T, class S> auto operator*(const Vector<T>& v,const Matrix<T,S>& m)
+
+template <isVector V, isMatrix M> auto operator*(const V& v,const M& m)
 {
-    auto indices = std::views::iota(size_t(0), v.size());
-    auto vm=indices | std::views::transform([m,v](size_t j) {return v * m.col(j);});
-    return VectorView(std::move(vm), indices);
-}
-template <typename T, class S,std::ranges::range R> auto operator*(const VectorView<R>& v,const Matrix<T,S>& m)
-{
-    auto indices = std::views::iota(size_t(0), v.size());
-    auto vm=indices | std::views::transform([m,v](size_t j) {return v * m.col(j);});
-    return VectorView(std::move(vm), indices);
+    auto cols=m.cols();
+    auto vm=v.indices() | std::views::transform([cols,v](size_t j) {return v * cols[j];});
+    return VectorView(std::move(vm), v.indices());
 }
 
 
@@ -209,15 +214,7 @@ private:
     S itsSubscriptor; //packing for the product.
 };
 
-template <class M> 
-concept isMatrix = requires (M m)
-{
-    m.rows();
-    m.cols();
-    m.subscriptor();
-    m.nr();
-    m.nc();
-};
+
 
 template <isMatrix A, isMatrix B> auto operator*(const A& a,const B& b)
 {
@@ -284,7 +281,7 @@ TEST_F(MatrixTests, DotProducts)
     }
     EXPECT_EQ(v1*A*v1,11+2*38+3*85+4*148+5*127);
     
-    // v1.view()*A; need to figure out how to handle indices for inner product with views.
+    
 }
 
 #include <ranges>
@@ -352,4 +349,20 @@ TEST_F(MatrixTests, MatriProductView)
 
     auto mpvAAA=A*A*A;
     EXPECT_EQ(mpvAAA(0,0),81);
+
+    Vector<double> v{1,2,3,4,5};
+    Vector<double> vA=v*A;
+    Vector<double> Av=A*v;
+    print(vA);
+    print(Av);
+    typedef std::initializer_list<double> il;
+    EXPECT_TRUE((vA==il{11, 38, 85, 148, 127}));
+    EXPECT_TRUE((Av==il{5 , 38, 83, 146, 131}));
+    EXPECT_EQ(v*A*v,1569);
+    EXPECT_EQ(v*A*A*v,46799);
+    EXPECT_EQ(v*A*A*A*v,1401625);
+    EXPECT_EQ(v*A*A*A*A*v,42055783);
+    EXPECT_EQ(v*A*A*A*A*A*v,1262119377);
+    
+    
 }
