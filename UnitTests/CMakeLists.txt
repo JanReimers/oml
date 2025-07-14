@@ -8,4 +8,4 @@ target_compile_options(UToml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas
 
 target_link_options(UToml PRIVATE -fopenmp)
 target_include_directories(UToml PRIVATE ../include )
-target_link_libraries(UToml oml lapack gtest)
+target_link_libraries(UToml oml lapack blas gtest)
