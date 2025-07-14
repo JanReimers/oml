@@ -10,7 +10,7 @@ add_subdirectory(src)
 # target_sources(oml PUBLIC )
 
 # -Wno-unknown-pragmas
-target_compile_options(oml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas -DHAVE_STDINT_H
+target_compile_options(oml PRIVATE -Wall -Wno-unknown-pragmas -DHAVE_STDINT_H
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>: -O2>
 )
