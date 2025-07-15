@@ -8,10 +8,8 @@ module;
 #include <vector>
 
 export module oml.vector;
-export
-{
 
-typedef int64_t        index_t;
+export typedef int64_t index_t;
 
 
 // veclimits.h
@@ -30,7 +28,7 @@ const index_t HIGH=LOW-1;
   attempt at any encapsulation stuff here, don't need it.
   \nosubgrouping
 */
-class VecLimits
+export class VecLimits
 {
  public:
   /*! \name Constructors*/
@@ -239,7 +237,7 @@ typedef const char* c_str;
   -ascii  Condensed/slow but readable.
   -pretty Formatted for reading by humans.
  */
-class StreamableObject
+export class StreamableObject
 {
  public:
   enum Mode {binary, ascii, pretty};
@@ -610,22 +608,22 @@ auto UnaryFunction(const Indexable <T,A,M,D,S>& a,TR(*f)(const T&))
   typedef XprUnary<T,TR,RefA,S> ExprTLambda;
   return Xpr<TR,ExprTLambda,M,D,S>(ExprTLambda(RefA(a),f));
 }
-template <class T, class A, Store M, Data D, Shape S> inline
+export template <class T, class A, Store M, Data D, Shape S> inline
 auto operator-(const Indexable <T,A,M,D,S>& a)
 {return UnaryFunction<T,T,A,M,D,S>(a,[](const T &x) { return -x; });}
 
-template <class T, class A, Store M, Data D, Shape S> inline
+export template <class T, class A, Store M, Data D, Shape S> inline
 auto operator+(const Indexable <T,A,M,D,S>& a)
 {return UnaryFunction<T,T,A,M,D,S>(a,[](const T &x) { return x; });}
 
 
 #define Op(f) \
-template <class T, class A, Store M, Data D, Shape S> inline \
+export template <class T, class A, Store M, Data D, Shape S> inline \
 auto f(const Indexable <T,A,M,D,S>& a) \
 {return UnaryFunction<T,T,A,M,D,S>(a,[](const T &x) { return f(x); });}
 
 #define OpR(f,TR) \
-template <class T, class A, Store M, Data D, Shape S> inline \
+export template <class T, class A, Store M, Data D, Shape S> inline \
 auto f(const Indexable <T,A,M,D,S>& a) \
 {return UnaryFunction<T,TR,A,M,D,S>(a,[](const T &x) { return f(x); });}
 
@@ -698,25 +696,25 @@ auto BinaryFunction1(const Indexable<TA,A,MA,DA,S>& a,
   return Xpr<TR,ExprTLambda,MR,DR,S>(ExprTLambda(RefA(a),RefB(b),f));
 }
 
-template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
+export template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
 auto operator+  (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
   return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa+xb; });
 }
 
-template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
+export template <class TA, class TB, class A, class B, Store MA, Store MB, Data DA, Data DB, Shape S> inline
 auto operator-  (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
   return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa-xb; });
 }
 
 
-template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
+export template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
 auto DirectMultiply (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
   return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa*xb; });
 }
-template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
+export template <class TA, class TB, class A, class B, Store MA,Store MB, Data DA, Data DB, Shape S> inline
 auto DirectDivide (const Indexable<TA,A,MA,DA,S>& a, const Indexable<TB,B,MB,DB,S>& b)
 {
   return BinaryFunction1<TA,TB,A,B,MA,MB,DA,DB,S>(a,b,[](const TA &xa,const TB& xb) { return xa/xb; });
@@ -775,10 +773,10 @@ auto BinaryFunctionR(const TA& a,
 
 
 #define ObSc1(func,op)\
-template <class TA, class A, Store M, Data DA, Shape S> \
+export template <class TA, class A, Store M, Data DA, Shape S> \
 inline auto func (const Indexable<TA,A,M,DA,S>& a, const TA& b)\
 {  return BinaryFunction<TA,TA,A,M,DA,S>(a,b,[](const TA &xa,const TA& xb) { return op; });}\
-template <class TB, class B, Store M, Data DB, Shape S> \
+export template <class TB, class B, Store M, Data DB, Shape S> \
 inline auto func  (const TB& a,const Indexable<TB,B,M,DB,S>& b)\
 {  return BinaryFunction<TB,TB,B,M,DB,S>(a,b,[](const TB &xa,const TB& xb) { return op; });}
 
@@ -803,7 +801,7 @@ inline bool LogicalIII(const Indexable<T,A,MA,DA,MatrixShape>& a, const Indexabl
 }
 
 #define ObScBool(func,op)\
-template <class T, class A,class B,Store MA,Store MB, Data DA, Data DB,Shape S> \
+export template <class T, class A,class B,Store MA,Store MB, Data DA, Data DB,Shape S> \
 inline bool func(const Indexable<T,A,MA,DA,S>& a, const Indexable<T,B,MB,DB,S>& b) \
 {return LogicalIII(a,b,[](const T& xa,const T&xb){return op;});}
 
@@ -814,16 +812,16 @@ ObScBool(operator!=,xa!=xb)
 
 
 #define ObScMix1(func,op,T1,T2)\
-template <class A, Store M, Data DA, Shape S> \
+export template <class A, Store M, Data DA, Shape S> \
 inline auto func (const Indexable<T1,A,M,DA,S>& a, const T2& b) \
 {return BinaryFunction<T1,T2,A,M,DA,S>(a,b,[](const T1 &xa,const T2& xb) { return op; });} \
-template <class B, Store M, Data DB, Shape S> \
+export template <class B, Store M, Data DB, Shape S> \
 inline auto func  (const T1& a,const Indexable<T2,B,M,DB,S>& b) \
 {return BinaryFunction<T1,T2,B,M,DB,S>(a,b,[](const T1 &xa,const T2& xb) { return op; });} \
-template <class A, Store M, Data DA, Shape S> \
+export template <class A, Store M, Data DA, Shape S> \
 inline auto func (const Indexable<T2,A,M,DA,S>& a, const T1& b) \
 {return BinaryFunction<T2,T1,A,M,DA,S>(a,b,[](const T2 &xa,const T1& xb) { return op; });} \
-template <class B, Store M, Data DB, Shape S> \
+export template <class B, Store M, Data DB, Shape S> \
 inline auto func  (const T2& a,const Indexable<T1,B,M,DB,S>& b) \
 {return BinaryFunction<T2,T1,B,M,DB,S>(a,b,[](const T2 &xa,const T1& xb) { return op; });}
 
@@ -854,7 +852,7 @@ ObScMix1(operator* ,xa*xb  ,double,int)
 ObScMix1(operator/ ,xa/xb  ,double,int)
 
 
-template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
+export template <class T, class A, class B, Store MA, Data DA, Store MB, Data DB, Shape S> inline
 T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
 {
   return Sum(DirectMultiply(a,b));
@@ -875,7 +873,7 @@ T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
   #define CHECK(i)
 #endif
 
-template <class T, class Derived,Store M, Shape S> class ArrayIndexable
+ template <class T, class Derived,Store M, Shape S> class ArrayIndexable
 {
 protected: //Can only copy and construct the derived class.
     ArrayIndexable() {};
@@ -938,19 +936,19 @@ public:
 
 #undef CHECK
 
-template <class T, class A, Shape S> inline T Sum(const ArrayIndexable<T,A,Full,S>& a)
+export template <class T, class A, Shape S> inline T Sum(const ArrayIndexable<T,A,Full,S>& a)
 {
   T ret(0);
   for (const T& ai:a) ret+=ai;
   return ret;
 }
 
-template <class T,class A, Store M, Shape S> inline void Fill(ArrayIndexable<T,A,M,S>& arr,T value)
+export template <class T,class A, Store M, Shape S> inline void Fill(ArrayIndexable<T,A,M,S>& arr,T value)
 {
   for (T& a:arr) a = value; //Sill fails for complex
 }
 
-template <class T,class A, Store M, Shape S> inline void FillLinear(ArrayIndexable<T,A,M,S>& arr,T start, T stop)
+export template <class T,class A, Store M, Shape S> inline void FillLinear(ArrayIndexable<T,A,M,S>& arr,T start, T stop)
 {
   T del = (stop-start)/(double)(static_cast<A&>(arr).size()-1);
   T val=start;
@@ -964,7 +962,7 @@ template <class T,class A, Store M, Shape S> inline void FillLinear(ArrayIndexab
 //
 //  FE calculus
 //
-template <class T,class A, Store M, Shape S> inline A Integrate(const ArrayIndexable<T,A,M,S>& arr,T y0=0)
+export template <class T,class A, Store M, Shape S> inline A Integrate(const ArrayIndexable<T,A,M,S>& arr,T y0=0)
 {
   size_t  n=arr.size();
   A ret(n);
@@ -976,7 +974,7 @@ template <class T,class A, Store M, Shape S> inline A Integrate(const ArrayIndex
   return ret;
 }
 
-template <class T,class A, Store M, Shape S> inline A Differentiate(const ArrayIndexable<T,A,M,S>& arr)
+export template <class T,class A, Store M, Shape S> inline A Differentiate(const ArrayIndexable<T,A,M,S>& arr)
 {
   index_t n=arr.size();
   A ret(n);
@@ -1022,13 +1020,13 @@ template <class T, class A, Store M, Shape S> inline std::istream& Read(std::ist
 //  Create assign functions
 //
 #define OP(NAME,OP) \
-template <class T, class Derived,Store M,Shape S> inline \
+export template <class T, class Derived,Store M,Shape S> inline \
 Derived& Array##NAME (ArrayIndexable<T,Derived,M,S>& a,const T& scalar)\
 {\
   for (T& ai:a) ai OP##=scalar;\
   return static_cast<Derived&>(a);\
 }\
-template <class T,class Derived,Store M,Shape S,class B> inline \
+export template <class T,class Derived,Store M,Shape S,class B> inline \
 Derived& Array##NAME (ArrayIndexable<T,Derived,M,S>& a, const ArrayIndexable<T,B,M,S>& b)\
 {\
     auto bi=b.begin();\
@@ -1079,12 +1077,12 @@ inline bool Logical(const T & a, const ArrayIndexable<T,A,M,S>& b,const L& lambd
 }
 
 #define ObScBool(func,op)\
-template <class T, class A,class B,Store M, Shape S> \
+export template <class T, class A,class B,Store M, Shape S> \
 inline bool func(const ArrayIndexable<T,A,M,S>& a, const ArrayIndexable<T,A,M,S>& b) \
 {return LogicalII(static_cast<const A&>(a),static_cast<const B&>(b),[](const T& xa,const T&xb){return op;});}\
-template <class T, class A,Store M, Shape S> inline bool func(const ArrayIndexable<T,A,M,S>& a, const T& b)\
+export template <class T, class A,Store M, Shape S> inline bool func(const ArrayIndexable<T,A,M,S>& a, const T& b)\
 {return Logical(a,b,[](const T& xa,const T&xb){return op;});}\
-template <class T, class A,Store M, Shape S> inline bool func(const T& a, const ArrayIndexable<T,A,M,S>& b)\
+export template <class T, class A,Store M, Shape S> inline bool func(const T& a, const ArrayIndexable<T,A,M,S>& b)\
 {return Logical(a,b,[](const T& xa,const T&xb){return op;});}\
 
 ObScBool(operator==,xa==xb)
@@ -1094,23 +1092,23 @@ ObScBool(operator!=,xa!=xb)
 //
 //  isnan isinf logical functions
 //
-inline constexpr bool isnan(const std::complex<double>& c)
+export inline constexpr bool isnan(const std::complex<double>& c)
 {
     return std::isnan(c.real()) || std::isnan(c.imag());
 }
-inline bool isinf(const std::complex<double>& c)
+export inline bool isinf(const std::complex<double>& c)
 {
     return std::isinf(c.real()) || std::isinf(c.imag());
 }
 
-template <class T, class D, Store M, Shape S> inline bool isnan(const ArrayIndexable<T,D,M,S>& arr)
+export template <class T, class D, Store M, Shape S> inline bool isnan(const ArrayIndexable<T,D,M,S>& arr)
 {
     bool ret=false;
     for (const T& a : arr) if (isnan(a)) {ret=true;break;}
     return ret;
 }
 
-template <class T, class D, Store M, Shape S> inline bool isinf(const ArrayIndexable<T,D,M,S>& arr)
+export template <class T, class D, Store M, Shape S> inline bool isinf(const ArrayIndexable<T,D,M,S>& arr)
 {
     bool ret=false;
     for (const T& a : arr) if (isinf(a)) {ret=true;break;}
@@ -1139,12 +1137,12 @@ public:
     }
 };
 
-template <class T, class A, Store M, Shape S> inline T Min(const ArrayIndexable<T,A,M,S>& a)
+export template <class T, class A, Store M, Shape S> inline T Min(const ArrayIndexable<T,A,M,S>& a)
 {
 	return MinMax<T,A,OpLT<T>,M,Real,S>::apply(a);
 }
 
-template <class T, class A, Store M, Shape S> inline T Max(const ArrayIndexable<T,A,M,S>& a)
+export template <class T, class A, Store M, Shape S> inline T Max(const ArrayIndexable<T,A,M,S>& a)
 {
 	return MinMax<T,A,OpGT<T>,M,Real,S>::apply(a);
 }
@@ -1242,7 +1240,7 @@ template <class T, class Derived, Store M> class Indexable<T,Derived,M,Abstract,
 //
 //  Create assign functions
 //
-template <class T, class Derived,Store M,Data D,class B,Data DB> inline
+export template <class T, class Derived,Store M,Data D,class B,Data DB> inline
 void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,const Indexable<T,B,M,DB,VectorShape>& b)
 {
 #ifdef WARN_DEEP_COPY
@@ -1253,7 +1251,7 @@ void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,const Indexable<T,B,M,
   for (index_t i:a.indices()) s(i)=b(i);
 }
 
-template <class T, class Derived,Store M,Data D> inline
+export template <class T, class Derived,Store M,Data D> inline
 void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,T scalar)
 {
 #ifdef WARN_DEEP_COPY
@@ -1264,14 +1262,14 @@ void VectorAssign(Indexable<T,Derived,M,D,VectorShape>& a,T scalar)
 }
 
 #define OP(NAME,OP) \
-template <class T, class Derived,Store M,Data D> inline \
+export template <class T, class Derived,Store M,Data D> inline \
 Derived& Vector##NAME (Indexable<T,Derived,M,D,VectorShape>& a,const T& scalar)\
 {\
   typename Derived::Subscriptor s(a); \
   for (index_t i:a) s(i) OP##=scalar;\
   return static_cast<Derived&>(a);\
 }\
-template <class T,class Derived,Store M,Data D,class B,Data DB> inline \
+export template <class T,class Derived,Store M,Data D,class B,Data DB> inline \
 Derived& Vector##NAME (Indexable<T,Derived,M,D,VectorShape>& a,\
                   const Indexable<T,B,M,DB,VectorShape>& b)\
 {\
@@ -1293,7 +1291,7 @@ OP(Div,/)
 //  Abstract vector specializations for some helper functions.
 //
 
-template <class T, class A, Store M> inline
+export template <class T, class A, Store M> inline
 T Sum(const Indexable<T,A,M,Abstract,VectorShape>& a)
 {
   T ret(0);
@@ -1318,31 +1316,31 @@ template <class T, class A, class Op, Store M> class MinMax<T,A,Op,M,Abstract,Ve
   }
 };
 
-template <class T, class A, Store M> inline T Min(const Indexable<T,A,M,Abstract,VectorShape>& a)
+export template <class T, class A, Store M> inline T Min(const Indexable<T,A,M,Abstract,VectorShape>& a)
 {
 	return MinMax<T,A,OpLT<T>,M,Abstract,VectorShape>::apply(a);
 }
 
-template <class T, class A, Store M> inline T Max(const Indexable<T,A,M,Abstract,VectorShape>& a)
+export template <class T, class A, Store M> inline T Max(const Indexable<T,A,M,Abstract,VectorShape>& a)
 {
 	return MinMax<T,A,OpGT<T>,M,Abstract,VectorShape>::apply(a);
 }
 
 // minmax.h
-template <class T> inline       T& Max(      T& a,       T& b)  {return a > b ? a : b;}
-template <class T> inline const T& Max(const T& a, const T& b)  {return a > b ? a : b;}
-template <class T> inline       T& Min(      T& a,       T& b)  {return a < b ? a : b;}
-template <class T> inline const T& Min(const T& a, const T& b)  {return a < b ? a : b;}
+export template <class T> inline       T& Max(      T& a,       T& b)  {return a > b ? a : b;}
+export template <class T> inline const T& Max(const T& a, const T& b)  {return a > b ? a : b;}
+export template <class T> inline       T& Min(      T& a,       T& b)  {return a < b ? a : b;}
+export template <class T> inline const T& Min(const T& a, const T& b)  {return a < b ? a : b;}
 
 // tstram.h
-template <class A> class TStreamableObject;
+export template <class A> class TStreamableObject;
 
-template <class A> std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o);
-template <class A> std::istream& operator>>(std::istream& os,       TStreamableObject<A>& o);
+export template <class A> std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o);
+export template <class A> std::istream& operator>>(std::istream& os,       TStreamableObject<A>& o);
 
 // Allows template based streaming.  IO methods for the parent type A are called directly.
 //  ***No virtual dispatch***!  If you need virtual dispatch see the PMStreamableObject class.
-template <class A> class TStreamableObject
+export template <class A> class TStreamableObject
 : public StreamableObject
 {
  public:
@@ -1354,13 +1352,13 @@ template <class A> class TStreamableObject
 };
 
 
-template <class A> inline std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o)
+export template <class A> inline std::ostream& operator<<(std::ostream& os, const TStreamableObject<A>& o)
 {
   o.WriteHeader(os,typeid(A).name());
   return static_cast<const A&>(o).Write(os);
 }
 
-template <class A> inline std::istream& operator>>(std::istream& is,TStreamableObject<A>& o)
+export template <class A> inline std::istream& operator>>(std::istream& is,TStreamableObject<A>& o)
 {
   StreamableObject::Mode current=o.ReadHeader(is,typeid(A).name());
   static_cast<A&>(o).Read (is);
@@ -1827,6 +1825,7 @@ Int2Real<float>::Int2Real()
 extern double  INorm;
 extern double  LNorm;
 
+export {
 template <class T> T      OMLRand();
 template <class T> T      OMLRandPos();
 template <class T> double OMLRandScale(T max);
@@ -1894,7 +1893,7 @@ template <class T,class A,Store M, Shape S> void FillRandomPositive(ArrayIndexab
   double scale=OMLRandScale<T>(max);
   for (T& i:arr) i = (T)(OMLRandPos<T>() * scale);
 }
-
+} //export block
 // vector3d.h
 const double pi=acos(-1.0);
 
@@ -1921,7 +1920,7 @@ const double pi=acos(-1.0);
   You will need to include \c io3d.h to get \c op<< and \c op>> for IO.
   \nosubgrouping
 */
-template <class T> class Vector3D
+export template <class T> class Vector3D
 {
  public:
   /*! \name Constructors/Assignment*/
@@ -1962,7 +1961,7 @@ template <class T> class Vector3D
   //@}
 };
 
-
+export {
 //-----------------------------------------------------------------------------
 //
 //  Binary algeabra.
@@ -2166,7 +2165,7 @@ template <class T> inline Vector3D<T> imag(const Vector3D<std::complex<T> >& v)
   return Vector3D<T>(imag(v.x),imag(v.y),imag(v.z));
 }
 
-
+} //export block
 
 
 
@@ -2191,9 +2190,9 @@ template <class T> inline Vector3D<T> imag(const Vector3D<std::complex<T> >& v)
   \nosubgrouping
 */
 
-enum class FillType {Zero,Random,Unit};
+export enum class FillType {Zero,Random,Unit};
 
-template <class T> class Vector
+export template <class T> class Vector
   : public Indexable<T,Vector<T>,Full,Real,VectorShape>
   , public ArrayIndexable<T,Vector<T>,Full,VectorShape>
   , public TStreamableObject<Vector<T> >
@@ -2335,7 +2334,7 @@ template <class T> class Vector
 #endif
 };
 
-
+export {
 //-------------------------------------------------------------------------
 //
 //  Some special operators only for vectors.
@@ -2377,6 +2376,7 @@ void Normalize(Indexable<T,A,M,D,VectorShape>& v)
 {
   v/=!v;
 }
+} //export block
 //-----------------------------------------------------------------------------
 //
 //  Macro, which expands to an index checking function call,
@@ -2609,7 +2609,7 @@ template <class T> void Vector<T>::SetLimits(const VecLimits& theLimits, bool pr
 }
 
 //  Concatenate two Vectors into a new Vector.
-template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T>& b)
+export template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T>& b)
 {
   typedef typename Vector<T>::const_iterator CI;
   VecLimits newlim(a.GetLimits().Low,a.GetLimits().Low+a.size()+b.size()-1);
@@ -2620,7 +2620,7 @@ template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T>& b)
   return ret;
 }
 
-template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
+export template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
 {
   assert(size()==index.size());
 
@@ -2631,7 +2631,7 @@ template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
   *this=dest;
 }
 
-template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
+export template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
 {
   assert(GetLimits().Low  <= lim.Low );
   assert(GetLimits().High >= lim.High);
@@ -2695,7 +2695,6 @@ template <class T> std::istream& Vector<T>::Read(std::istream& is)
 // template class Vector<double>;
 // template class Vector<std::complex<double>>;
 
-} //export block
 
 
 //

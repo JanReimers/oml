@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.C": "cpp",
+        "*.H": "\"c++\"",
+        "complex": "cpp",
+        "string": "cpp",
+        "exception": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "type_traits": "cpp",
+        "array": "cpp"
+    }
+}
