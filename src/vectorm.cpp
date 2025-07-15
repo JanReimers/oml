@@ -1,4 +1,4 @@
-// File: vectorm.cpp  Make a module for vector
+// File: vectorm.cpp  Make a module for Vector<T>
 module;
 #include <iostream>
 #include <iomanip>
@@ -149,7 +149,7 @@ inline std::istream& operator>>(std::istream& is,VecLimits& v)
 }
 
 // Use this to get limits of a tensor product
-VecLimits operator*(const VecLimits& a, const VecLimits& b);
+export VecLimits operator*(const VecLimits& a, const VecLimits& b);
 
 
 //-----------------------------------------------------------------------------
@@ -206,9 +206,9 @@ VecLimits operator*(const VecLimits& a, const VecLimits& b)
 //  OuterProduct(V1,V2) MatrixShape   Sym     Abstract.
 //
 
-enum Shape   {ArrayShape,VectorShape,MatrixShape};
-enum Store   {Full,Symmetric,Diagonal,Sparse,Upper,Lower,Row,Column};
-enum Data    {Real,Abstract};
+export enum Shape   {ArrayShape,VectorShape,MatrixShape};
+export enum Store   {Full,Symmetric,Diagonal,Sparse,Upper,Lower,Row,Column};
+export enum Data    {Real,Abstract};
 
 
 // Define how different storage layouts and Data type interact
@@ -449,28 +449,28 @@ std::istream& VecLimits::Read(std::istream& is)
 }
 
 
-template <class T> class OpLT
+export template <class T> class OpLT
 {
  public:
    typedef bool RetType;
    static inline bool apply(const T a, const T b) {return a<b;}
 };
 
-template <class T> class OpLE
+export template <class T> class OpLE
 {
  public:
    typedef bool RetType;
    static inline bool apply(const T a, const T b) {return a<=b;}
 };
 
-template <class T> class OpGT
+export template <class T> class OpGT
 {
  public:
    typedef bool RetType;
    static inline bool apply(const T a, const T b) {return a>b;}
 };
 
-template <class T> class OpGE
+export template <class T> class OpGE
 {
  public:
    typedef bool RetType;
@@ -482,7 +482,7 @@ template <class T> class OpGE
 //  Specify how different types are allowed to mix in binary operators.
 //  Main thing is to define a return type that does not lose any information.
 //
-template <class T1, class T2> struct ReturnType;
+export template <class T1, class T2> struct ReturnType;
 //
 //  Allow case where both types are the same.  Assumes no units.
 //
@@ -523,7 +523,7 @@ template <class T, class TR, class A> class XprUnary<T,TR,A,VectorShape>
 //
 //  Hold a reference to terminals
 //
-template <class T, class R,Shape> class Ref {};
+export template <class T, class R,Shape> class Ref {};
 
 template <class T, class R> class Ref<T,R,VectorShape>
 {
@@ -535,7 +535,7 @@ template <class T, class R> class Ref<T,R,VectorShape>
  private:
   const R& itsRef;
 };
-template <class Derived, Shape S> class IndexableBase;
+export template <class Derived, Shape S> class IndexableBase;
 
 //----------------------------------------------------
 //
@@ -561,14 +561,14 @@ template <class T, class A> class Val<T,A, VectorShape>
 //  Primary template for the IndexableBase class which provide index iterators.
 //  Use partial specialization for each  container shape.
 //
-template <class Derived, Shape S> class IndexableBase {};
+export template <class Derived, Shape S> class IndexableBase {};
 
 //---------------------------------------------------------------------------
 //
 //  Primary template for the indexable class.  Use partial specialization
 //  for each  container shape.
 //
-template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
+export template <class T, class Derived,Store M,Data D,Shape S> class Indexable;
 
 
 
@@ -873,7 +873,7 @@ T Dot(const Indexable<T,A,MA,DA,S>& a,const Indexable<T,B,MB,DB,S>& b)
   #define CHECK(i)
 #endif
 
- template <class T, class Derived,Store M, Shape S> class ArrayIndexable
+export template <class T, class Derived,Store M, Shape S> class ArrayIndexable
 {
 protected: //Can only copy and construct the derived class.
     ArrayIndexable() {};
@@ -988,7 +988,7 @@ export template <class T,class A, Store M, Shape S> inline A Differentiate(const
 //
 //  IO stuff.  Just dumps the data to the stream, ... thats it.
 //
-template <class T, class A, Store M, Shape S> inline std::ostream& Write(std::ostream& os,const ArrayIndexable<T,A,M,S>& arr)
+export template <class T, class A, Store M, Shape S> inline std::ostream& Write(std::ostream& os,const ArrayIndexable<T,A,M,S>& arr)
 {
   assert(os);
   if (StreamableObject::Binary()) for(T b:arr) BinaryWrite(b,os);
@@ -1005,7 +1005,7 @@ template <class T, class A, Store M, Shape S> inline std::ostream& Write(std::os
   return os;
 }
 
-template <class T, class A, Store M, Shape S> inline std::istream& Read(std::istream& is,ArrayIndexable<T,A,M,S>& arr)
+export template <class T, class A, Store M, Shape S> inline std::istream& Read(std::istream& is,ArrayIndexable<T,A,M,S>& arr)
 {
   assert(is);
   if(StreamableObject::Binary())
@@ -1377,7 +1377,7 @@ template <class A> inline A* TStreamableObject<A>::Factory(std::istream& is)
 
 // cow.h
 #ifndef OML_USE_STDVEC
-template <class T> class cow_array
+export template <class T> class cow_array
 {
 public:
     cow_array(size_t theSize     );

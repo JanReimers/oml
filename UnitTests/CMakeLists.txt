@@ -10,7 +10,7 @@ target_link_options(UToml PRIVATE -fopenmp)
 target_include_directories(UToml PRIVATE ../include )
 target_link_libraries(UToml oml lapack blas gtest)
 
-add_executable(UTomlm main.cc module.cpp)
+add_executable(UTomlm main.cc UTvectorm.cpp UTmatrixm.cpp)
 set_property(TARGET UTomlm PROPERTY CXX_STANDARD 20)
 
 target_link_options(UTomlm PRIVATE )
