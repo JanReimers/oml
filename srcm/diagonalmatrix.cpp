@@ -14,7 +14,7 @@ export import oml.FakeDouble;
 import oml.Shape;
 import oml.unop;
 import oml.MixTypes;
-import oml.vector;
+import oml.Vector;
 import oml.Xpr;
 import oml.Indexable;
 import oml.ArrIndex;

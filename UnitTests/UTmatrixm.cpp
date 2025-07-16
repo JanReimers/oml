@@ -8,7 +8,7 @@
 #include <fstream>
 #include <complex>
 
-import oml.vector;
+import oml.Vector;
 import oml.Matrix;
 
 using std::cout;

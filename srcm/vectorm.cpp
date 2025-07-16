@@ -7,7 +7,7 @@ module;
 #include <complex>
 #include <vector>
 
-export module oml.vector;
+export module oml.Vector;
 export import oml.StreamableObject;
 export import oml.VecLimits;
 export import oml.Indexable;
@@ -472,7 +472,7 @@ export template <class T> Vector<T> operator&(const Vector<T>& a, const Vector<T
   return ret;
 }
 
-export template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
+template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& index)
 {
   assert(size()==index.size());
 
@@ -483,7 +483,7 @@ export template <class T> void Vector<T>::ReIndex(const std::vector<index_t>& in
   *this=dest;
 }
 
-export template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
+template <class T> Vector<T> Vector<T>::SubVector(const VecLimits& lim) const
 {
   assert(GetLimits().Low  <= lim.Low );
   assert(GetLimits().High >= lim.High);

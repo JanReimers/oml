@@ -8,9 +8,10 @@
 #include <fstream>
 #include <complex>
 
-import oml.vector;
+import oml.Vector;
 import oml.Matrix;
 import oml.SMatrix;
+import omlNumericalRecipes;
 
 
 
@@ -232,36 +233,35 @@ TEST_F(SMatrixComplexTests,fabsHermitianConj)
 
 }
 
-// template <class T, class A, Store M, Data D> void
-// FillPos(Indexable<T,A,M,D,MatrixShape>& m)
-// {
-//     typename A::Subscriptor s(m);
-//     for (int i=m.GetLimits().Row.Low; i<=m.GetLimits().Row.High; i++)
-//         for (int j=m.GetLimits().Col.Low; j<=m.GetLimits().Col.High; j++)
-//         {
-//             double del=(i-j)/2.0;
-//             s(i,j)=exp(-del*del);
-//         }
-// }
+void FillPos(SMatrix<double>& m)
+{
+    typename SMatrix<double>::Subscriptor s(m);
+    for (int i=m.GetLimits().Row.Low; i<=m.GetLimits().Row.High; i++)
+        for (int j=m.GetLimits().Col.Low; j<=m.GetLimits().Col.High; j++)
+        {
+            double del=(i-j)/2.0;
+            s(i,j)=exp(-del*del);
+        }
+}
 
-// TEST_F(SMatrixDoubleTests,LinearAlgebra)
-// {
-//     typedef Matrix<double>  MatrixFT;
-//     typedef SMatrix<double> MatrixT;
-//     typedef Vector <double> VectorT;
-//     index_t N=10;
-//     MatrixT A(N);
-//     VectorT ones(N);
-//     FillPos(A);
-//     Fill(ones,1.0);
+TEST_F(SMatrixDoubleTests,LinearAlgebra)
+{
+    typedef Matrix<double>  MatrixFT;
+    typedef SMatrix<double> MatrixT;
+    typedef Vector <double> VectorT;
+    index_t N=10;
+    MatrixT A(N);
+    VectorT ones(N);
+    FillPos(A);
+    Fill(ones,1.0);
         
-//     MatrixT Ai=InvertSymmetric(A);
-//     MatrixFT I1=A*Ai,I2=Ai*A;
-//     I1.GetDiagonal()=I1.GetDiagonal()-ones;
-//     I2.GetDiagonal()=I2.GetDiagonal()-ones;
-//     EXPECT_NEAR(Max(fabs(I1)),0,1e-12);
-//     EXPECT_NEAR(Max(fabs(I2)),0,1e-12);
-// }
+    MatrixT Ai=InvertSymmetric(A);
+    MatrixFT I1=A*Ai,I2=Ai*A;
+    I1.GetDiagonal()=I1.GetDiagonal()-ones;
+    I2.GetDiagonal()=I2.GetDiagonal()-ones;
+    EXPECT_NEAR(Max(fabs(I1)),0,1e-12);
+    EXPECT_NEAR(Max(fabs(I2)),0,1e-12);
+}
 
 TEST_F(SMatrixComplexTests,MixedTypes)
 {

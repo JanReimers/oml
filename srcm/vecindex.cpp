@@ -231,12 +231,13 @@ template <class A> inline std::istream& operator>>(std::istream& is,TStreamableO
   return is;
 }
 
+
+}
+
 template <class A> inline A* TStreamableObject<A>::Factory(std::istream& is)
 {
   //  CheckName(is,typeid(A).name()); Read operation should do this.
   A* ret=new A;
   is >> ret;
   return ret;
-}
-
 }

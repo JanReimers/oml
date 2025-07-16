@@ -11,7 +11,7 @@ export module oml.Matrix;
 import oml.Shape;
 import oml.unop;
 import oml.MixTypes;
-import oml.vector;
+import oml.Vector;
 export import oml.MatLimits;
 import oml.Xpr;
 import oml.Indexable;

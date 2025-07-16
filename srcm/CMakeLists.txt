@@ -21,4 +21,10 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     smatindex.cpp
     smatrix.cpp
     diagonalmatrix.cpp
+    numeric.cpp
+    imp_numeric.cpp
+    indexsort.cpp
     )
+
+target_sources(omlm PRIVATE )
+

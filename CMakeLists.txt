@@ -30,6 +30,6 @@ target_compile_definitions(omlm PRIVATE
     $<$<CONFIG:Debug>:-DDEBUG>
     $<$<CONFIG:Release>:-DNDEBUG>
 )
-target_include_directories(omlm PRIVATE include )
+target_include_directories(omlm PRIVATE include src/numeric src/cnumeric)
 
 add_subdirectory(UnitTests)

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <complex>
 
-import oml.vector;
+import oml.Vector;
 
 template <class T> class VectorTests : public ::testing::Test
 {

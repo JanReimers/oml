@@ -1,15 +1,22 @@
 module;
 #include <vector>
 #include <cassert>
+#ifdef WARN_DEEP_COPY
+  #include <iostream>
+#endif
+#ifdef DEBUG
+  #define CHECK \
+  assert(*itsOwners >0); \
+  assert(itsData);       \
+  assert(itsSize>=0);
+#else
+  #define CHECK
+#endif
+
 export module oml.CopyOnWrite;
 import oml.VecLimits;
 
-export
-{
-
-// cow.h
-#ifndef OML_USE_STDVEC
-template <class T> class cow_array
+export template <class T> class cow_array
 {
 public:
     cow_array(size_t theSize     );
@@ -33,19 +40,6 @@ private:
           T*      itsData;
     mutable int*  itsOwners;
 };
-
-
-#ifdef DEBUG
-  #define CHECK \
-  assert(*itsOwners >0); \
-  assert(itsData);       \
-  assert(itsSize>=0);
-#else
-  #define CHECK
-#endif
-#ifdef WARN_DEEP_COPY
-  #include <iostream>
-#endif
 
 template <class T> inline cow_array<T>::cow_array(size_t theSize)
   : itsSize  (theSize       )
@@ -127,6 +121,3 @@ template <class T> void cow_array<T>::COW()
 
 #undef CHECK
 
-#endif //USE_STD_VEC
-
-}
