@@ -7,7 +7,7 @@ module;
 #include <cmath>
 #include <iomanip>
 
-export module oml.matrix;
+export module oml.Matrix;
 import oml.Shape;
 import oml.unop;
 import oml.MixTypes;
@@ -66,7 +66,7 @@ export template <class T> class Matrix
 
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
-  friend std::ostream& operator<<(std::ostream& os,const Matrix& a)
+  inline friend std::ostream& operator<<(std::ostream& os,const Matrix& a)
   {
     return os << static_cast<const TStreamableObject<Matrix<T> >& >(a);
   }

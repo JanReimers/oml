@@ -17,4 +17,7 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     matrixbase.cpp
     matindex.cpp
     rowcol.cpp
-    matrixm.cpp)
+    matrixm.cpp
+    smatindex.cpp
+    smatrix.cpp
+    )

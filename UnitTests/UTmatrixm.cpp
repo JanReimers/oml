@@ -1,6 +1,4 @@
-// File: UT-Matrix-double.cc  Unit test the Matrix class for double data types.
-
-// Copyright (1994-2020), Jan N. Reimers
+// File: UTMatrix.cpp  Unit test the Matrix<T> class for double/complex data types.
 
 //#include "stopw.h"
 #include "gtest/gtest.h"
@@ -11,7 +9,7 @@
 #include <complex>
 
 import oml.vector;
-import oml.matrix;
+import oml.Matrix;
 
 using std::cout;
 using std::endl;

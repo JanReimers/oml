@@ -45,7 +45,7 @@ template <class Derived> class IndexableBase<Derived,MatrixShape>
         }
         const index_t operator*() const {return current;}
               index_t operator*()       {return current;}
-        friend bool operator!=(const index_iterator& a, const index_iterator& b)
+        inline friend bool operator!=(const index_iterator& a, const index_iterator& b)
         {
             return a.current!=b.current;
         }

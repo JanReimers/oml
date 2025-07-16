@@ -7,6 +7,7 @@ import oml.unop;
 import oml.MixTypes;
 import oml.Xpr;
 import oml.VecLimits;
+ import oml.FakeDouble;
 
 export {
 //-----------------------------------------------------------------------------
