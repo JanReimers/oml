@@ -7,5 +7,13 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     mixtypes.cpp
     xpr.cpp
     indexable.cpp
+    arrindex.cpp
+    vecindex.cpp
+    cow.cpp
+    random.cpp
+    vector3d.cpp
     vectorm.cpp 
+    matrixbase.cpp
+    matindex.cpp
+    rowcol.cpp
     matrixm.cpp)

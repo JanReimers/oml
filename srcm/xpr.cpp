@@ -188,4 +188,21 @@ template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,M
   Expression itsExp;
 };
 
+template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,TB,A,B,MatrixShape>
+{
+ public:
+   XprBinary(const A& a,const B& b,TR(*f)(const TA&,const TB&)) : itsA(a), itsB(b), itsF(f) {};
+  ~XprBinary() {};
+
+  TR         operator[](index_t n          ) const {return itsF(itsA[n],itsB[n]);}
+  TR         operator()(index_t i,index_t j) const {return itsF(itsA(i,j),itsB(i,j));}
+  size_t     size      (                   ) const {return itsA.size();}
+  MatLimits  GetLimits (                   ) const {return itsA.GetLimits();}
+ private:
+   A itsA;
+   B itsB;
+   TR(*itsF)(const TA&,const TB&);
+};
+
+
 }
