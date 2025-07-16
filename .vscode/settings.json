@@ -12,6 +12,7 @@
         "stdexcept": "cpp",
         "type_traits": "cpp",
         "array": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "iostream": "cpp"
     }
 }

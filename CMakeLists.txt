@@ -9,7 +9,7 @@ add_library(omlm "")
 set_property(TARGET oml PROPERTY CXX_STANDARD 20)
 set_property(TARGET omlm PROPERTY CXX_STANDARD 20)
 add_subdirectory(src)
-# target_sources(oml PUBLIC )
+add_subdirectory(srcm)
 
 # -Wno-unknown-pragmas
 target_compile_options(oml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas -DHAVE_STDINT_H

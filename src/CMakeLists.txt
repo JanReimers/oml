@@ -17,7 +17,6 @@ target_sources(oml PRIVATE
  )
 
  #target_sources(omlm PRIVATE )
- target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES vectorm.cpp matrixm.cpp)
 
 
  add_subdirectory(linear_algebra)

@@ -8,173 +8,14 @@ module;
 #include <iomanip>
 
 export module oml.matrix;
+import oml.Shape;
+import oml.unop;
+import oml.MixTypes;
 import oml.vector;
+export import oml.MatLimits;
+import oml.Xpr;
+import oml.Indexable;
 
-//---------------------------------------------------------------------------
-/*! \class MatLimits matlimit.h oml/matlimit.h
-  \brief Encapsulate all effects of matrix subscript bounds in this class.
-
-  Structure for matrix dimension limits.  All limits are checked in the
-  VecLimits constructors.
-
-  \nosubgrouping
-*/
-export class MatLimits
-{
- public:
-  /*! \name Constructors*/
-  //@{
-  MatLimits(                                 );//!<Limits for a null Matrix.
-  MatLimits(index_t,index_t,index_t,index_t  );//!<Construct from lower and upper bounds.
-  MatLimits(size_t,size_t                    );//!<Construct from row and column size, use default lower bound.
-  MatLimits(const VecLimits&,const VecLimits&);//!<Construct from lower and upper bounds.
-  //@}
- ~MatLimits();
-
-  void ReBase(int rowLow,int colLow);
-
-  static size_t  size(size_t,size_t                  );
-  static size_t  size(index_t,index_t,index_t,index_t  );
-  static size_t  size(const VecLimits&,const VecLimits&);
-
-  //! Returns number of rows.
-  size_t  GetNumRows        (       ) const;
-  //! Returns number of columns.
-  size_t  GetNumCols        (       ) const;
-  //! Returns number of elements.
-  size_t  size              (       ) const;
-
-  index_t Offset    (index_t,index_t) const;
-  bool    Check     (               ) const;
-  bool    CheckIndex(index_t,index_t) const;
-
-  //! Comparison.
-  bool operator==(const MatLimits&) const;
-  //! Comparison.
-  bool operator!=(const MatLimits&) const;
-
-  /*! \name IO
-    See StreamableObject for details on output formats. You must include matrix_io.h to get
-    definitions.  op>> and op<< are also defined.
-  */
-  //@{
-  std::ostream& Write(std::ostream&) const;//!<Write to stream.
-  std::istream& Read (std::istream&)      ;//!<Read from stream.
-  //@}
-
-  VecLimits Row; //!<Row    index limits.
-  VecLimits Col; //!<Column index limits.
-};
-
-
-//------------------------------------------------------------------------
-//
-//  Constructors.
-//
-inline MatLimits::MatLimits()
-  : Row()
-  , Col()
-  {}
-
-inline MatLimits::MatLimits(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
-  : Row(rowLow,rowHigh)
-  , Col(colLow,colHigh)
-  {}
-
-inline MatLimits::MatLimits(size_t rowSize, size_t colSize)
-  : Row(rowSize)
-  , Col(colSize)
-  {}
-
-inline MatLimits::MatLimits(const VecLimits& rowLimits, const VecLimits& colLimits)
-  : Row(rowLimits)
-  , Col(colLimits)
-  {}
-
-inline MatLimits::~MatLimits() {}
-
-inline void MatLimits::ReBase(int rowLow,int colLow)
-{
-    Row.ReBase(rowLow);
-    Col.ReBase(colLow);
-}
-
-//------------------------------------------------------------------------
-//
-//  Get size static functions.
-//
-inline size_t  MatLimits::size(size_t numRows, size_t numCols)
-{
-  return numRows*numCols;
-}
-inline size_t  MatLimits::size(const VecLimits& row, const VecLimits& col)
-{
-  return row.size()*col.size();
-}
-
-inline size_t  MatLimits::size(index_t rowLow, index_t rowHigh,index_t colLow, index_t colHigh)
-{
-  return size(VecLimits(rowLow,rowHigh),VecLimits(colLow,colHigh) );
-}
-
-inline size_t  MatLimits::GetNumRows() const
-{
-  return Row.size();
-}
-
-inline size_t  MatLimits::GetNumCols() const
-{
-  return Col.size();
-}
-
-inline size_t  MatLimits::size() const
-{
-  return size(GetNumRows(),GetNumCols());
-}
-
-//------------------------------------------------------------------------
-//
-//  Overloaded ==
-//
-inline bool MatLimits::operator==(const MatLimits& lim) const
-{
-  return (Row==lim.Row)&&(Col==lim.Col);
-}
-
-inline bool MatLimits::operator!=(const MatLimits& l) const
-{
-  return !((*this)==l);
-}
-
-//-------------------------------------------------------------------
-//
-//  Other inline functions for the MatLimits class.
-//
-inline bool MatLimits::Check() const
-{
-  return Row.Check()&&Col.Check();
-}
-
-inline index_t MatLimits::Offset(index_t i,index_t j) const
-{
-  return Row.Offset(i)+GetNumRows()*Col.Offset(j);
-}
-
-inline std::ostream& operator<<(std::ostream& os,const MatLimits& lim)
-{
-  return lim.Write(os);
-}
-
-inline std::istream& operator>>(std::istream& is, MatLimits& lim)
-{
-  return lim.Read (is);
-}
-
-// Use this to get limits of a tensor product
-inline MatLimits operator*(const MatLimits& a, const MatLimits& b)
-{
-    return MatLimits(a.Row*b.Row,a.Col*b.Col);
-}
 
 // matrixbase.h
 
@@ -291,9 +132,6 @@ inline index_t MatrixBase::GetColHigh() const
 
 // binop.h
 
-template <class TR, class TA, class TB, class A, class B, Shape S> class XprBinary
-{};
-
 template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,TB,A,B,MatrixShape>
 {
  public:
@@ -311,71 +149,8 @@ template <class TR, class TA, class TB, class A, class B> class XprBinary<TR,TA,
 };
 
 // xpr.h
-template <class T, class TR, class A, Shape S> class XprUnary
-{};
-
-template <class T, class TR, class A> class XprUnary<T,TR,A,MatrixShape>
-{
- public:
-  XprUnary(const A& a,TR(*f)(const T&)) : itsA(a), itsF(f) {};
-  ~XprUnary() {};
-
-  TR        operator()(index_t i,index_t j) const {return itsF(itsA(i,j));}
-  size_t    size      (                   ) const {return itsA.size();}
-  MatLimits GetLimits (                   ) const {return itsA.GetLimits();}
- private:
-   A itsA;
-   TR(*itsF)(const T&);
-};
 
 
-template <class T, class R> class Ref<T,R,MatrixShape>
-: public IndexableBase<Ref<T,R,MatrixShape>,MatrixShape> //Get index iterators
-{
- public:
-  Ref(const R& r) : itsRef(r) {};
-  T         operator()(index_t i,index_t j) const {return itsRef(i,j);}
-  size_t    size      (                   ) const {return itsRef.size();}
-  MatLimits GetLimits (                   ) const {return itsRef.GetLimits();}
- private:
-  const R& itsRef;
-};
-
-template <class T, class A, Shape> class Val {};
-
-template <class T, class A> class Val<T,A,MatrixShape>
-{
- public:
-  explicit Val(const T& v, const A& a) : itsVal(v), itsA(a),itsLimits(itsA.GetLimits()) {};
-  T         operator()(index_t,index_t) const {return itsVal;}
-  index_t   size      (               ) const {return itsLimits.size();} //itsA may be gone
-  MatLimits GetLimits (               ) const {return itsLimits;} //Apparently itsA.GetLimits() fails at runtime
- private:
-  T         itsVal;
-  const A&  itsA;
-  MatLimits itsLimits;
-};
-
-template <class T, class Expression,Store M,Data D,Shape S> class Xpr;
-
-template <class T, class Expression,Store M,Data D> class Xpr<T,Expression,M,D,MatrixShape>
-: public Indexable<T,Xpr<T,Expression,M,D,MatrixShape>,M,Abstract,MatrixShape>
-{
- public:
-  typedef Indexable<T,Xpr<T,Expression,M,D,MatrixShape>,M,Abstract,MatrixShape> IndexableT;
-  typedef Ref<T,IndexableT,MatrixShape> RefT;
-
-  Xpr(Expression e) : itsExp(e) {};
-  Xpr(const Xpr& x) : itsExp(x.itsExp) {};
-  ~Xpr() {};
-
-  T         operator()(index_t i,index_t j) const {return itsExp(i,j);}
-  size_t    size      (                   ) const {return itsExp.size();}
-  MatLimits GetLimits (                   ) const {return itsExp.GetLimits();}
-
- private:
-  Expression itsExp;
-};
 // matindex.h
 
 //
