@@ -1,4 +1,4 @@
-// File: UTMatrix.cpp  Unit test the Matrix<T> class for double/complex data types.
+// File: UTSMatrix.cpp  Unit test the SMatrix<T> class for double/complex data types.
 
 //#include "stopw.h"
 #include "gtest/gtest.h"
