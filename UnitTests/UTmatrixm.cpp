@@ -84,7 +84,7 @@ TYPED_TEST_P(MatrixTests,Constructors)
     EXPECT_EQ(V1.size(),0);
 }
 
-/*
+
 TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -130,6 +130,8 @@ TYPED_TEST_P(MatrixTests,Fill_SetLimits_SubMatrix)
 
 
 }
+
+
 TYPED_TEST_P(MatrixTests,Transpose_Slices)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -179,6 +181,7 @@ TYPED_TEST_P(MatrixTests,SumDotMaxMinDirectMultiply)
     EXPECT_EQ(IsSymmetric(A),true);
 
 }
+
 TYPED_TEST_P(MatrixTests,OverloadedOperators1)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -245,6 +248,8 @@ TYPED_TEST_P(MatrixTests,OverloadedOperators1)
     A.GetRow(1)/=2.0;
     
 }
+
+
 TYPED_TEST_P(MatrixTests,MatrixAlgebra)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -276,6 +281,7 @@ TYPED_TEST_P(MatrixTests,MatrixAlgebra)
     EXPECT_EQ(Sum(OuterProduct(VL,VR)),-8.);
     EXPECT_EQ(Sum(OuterProduct(VL,VR)*OuterProduct(VR,VL)),16.);
 }
+
 TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -311,6 +317,7 @@ TYPED_TEST_P(MatrixTests,AsciiAndBinaryIO)
         EXPECT_EQ(B,A);
     }
 }
+
 template <class T> void mmul(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>& B)
 {
   int N=A.GetLimits().Row.High;
@@ -510,6 +517,7 @@ TEST_F(MatrixComplexTests,MixedTypes)
 
 
 }
+
 template <class T, typename Tf> void TestUnopLight(T dummy,Tf f)
 {
 //    cout << __PRETTY_FUNCTION__ << endl;
@@ -575,6 +583,7 @@ TEST_F(MatrixComplexTests,UnaryOps)
    TestUnop(dcmplx(0),[](const auto &x) { return arg(x); });
 
 }
+
 TYPED_TEST_P(MatrixTests,BinaryOps)
 {
     typedef Matrix<TypeParam> MatrixT;
@@ -698,20 +707,20 @@ template <class T> void mmul_mp(Matrix<T>& C,const Matrix<T>& A, const Matrix<T>
             }
     }
 }
-*/
+
 
 REGISTER_TYPED_TEST_SUITE_P(
             MatrixTests,
-            Constructors
-            // Fill_SetLimits_SubMatrix,
-            // SumDotMaxMinDirectMultiply,
-            // Transpose_Slices,
-            // OverloadedOperators1,
-            // MatrixAlgebra,
-            // AsciiAndBinaryIO,
-            // UnaryOps,
-            // BinaryOps
+            Constructors,
+            Fill_SetLimits_SubMatrix,
+            Transpose_Slices,
+            SumDotMaxMinDirectMultiply,
+            OverloadedOperators1,
+            MatrixAlgebra,
+            AsciiAndBinaryIO,
+            UnaryOps,
+            BinaryOps
             );
-using MyTypes = ::testing::Types<double>;
-// using MyTypes = ::testing::Types<double,std::complex<double>>;
+// using MyTypes = ::testing::Types<double>;
+using MyTypes = ::testing::Types<double,std::complex<double>>;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, MatrixTests, MyTypes);

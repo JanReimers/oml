@@ -18,8 +18,10 @@ import oml.Indexable;
 import oml.ArrIndex;
 import oml.CopyOnWrite;
 import oml.Matrixbase;
-import oml.MatIndex;
+export import oml.MatIndex;
 import oml.RowCol;
+export import oml.FakeDouble;
+
 
 //----------------------------------------------------------------------------
 //
@@ -553,7 +555,7 @@ template <class T> inline MatLimits Matrix<T>::ReBase(const MatLimits& lim)
     return oldLimits;
 }
 
-template <class T, class B,Store M, Data D> Matrix<T>& operator*=(Matrix<T>& a,const Indexable<T,B,M,D,MatrixShape>& b)
+export template <class T, class B,Store M, Data D> Matrix<T>& operator*=(Matrix<T>& a,const Indexable<T,B,M,D,MatrixShape>& b)
 {
     assert(a.GetLimits().Col==b.GetLimits().Row);
     Matrix<T> temp=a*b;
@@ -1110,5 +1112,6 @@ OuterProduct(const Indexable<T,A,M,D,VectorShape>& v)
   return SymMatrixOuterProduct<T,ref>(ref(v));
 }
 
+export inline const Matrix  <double>& conj(const Matrix  <double>& m) {return m;}
 
 

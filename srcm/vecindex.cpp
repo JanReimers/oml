@@ -33,7 +33,7 @@ template <class Derived> class IndexableBase<Derived,VectorShape>
         index_iterator operator++(){current++;return (*this);}
         const index_t operator*() const {return current;}
         index_t operator*() {return current;}
-        friend bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
+        friend inline bool operator!=(const index_iterator& a, const index_iterator& b) {return a.current!=b.current;}
     private:
         index_t current;
   };

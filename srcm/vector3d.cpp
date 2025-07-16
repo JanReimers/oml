@@ -333,6 +333,6 @@ template <class T> std::istream& operator>>(std::istream& is,Vector3D<T>& v)
   return is;
 }
 
-
+inline const Vector3D<double>& conj(const Vector3D<double>& v) {return v;}
 
 } //export block

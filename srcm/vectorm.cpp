@@ -14,6 +14,7 @@ export import oml.Indexable;
 export import oml.ArrIndex;
 export import oml.VecIndex;
 export import oml.Random;
+export import oml.FakeDouble;
 import oml.Vector3D;
 import oml.Shape;
 import oml.unop;
@@ -94,7 +95,7 @@ export template <class T> class Vector
   std::ostream& Write(std::ostream&) const;
   std::istream& Read (std::istream&)      ;
   // Need to disambiguate from expression version.
-  friend std::ostream& operator<<(std::ostream& os,const Vector& a)
+  friend inline std::ostream& operator<<(std::ostream& os,const Vector& a)
   {
     return os << static_cast<const TStreamableObject<Vector<T> >& >(a);
   }
@@ -539,6 +540,7 @@ template <class T> std::istream& Vector<T>::Read(std::istream& is)
   return is;
 }
 
+export inline const Vector  <double>& conj(const Vector  <double>& v) {return v;}
 
 
 #undef CHECK

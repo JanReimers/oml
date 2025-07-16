@@ -195,3 +195,27 @@ export inline MatLimits operator*(const MatLimits& a, const MatLimits& b)
 {
     return MatLimits(a.Row*b.Row,a.Col*b.Col);
 }
+
+//------------------------------------------------------------------------
+//
+//  Checking functions.
+//
+bool MatLimits::CheckIndex(index_t row, index_t col) const
+{
+  bool ok=true;
+  if (!Row.CheckIndex(row))
+  {
+    std::cout << "Matrix row index " << row << " out of range " << Row << std::endl;
+    ok=false;
+  }
+  if (!Col.CheckIndex(col))
+  {
+    std::cout << "Matrix column index " << col << " out of range " << Col << std::endl;
+    ok=false;
+  }
+#ifdef DEBUG
+  assert(ok);
+#endif
+  return ok;
+}
+
