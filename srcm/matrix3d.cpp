@@ -1,10 +1,14 @@
-// File: matrix3d.h
-#ifndef _matrix3d_h_
-#define _matrix3d_h_
+module;
+#include <cmath>
+#include <cassert>
+#include <iostream>
+#include <iomanip>
 
-// Copyright (1994-2003), Jan N. Reimers
-
-#include "oml/vector3d.h"
+export module oml.Matrix3D;
+import oml.VecLimits; //just to get index_t.
+import oml.MixTypes;
+export import oml.StreamableObject;
+export import oml.Vector3D;
 
 //------------------------------------------------------------------------
 //
@@ -12,7 +16,7 @@
 //  been overloaded. Also has convenient methods for making
 //  3D rotation matricies.
 //
-template <class T> class Matrix3D
+export template <class T> class Matrix3D
 {
 public:
    T M11,M12,M13;
@@ -82,6 +86,17 @@ template <class T> inline Matrix3D<T>& Matrix3D<T>::operator=(const Matrix3D<T>&
   return *this;
 }
 
+template <class T> inline Vector3D<T> Matrix3D<T>::GetRow(index_t r) const
+{
+   return Vector3D<T>((*this)(r,1),(*this)(r,2),(*this)(r,3));
+}
+
+template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(index_t c) const
+{
+   return Vector3D<T>((*this)(1,c),(*this)(2,c),(*this)(3,c));
+}
+
+export {
 //------------------------------------------------------------------------
 //
 //  Comparison
@@ -118,15 +133,7 @@ template <class T> inline Matrix3D<T> operator~(const Matrix3D<T>& m)
 	return Transpose(m);
 }
 
-template <class T> inline Vector3D<T> Matrix3D<T>::GetRow(index_t r) const
-{
-   return Vector3D<T>((*this)(r,1),(*this)(r,2),(*this)(r,3));
-}
 
-template <class T> inline Vector3D<T> Matrix3D<T>::GetCol(index_t c) const
-{
-   return Vector3D<T>((*this)(1,c),(*this)(2,c),(*this)(3,c));
-}
 //------------------------------------------------------------------------
 //
 //  Algebra
@@ -314,6 +321,77 @@ template <class T> inline void RotationZ(Matrix3D<T>& a,T theta)
   a.M11= a.M22=(T)cos(theta);
 }
 
+template <class T> std::ostream& operator<<(std::ostream& os,const Matrix3D<T>& a);
+template <class T> std::istream& operator>>(std::istream& is,Matrix3D<T>& a);
+
+} // export block
+
+//------------------------------------------------------------------------
+//
+//  Matrix IO
+//
+template <class T> std::ostream& operator<<(std::ostream& os,const Matrix3D<T>& a)
+{
+   if (StreamableObject::Binary())
+   {
+      BinaryWrite(a.M11,os);
+      BinaryWrite(a.M12,os);
+      BinaryWrite(a.M13,os);
+      BinaryWrite(a.M21,os);
+      BinaryWrite(a.M22,os);
+      BinaryWrite(a.M23,os);
+      BinaryWrite(a.M31,os);
+      BinaryWrite(a.M32,os);
+      BinaryWrite(a.M33,os);
+   }
+   if (StreamableObject::Ascii ())
+   {
+      os << a.M11 << " " << a.M12 << " " << a.M13 << " ";
+      os << a.M21 << " " << a.M22 << " " << a.M23 << " ";
+      os << a.M31 << " " << a.M32 << " " << a.M33 << " ";
+   }
+   if (StreamableObject::Pretty())
+   {
+      std::streamsize prec=os.precision();
+      std::streamsize wid =os.width();
+      os << std::setw(0);
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M11
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M12
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M13
+         << " ]" << std::endl;
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M21
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M22
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M23
+         << " ]" << std::endl;
+      os << "[ " << std::setw(wid) << std::setprecision(prec) << a.M31
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M32
+         << " "  << std::setw(wid) << std::setprecision(prec) << a.M33
+         << " ]" << std::endl;
+   }
+  return os;
+}
+
+template <class T> std::istream& operator>>(std::istream& is,Matrix3D<T>& a)
+{
+   if (StreamableObject::Binary())
+   {
+      BinaryRead(a.M11,is);
+      BinaryRead(a.M12,is);
+      BinaryRead(a.M13,is);
+      BinaryRead(a.M21,is);
+      BinaryRead(a.M22,is);
+      BinaryRead(a.M23,is);
+      BinaryRead(a.M31,is);
+      BinaryRead(a.M32,is);
+      BinaryRead(a.M33,is);
+   }
+   if (StreamableObject::Ascii ())
+   {
+      is >> a.M11 >> a.M12 >> a.M13;
+      is >> a.M21 >> a.M22 >> a.M23;
+      is >> a.M31 >> a.M32 >> a.M33;
+   }
+   return is;
+}
 
 
-#endif //_Matrix3D_h_

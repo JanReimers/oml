@@ -13,6 +13,7 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     cow.cpp
     random.cpp
     vector3d.cpp
+    matrix3d.cpp
     vectorm.cpp 
     matrixbase.cpp
     matindex.cpp
