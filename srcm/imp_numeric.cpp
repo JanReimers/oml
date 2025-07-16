@@ -4,7 +4,7 @@ module;
 #include <cassert>
 #include <iostream>
 
-export module omlNumericalRecipes:Imp;
+module omlNumericalRecipes:Imp;
 import oml.Vector;
 import oml.SMatrix;
 import oml.Matrix;
@@ -50,7 +50,7 @@ double epsilon (double x)
 //  Cholsky decomposition of a symmetric-positive definite matrix into
 //  upper and lower triangular parts.  A -> U * ~U
 //
-export template <class T> void Cholsky(Matrix<T>& A)
+template <class T> void Cholsky(Matrix<T>& A)
 {
     assert(A.GetRowLimits()==A.GetColLimits());
     assert(IsSymmetric(A));
@@ -92,7 +92,7 @@ export template <class T> void Cholsky(Matrix<T>& A)
 //
 //#include "oml/imp/isnan.h"
 #define UPPER_ONLY
-export template <class T> void Cholsky(SMatrix<T>& A)
+template <class T> void Cholsky(SMatrix<T>& A)
 {
     assert(A.GetRowLow()==1);
     assert(A.GetColLow()==1);
@@ -128,7 +128,7 @@ export template <class T> void Cholsky(SMatrix<T>& A)
 //  rearranged
 //
 
-export template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
+template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
@@ -155,7 +155,7 @@ export template <class T, class M> void EigenSort(M& A, Vector<T>& EigenValues)
 //
 //  Matrix inversion.
 //
-export template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
+template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
 {
   Matrix<T> temp(m);
   std::vector<index_t> SwapIndex(temp.GetNumRows());
@@ -168,7 +168,7 @@ export template <class T> Matrix<T> InvertSquare(const Matrix<T>& m)
 }
 
 
-export template <class T> Matrix<T> InvertSymmetric(const Matrix<T>& m)
+template <class T> Matrix<T> InvertSymmetric(const Matrix<T>& m)
 {
   Matrix<T> ret(m);
   Vector<T> normal=T(1)/sqrt(m.GetDiagonal());
@@ -183,7 +183,7 @@ export template <class T> Matrix<T> InvertSymmetric(const Matrix<T>& m)
 }
 
 #define UPPER_ONLY
-export template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
+template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
 {
   int n=m.GetNumRows();
   SMatrix<T> ret (m.GetLimits());
@@ -213,7 +213,7 @@ export template <class T> SMatrix<T> InvertSymmetric(const SMatrix<T>& m)
 //  Invert an upper triangular matrix.
 //
 //
-export template <class T> void InvertTriangular(Matrix<T>& A)
+template <class T> void InvertTriangular(Matrix<T>& A)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
@@ -241,7 +241,7 @@ export template <class T> void InvertTriangular(Matrix<T>& A)
 //
 //
 #define UPPER_ONLY
-export template <class T> void InvertTriangular(SMatrix<T>& A)
+template <class T> void InvertTriangular(SMatrix<T>& A)
 {
   assert(A.GetRowLow()==1);
   assert(A.GetColLow()==1);
@@ -262,7 +262,7 @@ export template <class T> void InvertTriangular(SMatrix<T>& A)
   }
 }
 #undef UPPER_ONLY
-export template <class T> void LUBackSub(const Matrix<T>& a, Vector<T>& B,const std::vector<index_t>& Index)
+template <class T> void LUBackSub(const Matrix<T>& a, Vector<T>& B,const std::vector<index_t>& Index)
 {
   assert(a.GetRowLimits()==a.GetColLimits());
   assert(B.GetLimits   ()==a.GetRowLimits());
@@ -298,7 +298,7 @@ export template <class T> void LUBackSub(const Matrix<T>& a, Vector<T>& B,const 
 //  LU backsubstitution of a whole matrix.
 //
 
-export template <class T> void LUBackSub(const Matrix<T>& a, Matrix<T>& B, const std::vector<index_t>& Index)
+template <class T> void LUBackSub(const Matrix<T>& a, Matrix<T>& B, const std::vector<index_t>& Index)
 {
   assert(a.GetRowLimits()==a.GetColLimits());
   assert(a.GetColLimits()==B.GetRowLimits());
@@ -335,7 +335,7 @@ export template <class T> void LUBackSub(const Matrix<T>& a, Matrix<T>& B, const
   } // isub
 }
 
-export template <class T> bool LUDecomp(Matrix<T>& A, std::vector<index_t>& ipiv ,T& d)
+template <class T> bool LUDecomp(Matrix<T>& A, std::vector<index_t>& ipiv ,T& d)
 {
     assert(A.GetRowLimits()==A.GetColLimits());
     assert(A.GetRowLow()==1);
@@ -420,7 +420,7 @@ export template <class T> bool LUDecomp(Matrix<T>& A, std::vector<index_t>& ipiv
 #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
 
 
-export template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
+template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
@@ -498,7 +498,7 @@ export template <class T, class M> void QLDecomp(M& A, Vector<T>& Diagonal, Vect
 }
 #undef SIGN
 
-export template <class T> void SVBackSub(const Matrix<T>& u, const Vector<T>& w,const Matrix<T>& v, const Vector<T>& b, Vector<T>& X)
+template <class T> void SVBackSub(const Matrix<T>& u, const Vector<T>& w,const Matrix<T>& v, const Vector<T>& b, Vector<T>& X)
 {
    assert(u.GetColLimits()==w.GetLimits());
    assert(u.GetColLimits()==X.GetLimits());
@@ -554,7 +554,7 @@ template <class T> T MAX(T a,T b) {return a > b ? a :b;}
 template <class T> T SIGN(T a, T b) {return b >= 0.0 ? fabs(a) : -fabs(a);}
 // #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 
-export template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
+template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 {
   assert(A.GetColLimits()==W.GetLimits());
   assert(A.GetColLimits()==V.GetRowLimits());
@@ -830,7 +830,7 @@ export template <class T, class M> void SVDecomp(M& A, Vector<T>& W, M& V)
 //  OffDiagonal - Output vector of off diagonal elements
 //
 
-export template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
+template <class T, class M> void TriDiagonal(M& A, Vector<T>& Diagonal, Vector<T>& OffDiagonal)
 {
   assert(A.GetRowLimits()==A.GetColLimits());
   assert(A.GetRowLow()==1);
