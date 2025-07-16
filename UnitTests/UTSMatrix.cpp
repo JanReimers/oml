@@ -11,7 +11,7 @@
 import oml.Vector;
 import oml.Matrix;
 import oml.SMatrix;
-import omlNumericalRecipes;
+import oml.NumericalRecipes;
 
 
 

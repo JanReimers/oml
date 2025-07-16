@@ -4,7 +4,7 @@ module;
 #include <cassert>
 #include <iostream>
 
-module omlNumericalRecipes:Imp;
+module oml.NumericalRecipes:Imp;
 import oml.Vector;
 import oml.SMatrix;
 import oml.Matrix;

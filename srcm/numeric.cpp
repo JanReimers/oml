@@ -1,7 +1,7 @@
 module;
 #include <vector>
 
-export module omlNumericalRecipes;
+export module oml.NumericalRecipes;
 // import omlNumericalRecipes:Imp;
 import oml.Vector;
 import oml.SMatrix;
