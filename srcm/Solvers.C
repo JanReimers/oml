@@ -30,8 +30,8 @@ public:
     virtual UdType  Solve              (const MatrixT&,double eps, int NumEigenValues)=0;
     virtual UdType  SolveAll           (const MatrixT&,double eps                    )=0;
     virtual UdTypeN SolveRightNonSym   (const MatrixT&,double eps, int NumEigenValues)=0;
-    // virtual UdTypeN SolveLeft_NonSym   (const MatrixT&,double eps, int NumEigenValues)  ;
-    // virtual UdTypeN SolveAllRightNonSym(const MatrixT&,double eps                    )=0;
+    virtual UdTypeN SolveLeft_NonSym   (const MatrixT&,double eps, int NumEigenValues)  ;
+    virtual UdTypeN SolveAllRightNonSym(const MatrixT&,double eps                    )=0;
 
 };
 
@@ -81,6 +81,14 @@ public:
     virtual UsVType  SolveAll(const MatrixT&                       )=0;
 
 };
+
+template <class T> typename EigenSolver<T>::UdTypeN
+EigenSolver<T>::SolveLeft_NonSym(const MatrixT& A,double eps, int NumEigenValues)
+{
+    MatrixT Adagger=Transpose(conj(A));
+    auto [U,d]=SolveRightNonSym(Adagger,eps,NumEigenValues);
+    return std::make_tuple(conj(U),conj(d));
+}
 
 
 } // namespace

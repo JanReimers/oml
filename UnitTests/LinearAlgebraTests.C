@@ -146,29 +146,29 @@ public:
             ValidateRight(U,d);
             itsSolver->Reset();
         }
-        // {
-        //     auto [U,d]=itsSolver->SolveLeft_NonSym(A,eps,Nev);
-        //     ValidateLeft(U,d);
-        //     itsSolver->Reset();
-        // }
+        {
+            auto [U,d]=itsSolver->SolveLeft_NonSym(A,eps,Nev);
+            ValidateLeft(U,d);
+            itsSolver->Reset();
+        }
         if (Nev/2>=1)
         {
             auto [U,d]=itsSolver->SolveRightNonSym(A,eps,Nev/2);
             ValidateRight(U,d);
             itsSolver->Reset();
         }
-        // if (Nev/2>=1)
-        // {
-        //     auto [U,d]=itsSolver->SolveLeft_NonSym(A,eps,Nev/2);
-        //     ValidateLeft(U,d);
-        //     itsSolver->Reset();
-        // }
-        // if (Nev==N)
-        // {
-        //     auto [U,d]=itsSolver->SolveAllRightNonSym(A,eps);
-        //     ValidateRight(U,d);
-        //     itsSolver->Reset();
-        // }
+        if (Nev/2>=1)
+        {
+            auto [U,d]=itsSolver->SolveLeft_NonSym(A,eps,Nev/2);
+            ValidateLeft(U,d);
+            itsSolver->Reset();
+        }
+        if (Nev==N)
+        {
+            auto [U,d]=itsSolver->SolveAllRightNonSym(A,eps);
+            ValidateRight(U,d);
+            itsSolver->Reset();
+        }
     }
     virtual void ValidateSymmetric(const Matrix<T>& U, const Vector<double>& d)
     {
