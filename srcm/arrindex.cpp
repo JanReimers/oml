@@ -4,6 +4,7 @@ module;
 #include <iomanip>
 #include <cmath>
 #include <complex>
+#include <cassert>
 export module oml.ArrIndex;
 import oml.VecLimits;
 import oml.Shape;

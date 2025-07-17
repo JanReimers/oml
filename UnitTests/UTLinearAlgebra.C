@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include <cmath>
 #include <complex>
+#include <tuple>
 #include "Epsilons.H"
 
 import oml;
-
 
 typedef std::complex<double> dcmplx;
 template <typename T> class EigenBase
@@ -375,6 +375,7 @@ public:
 
 
 
+
 class LinearAlgebraTests : public ::testing::Test
 {
 public:
@@ -437,7 +438,6 @@ public:
     double eigenDensity;
 
 };
-
 //
 //TEST_F(LinearAlgebraTests,SparseMatrix)
 //{
