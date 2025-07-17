@@ -25,6 +25,12 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     numeric.cpp
     imp_numeric.cpp
     indexsort.cpp
+    LapackCholsky.C
+    Solvers.C
+    Lapack.C
+    LapackEigenSolver.C
+    LapackLinearSolver.C
+    LapackSVDSolver.C
     )
 
 target_sources(omlm PRIVATE )

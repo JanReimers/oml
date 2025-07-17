@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "*.C": "cpp",
-        "*.H": "\"c++\"",
+        "*.H": "cpp",
         "complex": "cpp",
         "string": "cpp",
         "exception": "cpp",

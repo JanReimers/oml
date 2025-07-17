@@ -6,6 +6,7 @@ module;
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include <complex>
 
 export module oml.Matrix;
 import oml.Shape;
@@ -15,7 +16,7 @@ import oml.Vector;
 export import oml.MatLimits;
 import oml.Xpr;
 import oml.Indexable;
-import oml.ArrIndex;
+export import oml.ArrIndex;
 import oml.CopyOnWrite;
 import oml.Matrixbase;
 export import oml.MatIndex;

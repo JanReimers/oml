@@ -1,13 +1,14 @@
 module;
 #include <complex>
 #include <cassert>
+#include <complex>
 export module oml.Indexable;
 import oml.Shape;
 import oml.unop;
 import oml.MixTypes;
 import oml.Xpr;
 import oml.VecLimits;
- import oml.FakeDouble;
+import oml.FakeDouble;
 
 export {
 //-----------------------------------------------------------------------------
