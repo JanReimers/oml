@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include <iomanip>
-import oml.Vector3D;
+import oml;
  
 
 class Vector3DTests : public ::testing::Test

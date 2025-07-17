@@ -31,6 +31,7 @@ target_sources(omlm PUBLIC FILE_SET all_my_modules TYPE CXX_MODULES FILES
     LapackEigenSolver.C
     LapackLinearSolver.C
     LapackSVDSolver.C
+    oml.cpp
     )
 
 target_sources(omlm PRIVATE )

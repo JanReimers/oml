@@ -8,9 +8,7 @@
 #include <fstream>
 #include <complex>
 
-import oml.Vector;
-import oml.Matrix;
-import oml.DiagonalMatrix;
+import oml;
 
 template <class T> class DiagonalMatrixTests : public ::testing::Test
 {

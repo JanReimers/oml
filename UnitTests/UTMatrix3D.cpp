@@ -5,7 +5,7 @@
 using std::cout;
 using std::endl;
 
-import oml.Matrix3D;
+import oml;
 
 
 class Matrix3DTests : public ::testing::Test

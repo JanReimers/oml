@@ -8,10 +8,7 @@
 #include <fstream>
 #include <complex>
 
-import oml.Vector;
-import oml.Matrix;
-import oml.SMatrix;
-import oml.NumericalRecipes;
+import oml;
 
 
 

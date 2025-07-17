@@ -3,12 +3,7 @@
 #include <complex>
 #include "Epsilons.H"
 
-import oml.Matrix;
-import oml.SMatrix;
-import oml.DiagonalMatrix;
-import oml.Vector;
-import oml.Solvers;
-import oml.Lapack;
+import oml;
 
 
 typedef std::complex<double> dcmplx;
@@ -503,18 +498,18 @@ TEST_F(LinearAlgebraTests,Lapack_EigenSolverDenseComplex)
     EigenTester<dcmplx>(new oml::LapackEigenSolver<dcmplx>(),Neigen).RunTests();
 }
 
-//
-//TEST_F(LinearAlgebraTests,oml_SVDRandomComplexMatrix_10x10)
-//{
+
+// TEST_F(LinearAlgebraTests,oml_SVDRandomComplexMatrix_10x10)
+// {
 //    SetupC(10,10);
 //    auto [U,s,Vdagger]=oml_CSVDecomp(itsAC); //Solve A=U*s*conj(V)
-//
+
 //    MatrixCT V=Transpose(conj(Vdagger));
 //    EXPECT_NEAR(Max(fabs(Transpose(conj(U))*U-itsIC)),0.0,eps);
 //    EXPECT_NEAR(Max(fabs(V*Vdagger-itsIC)),0.0,eps);
 //    EXPECT_NEAR(Max(fabs(U*s*Vdagger-itsAC)),0.0,eps);
-//}
-//
+// }
+
 //
 //TEST_F(LinearAlgebraTests,oml_SVDRandomComplexMatrix_10x5)
 //{

@@ -123,6 +123,6 @@ template <class T> typename LapackLinearSolver<T>::VectorT LapackLinearSolver<T>
 }
 
 template class LapackLinearSolver<double>;
-template class LapackLinearSolver<dcmplx>;
+// template class LapackLinearSolver<dcmplx>;
 
 } //namespace
