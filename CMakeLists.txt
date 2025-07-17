@@ -9,7 +9,7 @@ set_property(TARGET omlm PROPERTY CXX_STANDARD 20)
 add_subdirectory(srcm)
 
 # -Wno-unknown-pragmas
-target_compile_options(omlm PRIVATE -Wall -Wno-unknown-pragmas -DHAVE_STDINT_H
+target_compile_options(omlm PRIVATE -Wall -Wno-unknown-pragmas 
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>: -O2>
 )
@@ -17,6 +17,6 @@ target_compile_definitions(omlm PRIVATE
     $<$<CONFIG:Debug>:-DDEBUG>
     $<$<CONFIG:Release>:-DNDEBUG>
 )
-target_include_directories(omlm PRIVATE include )
+#target_include_directories(omlm PRIVATE include )
 
 add_subdirectory(UnitTests)

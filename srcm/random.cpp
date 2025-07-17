@@ -2,32 +2,8 @@ module;
 #include <complex>
 #include <cassert>
 #include <climits>
-#ifdef HAVE_STDINT_H
-  #include <stdint.h>
-#else
-  #ifdef HAVE_INTTYPES_H
-    #include <inttypes.h>
-  #else
-    #ifdef  HAVE_SYS_TYPES_H
-      #include <sys/types.h>
-      typedef  __uint32_t uint32_t;
-    #endif
-  #endif
-#endif
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-#include <time.h>
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-#include <stdio.h>
-#include <cmath>
-#include <cassert>
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
+#include <cstddef>
+#include <cstdint>
 
 export module oml.Random;
 import oml.Shape;
