@@ -1,6 +1,6 @@
 # add_executable(UToml main.cc Benchmarks.cpp LinearAlgebraTests.C )
 
-add_executable(UTomlm main.cc UTVector3D.cpp UTMatrix3D.cpp UTVector.cpp UTMatrix.cpp UTSMatrix.cpp UTDiagonalMatrix.cpp LinearAlgebraTests.C Epsilons.C)
+add_executable(UTomlm main.cc UTVector3D.cpp UTMatrix3D.cpp UTVector.cpp UTMatrix.cpp UTSMatrix.cpp UTDiagonalMatrix.cpp UTLinearAlgebra.C Epsilons.C)
 set_property(TARGET UTomlm PROPERTY CXX_STANDARD 20)
 
 target_link_options(UTomlm PRIVATE )
