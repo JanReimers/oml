@@ -11,6 +11,6 @@ target_compile_options(UTomlm PRIVATE -Wall -Wno-unknown-pragmas
     $<$<CONFIG:Release>: -O2>
 )
 
-target_link_options(UToml PRIVATE -fopenmp)
-target_include_directories(UToml PRIVATE ../include )
-target_link_libraries(UToml oml lapack blas gtest)
+#target_link_options(UTomlm PRIVATE -fopenmp)
+#target_include_directories(UTomlm PRIVATE ../include )
+target_link_libraries(UTomlm oml lapack blas gtest)

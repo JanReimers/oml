@@ -160,10 +160,10 @@ public:
   void reset();
 };
 
-template <class T> inline       T& Max(      T& a,       T& b)  {return a > b ? a : b;}
-template <class T> inline const T& Max(const T& a, const T& b)  {return a > b ? a : b;}
-template <class T> inline       T& Min(      T& a,       T& b)  {return a < b ? a : b;}
-template <class T> inline const T& Min(const T& a, const T& b)  {return a < b ? a : b;}
+// template <class T> inline       T& Max(      T& a,       T& b)  {return a > b ? a : b;}
+// template <class T> inline const T& Max(const T& a, const T& b)  {return a > b ? a : b;}
+// template <class T> inline       T& Min(      T& a,       T& b)  {return a < b ? a : b;}
+// template <class T> inline const T& Min(const T& a, const T& b)  {return a < b ? a : b;}
 
 double INorm=1.0/LONG_MAX;
 double LNorm=1.0/LONG_MAX;
@@ -175,7 +175,7 @@ TwoTap::TwoTap(unsigned int tap1,unsigned int tap2)
   , Mask(0)
   , itsArray(0)
 {
-  unsigned int max=Max(Tap1,Tap2);
+  unsigned int max=std::max(Tap1,Tap2);
   unsigned int n=(unsigned int)pow(2.0,(int)floor(log(max)/log(2.0)+1.0));
   itsArray=new long[n];
   Mask=n-1;
@@ -204,7 +204,7 @@ FourTap::FourTap(unsigned int tap1,unsigned int tap2,unsigned int tap3,unsigned 
   , Mask(0)
   , itsArray(0)
 {
-  unsigned int max=Max(Max(Tap1,Tap2),Max(Tap3,Tap4));
+  unsigned int max=std::max(std::max(Tap1,Tap2),std::max(Tap3,Tap4));
   unsigned int n=(unsigned int)pow(2.0,(int)floor(log(max)/log(2.0)+1.0));
   itsArray=new long[n];
   Mask=n-1;
