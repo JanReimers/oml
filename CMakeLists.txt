@@ -6,6 +6,8 @@ set(CXX_SCAN_FOR_MODULES on)
  
 add_library(omlm "") 
 set_property(TARGET omlm PROPERTY CXX_STANDARD 20)
+target_link_libraries(omlm PUBLIC lapack blas)
+
 add_subdirectory(srcm)
 
 # -Wno-unknown-pragmas
