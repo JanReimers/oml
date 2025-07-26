@@ -254,8 +254,9 @@ template <class T, class A> inline T Sum(const Indexable<T,A,Full,Abstract,Matri
 	T ret(0);
     for (index_t i:a.rows())
         for (index_t j:a.cols())
-      ret+=a(i,j);
-	return ret;
+          ret+=a(i,j);
+	
+  return ret;
 }
 
 template <class T, class A> inline T Sum(const Indexable<T,A,Diagonal,Abstract,MatrixShape>& a)

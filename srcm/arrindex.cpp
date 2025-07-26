@@ -17,7 +17,6 @@ export{
 //  These macros invoke array index bounds checking if DEBUG is on.
 //
 #if DEBUG
-  #include <cassert>
   #define CHECK(i)\
   assert(i>=0);\
   assert(static_cast<size_t>(i)<size());
