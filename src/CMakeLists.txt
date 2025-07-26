@@ -16,4 +16,7 @@ target_sources(oml PRIVATE
     linear_algebra_double.cpp   
  )
 
+ #target_sources(omlm PRIVATE )
+
+
  add_subdirectory(linear_algebra)

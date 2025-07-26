@@ -1,7 +1,6 @@
 #ifndef SVDSOLVER_H
 #define SVDSOLVER_H
 
-#include "oml/imp/index_t.h"
 #include <tuple>
 
 template <class T> class Matrix;

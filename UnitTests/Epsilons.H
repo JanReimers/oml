@@ -3,7 +3,7 @@
 
 #include <iosfwd>
 
-namespace TensorNetworks
+namespace oml
 {
 //
 //  Simple struct for passing many epsilons down through the call hierarchy

@@ -1,23 +1,24 @@
-cmake_minimum_required(VERSION 3.20.0)
-project(oml VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.30.0)
+project(oml VERSION 1.1.0 LANGUAGES CXX)
 
 enable_language (Fortran)
-#file (GLOB_RECURSE oml_SOURCES CONFIGURE_DEPENDS "src/*.cpp")
-# file (GLOB_RECURSE oml_HEADERS CONFIGURE_DEPENDS "include/*.h")
+set(CXX_SCAN_FOR_MODULES on)
  
-add_library(oml "") 
-add_subdirectory(src)
-# target_sources(oml PUBLIC )
+add_library(omlm "") 
+set_property(TARGET omlm PROPERTY CXX_STANDARD 20)
+target_link_libraries(omlm PUBLIC lapack blas)
+
+add_subdirectory(srcm)
 
 # -Wno-unknown-pragmas
-target_compile_options(oml PRIVATE -fopenmp -Wall -Wno-unknown-pragmas -DHAVE_STDINT_H
+target_compile_options(omlm PRIVATE -Wall -Wno-unknown-pragmas 
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>: -O2>
 )
-target_compile_definitions(oml PRIVATE 
+target_compile_definitions(omlm PRIVATE 
     $<$<CONFIG:Debug>:-DDEBUG>
     $<$<CONFIG:Release>:-DNDEBUG>
 )
-target_include_directories(oml PRIVATE ./ include )
+#target_include_directories(omlm PRIVATE include )
 
 add_subdirectory(UnitTests)

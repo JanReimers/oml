@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace TensorNetworks
+namespace oml
 {
 
 Epsilons::Epsilons(double default_eps)
